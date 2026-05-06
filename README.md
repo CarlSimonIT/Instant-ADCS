@@ -77,7 +77,13 @@ Small multi-colored lanyards for the USBs.
 <details>
 
 <summary>START HERE</summary>
-  Tasks below are directed towards preparing **usb0**, **usb1**, and your bootable media. 
+  Tasks below are directed towards preparing **usb0**, **usb1**, and your bootable media. The "All Users All Hosts" Windows PowerShell profile (`%SystemRoot%\System32\WindowsPowerShell\v1.0\profile.ps1`) defines variables and functions necessary for the configuration of our external storage and the construction of our 3-tier AD-integrated PKI. 
+
+  Rename your current profile.ps1: 
+  ```powershell
+  . "$env:SystemRoot\System32\WindowsPowerShell\v1.0\profile.ps1"
+  Rename-Item -Path "$env:SystemRoot\System32\WindowsPowerShell\v1.0\profile.ps1" -NewName "profile Backup.ps1" -Force -PassThru
+  ```
 
   <details>
   <summary>SLOW DOWN, I WANT TO UNDERSTAND THE DETAILS</summary>
@@ -99,12 +105,20 @@ Small multi-colored lanyards for the USBs.
   <details>
   <summary>Apps</summary>
 
-  * Bitwarden CLI
-  * PowerShell 7-x64
-  * Visual Studio Code
-  * OneDrive
-  * 7-Zip
-  * MikroTik WinBox
+  ### Bitwarden CLI
+  Download from winget. 
+  ### PowerShell 7-x64
+  Download from winget. 
+  ### Visual Studio Code
+  Download 64-bit system installer. 
+  ### OneDrive
+  Download from Onedrive. 
+  ### 7-Zip
+  Download from internet. 
+  ### MikroTik WinBox
+  Download WinBox 4 from MikroTik website. 
+  ### Rufus
+  Download from internet. 
   </details>
 
   <details>
