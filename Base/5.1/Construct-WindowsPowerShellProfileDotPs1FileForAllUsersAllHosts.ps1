@@ -1,3 +1,6 @@
+#Requires -Version 5.1
+#Requires -PSEdition Desktop
+
 [CmdletBinding()]
 param (
   #region | External Storage Media |
