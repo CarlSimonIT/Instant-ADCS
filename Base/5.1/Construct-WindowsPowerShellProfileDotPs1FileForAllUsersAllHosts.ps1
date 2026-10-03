@@ -500,10 +500,16 @@ param (
     Mandatory = $true
   )]
   [System.String]
-  ${End-Entity CA2 Name}
-
+  ${End-Entity CA2 Name},
   #endregion
 
+  #region | Location for output content inside '.\output' directory of project root |
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${New Windows PowerShell Base Folder PARTIAL Path}
+  #endregion
 )
 
 #region | Instances from generalized precursors |
@@ -516,7 +522,7 @@ ${External Storage Media Drive Letters} = ${External Storage Media Drive Letters
   -replace '%_usb1 FriendlyName_%',${usb1 FriendlyName} `
   -replace '%_usb1 UniqueId Raw_%',${usb1 UniqueId Raw} `
   -replace '%_usb1 SerialNumber_%',${usb1 SerialNumber}
-Set-Content -Path "$PSScriptRoot\External Storage Media Drive Letters.ps1" -Value (${External Storage Media Drive Letters})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage Media Drive Letters.ps1" -Value (${External Storage Media Drive Letters})
 #endregion
 
 #region | PATH Environment Variable | Updated user-scope %path% variable |
@@ -524,7 +530,7 @@ ${ScriptStoragePaths Single String Raw} = $ScriptStoragePaths | Out-String
 ${PATH Environment Variable Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\PATH Environment Variable Precursor.ps1"
 ${PATH Environment Variable} = ${PATH Environment Variable Precursor} `
   -replace '%_ScriptStoragePaths Single String Raw_%',${ScriptStoragePaths Single String Raw}
-Set-Content -Path "$PSScriptRoot\PATH Environment Variable.ps1" -Value (${PATH Environment Variable})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PATH Environment Variable.ps1" -Value (${PATH Environment Variable})
 #endregion
 
 #region | AD Forest and Domain Naming |
@@ -534,7 +540,7 @@ ${AD Forest and Domain Naming} = ${AD Forest and Domain Naming Precursor} `
   -replace '%_DNS Name of Root Domain in AD Forest_%',${DNS Name of Root Domain in AD Forest} `
   -replace '%_AD Site Name_%',${AD Site Name} `
   -replace '%_AD Site Name A_%',${AD Site Name A}
-Set-Content -Path "$PSScriptRoot\AD Forest and Domain Naming.ps1" -Value (${AD Forest and Domain Naming})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\AD Forest and Domain Naming.ps1" -Value (${AD Forest and Domain Naming})
 #endregion
 
 #region | Labels for Active Directory Security Tiers |
@@ -548,7 +554,7 @@ ${Labels for Active Directory Security Tiers} = ${Labels for Active Directory Se
   -replace '%_LabelTheta_%',$LabelTheta `
   -replace '%_LabelKappa_%',$LabelKappa `
   -replace '%_LabelOmega_%',$LabelOmega
-Set-Content -Path "$PSScriptRoot\Labels for Active Directory Security Tiers.ps1" -Value (${Labels for Active Directory Security Tiers})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Labels for Active Directory Security Tiers.ps1" -Value (${Labels for Active Directory Security Tiers})
 
 #endregion
 
@@ -559,7 +565,7 @@ ${Constants for Organization Naming that are not directly related to IT operatio
   -replace '%_Organization Name_%',${Organization Name} `
   -replace '%_Organization Legal Name_%',${Organization Legal Name} `
   -replace '%_Registered Organization_%',${Registered Organization}
-Set-Content -Path "$PSScriptRoot\Constants for Organization Naming that are not directly related to IT operations.ps1" -Value (${Constants for Organization Naming that are not directly related to IT operations})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Constants for Organization Naming that are not directly related to IT operations.ps1" -Value (${Constants for Organization Naming that are not directly related to IT operations})
 #endregion
 
 #region | Node Mgmt NetIPInterface CNAMEs |
@@ -587,7 +593,7 @@ ${Node Mgmt NetIPInterface CNAMEs} = ${Node Mgmt NetIPInterface CNAMEs Precursor
   -replace '%_Web PKI OSCP Server Mgmt Cname_%',${Web PKI OSCP Server Mgmt Cname} `
   -replace '%_Web PKI CAWE Server Mgmt Cname_%',${Web PKI CAWE Server Mgmt Cname} `
   -replace '%_Web PKI NDES Server Mgmt Cname_%',${Web PKI NDES Server Mgmt Cname}
-Set-Content -Path "$PSScriptRoot\Node Mgmt NetIPInterface CNAMEs.ps1" -Value (${Node Mgmt NetIPInterface CNAMEs})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Node Mgmt NetIPInterface CNAMEs.ps1" -Value (${Node Mgmt NetIPInterface CNAMEs})
 #endregion
 
 #region | Volume Letters on VM Instances |
@@ -595,7 +601,7 @@ ${Volume Letters on VM Instances Precursor} = Get-Content -Path "$PSScriptRoot\P
 ${Volume Letters on VM Instances} = ${Volume Letters on VM Instances Precursor} `
   -replace '%_adVol_%',$adVol `
   -replace '%_pkiVol_%',$pkiVol
-Set-Content -Path "$PSScriptRoot\Volume Letters on VM Instances.ps1" -Value (${Volume Letters on VM Instances})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Volume Letters on VM Instances.ps1" -Value (${Volume Letters on VM Instances})
 #endregion
 
 #region | Storage Resiliency Reference |
@@ -608,7 +614,7 @@ ${Storage Resiliency Reference} = ${Storage Resiliency Reference Precursor} `
   -replace '%_Physical Disk Size-Xenon_%',${Physical Disk Size-Xenon} `
   -replace '%_Physical Disk Size-Radon_%',${Physical Disk Size-Radon} `
   -replace '%_Physical Disk Size-Oganesson_%',${Physical Disk Size-Oganesson}
-Set-Content -Path "$PSScriptRoot\Storage Resiliency Reference.ps1" -Value (${Storage Resiliency Reference})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Storage Resiliency Reference.ps1" -Value (${Storage Resiliency Reference})
 #endregion
 
 #region | Certification Authority CommonNames |
@@ -622,77 +628,54 @@ ${Certification Authority CommonNames} = ${Certification Authority CommonNames P
   -replace '%_Policy CA2 Name_%',${Policy CA2 Name} `
   -replace '%_End-Entity CA1 Name_%',${End-Entity CA1 Name} `
   -replace '%_End-Entity CA1 Name_%',${End-Entity CA1 Name}
-Set-Content -Path "$PSScriptRoot\Certification Authority CommonNames.ps1" -Value (${Certification Authority CommonNames})
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Certification Authority CommonNames.ps1" -Value (${Certification Authority CommonNames})
 #endregion
 
 #endregion
 
 ${Constructed Profile} = -join $(
-  Get-Content -Raw -Path "$PSScriptRoot\requires and StrictMode.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\External Storage Media Drive Letters.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Computer Info Lite.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Define explorer.exe Owner variable.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\PATH Environment Variable.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Other Env Vars not defined by DSC.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\AD Forest and Domain Naming.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Labels for Active Directory Security Tiers.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Constants for Organization Naming that are not directly related to IT operations.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Node Mgmt NetIPInterface CNAMEs.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Volume Letters on VM Instances.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Type Accelerator Instance.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\requires and StrictMode.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage Media Drive Letters.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Computer Info Lite.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Define explorer.exe Owner variable.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PATH Environment Variable.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Other Env Vars not defined by DSC.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\AD Forest and Domain Naming.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Labels for Active Directory Security Tiers.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Constants for Organization Naming that are not directly related to IT operations.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Node Mgmt NetIPInterface CNAMEs.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Volume Letters on VM Instances.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Type Accelerator Instance.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\Storage Spaces-Pooled Storage and Virtual Physical Disks.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Storage Resiliency Reference.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Windows ADK (Assessment and Deployment Kit) Versions and ProductIDs.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Lightweight Functions.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Important Variables.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Storage Resiliency Reference.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Windows ADK (Assessment and Deployment Kit) Versions and ProductIDs.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Lightweight Functions.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Important Variables.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\Virtual Local Area Network Titles and VLAN ID Map.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\Quick Management Cname Conversions.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\User Principal Name-to-SAM Account Name.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\Adapter Hardware Type.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Regular Expression Patterns.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Windows PowerShell in Action (3rd Ed.) Selections.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Unimportant Variables.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Regular Expression Patterns.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Windows PowerShell in Action (3rd Ed.) Selections.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Unimportant Variables.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\Windows Server Image Index.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Registry Provider Paths.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Certification Authority CommonNames.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Location - Culture - Geography.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\RelativeID and CanonicalName Sets.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Registry Provider Paths.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Certification Authority CommonNames.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Location - Culture - Geography.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\RelativeID and CanonicalName Sets.ps1"
 
-  Get-Content -Raw -Path "$PSScriptRoot\Exercise Control Over Command Resolution.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\PowerShell Cookbook (4th Ed.) Selections.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\prompt(s).ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\Final Set-Location.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Exercise Control Over Command Resolution.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\PowerShell Cookbook (4th Ed.) Selections.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\prompt(s).ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Final Set-Location.ps1"
 )
 
-$ParentParentPath = Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty 'Path'
-$NewPath = Join-Path -Path $ParentParentPath -ChildPath 'output\Instant-ADCS'
-
-$NewFolderPath = [System.IO.DirectoryInfo]$NewPath
-
-$IsPresent = Test-Path -Path "$NewFolderPath"
-if ($IsPresent) {
-  . "$PSScriptRoot\Lightweight Functions.ps1"
-  $DateVar = Call-DateVar
-  Get-Item -Path $NewFolderPath | Rename-Item -NewName "Instant-ADCS $DateVar"
-}
-
-${New Windows PowerShell Base Folder Path} = Join-Path -Path "$NewFolderPath" -ChildPath 'usb1\Instant-ADCS\Base\5.1'
-
-${New Windows PowerShell Base Folder} = try {
-  Get-Item -Path ${New Windows PowerShell Base Folder Path} -ErrorAction 'Stop'
-} catch {
-  New-Item -Path ${New Windows PowerShell Base Folder Path} -ItemType 'Directory' -Force
-}
-
-#region | Copy supporting scripts into prep directory for usb1 |
-Copy-Item -Path "$PSScriptRoot\Class Definitions" -Destination "${New Windows PowerShell Base Folder}" -Recurse
-Get-ChildItem -Path $PSScriptRoot -File | ForEach-Object -Process {
-  Copy-Item -Path $_.FullName -Destination "${New Windows PowerShell Base Folder}"
-}
+#region | Copy supporting scripts into Base directory of usb1 prep directory for Windows PowerShell |
+Copy-Item -Path "$PSScriptRoot\Class Definitions" -Destination "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}" -Recurse
+Get-ChildItem -Path $PSScriptRoot -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}"}
 #endregion
 
-${Constructed profile.ps1 File Path} = Join-Path -Path "${New Windows PowerShell Base Folder}" -ChildPath 'profile.ps1'
-
+#region | Generate finished profile.ps1 file in Base directory of usb1 prep directory for Windows PowerShell |
+${Constructed profile.ps1 File Path} = Join-Path -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}" -ChildPath 'profile.ps1'
 Set-Content -Path ${Constructed profile.ps1 File Path} -Value (${Constructed Profile})
-
-
+#endregion
