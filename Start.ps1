@@ -49,14 +49,7 @@ param (
 
 
 #region | Export non-senstive strings to .clixml for later import by other applications |
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\EmailAddressOfBitwardenAccount.clixml" -InputObject ($EmailAddressOfBitwardenAccount)
-<# Note |
-  Fully Qualified Name (FQN) of the Folder object in the Bitwarden 
-  Vault that contains the secure strings for Instant-ADCS follows
-  the name of the project: Instant-ADCS. 
-#>
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml" -InputObject ($FolderFQN)
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\BadPassword.clixml" -InputObject ($BadPassword)
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1"
 #endregion
 
 #region | Install NuGet | Set PSGallery as Trusted | Install 'TUN.CredentialManager' |
@@ -257,15 +250,15 @@ $HT = @{
 #endregion
 
 #region | Install machine-scope PowerShell 7 and register Event Logging Manifest |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
+#TEMPORARY#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
 #endregion
 
 #region | Install Bitwarden CLI, log into Bitwarden CLI, and Build SAT module |
-. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
+#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
 #endregion
 #region | Variable Setup in Windows PowerShell and Export to CliXml |
 #         & "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+#TEMPORARY#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
 #endregion
 
 
@@ -326,13 +319,13 @@ $HT = @{
 #>
 #endregion
 #region | Compile Quick Lookup Table.csv File |
-. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Compile Quick Lookup Table.csv File.ps1"
+#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Compile Quick Lookup Table.csv File.ps1"
 #endregion
 #region | Update Password for Logging into Bare-metal Server (aka DSC Authoring Station, aka Unclustered Hyper-V Host) to a value you know |
-. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Update Password for Logging into Bare-metal Unclustered Hyper-V Host.ps1"
+#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Update Password for Logging into Bare-metal Unclustered Hyper-V Host.ps1"
 #endregion
 #region | Write password from local Secrets Vault into local Windows Credential Manager |
-. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Write password from local Secrets Vault into local Windows Credential Manager.ps1"
+#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Write password from local Secrets Vault into local Windows Credential Manager.ps1"
 #endregion
 #endregion
 
