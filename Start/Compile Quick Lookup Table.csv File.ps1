@@ -1,8 +1,6 @@
 #Requires -Version 7.4
 #Requires -PSEdition Core
 
-
-
 #region | Synchronize contents of 'Instant-ADCS' folder in online Bitwarden Vault down to local Secrets Vault |
 Unlock-BwCli -Verbose
 
