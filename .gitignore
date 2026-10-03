@@ -1,6 +1,7 @@
 # Text Editor #
 ###################
 *.code-workspace
+.vscode\*
 # Compiled source #
 ###################
 *.com
