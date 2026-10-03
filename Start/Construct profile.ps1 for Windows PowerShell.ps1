@@ -18,6 +18,30 @@ param (
   ${DNS Name of Root Domain in AD Forest}
 )
 
+#region | Ensure target 'output' directory is present in project root |
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.clixml"
+
+$ParentPath = Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty 'Path'
+$NewPath = Join-Path -Path $ParentPath -ChildPath "output\$FolderFQN"
+$NewFolderPath = [System.IO.DirectoryInfo]$NewPath
+
+$IsPresent = Test-Path -Path "$NewFolderPath"
+if ($IsPresent) {
+  . "$PSScriptRoot\..\Base\5.1\Static\Lightweight Functions.ps1"
+  $DateVar = Call-DateVar
+  Get-Item -Path $NewFolderPath | Rename-Item -NewName "$FolderFQN $DateVar"
+}
+
+${New Windows PowerShell Base Folder Path} = Join-Path -Path "$NewFolderPath" -ChildPath "usb1\$FolderFQN\Base\5.1"
+${New Windows PowerShell Base Folder PARTIAL Path} = Join-Path -Path "output\$FolderFQN" -ChildPath "usb1\$FolderFQN\Base\5.1"
+
+${New Windows PowerShell Base Folder} = try {
+  Get-Item -Path ${New Windows PowerShell Base Folder Path} -ErrorAction 'Stop'
+} catch {
+  New-Item -Path ${New Windows PowerShell Base Folder Path} -ItemType 'Directory' -Force
+}
+#endregion
+
 #region | Set variable values and construct profile.ps1 for Windows PowerShell |
 #region | Constants for Organization Naming that are not directly related to IT operations |
 ${Registered Owner}        = "Registered Owner"
@@ -181,6 +205,10 @@ $HT = @{
   'Policy CA2 Name'     = 'Deimos Trust S01'
   'End-Entity CA1 Name' = 'Sagittarius A* Global Edition Generation 1 Version 00'
   'End-Entity CA2 Name' = "Ascii$([System.Char]92) $([System.Char]47)utf7$([System.Char]58)-$([System.Char]42)ANSI$([System.Char]63) z$([System.Char]34)$([System.Char]60)$([System.Char]62)$([System.Char]124) Truncation$([System.Char]63)"
+  #endregion
+
+  #region | Location for output content inside '.\output' directory of project root |
+  'New Windows PowerShell Base Folder PARTIAL Path' = ${New Windows PowerShell Base Folder PARTIAL Path}  
   #endregion
 }
 
