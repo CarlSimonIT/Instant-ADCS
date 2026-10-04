@@ -5,7 +5,7 @@
 $PackageManagerName = (Get-PackageProvider).Where({$_.Name -eq 'NuGet'}).Name
 ${NuGet Needs To Be Installed} = $PackageManagerName -eq $null
 if (${NuGet Needs To Be Installed}) {
-  Install-PackageProvider -Name 'NuGet' -Scope 'CurrentUser' -MinimumVersion '2.8.5.201' -Force
+  Install-PackageProvider -Name 'NuGet' -Scope 'CurrentUser' -MinimumVersion '2.8.5.201' -Force | Format-Table -AutoSize
 }
 #endregion
 
