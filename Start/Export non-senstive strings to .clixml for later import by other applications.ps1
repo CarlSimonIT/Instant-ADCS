@@ -6,6 +6,12 @@ param (
     Mandatory = $true
   )]
   [System.String]
+  ${SHA256 of Windows Server 2025 ISO File},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
   $EmailAddressOfBitwardenAccount,
 
   [Parameter(
@@ -21,6 +27,7 @@ param (
   $FolderFQN
 )
 
+Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml" -InputObject (${SHA256 of Windows Server 2025 ISO File})
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\EmailAddressOfBitwardenAccount.clixml" -InputObject ($EmailAddressOfBitwardenAccount)
 <# Note |
   Fully Qualified Name (FQN) of the Folder object in the Bitwarden 
