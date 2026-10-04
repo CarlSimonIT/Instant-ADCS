@@ -92,7 +92,7 @@ ${BW_CLIENTSECRET Secret} = Get-StoredCredential -Target ${Bitwarden Client Secr
 [System.Environment]::SetEnvironmentVariable($key2,${BW_CLIENTSECRET Secret},$scope2)
 
 # Set-PrerequisiteConditions -Verbose
-Write-Host -Object "`n  Open your authenticator app. Copy the TOTP for the Bitwarden Account of '$EmailAddressOfBitwardenAccount' and press Enter.`n" -ForegroundColor ([System.ConsoleColor]::DarkRed)
+Write-Host -Object "`n  Open your authenticator app.`n  Copy the 6-digit Two-step login code`n    (aka, the TOTP/Time-sensitive One-time Passcode)`n  for the Bitwarden Account of '$EmailAddressOfBitwardenAccount' and press Enter.`n" -ForegroundColor ([System.ConsoleColor]::DarkRed)
 pause
 Unlock-BwCli -EmailAddressOfBitwardenAccount $EmailAddressOfBitwardenAccount -Verbose
 
