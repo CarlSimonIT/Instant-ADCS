@@ -49,7 +49,6 @@ param (
 
 
 #region | Export non-senstive strings to .clixml for later import by other applications |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1"
 $HT = @{
   EmailAddressOfBitwardenAccount = $EmailAddressOfBitwardenAccount
   BadPassword                    = $BadPassword
@@ -70,36 +69,31 @@ $HT = @{
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage media.ps1"
 #endregion
 
-#region | Set variable values and construct profile.ps1 for Windows PowerShell |
-
 #region | Generate Windows PowerShell-compatible profile.ps1 file for Instant-ADCS |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1"
 $HT = @{
   'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
   'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
 }
 & "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1" @HT
 #endregion
-#endregion
 
 #region | Install machine-scope PowerShell 7 and register Event Logging Manifest |
-#TEMPORARY#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
 #endregion
 
 #region | Install Bitwarden CLI, log into Bitwarden CLI, and Build SAT module |
-#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
+. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
 #endregion
 #region | Variable Setup in Windows PowerShell and Export to CliXml |
-#         & "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
-#TEMPORARY#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
 #endregion
-
 
 #region | Persistent Secrets in Bitwarden Vault | WARNING: This will take over 60 minutes! |
 <#
   For this reason, the code should run in a PowerShell Job!! 
 #>
 #region | Generate secure strings in online Bitwarden Vault |
+
 <# Temporary Halt |
   . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Generate and Save Credentials into Bitwarden Vault.ps1"
 #>
