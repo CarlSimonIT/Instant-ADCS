@@ -675,7 +675,7 @@ ${Constructed Profile} = -join $(
 
 #region | Copy supporting scripts into Base directory of usb1 prep directory for Windows PowerShell |
 Copy-Item -Path "$PSScriptRoot\Class Definitions" -Destination "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}" -Recurse
-Get-ChildItem -Path $PSScriptRoot -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}"}
+Get-ChildItem -Path "$PSScriptRoot\Static" -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}"}
 #endregion
 
 #region | Generate finished profile.ps1 file in Base directory of usb1 prep directory for Windows PowerShell |
