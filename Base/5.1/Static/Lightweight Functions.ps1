@@ -3,6 +3,7 @@
 #function Call-DateVar {[System.String]::Format('{0:yyyy}.{0:MMdd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
 function Call-DateVar {[System.String]::Format('{0:yyyy}.{0:MM}{0:dd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
 Set-Alias -Name 'cdv' -Value 'Call-DateVar'
+#function Call-DateVar {[System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now)}
 
 #function Call-VersVar {[System.Version][System.String]::Format('{0:yyyy}.{0:MMdd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
 function Call-VersVar {[System.Version][System.String]::Format('{0:yyyy}.{0:MM}{0:dd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
