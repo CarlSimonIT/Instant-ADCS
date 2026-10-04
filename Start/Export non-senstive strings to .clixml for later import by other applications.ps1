@@ -3,7 +3,7 @@
 
 param (
   [Parameter(
-    Mandatory = $true,
+    Mandatory = $true
   )]
   [System.String]
   $EmailAddressOfBitwardenAccount,
