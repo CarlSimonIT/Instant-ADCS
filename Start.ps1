@@ -93,6 +93,21 @@ $HT = @{
   For this reason, the code should run in a PowerShell Job!! 
 #>
 #region | Generate secure strings in online Bitwarden Vault |
+<# Notes |
+  start msedge.exe 'https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/start-job?view=powershell-5.1'
+  Start-Job -ScriptBlock -Name -Credential -Authentication -InitializationScript -RunAs32 -PSVersion -InputObject -ArgumentList -Verbose -Debug -ErrorAction -WarningAction
+#>
+
+$ArgumentList = @(
+  "$PSScriptRoot\Start"
+)
+Start-Job -Name "Generate secure strings in online Bitwarden Vault" -ArgumentList $ArgumentList -ScriptBlock {
+  $StartFolder = $args[0]
+  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
+  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
+  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
+  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
+}
 
 <# Temporary Halt |
   . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Generate and Save Credentials into Bitwarden Vault.ps1"
