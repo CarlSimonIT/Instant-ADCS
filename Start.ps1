@@ -109,6 +109,15 @@ $HT = @{
 
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
 
+$ArgumentList = @(
+  "$PSScriptRoot\Start\Download Jobs"
+)
+Start-Job -Name "Download Windows Server .ISO file" -ArgumentList $ArgumentList -ScriptBlock {
+  $JobsFolder = $args[0]
+  . powershell.exe -NoProfile -File "$JobsFolder\Latest Windows Server .iso File.ps1"
+}
+
+
 #endregion
 
 #region | Download, but do not install, DSC Resource Modules |
