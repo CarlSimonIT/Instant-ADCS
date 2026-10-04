@@ -2,6 +2,7 @@
 ###################
 *.code-workspace
 .vscode\*
+.\output*
 # Compiled source #
 ###################
 *.com
