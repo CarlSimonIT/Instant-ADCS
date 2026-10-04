@@ -12,6 +12,18 @@ param (
     Mandatory = $true
   )]
   [System.String]
+  ${SHA256 of WinPE 2026-09 EXE File},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${SHA256 of ADK 2026-09 EXE File},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
   $EmailAddressOfBitwardenAccount,
 
   [Parameter(
@@ -28,6 +40,8 @@ param (
 )
 
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml" -InputObject (${SHA256 of Windows Server 2025 ISO File})
+Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml" -InputObject (${SHA256 of WinPE 2026-09 EXE File})
+Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of ADK 2026-09 EXE File.clixml" -InputObject (${SHA256 of ADK 2026-09 EXE File})
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\EmailAddressOfBitwardenAccount.clixml" -InputObject ($EmailAddressOfBitwardenAccount)
 <# Note |
   Fully Qualified Name (FQN) of the Folder object in the Bitwarden 
