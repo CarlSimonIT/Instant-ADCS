@@ -88,93 +88,27 @@ $HT = @{
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
 #endregion
 
-#region | Persistent Secrets in Bitwarden Vault | WARNING: This will take over 60 minutes! |
-<#
-  For this reason, the code should run in a PowerShell Job!! 
-#>
-#region | Generate secure strings in online Bitwarden Vault |
+#region | Generate secure strings in online Bitwarden Vault and synchronize down to local Windows Credential Manager | WARNING: This will take over 60 minutes! |
 <# Notes |
   start msedge.exe 'https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/start-job?view=powershell-5.1'
   Start-Job -ScriptBlock -Name -Credential -Authentication -InitializationScript -RunAs32 -PSVersion -InputObject -ArgumentList -Verbose -Debug -ErrorAction -WarningAction
 #>
-
-$ArgumentList = @(
-  "$PSScriptRoot\Start"
-)
-Start-Job -Name "Generate secure strings in online Bitwarden Vault" -ArgumentList $ArgumentList -ScriptBlock {
-  $StartFolder = $args[0]
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
-}
-
 <# Temporary Halt |
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Generate and Save Credentials into Bitwarden Vault.ps1"
-#>
-#endregion
-
-#region | Install 'TUN.CredentialManager' module for Windows PowerShell |
-<# I think we can delete this because the module has already been established much earlier |
-  Write-Host -Object "`n  Installing 'TUN.CredentialManager' module for Windows PowerShell...`n" -ForegroundColor ([System.ConsoleColor]::DarkYellow)
-  $InstallModuleHT = @{
-    Scope      = 'CurrentUser'
-    Repository = 'PSGallery'
-    Verbose    = $true
-  }
-  $ModuleName = 'TUN.CredentialManager'
-  try {
-    Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' | Format-Table -AutoSize
-  } 
-  catch {
-    Install-Module -Name $ModuleName @InstallModuleHT | Format-Table -AutoSize
+  $ArgumentList = @(
+    "$PSScriptRoot\Start"
+  )
+  Start-Job -Name "Generate secure strings in online Bitwarden Vault" -ArgumentList $ArgumentList -ScriptBlock {
+    $StartFolder = $args[0]
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
   }
 #>
 #endregion
-
-#region | Synchronize in-cloud Bitwarden Items down to local Windows Credential Manager |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Synchronize in-cloud Bitwarden Items down to local Windows Credential Manager.ps1"
-<# I think we can delete. 
-  #   Exporting $FolderFQN to CliXml happens early 
-  #   in .\Start.ps1 and exporting $FolderId to CliXml happens during 
-  #   'Generate and Save Credentials into Bitwarden Vault.ps1'
-
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Export FolderId and FolderFQN to CliXml.ps1"
-#>
-#region | Import FolderId  GUID and`$FolderFQN from .clixml file into separate in-memory variables |
-<# Can we delete? I think this was not necessary |
-  Write-Verbose -Message "Import `$FolderId and `$FolderFQN from .clixml file into separate in-memory variables"
-
-  $CliXmlFile = Get-ChildItem -Path "$PSScriptRoot\..\.CommonItems\FolderId and FolderFQN *.clixml" `
-  | Sort-Object `
-  | Select-Object -Last 1
-
-  $CliXmlHT = Import-CliXml -Path $CliXmlFile.FullName
-
-  foreach ($Ea in ($CliXmlHT.GetEnumerator() | Write-Output)) {
-    $_Var_Name = $Ea.Name
-    try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
-    Set-Variable -Name $_Var_Name -Value ($Ea.Value)
-  }
-  Write-Verbose -Message "`$FolderFQN = $FolderFQN"
-  Write-Verbose -Message "`$FolderId = $FolderId"
-#>
-#endregion
-#region | Compile Quick Lookup Table.csv File |
-#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Compile Quick Lookup Table.csv File.ps1"
-#endregion
-#region | Update Password for Logging into Bare-metal Server (aka DSC Authoring Station, aka Unclustered Hyper-V Host) to a value you know |
-#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Update Password for Logging into Bare-metal Unclustered Hyper-V Host.ps1"
-#endregion
-#region | Write password from local Secrets Vault into local Windows Credential Manager |
-#TEMPORARY#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Write password from local Secrets Vault into local Windows Credential Manager.ps1"
-#endregion
-#endregion
-
-#endregion
-
 
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
+
 #endregion
 
 #region | Download, but do not install, DSC Resource Modules |
