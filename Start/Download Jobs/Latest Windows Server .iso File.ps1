@@ -40,6 +40,7 @@ Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
 
 
 # Speed up slow Invoke-WebRequest: 
+## Google Search:       Invoke-WebRequest slow download speed -noai
 start msedge.exe 'https://rostacik.net/2022/07/28/how-to-speed-up-powershell-invoke-webrequest/'
 $OriginalProgressPreference = $ProgressPreference
 $ProgressPreference = 'SilentlyContinue'
