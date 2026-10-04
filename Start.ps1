@@ -14,13 +14,23 @@ param (
 
   [Parameter(
     Mandatory = $false,
-    HelpMessage = "The SHA256 hash you download might not match the default value in the Start.ps1 script. `r`nSome websites for reference on hash verification of an iso:`r`n  'https://woshub.com/check-file-hash-windows/'`r`n  'https://files.rg-adguard.net/?dark=1'`r`n  'https://my.visualstudio.com/Downloads' "
+    HelpMessage = "Download link: 'https://go.microsoft.com/fwlink/?linkid=2289981'"
   )]
   [ValidatePattern(
     '^[0-9a-f]{64}$'
   )]
   [System.String]
   ${SHA256 of WinPE 2026-09 EXE File} = 'D4DE67ACC83DE253CCC941DD0590808D83726BDD8EA768A374A7BEAFF7949D6A',
+
+  [Parameter(
+    Mandatory = $false,
+    HelpMessage = "Download link: 'https://go.microsoft.com/fwlink/?linkid=2289980'"
+  )]
+  [ValidatePattern(
+    '^[0-9a-f]{64}$'
+  )]
+  [System.String]
+  ${SHA256 of ADK 2026-09 EXE File} = 'AC6A930FDB5C2980BA5FEFE606D47EDAAFCF5F647B4337411500D158EA77300F',
 
   [Parameter(
     Mandatory = $true,
@@ -71,6 +81,8 @@ param (
 #region | Export non-senstive strings to .clixml for later import by other applications |
 $HT = @{
   'SHA256 of Windows Server 2025 ISO File' = ${SHA256 of Windows Server 2025 ISO File}
+  'SHA256 of WinPE 2026-09 EXE File'       = ${SHA256 of WinPE 2026-09 EXE File}
+  'SHA256 of ADK 2026-09 EXE File'         = ${SHA256 of ADK 2026-09 EXE File}
   EmailAddressOfBitwardenAccount           = $EmailAddressOfBitwardenAccount
   BadPassword                              = $BadPassword
   FolderFQN                                = $FolderFQN
@@ -141,40 +153,65 @@ $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Or
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 ${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq ${SHA256 of Windows Server 2025 ISO File}} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
 if (${Windows Server 2025 ISO File} -eq $null) {
-  $ArgumentList = @(
-    ${Windows Server 2025 ISO File}
-    'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
-    "$folder\Windows Server 2025.iso"
-    $ProgressPreference
-  )
   $JobName = 'Download Windows Server 2025 ISO File'
   # (Get-Job -Name $JobName).Where({$_.State -eq 'Running'})
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+      "$folder\Windows Server 2025.iso"
+      $ProgressPreference
+    )
 
-  Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-    ${Windows Server 2025 ISO File} = $args[0]
-    $WebPath                        = $args[1]
-    $FilePath                       = $args[2]
-    $OriginalProgressPreference     = $args[3]
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                        = $args[0]
+      $FilePath                       = $args[1]
+      $OriginalProgressPreference     = $args[2]
 
-    $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-    $ProgressPreference = $OriginalProgressPreference
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
   }
 }
 #endregion
 
-
 #region | Windows Assessment and Deployment Kit | Phase 1 |
-<# Windows ADK 10.1.26100.9457 (September 2026) |
-  'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install'
-  'https://go.microsoft.com/fwlink/?linkid=2289980'
-#>
 <# Windows PE add-on for Windows ADK 10.1.26100.9457 (September 2026) |
   'https://go.microsoft.com/fwlink/?linkid=2289981'
 #>
-start msedge.exe 'https://go.microsoft.com/fwlink/?linkid=2289981'
-Get-FileHash -Path "C:\Users\lowpr\Downloads\adkwinpesetup.exe" -Algorithm sha256
-'D4DE67ACC83DE253CCC941DD0590808D83726BDD8EA768A374A7BEAFF7949D6A'
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq ${SHA256 of WinPE 2026-09 EXE File}} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+if (${WinPE 2026-09 EXE File} -eq $null) {
+  $JobName = 'Download WinPE 2026-09 EXE File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2289981'
+      "$folder\adkwinpesetup.exe"
+      $ProgressPreference
+    )
+
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+  }
+}
 
 #endregion
 
@@ -190,30 +227,8 @@ Get-FileHash -Path "C:\Users\lowpr\Downloads\adkwinpesetup.exe" -Algorithm sha25
 #region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion. |
 #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #region | Windows Assessment and Deployment Kit | Phase 2 |
 <#
   
 #>
 #endregion
-
-
-
-
-
-
-
-
-
