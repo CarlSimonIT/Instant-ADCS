@@ -29,3 +29,6 @@ Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\EmailAddressOfBitwardenAcc
 #>
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\BadPassword.clixml" -InputObject ($BadPassword)
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.clixml" -InputObject ($FolderFQN)
+
+${Full Computer Name} = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name 'HostName'
+Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\Full Computer Name.clixml" -InputObject (${Full Computer Name})
