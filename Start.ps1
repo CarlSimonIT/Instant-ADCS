@@ -30,7 +30,7 @@ param (
     '^[0-9a-f]{64}$'
   )]
   [System.String]
-  ${SHA256 of ADK 2026-09 EXE File} = 'AC6A930FDB5C2980BA5FEFE606D47EDAAFCF5F647B4337411500D158EA77300F',
+  ${SHA256 of Windows ADK 2026-09 EXE File} = 'AC6A930FDB5C2980BA5FEFE606D47EDAAFCF5F647B4337411500D158EA77300F',
 
   [Parameter(
     Mandatory = $true,
@@ -82,7 +82,7 @@ param (
 $HT = @{
   'SHA256 of Windows Server 2025 ISO File' = ${SHA256 of Windows Server 2025 ISO File}
   'SHA256 of WinPE 2026-09 EXE File'       = ${SHA256 of WinPE 2026-09 EXE File}
-  'SHA256 of ADK 2026-09 EXE File'         = ${SHA256 of ADK 2026-09 EXE File}
+  'SHA256 of Windows ADK 2026-09 EXE File' = ${SHA256 of Windows ADK 2026-09 EXE File}
   EmailAddressOfBitwardenAccount           = $EmailAddressOfBitwardenAccount
   BadPassword                              = $BadPassword
   FolderFQN                                = $FolderFQN
@@ -128,18 +128,25 @@ $HT = @{
   Start-Job -ScriptBlock -Name -Credential -Authentication -InitializationScript -RunAs32 -PSVersion -InputObject -ArgumentList -Verbose -Debug -ErrorAction -WarningAction
 #>
 <# Temporary Halt |
+#>
+$JobName = 'Generate secure strings in online Bitwarden Vault'
+$RunningJob = Get-Job | Where-Object -FilterScript {
+  $_.Name  -eq $JobName  -and `
+  $_.State -eq 'Running'
+}
+if ($RunningJob -eq $null) {
   $ArgumentList = @(
     "$PSScriptRoot\Start"
   )
-  $JobName = 'Generate secure strings in online Bitwarden Vault'
-  Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
     $StartFolder = $args[0]
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
   }
-#>
+  $Job | Format-Table -AutoSize
+}
 #endregion
 
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
@@ -149,9 +156,10 @@ $HT = @{
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
+$hash = ${SHA256 of Windows Server 2025 ISO File}
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq ${SHA256 of Windows Server 2025 ISO File}} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
 if (${Windows Server 2025 ISO File} -eq $null) {
   $JobName = 'Download Windows Server 2025 ISO File'
   # (Get-Job -Name $JobName).Where({$_.State -eq 'Running'})
@@ -166,7 +174,7 @@ if (${Windows Server 2025 ISO File} -eq $null) {
       $ProgressPreference
     )
 
-    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                        = $args[0]
       $FilePath                       = $args[1]
       $OriginalProgressPreference     = $args[2]
@@ -175,19 +183,24 @@ if (${Windows Server 2025 ISO File} -eq $null) {
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
     }
+    $Job | Format-Table -AutoSize
   }
 }
 #endregion
 
 #region | Windows Assessment and Deployment Kit | Phase 1 |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
 <# Windows PE add-on for Windows ADK 10.1.26100.9457 (September 2026) |
   'https://go.microsoft.com/fwlink/?linkid=2289981'
 #>
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09"
+$hash = ${SHA256 of WinPE 2026-09 EXE File}
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\WinPE 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq ${SHA256 of WinPE 2026-09 EXE File}} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
 if (${WinPE 2026-09 EXE File} -eq $null) {
   $JobName = 'Download WinPE 2026-09 EXE File'
   $RunningJob = Get-Job | Where-Object -FilterScript {
@@ -201,7 +214,7 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
       $ProgressPreference
     )
 
-    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                    = $args[0]
       $FilePath                   = $args[1]
       $OriginalProgressPreference = $args[2]
@@ -210,8 +223,51 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
     }
+    $Job | Format-Table -AutoSize
   }
 }
+
+#Push-Location -Path "$PSScriptRoot\Start\Download Jobs"
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\Windows ADK 2026-09 EXE File.ps1"
+#Pop-Location
+
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+${SHA256 of Windows ADK 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml"
+$hash = ${SHA256 of Windows ADK 2026-09 EXE File}
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${Windows ADK 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+if (${Windows ADK 2026-09 EXE File} -eq $null) {
+  $JobName = 'Download Windows ADK 2026-09 EXE File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2289980'
+      "$folder\adksetup.exe"
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+
+<# Windows ADK Patches |
+  None currently published for Windows ADK 2026-09 but check back periodically. 
+  'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-servicing'
+#>
+
 
 #endregion
 
