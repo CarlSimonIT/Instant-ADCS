@@ -41,8 +41,6 @@
   $FilePath = "$folder\adksetup.exe"
   Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
 
-
-
   $FolderFQN = 'Instant-ADCS'
   #   $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
   $path = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
