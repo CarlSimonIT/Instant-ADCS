@@ -10,17 +10,19 @@
   start msedge.exe 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/dn621910(v=win.10)'
 #>
 
-$FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
-$path = "$env:UserProfile\GitHub\CarlSimonIT\$FolderFQN\Start\Assessment and Deployment Kit Scripting Dev.ps1"
+$AppName = 'Windows ADK 2026-09'
+
 <#
+  $FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
+  $path = "$env:UserProfile\GitHub\CarlSimonIT\$FolderFQN\Start\Assessment and Deployment Kit Scripting Dev.ps1"
   $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
   code $file.FullName
 #>
 
 
 $FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
-$WorkingDirectory = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
-$layout = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Extracted"
+$WorkingDirectory = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs\$AppName Installer"
+$layout = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs\$AppName Extracted"
 $ArgumentList = @(
   '/quiet'
   '/ceip on'
@@ -47,18 +49,14 @@ Start-Process -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -Ar
 #>
 
 $FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
-$WorkingDirectory = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
+$WorkingDirectory = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs\$AppName Installer"
 $ArgumentList = @(
   '/quiet'
   '/ceip on'
-  "/installpath $([System.Char]34)$env:ProgramFiles$([System.Char]34)"
+  "/installpath $([System.Char]34)${env:ProgramFiles(x86)}\Windows Kits\10$([System.Char]34)"
   '/features OptionId.DeploymentTools'
 )
 Start-Process -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -ArgumentList $ArgumentList -Verb 'RunAs'
-
-
-
-
 
 . "$env:UserProfile\GitHub\CarlSimonIT\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
 "$usb0"
@@ -67,18 +65,6 @@ Start-Process -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -Ar
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
   # Boot To WinPE
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
-  start msedge.exe ''
-  start msedge.exe ''
-  start msedge.exe ''
-  start msedge.exe ''
   # Deployment Tools Reference for WinPE
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
 #>
-
-
-<#
-
-
-#>
-
-
