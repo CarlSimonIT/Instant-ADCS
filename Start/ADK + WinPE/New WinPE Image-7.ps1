@@ -1,6 +1,4 @@
 
-
-
 <#
   Deployment Tools Reference for WinPE. 
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
@@ -17,10 +15,6 @@
   Boot To WinPE
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
 #>
-
-
-
-
 
 
 <#
