@@ -267,7 +267,7 @@ $HT = @{
 $HT = @{
   AppName = 'WinPE 2026-09'
 }
-#& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
+& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
 #endregion
 
 
