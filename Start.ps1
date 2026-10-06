@@ -125,38 +125,6 @@ $HT = @{
 
 #region | Install Bitwarden CLI, log into Bitwarden CLI, and Build SAT module |
 . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
-
-<#
-
-  ${Build Secure-Automations-Toolset Module Script Path} = "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
-  ${Build Secure-Automations-Toolset Module Script Path} = "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\Start\Build Secure-Automations-Toolset Module.ps1"
-  ${Command Here-String} = Get-Item -Path ${Build Secure-Automations-Toolset Module Script Path} | Get-Content -Raw
-  $Command = [ScriptBlock]::Create(${Command Here-String})
-
-
-  ${Command Here-String} = $(
-    "  & {`n"
-    "    Get-Item -Path $([System.Char]39)${Build Secure-Automations-Toolset Module Script Path}$([System.Char]39) | Get-Content -Raw | Invoke-Expression`n"
-    "  }`n"
-  ) -join ''
-
-  Start-Process -FilePath "$env:ProgramFiles\PowerShell\7\pwsh.exe" -ArgumentList @(
-    #"& $([System.Char]34)$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1$([System.Char]34) @{'explorer.exe Owner' = ${explorer.exe Owner}}"
-    "$Command @{'explorer.exe Owner' = ${explorer.exe Owner}}"
-  ) -Verb 'RunAs'
-
-
-
-
-  ${Command Here-String} = $(
-    "& {`n"
-    "  $([System.Char]34)${Build Secure-Automations-Toolset Module Script Path}$([System.Char]34) -Verbose`n"
-    "}`n"
-  ) -join ''
-  $Command = [ScriptBlock]::Create(${Command Here-String})
-
-  Start-Process -FilePath "$env:ProgramFiles\PowerShell\7\pwsh.exe" $Command -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
-#>
 #endregion
 
 #region | Variable Setup in Windows PowerShell and Export to CliXml |
@@ -164,12 +132,6 @@ $HT = @{
 #endregion
 
 #region | Generate secure strings in online Bitwarden Vault and synchronize down to local Windows Credential Manager | WARNING: This will take over 60 minutes! |
-<# Notes |
-  start msedge.exe 'https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/start-job?view=powershell-5.1'
-  Start-Job -ScriptBlock -Name -Credential -Authentication -InitializationScript -RunAs32 -PSVersion -InputObject -ArgumentList -Verbose -Debug -ErrorAction -WarningAction
-#>
-<# Temporary Halt |
-#>
 $JobName = 'Generate secure strings in online Bitwarden Vault'
 $RunningJob = Get-Job | Where-Object -FilterScript {
   $_.Name  -eq $JobName  -and `
@@ -194,9 +156,9 @@ if ($RunningJob -eq $null) {
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
-<# Windows PE add-on for Windows ADK 10.1.26100.9457 (September 2026) |
-  'https://go.microsoft.com/fwlink/?linkid=2289981'
-#>
+# Windows PE add-on for Windows ADK 10.1.26100.9457 (September 2026) |
+# start msedge.exe 'https://go.microsoft.com/fwlink/?linkid=2289981'
+
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
 $hash = ${SHA256 of WinPE 2026-09 EXE File}
@@ -228,10 +190,6 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
     $Job | Format-Table -AutoSize
   }
 }
-
-#Push-Location -Path "$PSScriptRoot\Start\Download Jobs"
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\Windows ADK 2026-09 EXE File.ps1"
-#Pop-Location
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of Windows ADK 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml"
@@ -267,10 +225,6 @@ if (${Windows ADK 2026-09 EXE File} -eq $null) {
 #endregion
 
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
-# Push-Location -Path "$PSScriptRoot\Start\Download Jobs"
-# . powershell.exe -NoProfile -File '.\Latest Windows Server .iso File.ps1'
-# Pop-Location
-
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
 $hash = ${SHA256 of Windows Server 2025 ISO File}
@@ -279,7 +233,6 @@ $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $
 ${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
 if (${Windows Server 2025 ISO File} -eq $null) {
   $JobName = 'Download Windows Server 2025 ISO File'
-  # (Get-Job -Name $JobName).Where({$_.State -eq 'Running'})
   $RunningJob = Get-Job | Where-Object -FilterScript {
     $_.Name  -eq $JobName  -and `
     $_.State -eq 'Running'
@@ -309,7 +262,7 @@ if (${Windows Server 2025 ISO File} -eq $null) {
 $HT = @{
   AppName = 'Windows ADK 2026-09'
 }
-#& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
+& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
 
 $HT = @{
   AppName = 'WinPE 2026-09'
