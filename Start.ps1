@@ -33,6 +33,12 @@ param (
   ${SHA256 of Windows ADK 2026-09 EXE File} = 'AC6A930FDB5C2980BA5FEFE606D47EDAAFCF5F647B4337411500D158EA77300F',
 
   [Parameter(
+    Mandatory = $false
+  )]
+  [System.String]
+  $CloningRepoPath = $(Get-Location | Select-Object -ExpandProperty 'Path'),
+
+  [Parameter(
     Mandatory = $true,
     HelpMessage = "Regular expression sourced from 'https://www.regular-expressions.info/email.html'"
   )]
@@ -77,7 +83,6 @@ param (
   ${DNS Name of Root Domain in AD Forest}
 )
 
-
 #region | Export non-senstive strings to .clixml for later import by other applications |
 $HT = @{
   'SHA256 of Windows Server 2025 ISO File' = ${SHA256 of Windows Server 2025 ISO File}
@@ -88,6 +93,10 @@ $HT = @{
   FolderFQN                                = $FolderFQN
 }
 & "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1" @HT
+
+
+[System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
+
 #endregion
 
 #region | Install NuGet | Set PSGallery as Trusted | Install 'TUN.CredentialManager' |
@@ -116,6 +125,38 @@ $HT = @{
 
 #region | Install Bitwarden CLI, log into Bitwarden CLI, and Build SAT module |
 . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
+
+<#
+
+  ${Build Secure-Automations-Toolset Module Script Path} = "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
+  ${Build Secure-Automations-Toolset Module Script Path} = "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\Start\Build Secure-Automations-Toolset Module.ps1"
+  ${Command Here-String} = Get-Item -Path ${Build Secure-Automations-Toolset Module Script Path} | Get-Content -Raw
+  $Command = [ScriptBlock]::Create(${Command Here-String})
+
+
+  ${Command Here-String} = $(
+    "  & {`n"
+    "    Get-Item -Path $([System.Char]39)${Build Secure-Automations-Toolset Module Script Path}$([System.Char]39) | Get-Content -Raw | Invoke-Expression`n"
+    "  }`n"
+  ) -join ''
+
+  Start-Process -FilePath "$env:ProgramFiles\PowerShell\7\pwsh.exe" -ArgumentList @(
+    #"& $([System.Char]34)$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1$([System.Char]34) @{'explorer.exe Owner' = ${explorer.exe Owner}}"
+    "$Command @{'explorer.exe Owner' = ${explorer.exe Owner}}"
+  ) -Verb 'RunAs'
+
+
+
+
+  ${Command Here-String} = $(
+    "& {`n"
+    "  $([System.Char]34)${Build Secure-Automations-Toolset Module Script Path}$([System.Char]34) -Verbose`n"
+    "}`n"
+  ) -join ''
+  $Command = [ScriptBlock]::Create(${Command Here-String})
+
+  Start-Process -FilePath "$env:ProgramFiles\PowerShell\7\pwsh.exe" $Command -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
+#>
 #endregion
 
 #region | Variable Setup in Windows PowerShell and Export to CliXml |
@@ -268,12 +309,12 @@ if (${Windows Server 2025 ISO File} -eq $null) {
 $HT = @{
   AppName = 'Windows ADK 2026-09'
 }
-& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
+#& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
 
 $HT = @{
   AppName = 'WinPE 2026-09'
 }
-& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
+#& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
 #endregion
 
 
