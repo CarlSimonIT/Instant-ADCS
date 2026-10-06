@@ -1,6 +1,10 @@
 #Requires -Version 5.1
 #Requires -PSEdition Desktop
 
+param (
+  $AppName
+)
+
 <#
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
   # Boot To WinPE
@@ -13,9 +17,9 @@
   start msedge.exe ''
 #>
 
-$AppName = 'WinPE 2026-09'
-$FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
-$InstallsPath = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
+$InstallsPath = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+
 
 <#
   $FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
