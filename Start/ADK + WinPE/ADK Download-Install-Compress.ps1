@@ -1,6 +1,10 @@
 #Requires -Version 5.1
 #Requires -PSEdition Desktop
 
+param (
+  $AppName
+)
+
 <#
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install#install-the-adk'
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-offline-install'
@@ -10,9 +14,9 @@
   start msedge.exe 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/dn621910(v=win.10)'
 #>
 
-$AppName = 'Windows ADK 2026-09'
-$FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
-$InstallsPath = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\$FolderFQN\cfg\installs"
+
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
+$InstallsPath = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
 
 <#
   $FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
@@ -37,10 +41,8 @@ if (-not $IsZipPresent) {
   #region | Compress Installation Files to .zip Flie |
   ${Command Here-String} = $(
     "& {`n"
-    "  `$AppName = $([System.Char]39)Windows ADK 2026-09$([System.Char]39)`n"
-    "  `$FolderFQN = Import-CliXml -Path $([System.Char]34)`$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml$([System.Char]34)`n"
-    "  `$layout = $([System.Char]34)`$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\`$FolderFQN\cfg\installs\`$AppName Extracted$([System.Char]34)`n"
-    "  `$ZipFilePath = $([System.Char]34)`$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\`$FolderFQN\cfg\installs\`$AppName.zip$([System.Char]34)`n"
+    "  `$layout = $([System.Char]34)$InstallsPath\`$AppName Extracted$([System.Char]34)`n"
+    "  `$ZipFilePath = $([System.Char]34)$InstallsPath\`$AppName.zip$([System.Char]34)`n"
     "  Compress-Archive -Path `$layout -DestinationPath `$ZipFilePath`n"
     "}`n"
   ) -join ''
