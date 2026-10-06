@@ -149,46 +149,7 @@ if ($RunningJob -eq $null) {
 }
 #endregion
 
-#region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
-# Push-Location -Path "$PSScriptRoot\Start\Download Jobs"
-# . powershell.exe -NoProfile -File '.\Latest Windows Server .iso File.ps1'
-# Pop-Location
-
-$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
-${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
-$hash = ${SHA256 of Windows Server 2025 ISO File}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
-if (${Windows Server 2025 ISO File} -eq $null) {
-  $JobName = 'Download Windows Server 2025 ISO File'
-  # (Get-Job -Name $JobName).Where({$_.State -eq 'Running'})
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
-      "$folder\Windows Server 2025.iso"
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                        = $args[0]
-      $FilePath                       = $args[1]
-      $OriginalProgressPreference     = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
-  }
-}
-#endregion
-
-#region | Windows Assessment and Deployment Kit | Phase 1 |
+#region | Download ADK Installer exe files, but do not yet install |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
@@ -262,14 +223,65 @@ if (${Windows ADK 2026-09 EXE File} -eq $null) {
     $Job | Format-Table -AutoSize
   }
 }
+#endregion
+
+#region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
+# Push-Location -Path "$PSScriptRoot\Start\Download Jobs"
+# . powershell.exe -NoProfile -File '.\Latest Windows Server .iso File.ps1'
+# Pop-Location
+
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
+$hash = ${SHA256 of Windows Server 2025 ISO File}
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+if (${Windows Server 2025 ISO File} -eq $null) {
+  $JobName = 'Download Windows Server 2025 ISO File'
+  # (Get-Job -Name $JobName).Where({$_.State -eq 'Running'})
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+      "$folder\Windows Server 2025.iso"
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                        = $args[0]
+      $FilePath                       = $args[1]
+      $OriginalProgressPreference     = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+
+#region | Download-Install-Compress ADK + WinPE |
+$HT = @{
+  AppName = 'Windows ADK 2026-09'
+}
+& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
+
+$HT = @{
+  AppName = 'WinPE 2026-09'
+}
+& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
+
+#endregion
+
 
 <# Windows ADK Patches |
   None currently published for Windows ADK 2026-09 but check back periodically. 
   'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-servicing'
 #>
-
-
-#endregion
 
 
 
