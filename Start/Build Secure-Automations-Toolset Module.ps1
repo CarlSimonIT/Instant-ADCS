@@ -1,6 +1,7 @@
 #Requires -Version 7.4
 #Requires -PSEdition Core
 
+
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.clixml"
 $EmailAddressOfBitwardenAccount = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\EmailAddressOfBitwardenAccount.clixml"
 
@@ -73,7 +74,14 @@ Pop-Location
 #region | Use PowerShell 7 to install Bitwarden Password Manager CLI with script in Secure-Automations-Toolset |
 Write-Host -Object "`n  Installing (1) Bitwarden Password Manager CLI and (2) jq JSON processor with script from $ModuleName.`n" -ForegroundColor ([System.ConsoleColor]::DarkGray)
 $PSModuleInfo = Import-Module $ModuleName -PassThru -Force
-Set-PrerequisiteConditions -Verbose
+
+${explorer.exe Owner} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\explorer.exe Owner.clixml"
+#Set-PrerequisiteConditions -Verbose
+$HT = @{
+  'explorer.exe Owner' = ${explorer.exe Owner}
+  Verbose              = $true
+}
+Set-PrerequisiteConditions @HT
 #endregion
 
 #region | Authenticate into the Bitwarden CLI and register the local Secrets Vault |
