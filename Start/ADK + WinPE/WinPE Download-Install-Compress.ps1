@@ -5,28 +5,8 @@ param (
   $AppName
 )
 
-<#
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
-  # Boot To WinPE
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
-  # Deployment Tools Reference for WinPE
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
-  # Create bootable WinPE Media
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
-
-  start msedge.exe ''
-#>
-
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 $InstallsPath = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
-
-
-<#
-  $FolderFQN = Import-CliXml -Path "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\FolderFQN.clixml"
-  $path = "$env:UserProfile\GitHub\CarlSimonIT\$FolderFQN\Start\WinPE Scripting Dev.ps1"
-  $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
-  code $file.FullName
-#>
 
 $IsZipPresent = Test-Path -Path "$InstallsPath\$AppName.zip"
 if (-not $IsZipPresent) {
@@ -115,8 +95,3 @@ if (-not $IsInstalled) {
   #endregion
 }
 
-
-<#
-  . "$env:UserProfile\GitHub\CarlSimonIT\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
-  "$usb0"
-#>
