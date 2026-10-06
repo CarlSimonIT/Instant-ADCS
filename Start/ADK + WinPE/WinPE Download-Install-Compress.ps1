@@ -76,12 +76,13 @@ $IsInstalled = Test-Path -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\Cur
 if (-not $IsInstalled) {
   #region | Install the WinPE Add-ons |
   $WorkingDirectory = "$InstallsPath\$AppName Extracted"
-  Start-Process -ArgumentList @(
+  $ArgumentList = @(
     '/quiet'
     '/ceip on'
     "/installpath $([System.Char]34)${env:ProgramFiles(x86)}\Windows Kits\10$([System.Char]34)"
     '/features OptionId.WindowsPreinstallationEnvironment'
-  ) -FilePath '.\adkwinpesetup.exe' -WorkingDirectory $WorkingDirectory -Verb 'RunAs' -Wait
+  )
+  Start-Process -ArgumentList $ArgumentList -FilePath '.\adkwinpesetup.exe' -WorkingDirectory $WorkingDirectory -Verb 'RunAs' -Wait
   #endregion
 }
 
