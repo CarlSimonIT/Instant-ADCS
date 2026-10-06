@@ -6,7 +6,7 @@ param (
 )
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
-$InstallsPath = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$InstallsPath = "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
 
 $IsZipPresent = Test-Path -Path "$InstallsPath\$AppName.zip"
 if (-not $IsZipPresent) {
@@ -36,17 +36,19 @@ if (-not $IsZipPresent) {
   ) -FilePath powershell.exe -Verb 'RunAs' -Wait
   #endregion
   #region | Delete the recently-downloaded files |
-  ${Command Here-String} = $(
-    "& {`n"
-    "  `Get-Item -Path $([System.Char]34)$InstallsPath\$AppName Extracted$([System.Char]34) | Remove-Item -Force -Recurse`n"
-    "}`n"
-  ) -join ''
-  ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
-  Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
+  <#
+    ${Command Here-String} = $(
+      "& {`n"
+      "  `Get-Item -Path $([System.Char]34)$InstallsPath\$AppName Extracted$([System.Char]34) | Remove-Item -Force -Recurse`n"
+      "}`n"
+    ) -join ''
+    ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+    Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
 
-  Start-Process -ArgumentList @(
-    "Get-Item -Path '${Delete Extraction Directory Script Path}' | Get-Content -Raw | Invoke-Expression"
-  ) -FilePath powershell.exe -Verb 'RunAs' -Wait
+    Start-Process -ArgumentList @(
+      "Get-Item -Path '${Delete Extraction Directory Script Path}' | Get-Content -Raw | Invoke-Expression"
+    ) -FilePath powershell.exe -Verb 'RunAs' -Wait
+  #>
   #endregion
 } else {
   #region | Extract the local .zip file |
@@ -66,12 +68,13 @@ if (-not $IsZipPresent) {
   #endregion
 }
 
+<# WinPE Add-on Installation Options |
+  OptionId.WindowsPreinstallationEnvironment
+#>
+
 $IsInstalled = Test-Path -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{f567a246-97ac-4217-a1ba-020ced2a8187}"
 if (-not $IsInstalled) {
   #region | Install the WinPE Add-ons |
-  <# WinPE Add-on Installation Options |
-    OptionId.WindowsPreinstallationEnvironment
-  #>
   $WorkingDirectory = "$InstallsPath\$AppName Extracted"
   Start-Process -ArgumentList @(
     '/quiet'
@@ -80,18 +83,18 @@ if (-not $IsInstalled) {
     '/features OptionId.WindowsPreinstallationEnvironment'
   ) -FilePath '.\adkwinpesetup.exe' -WorkingDirectory $WorkingDirectory -Verb 'RunAs' -Wait
   #endregion
-  #region | Delete the recently-extracted files |
-  ${Command Here-String} = $(
-    "& {`n"
-    "  `Get-Item -Path $([System.Char]34)$InstallsPath\$AppName Extracted$([System.Char]34) | Remove-Item -Force -Recurse`n"
-    "}`n"
-  ) -join ''
-  ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
-  Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
-
-  Start-Process -ArgumentList @(
-    "Get-Item -Path '${Delete Extraction Directory Script Path}' | Get-Content -Raw | Invoke-Expression"
-  ) -FilePath powershell.exe -Verb 'RunAs' -Wait
-  #endregion
 }
 
+#region | Delete the recently-extracted files |
+${Command Here-String} = $(
+  "& {`n"
+  "  `Get-Item -Path $([System.Char]34)$InstallsPath\$AppName Extracted$([System.Char]34) | Remove-Item -Force -Recurse`n"
+  "}`n"
+) -join ''
+${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
+
+Start-Process -ArgumentList @(
+  "Get-Item -Path '${Delete Extraction Directory Script Path}' | Get-Content -Raw | Invoke-Expression"
+) -FilePath powershell.exe -Verb 'RunAs' -Wait
+#endregion
