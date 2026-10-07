@@ -7,8 +7,10 @@ param (
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 $InstallsPath = "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$path = "$InstallsPath\ADK + WinPE (2026-09)"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
-$IsZipPresent = Test-Path -Path "$InstallsPath\$AppName.zip"
+$IsZipPresent = Test-Path -Path "$folder\$AppName.zip"
 $IsInstalled = Test-Path -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{4f4f4626-ccb4-41ba-9c62-7ec9b0e113f3}"
 
 switch ($true) {
@@ -16,8 +18,8 @@ switch ($true) {
     (-not $IsZipPresent) -and (-not $IsInstalled)
   } {
     #region | Download but do not install Windows ADK Installation Files |
-    $WorkingDirectory = "$InstallsPath\$AppName Installer"
-    $layout = "$InstallsPath\$AppName Extracted"
+    $WorkingDirectory = "$folder\$AppName Installer"
+    $layout = "$folder\$AppName Extracted"
     $ArgumentList = @(
       '/quiet'
       '/ceip on'
@@ -34,7 +36,7 @@ switch ($true) {
       "  Compress-Archive -Path `$layout -DestinationPath `$ZipFilePath`n"
       "}`n"
     ) -join ''
-    ${Compression Script Path} = "$InstallsPath\$AppName Compress.ps1"
+    ${Compression Script Path} = "$folder\$AppName Compress.ps1"
     Set-Content -Path ${Compression Script Path} -Value ${Command Here-String}
 
     Start-Process -ArgumentList @(
@@ -42,7 +44,7 @@ switch ($true) {
     ) -FilePath powershell.exe -Verb 'RunAs' -Wait
     #endregion
     #region | Install the Windows Assessment and Deployment Kit |
-    $WorkingDirectory = "$InstallsPath\$AppName Extracted"
+    $WorkingDirectory = "$folder\$AppName Extracted"
     $ArgumentList = @(
       '/quiet'
       '/ceip on'
@@ -52,7 +54,7 @@ switch ($true) {
     Start-Process -ArgumentList $ArgumentList -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -Verb 'RunAs' -Wait
     #endregion
     #region | Ensure that uncompressed is deleted |
-    $IsExtractedPresent = Test-Path -Path "$InstallsPath\$AppName Extracted"
+    $IsExtractedPresent = Test-Path -Path "$folder\$AppName Extracted"
     if ($IsExtractedPresent) {
       ${Command Here-String} = $(
         "& {`n"
@@ -62,7 +64,7 @@ switch ($true) {
         "  }`n"
         "}`n"
       ) -join ''
-      ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+      ${Delete Extraction Directory Script Path} = "$folder\$AppName Delete Extraction Directory.ps1"
       Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
 
       Start-Process -ArgumentList @(
@@ -82,7 +84,7 @@ switch ($true) {
       "  Expand-Archive -Path `$ZipFilePath -DestinationPath `$DestinationPath`n"
       "}`n"
     ) -join ''
-    ${Expansion Script Path} = "$InstallsPath\$AppName Expand.ps1"
+    ${Expansion Script Path} = "$folder\$AppName Expand.ps1"
     Set-Content -Path ${Expansion Script Path} -Value ${Command Here-String}
 
     Start-Process -ArgumentList @(
@@ -90,7 +92,7 @@ switch ($true) {
     ) -FilePath powershell.exe -Verb 'RunAs' -Wait
     #endregion
     #region | Install the Windows Assessment and Deployment Kit |
-    $WorkingDirectory = "$InstallsPath\$AppName Extracted"
+    $WorkingDirectory = "$folder\$AppName Extracted"
     $ArgumentList = @(
       '/quiet'
       '/ceip on'
@@ -100,7 +102,7 @@ switch ($true) {
     Start-Process -ArgumentList $ArgumentList -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -Verb 'RunAs' -Wait
     #endregion
     #region | Ensure that uncompressed is deleted |
-    $IsExtractedPresent = Test-Path -Path "$InstallsPath\$AppName Extracted"
+    $IsExtractedPresent = Test-Path -Path "$folder\$AppName Extracted"
     if ($IsExtractedPresent) {
       ${Command Here-String} = $(
         "& {`n"
@@ -110,7 +112,7 @@ switch ($true) {
         "  }`n"
         "}`n"
       ) -join ''
-      ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+      ${Delete Extraction Directory Script Path} = "$folder\$AppName Delete Extraction Directory.ps1"
       Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
 
       Start-Process -ArgumentList @(
@@ -123,8 +125,8 @@ switch ($true) {
     (-not $IsZipPresent) -and ($IsInstalled)
   } {
     #region | Download but do not install Windows ADK Installation Files |
-    $WorkingDirectory = "$InstallsPath\$AppName Installer"
-    $layout = "$InstallsPath\$AppName Extracted"
+    $WorkingDirectory = "$folder\$AppName Installer"
+    $layout = "$folder\$AppName Extracted"
     $ArgumentList = @(
       '/quiet'
       '/ceip on'
@@ -141,7 +143,7 @@ switch ($true) {
       "  Compress-Archive -Path `$layout -DestinationPath `$ZipFilePath`n"
       "}`n"
     ) -join ''
-    ${Compression Script Path} = "$InstallsPath\$AppName Compress.ps1"
+    ${Compression Script Path} = "$folder\$AppName Compress.ps1"
     Set-Content -Path ${Compression Script Path} -Value ${Command Here-String}
 
     Start-Process -ArgumentList @(
@@ -149,7 +151,7 @@ switch ($true) {
     ) -FilePath powershell.exe -Verb 'RunAs' -Wait
     #endregion
     #region | Ensure that uncompressed is deleted |
-    $IsExtractedPresent = Test-Path -Path "$InstallsPath\$AppName Extracted"
+    $IsExtractedPresent = Test-Path -Path "$folder\$AppName Extracted"
     if ($IsExtractedPresent) {
       ${Command Here-String} = $(
         "& {`n"
@@ -159,7 +161,7 @@ switch ($true) {
         "  }`n"
         "}`n"
       ) -join ''
-      ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+      ${Delete Extraction Directory Script Path} = "$folder\$AppName Delete Extraction Directory.ps1"
       Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
 
       Start-Process -ArgumentList @(
@@ -172,7 +174,7 @@ switch ($true) {
     ($IsZipPresent) -and ($IsInstalled)
   } {
     #region | Ensure that uncompressed is deleted |
-    $IsExtractedPresent = Test-Path -Path "$InstallsPath\$AppName Extracted"
+    $IsExtractedPresent = Test-Path -Path "$folder\$AppName Extracted"
     if ($IsExtractedPresent) {
       ${Command Here-String} = $(
         "& {`n"
@@ -182,7 +184,7 @@ switch ($true) {
         "  }`n"
         "}`n"
       ) -join ''
-      ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+      ${Delete Extraction Directory Script Path} = "$folder\$AppName Delete Extraction Directory.ps1"
       Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
 
       Start-Process -ArgumentList @(
@@ -196,8 +198,8 @@ switch ($true) {
 <#
   if (-not $IsZipPresent) {
     #region | Download but do not install Windows ADK Installation Files |
-    $WorkingDirectory = "$InstallsPath\$AppName Installer"
-    $layout = "$InstallsPath\$AppName Extracted"
+    $WorkingDirectory = "$folder\$AppName Installer"
+    $layout = "$folder\$AppName Extracted"
     $ArgumentList = @(
       '/quiet'
       '/ceip on'
@@ -214,7 +216,7 @@ switch ($true) {
       "  Compress-Archive -Path `$layout -DestinationPath `$ZipFilePath`n"
       "}`n"
     ) -join ''
-    ${Compression Script Path} = "$InstallsPath\$AppName Compress.ps1"
+    ${Compression Script Path} = "$folder\$AppName Compress.ps1"
     Set-Content -Path ${Compression Script Path} -Value ${Command Here-String}
 
     Start-Process -ArgumentList @(
@@ -227,7 +229,7 @@ switch ($true) {
     #      "  Get-Item -Path $([System.Char]34)$InstallsPath\$AppName Extracted$([System.Char]34) | Remove-Item -Force -Recurse`n"
     #      "}`n"
     #    ) -join ''
-    #    ${Delete Extraction Directory Script Path} = "$InstallsPath\$AppName Delete Extraction Directory.ps1"
+    #    ${Delete Extraction Directory Script Path} = "$folder\$AppName Delete Extraction Directory.ps1"
     #    Set-Content -Path ${Delete Extraction Directory Script Path} -Value ${Command Here-String}
     #
     #    Start-Process -ArgumentList @(
@@ -243,7 +245,7 @@ switch ($true) {
         "  Expand-Archive -Path `$ZipFilePath -DestinationPath `$DestinationPath`n"
         "}`n"
       ) -join ''
-      ${Expansion Script Path} = "$InstallsPath\$AppName Expand.ps1"
+      ${Expansion Script Path} = "$folder\$AppName Expand.ps1"
       Set-Content -Path ${Expansion Script Path} -Value ${Command Here-String}
 
       Start-Process -ArgumentList @(
@@ -254,7 +256,7 @@ switch ($true) {
 
   if (-not $IsInstalled) {
       #region | Install the Windows Assessment and Deployment Kit |
-      $WorkingDirectory = "$InstallsPath\$AppName Extracted"
+      $WorkingDirectory = "$folder\$AppName Extracted"
       $ArgumentList = @(
         '/quiet'
         '/ceip on'
