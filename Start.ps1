@@ -153,7 +153,7 @@ if ($RunningJob -eq $null) {
 #endregion
 
 #region | Download ADK Installer exe files, but do not yet install |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 # Windows PE add-on for Windows ADK 10.1.26100.9457 (September 2026)
@@ -285,35 +285,35 @@ $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
 Get-Job -Name $JobName | Wait-Job
 
 <#
-  $JobName = 'Download WinPE 2026-09 EXE File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($null -ne $RunningJob) {
-    Get-Job -Name $JobName | Wait-Job
-  }
-
-  $JobName = 'Download-Install-Compress WinPE 2026-09'
-  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-    ${ADK + WinPE Folder Path} = $args[0]
-    $HT = @{
-      AppName = 'WinPE 2026-09'
-    }
-    #& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
-    & "${ADK + WinPE Folder Path}\WinPE Download-Install-Compress.ps1" @HT
-  }
-  Get-Job -Name $JobName | Wait-Job
 #>
+$JobName = 'Download WinPE 2026-09 EXE File'
+$RunningJob = Get-Job | Where-Object -FilterScript {
+  $_.Name  -eq $JobName  -and `
+  $_.State -eq 'Running'
+}
+if ($null -ne $RunningJob) {
+  Get-Job -Name $JobName | Wait-Job
+}
+
+$JobName = 'Download-Install-Compress WinPE 2026-09'
+$Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+  ${ADK + WinPE Folder Path} = $args[0]
+  $HT = @{
+    AppName = 'WinPE 2026-09'
+  }
+  #& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
+  & "${ADK + WinPE Folder Path}\WinPE Download-Install-Compress.ps1" @HT
+}
+Get-Job -Name $JobName | Wait-Job
 #endregion
 
 #region | Default WinPE ISO File |
 <#
-  $HT = @{
-    amd64_XX = 'WinPE_amd64-02'
-  }
-  & "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
 #>
+$HT = @{
+  amd64_XX = 'WinPE_amd64-02'
+}
+& "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
 #endregion
 
 <# Windows ADK Patches |
