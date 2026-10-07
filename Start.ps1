@@ -162,7 +162,7 @@ $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
 $hash = ${SHA256 of WinPE 2026-09 EXE File}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\WinPE 2026-09 Installer"
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 ${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
 if (${WinPE 2026-09 EXE File} -eq $null) {
@@ -194,7 +194,7 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of Windows ADK 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml"
 $hash = ${SHA256 of Windows ADK 2026-09 EXE File}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Windows ADK 2026-09 Installer"
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 ${Windows ADK 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
 if (${Windows ADK 2026-09 EXE File} -eq $null) {
@@ -260,29 +260,31 @@ if (${Windows Server 2025 ISO File} -eq $null) {
 
 #region | Download-Install-Compress ADK + WinPE |
 <#
-  ${ADK + WinPE Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
-  $ArgumentList = @(${ADK + WinPE Folder Path})
+#>
+${ADK + WinPE Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
+$ArgumentList = @(${ADK + WinPE Folder Path})
 
-  $JobName = 'Download Windows ADK 2026-09 EXE File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($null -ne $RunningJob) {
-    Get-Job -Name $JobName | Wait-Job
-  }
-
-  $JobName = 'Download-Install-Compress Windows ADK 2026-09'
-  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-    ${ADK + WinPE Folder Path} = $args[0]
-    $HT = @{
-      AppName = 'Windows ADK 2026-09'
-    }
-    #& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
-    & "${ADK + WinPE Folder Path}\ADK Download-Install-Compress.ps1" @HT
-  }
+$JobName = 'Download Windows ADK 2026-09 EXE File'
+$RunningJob = Get-Job | Where-Object -FilterScript {
+  $_.Name  -eq $JobName  -and `
+  $_.State -eq 'Running'
+}
+if ($null -ne $RunningJob) {
   Get-Job -Name $JobName | Wait-Job
+}
 
+$JobName = 'Download-Install-Compress Windows ADK 2026-09'
+$Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+  ${ADK + WinPE Folder Path} = $args[0]
+  $HT = @{
+    AppName = 'Windows ADK 2026-09'
+  }
+  #& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
+  & "${ADK + WinPE Folder Path}\ADK Download-Install-Compress.ps1" @HT
+}
+Get-Job -Name $JobName | Wait-Job
+
+<#
   $JobName = 'Download WinPE 2026-09 EXE File'
   $RunningJob = Get-Job | Where-Object -FilterScript {
     $_.Name  -eq $JobName  -and `
@@ -306,10 +308,12 @@ if (${Windows Server 2025 ISO File} -eq $null) {
 #endregion
 
 #region | Default WinPE ISO File |
-$HT = @{
-  amd64_XX = 'amd64_19'
-}
-& "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
+<#
+  $HT = @{
+    amd64_XX = 'WinPE_amd64-02'
+  }
+  & "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
+#>
 #endregion
 
 <# Windows ADK Patches |
