@@ -49,7 +49,7 @@ switch ($true) {
       '/quiet'
       '/ceip on'
       "/installpath $([System.Char]34)${env:ProgramFiles(x86)}\Windows Kits\10$([System.Char]34)"
-      '/features OptionId.WindowsPreinstallationEnvironment'
+      '/features OptionId.WindowsPreinstallationEnvironment'code 
     )
     Start-Process -ArgumentList $ArgumentList -FilePath '.\adkwinpesetup.exe' -WorkingDirectory $WorkingDirectory -Verb 'RunAs' -Wait
     #endregion
