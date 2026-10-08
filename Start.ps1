@@ -494,11 +494,11 @@ switch ($true) {
 #endregion
 
 
-#region | New Windows Preinstallation Environment ISO File |
+#region | PowerShell-enabled WinPE ISO File |
 $HT = @{
-  'WinPE Workspace Folder Name' = 'PowerShell-Infused WinPE-00'
+  'WinPE Workspace Folder Name' = 'PowerShell-Infused WinPE-12'
 }
-& "$PSScriptRoot\Start\ADK + WinPE\New Windows Preinstallation Environment ISO File.ps1" @HT
+& "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
 #endregion
 
 <# Windows ADK Patches |
