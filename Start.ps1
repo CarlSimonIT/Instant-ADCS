@@ -265,8 +265,6 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
 #endregion
 
 #region | Download-Install-Compress ADK + WinPE |
-<#
-#>
 ${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
 $ArgumentList = @(${ADK + WinPE Script Folder Path})
 
@@ -280,34 +278,8 @@ if ($null -ne $RunningJob0) {
 }
 Write-Host -Object "  `$RunningJob0.Name = $($RunningJob0.Name)"
 
-<#
-  $JobName = 'Download-Install-Compress Windows ADK 2026-09'
-  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-    ${ADK + WinPE Script Folder Path} = $args[0]
-    $HT = @{
-      AppName = 'Windows ADK 2026-09'
-    }
-    #& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
-    & "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" @HT
-  }
-  Write-Host -Object "  `$Job.Name = $($Job.Name)"
-  Get-Job -Name $Job.Name | Wait-Job | Format-Table -AutoSize
-#>
-
-
-
-<#
-  & {
-    $path = "$env:ProgramData\ADK + WinPE"
-    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-    Copy-Item -Path ${Windows ADK 2026-09 Installer Folder Path} -Destination $folder -Recurse
-    Copy-Item -Path ${WinPE 2026-09 Installer Folder Path} -Destination $folder -Recurse
-  }
-#>
-
 ${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
 $HT = @{AppName = 'Windows ADK 2026-09'}
-#& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 $InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
@@ -414,34 +386,131 @@ Write-host -object "  `${Bring ADK + WinPE Offline Installation Files into a %Us
 $ArgumentList = @(
   "`${Here-String} = Get-Item -Path '${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}' | Get-Content -Raw; `$ScriptBlock = [ScriptBlock]::Create(`${Here-String}); `$ScriptBlock | Invoke-Expression"
 )
-Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'
 
+${Windows ADK 2026-09 Extracted Folder Name} = 'Windows ADK 2026-09 Extracted'
+${Windows ADK 2026-09 Extracted Folder Path} = "$AppFolder\${Windows ADK 2026-09 Extracted Folder Name}"
+${WinPE 2026-09 Extracted Folder Name} = 'WinPE 2026-09 Extracted'
+${WinPE 2026-09 Extracted Folder Path} = "$AppFolder\${WinPE 2026-09 Extracted Folder Name}"
 
+if (
+  -not (
+    (Test-Path -Path "$env:ProgramData\ADK + WinPE\Windows ADK 2026-09.zip") -and `
+    (Test-Path -Path "$env:ProgramData\ADK + WinPE\WinPE 2026-09.zip")       -and `
+    (Test-Path -Path ${Windows ADK 2026-09 Extracted Folder Path})           -and `
+    (Test-Path -Path ${WinPE 2026-09 Extracted Folder Path})
+  )
+) {Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'}
 
-
-
-#& "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" @HT
-#& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1"
-#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList @("$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1")
-#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList @("${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1")
-#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList @("${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1")
-
-#$ArgumentList = @("& $([System.Char]34)${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1$([System.Char]34)")
-#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList $ArgumentList
-
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1"
-#. powershell.exe -NoProfile -WorkingDirectory "$PSScriptRoot\Start\ADK + WinPE" -File "ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
-#. powershell.exe -NoProfile -WorkingDirectory "${ADK + WinPE Script Folder Path}\Start\ADK + WinPE" -File "ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
-#. powershell.exe -NoProfile -File "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
-
-#$ArgumentList = @("& $([System.Char]34)${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1$([System.Char]34)")
-
-#$ArgumentList = @("Get-Item -Path '${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1' | Get-Content -Raw | Invoke-Expression")
-#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList $ArgumentList
-#. powershell.exe -NoProfile -File "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
+#region | Groundwork Variables |
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+$InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$path = "$InstallsPath\ADK + WinPE (2026-09)"
+$AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 #endregion
+#region | Main Logic |
+$AppName = 'Windows ADK 2026-09'
+$UninstallGuid = '4f4f4626-ccb4-41ba-9c62-7ec9b0e113f3'
+$InstallerArgumentList = @(
+  '/quiet'
+  '/ceip on'
+  '/features OptionId.DeploymentTools'
+)
 
+$IsZipPresent = Test-Path -Path "$AppFolder\$AppName.zip"
+$IsInstalled = Test-Path -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{$UninstallGuid}"
+switch ($true) {
+  { # Zip is NOT present + App is NOT installed --->  Install + Compress. |
+    (-not $IsZipPresent) -and (-not $IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip is NOT present + App is NOT installed --->  Install + Compress."
+    #region | Install Windows ADK or WinPE from offline files |
+    $WorkingDirectory = "$AppFolder\$AppName Extracted"
+    Start-Process -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -ArgumentList $InstallerArgumentList -Wait -Verb 'RunAs'
+    #endregion
+    #region | Compress Installation Files to .zip Flie |
+    Compress-Archive -Path "$AppFolder\$AppName Extracted" -DestinationPath "$AppFolder\$AppName.zip"
+    #endregion
+    break
+  }
+  { # Zip IS present + App is NOT installed     --->  Install. |
+    ($IsZipPresent) -and (-not $IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip IS present + App is NOT installed     --->  Install."
+    #region | Install Windows ADK or WinPE from offline files |
+    $WorkingDirectory = "$AppFolder\$AppName Extracted"
+    Start-Process -FilePath '.\adksetup.exe' -WorkingDirectory $WorkingDirectory -ArgumentList $InstallerArgumentList -Wait -Verb 'RunAs'
+    #endregion
+    break
+  }
+  { # Zip is NOT present + App IS installed     --->  Shouldn't happen. Compress. |
+    (-not $IsZipPresent) -and ($IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip is NOT present + App IS installed     --->  Shouldn't happen. Compress."
+    #region | Compress Installation Files to .zip Flie |
+    Compress-Archive -Path "$AppFolder\$AppName Extracted" -DestinationPath "$AppFolder\$AppName.zip"
+    #endregion
+    break
+  }
+  { # Zip IS present + App IS installed         --->  Do Nothing. |
+    ($IsZipPresent) -and ($IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip IS present + App IS installed         --->  Do Nothing."
+    break
+  }
+}
 
+$AppName = 'WinPE 2026-09'
+$UninstallGuid = 'f567a246-97ac-4217-a1ba-020ced2a8187'
+$InstallerArgumentList = @(
+  '/quiet'
+  '/ceip on'
+  '/features OptionId.WindowsPreinstallationEnvironment'
+)
+
+$IsZipPresent = Test-Path -Path "$AppFolder\$AppName.zip"
+$IsInstalled = Test-Path -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{$UninstallGuid}"
+switch ($true) {
+  { # Zip is NOT present + App is NOT installed --->  Install + Compress. |
+    (-not $IsZipPresent) -and (-not $IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip is NOT present + App is NOT installed --->  Install + Compress."
+    #region | Install Windows ADK or WinPE from offline files |
+    $WorkingDirectory = "$AppFolder\$AppName Extracted"
+    Start-Process -FilePath '.\adkwinpesetup.exe' -WorkingDirectory $WorkingDirectory -ArgumentList $InstallerArgumentList -Wait -Verb 'RunAs'
+    #endregion
+    #region | Compress Installation Files to .zip Flie |
+    Compress-Archive -Path "$AppFolder\$AppName Extracted" -DestinationPath "$AppFolder\$AppName.zip"
+    #endregion
+    break
+  }
+  { # Zip IS present + App is NOT installed     --->  Install. |
+    ($IsZipPresent) -and (-not $IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip IS present + App is NOT installed     --->  Install."
+    #region | Install Windows ADK or WinPE from offline files |
+    $WorkingDirectory = "$AppFolder\$AppName Extracted"
+    Start-Process -FilePath '.\adkwinpesetup.exe' -WorkingDirectory $WorkingDirectory -ArgumentList $InstallerArgumentList -Wait -Verb 'RunAs'
+    #endregion
+    break
+  }
+  { # Zip is NOT present + App IS installed     --->  Shouldn't happen. Compress. |
+    (-not $IsZipPresent) -and ($IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip is NOT present + App IS installed     --->  Shouldn't happen. Compress."
+    #region | Compress Installation Files to .zip Flie |
+    Compress-Archive -Path "$AppFolder\$AppName Extracted" -DestinationPath "$AppFolder\$AppName.zip"
+    #endregion
+    break
+  }
+  { # Zip IS present + App IS installed         --->  Do Nothing. |
+    ($IsZipPresent) -and ($IsInstalled)
+  } {
+    Write-Verbose -Message "    Zip IS present + App IS installed         --->  Do Nothing."
+    break
+  }
+}
+#endregion
+#endregion
 
 
 
