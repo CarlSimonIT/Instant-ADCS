@@ -1,4 +1,3 @@
-
 <#
   Deployment Tools Reference for WinPE. 
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
@@ -15,13 +14,6 @@
   Boot To WinPE
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
 #>
-
-
-<#
-  . "$env:UserProfile\GitHub\CarlSimonIT\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
-  "$usb0"
-#>
-
 #region | Default WinPE ISO File |
 $amd64_XX = 'amd64_03'
 ${Make WinPE Media Here-String Precursor} = @'
@@ -38,27 +30,9 @@ Start-Process -FilePath cmd.exe -ArgumentList @(
   "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '$env:TEMP\Make_WinPE_Media_Script.ps1')"
 ) -Verb 'RunAs'
 #endregion
-
 #region | Custom WinPE ISO File derived from default WinPE .iso |
 #region | Add Windows PowerShell support to the WinPE OS |
 # start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11'
-$path = "$env:UserProfile\WinPE\$amd64_XX\winpe_amd64"; 
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-${Command Here-String Precursor} = $(
-  # . "$env:UserProfile\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-HereStringCompatible.ps1"
-  "  & {`n"
-  "    dism.exe /Mount-Image /ImageFile:$([System.Char]34)`$env:UserProfile\WinPE\%_amd64_XX_%\ISO\media\sources\boot.wim$([System.Char]34) /Index:1 /MountDir:$([System.Char]34)`$env:UserProfile\WinPE\%_amd64_XX_%\winpe_amd64$([System.Char]34)`n"
-  "  }`n"
-) -join ''
-${Command Here-String} = ${Command Here-String Precursor} -replace '%_amd64_XX_%',$amd64_XX
-${Mount Image Script Path} = "$env:UserProfile\WinPE\Mount Image Script.ps1"
-Set-Content -Path ${Mount Image Script Path} -Value ${Command Here-String}
-Start-Process -ArgumentList @(
-  "Get-Item -Path '${Mount Image Script Path}' | Get-Content -Raw | Invoke-Expression"
-) -FilePath powershell.exe -Verb 'RunAs' -WindowStyle 'Normal' # -Wait
-
-
 
 
 
@@ -101,6 +75,22 @@ gci "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Depl
 #endregion
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #region | WinPE |
 ${Micro Center 128GB Disk Orange} = Get-Disk | Where-Object -FilterScript {
   $_.FriendlyName -eq    " USB DISK 3.0" -and `
@@ -140,9 +130,6 @@ Write-Host -Object "`r`n`t`$drivers128 = $drivers128`r`n"
 . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
 
 #endregion
-
-
-
 #region | PATCH TUESDAY | Apply Windows Updates to .iso file | Apply Windows Updates to bootable media | PATCH TUESDAY |
 #region | ALL editions of Windows Server 2025 > Patched with most recent Windows Updates and No OEM-specific drivers |
 $SamsungFITdisk = Get-Disk | Select-Object * | Where-Object -FilterScript {
@@ -638,9 +625,6 @@ $DriveLetter = (Get-Disk).Where({($_.FriendlyName -eq 'USB SanDisk 3.2Gen1') -an
 $DriveLetter = (Get-Disk).Where({($_.FriendlyName -eq 'USB SanDisk 3.2Gen1') -and ($_.SerialNumber -match '040170557f5ffbf9a7af')}) | % 'Number' | % {Get-Partition -DiskNumber $_} | Sort-Object Size -Descending | Select-Object -First 1 | % 'DriveLetter'; $red32 = $DriveLetter + ':';   Write-Host -Object "`r`n`t`$red32 = $red32`r`n"
 #endregion
 #endregion
-
-
-
 #region | Windows 11 Pro on Dell Precision 3460 |
 ${Windows 11 Image Index} = 6
 ${Micro Center 128GB Disk Orange} = Get-Disk | Where-Object -FilterScript {
@@ -716,5 +700,3 @@ dism.exe /Image:"$ns\reimages\m0unted_w1m" /Add-Driver /Driver:"$drivers128\driv
 #endregion
 dism.exe /Unmount-Wim /MountDir:"$ns\reimages\m0unted_w1m" /Commit #  /Discard
 #endregion
-
-
