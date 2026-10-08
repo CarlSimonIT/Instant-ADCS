@@ -81,13 +81,7 @@ $HT = @{
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
-$HT = @{
-  EmailAddressOfBitwardenAccount             = 'pwdsec3@gmail.com'
-  'Folder Fully Qualified Name'              = 'Instant-ADCS'
-  BadPassword                                = 'BadPassword!'
-  'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'
-  'DNS Name of Root Domain in AD Forest'     = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'
-}
+$HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}
 & '.\Instant-ADCS\Start.ps1' @HT
 ```
 
