@@ -93,69 +93,57 @@ $HT = @{
   FolderFQN                                = $FolderFQN
 }
 & "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1" @HT
-
-
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
-
 #endregion
+
+<#
+#>
 
 #region | Install NuGet | Set PSGallery as Trusted | Install 'TUN.CredentialManager' |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
 #endregion
-
 #region | Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
 #endregion
-
 #region | Collect and export to .clixml the unique identifiers of removable external storage media |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage media.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage media.ps1"
 #endregion
-
 #region | Generate Windows PowerShell-compatible profile.ps1 file for Instant-ADCS |
-<#
-  $HT = @{
-    'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
-    'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
-  }
-  & "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1" @HT
-#>
+$HT = @{
+  'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
+  'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
+}
+& "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1" @HT
 #endregion
-
 #region | Install machine-scope PowerShell 7 and register Event Logging Manifest |
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
 #endregion
-
 #region | Install Bitwarden CLI, log into Bitwarden CLI, and Build SAT module |
-# . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
+. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
 #endregion
-
 #region | Variable Setup in Windows PowerShell and Export to CliXml |
-# . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
 #endregion
-
 #region | Generate secure strings in online Bitwarden Vault and synchronize down to local Windows Credential Manager | WARNING: This will take over 60 minutes! |
-<#
-  $JobName = 'Generate secure strings in online Bitwarden Vault'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
+$JobName = 'Generate secure strings in online Bitwarden Vault'
+$RunningJob = Get-Job | Where-Object -FilterScript {
+  $_.Name  -eq $JobName  -and `
+  $_.State -eq 'Running'
+}
+if ($RunningJob -eq $null) {
+  $ArgumentList = @(
+    "$PSScriptRoot\Start"
+  )
+  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    $StartFolder = $args[0]
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
   }
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      "$PSScriptRoot\Start"
-    )
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $StartFolder = $args[0]
-      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
-      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
-      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
-      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
-    }
-    $Job | Format-Table -AutoSize
-  }
-#>
+  $Job | Format-Table -AutoSize
+}
 #endregion
-
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -190,7 +178,6 @@ if (${Windows Server 2025 ISO File} -eq $null) {
   }
 }
 #endregion
-
 #region | Download, but do not install, the setup file for the Windows ADK and the Windows PE Add-on |
 #region | Download the Windows ADK installer EXE File |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
@@ -263,23 +250,18 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
 }
 #endregion
 #endregion
-
 #region | Download-Install-Compress ADK + WinPE |
-${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
-$ArgumentList = @(${ADK + WinPE Script Folder Path})
-
 $JobName0 = 'Download Windows ADK 2026-09 EXE File'
 $RunningJob0 = Get-Job | Where-Object -FilterScript {
   $_.Name  -eq $JobName0  -and `
   $_.State -eq 'Running'
 }
 if ($null -ne $RunningJob0) {
+  Write-Host -Object "  `$RunningJob0.Name = $($RunningJob0.Name)"
   Get-Job -Name $JobName0 | Wait-Job | Format-Table -AutoSize
 }
-Write-Host -Object "  `$RunningJob0.Name = $($RunningJob0.Name)"
 
-${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
-$HT = @{AppName = 'Windows ADK 2026-09'}
+#region | Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container |
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 $InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
@@ -290,7 +272,6 @@ ${Windows ADK 2026-09 Installer Folder Name} = 'Windows ADK 2026-09 Installer'
 ${Windows ADK 2026-09 Installer Folder Path} = "$AppFolder\${Windows ADK 2026-09 Installer Folder Name}"
 ${WinPE 2026-09 Installer Folder Name} = 'WinPE 2026-09 Installer'
 ${WinPE 2026-09 Installer Folder Path} = "$AppFolder\${WinPE 2026-09 Installer Folder Name}"
-
 
 ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String} = $(
   "#Requires -Version 5.1`n"
@@ -382,7 +363,7 @@ ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container He
 
 ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = "$AppFolder\Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script.ps1"
 Set-Content -Path ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} -Value (${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String})
-Write-host -object "  `${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}"
+#Write-host -object "  `${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}"
 $ArgumentList = @(
   "`${Here-String} = Get-Item -Path '${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}' | Get-Content -Raw; `$ScriptBlock = [ScriptBlock]::Create(`${Here-String}); `$ScriptBlock | Invoke-Expression"
 )
@@ -400,14 +381,14 @@ if (
     (Test-Path -Path ${WinPE 2026-09 Extracted Folder Path})
   )
 ) {Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'}
-
-#region | Groundwork Variables |
+#endregion
+#region | Groundwork Variables for offline install of ADK + WinPE |
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 $InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
 $path = "$InstallsPath\ADK + WinPE (2026-09)"
 $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 #endregion
-#region | Main Logic |
+#region | Main logic for offline install of ADK + WinPE |
 $AppName = 'Windows ADK 2026-09'
 $UninstallGuid = '4f4f4626-ccb4-41ba-9c62-7ec9b0e113f3'
 $InstallerArgumentList = @(
@@ -513,38 +494,11 @@ switch ($true) {
 #endregion
 
 
-
-#region | Download-Install-Compress WinPE |
-<#
-  $JobName = 'Download WinPE 2026-09 EXE File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($null -ne $RunningJob) {
-    Get-Job -Name $JobName | Wait-Job
-  }
-
-  $JobName = 'Download-Install-Compress WinPE 2026-09'
-  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-    ${ADK + WinPE Script Folder Path} = $args[0]
-    $HT = @{
-      AppName = 'WinPE 2026-09'
-    }
-    #& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
-    & "${ADK + WinPE Script Folder Path}\WinPE Download-Install-Compress.ps1" @HT
-  }
-  Get-Job -Name $JobName | Wait-Job
-#>
-#endregion
-
-#region | Default WinPE ISO File |
-<#
-  $HT = @{
-    DefaultImageFolderName = 'Trial-00'
-  }
-  & "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
-#>
+#region | New Windows Preinstallation Environment ISO File |
+$HT = @{
+  'WinPE Workspace Folder Name' = 'PowerShell-Infused WinPE-00'
+}
+& "$PSScriptRoot\Start\ADK + WinPE\New Windows Preinstallation Environment ISO File.ps1" @HT
 #endregion
 
 <# Windows ADK Patches |
@@ -552,10 +506,7 @@ switch ($true) {
   'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-servicing'
 #>
 
-
-
 #region | Download, but do not install, DSC Resource Modules |
-
 #endregion
 
 #region | Download, but do not install, Windows PowerShell Modules |
@@ -565,7 +516,4 @@ switch ($true) {
 #endregion
 
 #region | Windows Assessment and Deployment Kit | Phase 2 |
-<#
-  
-#>
 #endregion
