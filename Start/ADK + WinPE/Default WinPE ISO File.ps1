@@ -82,6 +82,34 @@ Start-Process -FilePath cmd.exe -ArgumentList @(
 
 #endregion
 
+
+<#
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install#install-the-adk'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-offline-install'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-offline-install#using-the-command-line'
+
+  adksetup.exe cli syntax: 
+  start msedge.exe 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/dn621910(v=win.10)'
+#>
+
+
+<# Windows ADK Installation Options |
+  OptionId.ApplicationCompatibilityToolkit
+  OptionId.DeploymentTools
+  OptionId.ImagingAndConfigurationDesigner
+  OptionId.ICDConfigurationDesigner
+  OptionId.UserStateMigrationTool
+  OptionId.VolumeActivationManagementTool
+  OptionId.WindowsPerformanceToolkit
+  OptionId.WindowsAssessmentToolkit
+  OptionId.UEVTools
+  OptionId.AppmanSequencer
+  OptionId.AppmanAutoSequencer
+  OptionId.MediaeXperienceAnalyzer
+  OptionId.SupplyChainTrustTools
+#>
+
+
 <#
   $path = "$env:SystemDrive\Users\${explorer.exe Owner}\WinPE\$DefaultImageFolderName\winpe_amd64"; 
   $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
