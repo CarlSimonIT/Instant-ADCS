@@ -37,11 +37,7 @@ Ensure the folder exists and set as working directory.
 
 ```powershell
 $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"
-$CloningRepoFolder = try {
-  Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'
-} catch {
-  New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force
-}
+$CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}
 Set-Location -Path "$CloningRepoFolder"
 ```
 
