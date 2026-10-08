@@ -100,64 +100,135 @@ $HT = @{
 #endregion
 
 #region | Install NuGet | Set PSGallery as Trusted | Install 'TUN.CredentialManager' |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
 #endregion
 
 #region | Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
 #endregion
 
 #region | Collect and export to .clixml the unique identifiers of removable external storage media |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage media.ps1"
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage media.ps1"
 #endregion
 
 #region | Generate Windows PowerShell-compatible profile.ps1 file for Instant-ADCS |
-$HT = @{
-  'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
-  'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
-}
-& "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1" @HT
+<#
+  $HT = @{
+    'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
+    'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
+  }
+  & "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1" @HT
+#>
 #endregion
 
 #region | Install machine-scope PowerShell 7 and register Event Logging Manifest |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
 #endregion
 
 #region | Install Bitwarden CLI, log into Bitwarden CLI, and Build SAT module |
-. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
+# . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Build Secure-Automations-Toolset Module.ps1"
 #endregion
 
 #region | Variable Setup in Windows PowerShell and Export to CliXml |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
 #endregion
 
 #region | Generate secure strings in online Bitwarden Vault and synchronize down to local Windows Credential Manager | WARNING: This will take over 60 minutes! |
-$JobName = 'Generate secure strings in online Bitwarden Vault'
-$RunningJob = Get-Job | Where-Object -FilterScript {
-  $_.Name  -eq $JobName  -and `
-  $_.State -eq 'Running'
-}
-if ($RunningJob -eq $null) {
-  $ArgumentList = @(
-    "$PSScriptRoot\Start"
-  )
-  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-    $StartFolder = $args[0]
-    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
-    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
-    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
-    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
+<#
+  $JobName = 'Generate secure strings in online Bitwarden Vault'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
   }
-  $Job | Format-Table -AutoSize
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      "$PSScriptRoot\Start"
+    )
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $StartFolder = $args[0]
+      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
+      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
+      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
+      . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
+    }
+    $Job | Format-Table -AutoSize
+  }
+#>
+#endregion
+
+#region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
+$hash = ${SHA256 of Windows Server 2025 ISO File}
+${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+if (${Windows Server 2025 ISO File} -eq $null) {
+  $JobName = 'Download Windows Server 2025 ISO File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+      "$folder\Windows Server 2025.iso"
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                        = $args[0]
+      $FilePath                       = $args[1]
+      $OriginalProgressPreference     = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
 }
 #endregion
 
-#region | Download ADK Installer exe files, but do not yet install |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
+#region | Download, but do not install, the setup file for the Windows ADK and the Windows PE Add-on |
+#region | Download the Windows ADK installer EXE File |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
-# Windows PE add-on for Windows ADK 10.1.26100.9457 (September 2026)
-# start msedge.exe 'https://go.microsoft.com/fwlink/?linkid=2289981'
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+${SHA256 of Windows ADK 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml"
+$hash = ${SHA256 of Windows ADK 2026-09 EXE File}
+${Windows ADK 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+if (${Windows ADK 2026-09 EXE File} -eq $null) {
+  $JobName = 'Download Windows ADK 2026-09 EXE File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2289980'
+      "$folder\adksetup.exe"
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+#region | Download the WinPE installer EXE File |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 ${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
@@ -190,130 +261,223 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
     $Job | Format-Table -AutoSize
   }
 }
-
-$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
-${SHA256 of Windows ADK 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml"
-$hash = ${SHA256 of Windows ADK 2026-09 EXE File}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${Windows ADK 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
-if (${Windows ADK 2026-09 EXE File} -eq $null) {
-  $JobName = 'Download Windows ADK 2026-09 EXE File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      'https://go.microsoft.com/fwlink/?linkid=2289980'
-      "$folder\adksetup.exe"
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                    = $args[0]
-      $FilePath                   = $args[1]
-      $OriginalProgressPreference = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
-  }
-}
 #endregion
-
-#region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
-$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
-${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
-$hash = ${SHA256 of Windows Server 2025 ISO File}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${Windows Server 2025 ISO File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
-if (${Windows Server 2025 ISO File} -eq $null) {
-  $JobName = 'Download Windows Server 2025 ISO File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
-      "$folder\Windows Server 2025.iso"
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                        = $args[0]
-      $FilePath                       = $args[1]
-      $OriginalProgressPreference     = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
-  }
-}
 #endregion
 
 #region | Download-Install-Compress ADK + WinPE |
 <#
 #>
-${ADK + WinPE Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
-$ArgumentList = @(${ADK + WinPE Folder Path})
+${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
+$ArgumentList = @(${ADK + WinPE Script Folder Path})
 
-$JobName = 'Download Windows ADK 2026-09 EXE File'
-$RunningJob = Get-Job | Where-Object -FilterScript {
-  $_.Name  -eq $JobName  -and `
+$JobName0 = 'Download Windows ADK 2026-09 EXE File'
+$RunningJob0 = Get-Job | Where-Object -FilterScript {
+  $_.Name  -eq $JobName0  -and `
   $_.State -eq 'Running'
 }
-if ($null -ne $RunningJob) {
-  Get-Job -Name $JobName | Wait-Job
+if ($null -ne $RunningJob0) {
+  Get-Job -Name $JobName0 | Wait-Job | Format-Table -AutoSize
 }
-
-$JobName = 'Download-Install-Compress Windows ADK 2026-09'
-$Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-  ${ADK + WinPE Folder Path} = $args[0]
-  $HT = @{
-    AppName = 'Windows ADK 2026-09'
-  }
-  #& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
-  & "${ADK + WinPE Folder Path}\ADK Download-Install-Compress.ps1" @HT
-}
-Get-Job -Name $JobName | Wait-Job
+Write-Host -Object "  `$RunningJob0.Name = $($RunningJob0.Name)"
 
 <#
-#>
-$JobName = 'Download WinPE 2026-09 EXE File'
-$RunningJob = Get-Job | Where-Object -FilterScript {
-  $_.Name  -eq $JobName  -and `
-  $_.State -eq 'Running'
-}
-if ($null -ne $RunningJob) {
-  Get-Job -Name $JobName | Wait-Job
-}
-
-$JobName = 'Download-Install-Compress WinPE 2026-09'
-$Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-  ${ADK + WinPE Folder Path} = $args[0]
-  $HT = @{
-    AppName = 'WinPE 2026-09'
+  $JobName = 'Download-Install-Compress Windows ADK 2026-09'
+  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    ${ADK + WinPE Script Folder Path} = $args[0]
+    $HT = @{
+      AppName = 'Windows ADK 2026-09'
+    }
+    #& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
+    & "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" @HT
   }
-  #& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
-  & "${ADK + WinPE Folder Path}\WinPE Download-Install-Compress.ps1" @HT
-}
-Get-Job -Name $JobName | Wait-Job
+  Write-Host -Object "  `$Job.Name = $($Job.Name)"
+  Get-Job -Name $Job.Name | Wait-Job | Format-Table -AutoSize
+#>
+
+
+
+<#
+  & {
+    $path = "$env:ProgramData\ADK + WinPE"
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    Copy-Item -Path ${Windows ADK 2026-09 Installer Folder Path} -Destination $folder -Recurse
+    Copy-Item -Path ${WinPE 2026-09 Installer Folder Path} -Destination $folder -Recurse
+  }
+#>
+
+${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
+$HT = @{AppName = 'Windows ADK 2026-09'}
+#& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
+
+
+
+${Copy ADK + WinPE Install Files to ProgramData Here-String} = $(
+  $SelfRef = $(
+    $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+    $InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+    $path = "$InstallsPath\ADK + WinPE (2026-09)"
+    $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+    ${Windows ADK 2026-09 Installer Folder Name} = 'Windows ADK 2026-09 Installer'
+    ${Windows ADK 2026-09 Installer Folder Path} = "$AppFolder\${Windows ADK 2026-09 Installer Folder Name}"
+    ${WinPE 2026-09 Installer Folder Name} = 'WinPE 2026-09 Installer'
+    ${WinPE 2026-09 Installer Folder Path} = "$AppFolder\${WinPE 2026-09 Installer Folder Name}"
+  )
+  "#Requires -Version 5.1`n"
+  "#Requires -PSEdition Desktop`n"
+  "#Requires -RunAsAdministrator`n"
+  " `n"
+  "& {`n"
+  #region | Copy ADK + WinPE Install Files to ProgramData |
+  "  `$path1 = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$env:UserName$([System.Char]34)`n"
+  "  `$folder1 = try {Get-Item -Path `$path1 -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path1 -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  `$path = $([System.Char]34)`$env:ProgramData\ADK + WinPE$([System.Char]34)`n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  `$IsPresent = Test-Path -Path $([System.Char]34)`$folder\${Windows ADK 2026-09 Installer Folder Name}\adksetup.exe$([System.Char]34)`n"
+  "  if (-not `$IsPresent) {`n"
+  "    Copy-Item -Path $([System.Char]34)${Windows ADK 2026-09 Installer Folder Path}$([System.Char]34) -Destination `$folder -Recurse`n"
+  "  }`n"
+  "  `$IsPresent = Test-Path -Path $([System.Char]34)`$folder\${WinPE 2026-09 Installer Folder Name}\adkwinpesetup.exe$([System.Char]34)`n"
+  "  if (-not `$IsPresent) {`n"
+  "    Copy-Item -Path $([System.Char]34)${WinPE 2026-09 Installer Folder Path}$([System.Char]34) -Destination `$folder -Recurse`n"
+  "  }`n"
+  #endregion
+  #region | Download but do not install the Windows ADK Installation Files |
+  "  `$AppName = $([System.Char]39)Windows ADK 2026-09$([System.Char]39)`n"
+  "  `$TargetLayout = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$AppName Extracted$([System.Char]34)`n"
+  "  `$IsPresent = Test-Path -Path `$TargetLayout`n"
+  "  if (-not `$IsPresent) {`n"
+  "    `$DownloadArgumentList = @(`n"
+  "      $([System.Char]39)/quiet$([System.Char]39)`n"
+  "      $([System.Char]39)/ceip on$([System.Char]39)`n"
+  "      $([System.Char]39)/forcerestart$([System.Char]39)`n"
+  "      $([System.Char]34)/layout `$env:ProgramData$([System.Char]34)`n"
+  "    )`n"
+  "    `$WorkingDirectory = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$AppName Installer$([System.Char]34)`n"
+  "    Start-Process -FilePath $([System.Char]39).\adksetup.exe$([System.Char]39) -WorkingDirectory `$WorkingDirectory -ArgumentList `$DownloadArgumentList -Wait -Verb 'RunAs'`n"
+  "    `$TargetLayoutFolder = try {Get-Item -Path `$TargetLayout -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$TargetLayout -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    Move-Item -Path $([System.Char]34)`$env:ProgramData\UserExperienceManifest.xml$([System.Char]34) -Destination $([System.Char]34)`$TargetLayoutFolder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`$env:ProgramData\adksetup.exe$([System.Char]34) -Destination $([System.Char]34)`$TargetLayoutFolder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`$env:ProgramData\Installers$([System.Char]34) -Destination $([System.Char]34)`$TargetLayoutFolder$([System.Char]34) -Force`n"
+  "  }`n"
+  #endregion
+  #region | Compress the Windows ADK Installation Files after getting a slice at DiNico's |
+  "  `$ZipFilePath = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$AppName.zip$([System.Char]34)`n"
+  "  `$IsPresent = Test-Path -Path `$ZipFilePath`n"
+  "  if (-not `$IsPresent) {`n"
+  "    Compress-Archive -Path `$TargetLayout -DestinationPath `$ZipFilePath`n"
+  "  }`n"
+  #endregion
+  #region | Extract the .zip file of Windows ADK Installation Files into the %UserProfile% |
+  
+  #endregion
+
+  #region | Download but do not install the Windows PE Installation Files |
+  "  `$AppName = $([System.Char]39)WinPE 2026-09$([System.Char]39)`n"
+  "  `$TargetLayout = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$AppName Extracted$([System.Char]34)`n"
+  "  `$IsPresent = Test-Path -Path `$TargetLayout`n"
+  "  if (-not `$IsPresent) {`n"
+  "    `$DownloadArgumentList = @(`n"
+  "      $([System.Char]39)/quiet$([System.Char]39)`n"
+  "      $([System.Char]39)/ceip on$([System.Char]39)`n"
+  "      $([System.Char]39)/forcerestart$([System.Char]39)`n"
+  "      $([System.Char]34)/layout `$env:ProgramData$([System.Char]34)`n"
+  "    )`n"
+  "    `$WorkingDirectory = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$AppName Installer$([System.Char]34)`n"
+  "    Start-Process -FilePath $([System.Char]39).\adkwinpesetup.exe$([System.Char]39) -WorkingDirectory `$WorkingDirectory -ArgumentList `$DownloadArgumentList -Wait -Verb 'RunAs'`n"
+  "    `$TargetLayoutFolder = try {Get-Item -Path `$TargetLayout -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$TargetLayout -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    Move-Item -Path $([System.Char]34)`$env:ProgramData\UserExperienceManifest.xml$([System.Char]34) -Destination $([System.Char]34)`$TargetLayoutFolder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`$env:ProgramData\adkwinpesetup.exe$([System.Char]34) -Destination $([System.Char]34)`$TargetLayoutFolder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`$env:ProgramData\Installers$([System.Char]34) -Destination $([System.Char]34)`$TargetLayoutFolder$([System.Char]34) -Force`n"
+  "  }`n"
+  #endregion
+  #region | Compress the WinPE Installation Files |
+  "  `$ZipFilePath = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$AppName.zip$([System.Char]34)`n"
+  "  `$IsPresent = Test-Path -Path `$ZipFilePath`n"
+  "  if (-not `$IsPresent) {`n"
+  "    Compress-Archive -Path `$TargetLayout -DestinationPath `$ZipFilePath`n"
+  "  }`n"
+  #endregion
+
+
+  "}`n"
+) -join ''
+
+
+
+
+
+
+${Copy ADK + WinPE Install Files to ProgramData Script Path} = "$AppFolder\Copy ADK + WinPE Install Files to ProgramData Script.ps1"
+Set-Content -Path ${Copy ADK + WinPE Install Files to ProgramData Script Path} -Value (${Copy ADK + WinPE Install Files to ProgramData Here-String})
+
+Write-host -object "  `${Copy ADK + WinPE Install Files to ProgramData Script Path} = ${Copy ADK + WinPE Install Files to ProgramData Script Path}"
+
+$ArgumentList = @(
+  "`$herestring = Get-Item -Path '${Copy ADK + WinPE Install Files to ProgramData Script Path}' | Get-Content -Raw; `$ScBk = [ScriptBlock]::Create(`$herestring); `$ScBk | Invoke-Expression"
+)
+Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'
+
+
+
+
+
+#& "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" @HT
+#& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1"
+#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList @("$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1")
+#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList @("${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1")
+#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList @("${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1")
+
+#$ArgumentList = @("& $([System.Char]34)${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1$([System.Char]34)")
+#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList $ArgumentList
+
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1"
+#. powershell.exe -NoProfile -WorkingDirectory "$PSScriptRoot\Start\ADK + WinPE" -File "ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
+#. powershell.exe -NoProfile -WorkingDirectory "${ADK + WinPE Script Folder Path}\Start\ADK + WinPE" -File "ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
+#. powershell.exe -NoProfile -File "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
+
+#$ArgumentList = @("& $([System.Char]34)${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1$([System.Char]34)")
+
+#$ArgumentList = @("Get-Item -Path '${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1' | Get-Content -Raw | Invoke-Expression")
+#Start-Process -FilePath powershell.exe -Verb 'RunAs' -ArgumentList $ArgumentList
+#. powershell.exe -NoProfile -File "${ADK + WinPE Script Folder Path}\ADK Download-Install-Compress.ps1" -ExecutionPolicy 'RemoteSigned'
+#endregion
+
+
+
+
+
+#region | Download-Install-Compress WinPE |
+<#
+  $JobName = 'Download WinPE 2026-09 EXE File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($null -ne $RunningJob) {
+    Get-Job -Name $JobName | Wait-Job
+  }
+
+  $JobName = 'Download-Install-Compress WinPE 2026-09'
+  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    ${ADK + WinPE Script Folder Path} = $args[0]
+    $HT = @{
+      AppName = 'WinPE 2026-09'
+    }
+    #& "$PSScriptRoot\Start\ADK + WinPE\WinPE Download-Install-Compress.ps1" @HT
+    & "${ADK + WinPE Script Folder Path}\WinPE Download-Install-Compress.ps1" @HT
+  }
+  Get-Job -Name $JobName | Wait-Job
+#>
 #endregion
 
 #region | Default WinPE ISO File |
 <#
+  $HT = @{
+    DefaultImageFolderName = 'Trial-00'
+  }
+  & "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
 #>
-$HT = @{
-  amd64_XX = 'WinPE_amd64-02'
-}
-& "$PSScriptRoot\Start\ADK + WinPE\Default WinPE ISO File.ps1" @HT
 #endregion
 
 <# Windows ADK Patches |
