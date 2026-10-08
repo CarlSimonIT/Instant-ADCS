@@ -309,26 +309,24 @@ ${ADK + WinPE Script Folder Path} = "$PSScriptRoot\Start\ADK + WinPE"
 $HT = @{AppName = 'Windows ADK 2026-09'}
 #& "$PSScriptRoot\Start\ADK + WinPE\ADK Download-Install-Compress.ps1" @HT
 
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+$InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$path = "$InstallsPath\ADK + WinPE (2026-09)"
+$AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+${Windows ADK 2026-09 Installer Folder Name} = 'Windows ADK 2026-09 Installer'
+${Windows ADK 2026-09 Installer Folder Path} = "$AppFolder\${Windows ADK 2026-09 Installer Folder Name}"
+${WinPE 2026-09 Installer Folder Name} = 'WinPE 2026-09 Installer'
+${WinPE 2026-09 Installer Folder Path} = "$AppFolder\${WinPE 2026-09 Installer Folder Name}"
 
 
-${Copy ADK + WinPE Install Files to ProgramData Here-String} = $(
-  $SelfRef = $(
-    $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
-    $InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
-    $path = "$InstallsPath\ADK + WinPE (2026-09)"
-    $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-    ${Windows ADK 2026-09 Installer Folder Name} = 'Windows ADK 2026-09 Installer'
-    ${Windows ADK 2026-09 Installer Folder Path} = "$AppFolder\${Windows ADK 2026-09 Installer Folder Name}"
-    ${WinPE 2026-09 Installer Folder Name} = 'WinPE 2026-09 Installer'
-    ${WinPE 2026-09 Installer Folder Path} = "$AppFolder\${WinPE 2026-09 Installer Folder Name}"
-  )
+${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String} = $(
   "#Requires -Version 5.1`n"
   "#Requires -PSEdition Desktop`n"
   "#Requires -RunAsAdministrator`n"
   " `n"
   "& {`n"
-  #region | Copy ADK + WinPE Install Files to ProgramData |
+  #region | Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container |
   "  `$path1 = $([System.Char]34)`$env:ProgramData\ADK + WinPE\`$env:UserName$([System.Char]34)`n"
   "  `$folder1 = try {Get-Item -Path `$path1 -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path1 -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "  `$path = $([System.Char]34)`$env:ProgramData\ADK + WinPE$([System.Char]34)`n"
@@ -369,7 +367,10 @@ ${Copy ADK + WinPE Install Files to ProgramData Here-String} = $(
   "  }`n"
   #endregion
   #region | Extract the .zip file of Windows ADK Installation Files into the %UserProfile% |
-  
+  "  `$IsPresent = Test-Path -Path $([System.Char]34)$AppFolder\`$AppName Extracted$([System.Char]34)`n"
+  "  if (-not `$IsPresent) {`n"
+  "    Expand-Archive -Path `$ZipFilePath -DestinationPath $([System.Char]34)$AppFolder$([System.Char]34)`n"
+  "  }`n"
   #endregion
 
   #region | Download but do not install the Windows PE Installation Files |
@@ -398,23 +399,20 @@ ${Copy ADK + WinPE Install Files to ProgramData Here-String} = $(
   "    Compress-Archive -Path `$TargetLayout -DestinationPath `$ZipFilePath`n"
   "  }`n"
   #endregion
-
-
+  #region | Extract the .zip file of WinPE Installation Files into the %UserProfile% |
+  "  `$IsPresent = Test-Path -Path $([System.Char]34)$AppFolder\`$AppName Extracted$([System.Char]34)`n"
+  "  if (-not `$IsPresent) {`n"
+  "    Expand-Archive -Path `$ZipFilePath -DestinationPath $([System.Char]34)$AppFolder$([System.Char]34)`n"
+  "  }`n"
+  #endregion
   "}`n"
 ) -join ''
 
-
-
-
-
-
-${Copy ADK + WinPE Install Files to ProgramData Script Path} = "$AppFolder\Copy ADK + WinPE Install Files to ProgramData Script.ps1"
-Set-Content -Path ${Copy ADK + WinPE Install Files to ProgramData Script Path} -Value (${Copy ADK + WinPE Install Files to ProgramData Here-String})
-
-Write-host -object "  `${Copy ADK + WinPE Install Files to ProgramData Script Path} = ${Copy ADK + WinPE Install Files to ProgramData Script Path}"
-
+${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = "$AppFolder\Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script.ps1"
+Set-Content -Path ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} -Value (${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String})
+Write-host -object "  `${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}"
 $ArgumentList = @(
-  "`$herestring = Get-Item -Path '${Copy ADK + WinPE Install Files to ProgramData Script Path}' | Get-Content -Raw; `$ScBk = [ScriptBlock]::Create(`$herestring); `$ScBk | Invoke-Expression"
+  "`${Here-String} = Get-Item -Path '${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}' | Get-Content -Raw; `$ScriptBlock = [ScriptBlock]::Create(`${Here-String}); `$ScriptBlock | Invoke-Expression"
 )
 Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'
 
