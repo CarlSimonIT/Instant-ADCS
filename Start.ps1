@@ -96,11 +96,95 @@ $HT = @{
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
 #endregion
 
-<#
-#>
-
 #region | Install NuGet | Set PSGallery as Trusted | Install 'TUN.CredentialManager' |
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
+
+
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
+${Command Here-String} = $(
+  #Requires -Version 5.1
+  #Requires -PSEdition Desktop
+  #Requires -RunAsAdministrator
+
+  & {
+    $PackageManagerName = (Get-PackageProvider).Where({$_.Name -eq 'NuGet'}).Name
+    ${NuGet Needs To Be Installed} = $PackageManagerName -eq $null
+    if (${NuGet Needs To Be Installed}) {
+      Install-PackageProvider -Name 'NuGet' -Scope 'AllUsers' -MinimumVersion '2.8.5.208' -Force | Format-Table -AutoSize
+    }
+  }
+) -join ''
+
+
+$PackageManagerName = (Get-PackageProvider).Where({$_.Name -eq 'NuGet'}).Name
+${NuGet Needs To Be Installed} = $PackageManagerName -eq $null
+if (${NuGet Needs To Be Installed}) {
+  ${Install NuGet Command Here-String} = $(
+    "#Requires -Version 5.1`n"
+    "#Requires -PSEdition Desktop`n"
+    "#Requires -RunAsAdministrator`n"
+    "`n"
+    "& {`n"
+    "  Install-PackageProvider -Name $([System.Char]39)NuGet$([System.Char]39) -Scope $([System.Char]39)AllUsers$([System.Char]39) -MinimumVersion $([System.Char]39)2.8.5.208$([System.Char]39) -Force | Format-Table -AutoSize`n"
+    "}`n"
+  ) -join ''
+  
+
+
+
+
+  
+  
+
+
+}
+
+
+
+
+${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String} = $(
+  #Requires -Version 5.1
+  #Requires -PSEdition Desktop
+  #Requires -RunAsAdministrator
+
+  & {
+
+    $Repository = 'PSGallery'
+    $InstallationPolicy = (Get-PSRepository -Name $Repository).InstallationPolicy
+    if ($InstallationPolicy -eq 'Untrusted') {
+      Set-PSRepository -Name $Repository -InstallationPolicy 'Trusted' -Verbose:$true
+    }
+
+
+
+  }
+
+  <#
+  
+  #>
+) -join ''
+
+${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = "$AppFolder\Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script.ps1"
+Set-Content -Path ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} -Value (${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String})
+#Write-host -object "  `${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}"
+$ArgumentList = @(
+  "`${Here-String} = Get-Item -Path '${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}' | Get-Content -Raw; `$ScriptBlock = [ScriptBlock]::Create(`${Here-String}); `$ScriptBlock | Invoke-Expression"
+)
+
+${Windows ADK 2026-09 Extracted Folder Name} = 'Windows ADK 2026-09 Extracted'
+${Windows ADK 2026-09 Extracted Folder Path} = "$AppFolder\${Windows ADK 2026-09 Extracted Folder Name}"
+${WinPE 2026-09 Extracted Folder Name} = 'WinPE 2026-09 Extracted'
+${WinPE 2026-09 Extracted Folder Path} = "$AppFolder\${WinPE 2026-09 Extracted Folder Name}"
+
+if (
+  -not (
+    (Test-Path -Path "$env:ProgramData\ADK + WinPE\Windows ADK 2026-09.zip") -and `
+    (Test-Path -Path "$env:ProgramData\ADK + WinPE\WinPE 2026-09.zip")       -and `
+    (Test-Path -Path ${Windows ADK 2026-09 Extracted Folder Path})           -and `
+    (Test-Path -Path ${WinPE 2026-09 Extracted Folder Path})
+  )
+) {Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'}
+
+
 #endregion
 #region | Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager |
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
@@ -492,11 +576,9 @@ switch ($true) {
 }
 #endregion
 #endregion
-
-
 #region | PowerShell-enabled WinPE ISO File |
 $HT = @{
-  'WinPE Workspace Folder Name' = 'PowerShell-Infused WinPE-12'
+  'WinPE Workspace Folder Name' = 'PowerShell-Infused'
 }
 & "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
 #endregion
@@ -507,6 +589,14 @@ $HT = @{
 #>
 
 #region | Download, but do not install, DSC Resource Modules |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 5.1\Modules\DSC Resources"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PowerShell Gallery.ps1"
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
 #endregion
 
 #region | Download, but do not install, Windows PowerShell Modules |
