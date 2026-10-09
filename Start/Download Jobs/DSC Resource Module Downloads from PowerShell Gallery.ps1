@@ -1,10 +1,9 @@
-#Requires -Version 7.4
-#Requires -PSEdition Core
+#Requires -Version 5.1
+#Requires -PSEdition Desktop
 
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
-$ModuleSavePath = "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 5.1\Modules\DSC Resources"
-#$ModuleSavePath = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\installs\PowerShell 5.1\Modules\DSC Resources"
+$ModuleSavePath = "$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery\"
 ${DSC Resource Module Names} = @(
   'ActiveDirectoryCSDsc'
   'ActiveDirectoryDsc'
