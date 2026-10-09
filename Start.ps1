@@ -95,96 +95,9 @@ $HT = @{
 & "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1" @HT
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
 #endregion
-
-#region | Install NuGet | Set PSGallery as Trusted | Install 'TUN.CredentialManager' |
-
-
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
-${Command Here-String} = $(
-  #Requires -Version 5.1
-  #Requires -PSEdition Desktop
-  #Requires -RunAsAdministrator
-
-  & {
-    $PackageManagerName = (Get-PackageProvider).Where({$_.Name -eq 'NuGet'}).Name
-    ${NuGet Needs To Be Installed} = $PackageManagerName -eq $null
-    if (${NuGet Needs To Be Installed}) {
-      Install-PackageProvider -Name 'NuGet' -Scope 'AllUsers' -MinimumVersion '2.8.5.208' -Force | Format-Table -AutoSize
-    }
-  }
-) -join ''
-
-
-$PackageManagerName = (Get-PackageProvider).Where({$_.Name -eq 'NuGet'}).Name
-${NuGet Needs To Be Installed} = $PackageManagerName -eq $null
-if (${NuGet Needs To Be Installed}) {
-  ${Install NuGet Command Here-String} = $(
-    "#Requires -Version 5.1`n"
-    "#Requires -PSEdition Desktop`n"
-    "#Requires -RunAsAdministrator`n"
-    "`n"
-    "& {`n"
-    "  Install-PackageProvider -Name $([System.Char]39)NuGet$([System.Char]39) -Scope $([System.Char]39)AllUsers$([System.Char]39) -MinimumVersion $([System.Char]39)2.8.5.208$([System.Char]39) -Force | Format-Table -AutoSize`n"
-    "}`n"
-  ) -join ''
-  
-
-
-
-
-  
-  
-
-
-}
-
-
-
-
-${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String} = $(
-  #Requires -Version 5.1
-  #Requires -PSEdition Desktop
-  #Requires -RunAsAdministrator
-
-  & {
-
-    $Repository = 'PSGallery'
-    $InstallationPolicy = (Get-PSRepository -Name $Repository).InstallationPolicy
-    if ($InstallationPolicy -eq 'Untrusted') {
-      Set-PSRepository -Name $Repository -InstallationPolicy 'Trusted' -Verbose:$true
-    }
-
-
-
-  }
-
-  <#
-  
-  #>
-) -join ''
-
-${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = "$AppFolder\Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script.ps1"
-Set-Content -Path ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} -Value (${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Here-String})
-#Write-host -object "  `${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path} = ${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}"
-$ArgumentList = @(
-  "`${Here-String} = Get-Item -Path '${Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container Script Path}' | Get-Content -Raw; `$ScriptBlock = [ScriptBlock]::Create(`${Here-String}); `$ScriptBlock | Invoke-Expression"
-)
-
-${Windows ADK 2026-09 Extracted Folder Name} = 'Windows ADK 2026-09 Extracted'
-${Windows ADK 2026-09 Extracted Folder Path} = "$AppFolder\${Windows ADK 2026-09 Extracted Folder Name}"
-${WinPE 2026-09 Extracted Folder Name} = 'WinPE 2026-09 Extracted'
-${WinPE 2026-09 Extracted Folder Path} = "$AppFolder\${WinPE 2026-09 Extracted Folder Name}"
-
-if (
-  -not (
-    (Test-Path -Path "$env:ProgramData\ADK + WinPE\Windows ADK 2026-09.zip") -and `
-    (Test-Path -Path "$env:ProgramData\ADK + WinPE\WinPE 2026-09.zip")       -and `
-    (Test-Path -Path ${Windows ADK 2026-09 Extracted Folder Path})           -and `
-    (Test-Path -Path ${WinPE 2026-09 Extracted Folder Path})
-  )
-) {Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'}
-
-
+#region | Install NuGet | Set PSGallery as Trusted | Update PowerShellGet module | Install 'TUN.CredentialManager' module |
+& "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Module for Credential Manager.ps1"
+# Delete Shortly # . powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
 #endregion
 #region | Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager |
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
@@ -582,28 +495,280 @@ $HT = @{
 }
 & "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
 #endregion
+#region | Download, but do not install, DSC Resource modules |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PowerShell Gallery.ps1"
+#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PSGallery-Single Job.ps1"
+#. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PSGallery-Single Job.ps1"
+
+$ModuleSavePath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
+$ArgumentList = @($ModuleSavePath)
+Start-Job -Name 'Prepare .Zip files of DSC Resource modules from PSGallery' -ArgumentList $ArgumentList -ScriptBlock {
+  $ModuleSavePath = $args[0]
+  ${DSC Resource Module Names} = @(
+    'ActiveDirectoryCSDsc'
+    'ActiveDirectoryDsc'
+    'cDhcpServerDynamicUpdate'
+    'CertificateDsc'
+    'cHyper-V'
+    'ComputerManagementDsc'
+    'DhcpServerDsc'
+    'DnsServerDsc'
+    'GroupPolicyDsc'
+    'HyperVDsc'
+    'NetworkingDsc'
+    'StorageDsc'
+    'UpdateServicesDsc'
+    'WebAdministrationDsc'
+    'WmiNamespaceSecurity'
+    'WSManDsc'
+    'xCIMSecurity'
+    'xComputerManagement'
+    'xPendingReboot'
+    'xPSDesiredStateConfiguration'
+  )
+
+  ${DSC Resource Module Names} | Select-Object -PipelineVariable 'DSC Resource Module Name' | ForEach-Object -Process {
+    $IsZipPresent = Test-Path -Path "$ModuleSavePath\${DSC Resource Module Name}.zip"
+    if (-not $IsZipPresent) {
+      Save-Module -Name ${DSC Resource Module Name} -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
+      Start-Sleep 10
+      Compress-Archive -Path "$ModuleSavePath\${DSC Resource Module Name}" -DestinationPath "$ModuleSavePath\${DSC Resource Module Name}.zip"
+      Remove-Item -Path "$ModuleSavePath\${DSC Resource Module Name}" -Recurse -Force
+    }
+  }
+}
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
+#region | Download, but do not install, Windows PowerShell Modules |
+$ModuleSavePath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\5.1"
+$folder = try {Get-Item -Path $ModuleSavePath -ErrorAction 'Stop'} catch {New-Item -Path $ModuleSavePath -ItemType 'Directory' -Force}
+
+$ArgumentList = @($ModuleSavePath)
+Start-Job -Name 'Prepare .Zip files of Windows PowerShell modules from PSGallery' -ArgumentList $ArgumentList -ScriptBlock {
+  $ModuleSavePath = $args[0]
+  ${Windows PowerShell Module Names} = @(
+    'xDscDiagnostics'
+    'TUN.CredentialManager'
+    'Indented.Net.IP'
+    'PSPKI'
+  )
+
+  ${Windows PowerShell Module Names} | Select-Object -PipelineVariable 'Windows PowerShell Module Name' | ForEach-Object -Process {
+    $IsZipPresent = Test-Path -Path "$ModuleSavePath\${Windows PowerShell Module Name}.zip"
+    if (-not $IsZipPresent) {
+      Save-Module -Name ${Windows PowerShell Module Name} -Path $ModuleSavePath -Repository 'PSGallery'
+      Start-Sleep 10
+      Compress-Archive -Path "$ModuleSavePath\${Windows PowerShell Module Name}" -DestinationPath "$ModuleSavePath\${Windows PowerShell Module Name}.zip"
+      Remove-Item -Path "$ModuleSavePath\${Windows PowerShell Module Name}" -Recurse -Force
+    }
+  }
+}
+#endregion
+#region | Download PowerShell 7 .msi files |
+<# End-of-Support announcements | Versioning Explained |
+  End-of-Support latest announcements:
+  start msedge.exe 'https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-support-lifecycle'
+  Releases:
+  start msedge.exe 'https://github.com/powershell/powershell/releases'
+
+  # Versioning
+  $PSVersionTable
+  ($PSVersionTable).GetType().Name
+  $PSVersionTable['PSVersion']
+  $PSVersionTable['PSVersion'].Major
+  $PSVersionTable['PSVersion'].Minor
+  $PSVersionTable['PSVersion'].Patch
+#>
+#region | PowerShell 7.4 |
+$Minor = 4
+$Patch = 20
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+#region | PowerShell 7.5 |
+$Minor = 5
+$Patch = 11
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+#region | PowerShell 7.6 |
+$Minor = 6
+$Patch = 6
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.5"
+'https://github.com/PowerShell/PowerShell/releases/download/v7.5.11/PowerShell-7.5.11-win-x64.msi'
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.6"
+'https://github.com/PowerShell/PowerShell/releases/download/v7.6.6/PowerShell-7.6.6-win-x64.msi'
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
+#region | Download, but do not install, PowerShell 7 modules |
+$ModuleSavePath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\7"
+$folder = try {Get-Item -Path $ModuleSavePath -ErrorAction 'Stop'} catch {New-Item -Path $ModuleSavePath -ItemType 'Directory' -Force}
+
+$ArgumentList = @($ModuleSavePath)
+Start-Job -Name 'Prepare .Zip files of PowerShell 7 modules from PSGallery' -ArgumentList $ArgumentList -ScriptBlock {
+  $ModuleSavePath = $args[0]
+  ${PowerShell 7 Module Names} = @(
+    'Microsoft.PowerShell.SecretManagement'
+    'SecretManagement.Warden'
+    'TUN.CredentialManager'
+  )
+
+  ${PowerShell 7 Module Names} | Select-Object -PipelineVariable 'PowerShell 7 Module Name' | ForEach-Object -Process {
+    $IsZipPresent = Test-Path -Path "$ModuleSavePath\${PowerShell 7 Module Name}.zip"
+    if (-not $IsZipPresent) {
+      Save-Module -Name ${PowerShell 7 Module Name} -Path $ModuleSavePath -Repository 'PSGallery'
+      Start-Sleep 10
+      Compress-Archive -Path "$ModuleSavePath\${PowerShell 7 Module Name}" -DestinationPath "$ModuleSavePath\${PowerShell 7 Module Name}.zip"
+      Remove-Item -Path "$ModuleSavePath\${PowerShell 7 Module Name}" -Recurse -Force
+    }
+  }
+}
+#endregion
+
+
+
+#region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion. |
+
+#endregion
+
+
+
+
+
+
+
 
 <# Windows ADK Patches |
   None currently published for Windows ADK 2026-09 but check back periodically. 
   'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-servicing'
 #>
 
-#region | Download, but do not install, DSC Resource Modules |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 5.1\Modules\DSC Resources"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PowerShell Gallery.ps1"
-
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-#endregion
-
-#region | Download, but do not install, Windows PowerShell Modules |
-#endregion
-
-#region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion. |
-#endregion
-
-#region | Windows Assessment and Deployment Kit | Phase 2 |
-#endregion
