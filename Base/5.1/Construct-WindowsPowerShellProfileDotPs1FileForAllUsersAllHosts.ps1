@@ -39,6 +39,24 @@ param (
   )]
   [System.String]
   ${usb1 SerialNumber},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${OSDeploy FriendlyName},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${OSDeploy UniqueId Raw},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${OSDeploy SerialNumber},
   #endregion
 
   #region | PATH Environment Variable | Updated user-scope %path% variable |
@@ -516,16 +534,19 @@ param (
 )
 
 #region | Instances from generalized precursors |
-#region | External Storage Media Drive Letters |
-${External Storage Media Drive Letters Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\External Storage Media Drive Letters Precursor.ps1"
-${External Storage Media Drive Letters} = ${External Storage Media Drive Letters Precursor} `
+#region | External Storage + Bootable Media Drive Letters |
+${External Storage + Bootable Media Drive Letters Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\External Storage + Bootable Media Drive Letters Precursor.ps1"
+${External Storage + Bootable Media Drive Letters} = ${External Storage + Bootable Media Drive Letters Precursor} `
   -replace '%_usb0 FriendlyName_%',${usb0 FriendlyName} `
   -replace '%_usb0 UniqueId Raw_%',${usb0 UniqueId Raw} `
   -replace '%_usb0 SerialNumber_%',${usb0 SerialNumber} `
   -replace '%_usb1 FriendlyName_%',${usb1 FriendlyName} `
   -replace '%_usb1 UniqueId Raw_%',${usb1 UniqueId Raw} `
-  -replace '%_usb1 SerialNumber_%',${usb1 SerialNumber}
-Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage Media Drive Letters.ps1" -Value (${External Storage Media Drive Letters})
+  -replace '%_usb1 SerialNumber_%',${usb1 SerialNumber} `
+  -replace '%_OSDeploy FriendlyName_%',${OSDeploy FriendlyName} `
+  -replace '%_OSDeploy UniqueId Raw_%',${OSDeploy UniqueId Raw} `
+  -replace '%_OSDeploy SerialNumber_%',${OSDeploy SerialNumber}
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage + Bootable Media Drive Letters.ps1" -Value (${External Storage + Bootable Media Drive Letters})
 #endregion
 
 #region | PATH Environment Variable | Updated user-scope %path% variable |
@@ -638,7 +659,7 @@ Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PART
 
 ${Constructed Profile} = -join $(
   Get-Content -Raw -Path "$PSScriptRoot\Static\requires and StrictMode.ps1"
-  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage Media Drive Letters.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage + Bootable Media Drive Letters.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Computer Info Lite.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Define explorer.exe Owner variable.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PATH Environment Variable.ps1"
