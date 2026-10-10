@@ -97,8 +97,7 @@ foreach ($BaseName in $BaseNames) {
   )
 }
 #endregion
-
-# Sanitize the user's input by eliminating single & double quotation marks. 
+#region | Sanitize the user's input by eliminating single & double quotation marks |
 ${usb0 FriendlyName} = ${usb0 FriendlyName} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 ${usb0 UniqueId Raw} = ${usb0 UniqueId Raw} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 ${usb0 SerialNumber} = ${usb0 SerialNumber} -replace $([System.Char]39),'' -replace $([System.Char]34),''
@@ -108,15 +107,16 @@ ${usb1 SerialNumber} = ${usb1 SerialNumber} -replace $([System.Char]39),'' -repl
 ${OSDeploy FriendlyName} = ${OSDeploy FriendlyName} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 ${OSDeploy UniqueId Raw} = ${OSDeploy UniqueId Raw} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 ${OSDeploy SerialNumber} = ${OSDeploy SerialNumber} -replace $([System.Char]39),'' -replace $([System.Char]34),''
+#endregion
 
 $HT = @{
   #region | External Storage Media |
-  'usb0 FriendlyName' = ${usb0 FriendlyName}
-  'usb0 UniqueId Raw' = ${usb0 UniqueId Raw}
-  'usb0 SerialNumber' = ${usb0 SerialNumber}
-  'usb1 FriendlyName' = ${usb1 FriendlyName}
-  'usb1 UniqueId Raw' = ${usb1 UniqueId Raw}
-  'usb1 SerialNumber' = ${usb1 SerialNumber}
+  'usb0 FriendlyName'     = ${usb0 FriendlyName}
+  'usb0 UniqueId Raw'     = ${usb0 UniqueId Raw}
+  'usb0 SerialNumber'     = ${usb0 SerialNumber}
+  'usb1 FriendlyName'     = ${usb1 FriendlyName}
+  'usb1 UniqueId Raw'     = ${usb1 UniqueId Raw}
+  'usb1 SerialNumber'     = ${usb1 SerialNumber}
   'OSDeploy FriendlyName' = ${OSDeploy FriendlyName}
   'OSDeploy UniqueId Raw' = ${OSDeploy UniqueId Raw}
   'OSDeploy SerialNumber' = ${OSDeploy SerialNumber}
