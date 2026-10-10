@@ -77,7 +77,24 @@ foreach ($BaseName in $BaseNames) {
   Set-Variable -Name $_Var_Name -Value (
     Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\$BaseName.clixml"
   )
+}
 
+$BaseNames = @(
+  'OSDeploy FriendlyName'
+  'OSDeploy UniqueId Raw'
+  'OSDeploy SerialNumber'
+)
+foreach ($BaseName in $BaseNames) {
+  $IsPresent = Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\$BaseName.clixml"
+  if (-not $IsPresent) {
+    . powershell.exe -NoProfile -File "$PSScriptRoot\..\A0\Single Use\Obtain $BaseName.ps1"
+  }
+
+  $_Var_Name = $BaseName
+  try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+  Set-Variable -Name $_Var_Name -Value (
+    Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\$BaseName.clixml"
+  )
 }
 #endregion
 
@@ -88,6 +105,9 @@ ${usb0 SerialNumber} = ${usb0 SerialNumber} -replace $([System.Char]39),'' -repl
 ${usb1 FriendlyName} = ${usb1 FriendlyName} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 ${usb1 UniqueId Raw} = ${usb1 UniqueId Raw} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 ${usb1 SerialNumber} = ${usb1 SerialNumber} -replace $([System.Char]39),'' -replace $([System.Char]34),''
+${OSDeploy FriendlyName} = ${OSDeploy FriendlyName} -replace $([System.Char]39),'' -replace $([System.Char]34),''
+${OSDeploy UniqueId Raw} = ${OSDeploy UniqueId Raw} -replace $([System.Char]39),'' -replace $([System.Char]34),''
+${OSDeploy SerialNumber} = ${OSDeploy SerialNumber} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 
 $HT = @{
   #region | External Storage Media |
@@ -97,6 +117,9 @@ $HT = @{
   'usb1 FriendlyName' = ${usb1 FriendlyName}
   'usb1 UniqueId Raw' = ${usb1 UniqueId Raw}
   'usb1 SerialNumber' = ${usb1 SerialNumber}
+  'OSDeploy FriendlyName' = ${OSDeploy FriendlyName}
+  'OSDeploy UniqueId Raw' = ${OSDeploy UniqueId Raw}
+  'OSDeploy SerialNumber' = ${OSDeploy SerialNumber}
   #endregion
 
   #region | Updated user-scope %path% variable |
