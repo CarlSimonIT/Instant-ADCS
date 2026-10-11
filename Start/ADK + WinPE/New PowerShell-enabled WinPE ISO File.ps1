@@ -6,12 +6,17 @@ param (
 )
 
 ${explorer.exe Owner} = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\explorer.exe Owner.clixml"
-${WinPE Image Creation Parent Path} = "$env:SystemDrive\Users\${explorer.exe Owner}\WinPE"
+#${WinPE Image Creation Parent Path} = "$env:SystemDrive\Users\${explorer.exe Owner}\WinPE"
+${WinPE Image Creation Parent Path} = "$PSScriptRoot\..\..\..\.CommonItems\WinPE"
 ${WinPE Image Creation Parent Folder} = try {
   Get-Item -Path ${WinPE Image Creation Parent Path} -ErrorAction 'Stop'
 } catch {
   New-Item -Path ${WinPE Image Creation Parent Path} -ItemType 'Directory' -Force
 }
+
+
+
+
 
 <#
   ${WinPE Workspace Folder Name} = 'PowerShell-Infused WinPE-00'
@@ -19,16 +24,14 @@ ${WinPE Image Creation Parent Folder} = try {
 #>
 
 ${Unique WinPE ISO Command Here-String Precursor} = $(
-
-
   "`n"
   "    & { # Created with $([System.Char]39).\ConvertTo-HereStringCompatible.ps1$([System.Char]39) |`n"
   "      `${WinPE x64 Tools Path} = $([System.Char]34)`${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64$([System.Char]34)`n"
   "      `${ADK x64 Tools Path} = Resolve-Path -Path $([System.Char]34)`${WinPE x64 Tools Path}\..\..\Deployment Tools\amd64$([System.Char]34) | Select-Object -ExpandProperty $([System.Char]39)Path$([System.Char]39)`n"
-  "      `${WinPE Workspace Folder Name},`${explorer.exe Owner} = $([System.Char]39)%_WinPE Workspace Folder Name_%$([System.Char]39),$([System.Char]39)%_explorer_owner_%$([System.Char]39)`n"
+  "      `${WinPE Workspace Folder Name},`${explorer.exe Owner},`${WinPE Image Creation Parent Path} = $([System.Char]39)%_WinPE Workspace Folder Name_%$([System.Char]39),$([System.Char]39)%_explorer_owner_%$([System.Char]39),$([System.Char]34)%_WinPE Image Creation Parent Path_%$([System.Char]34)`n"
   "`n"
   "      # Define directory that contains unmodified files for WinPE ISO file generation`n"
-  "      `${WinPE Image Creation Parent Path} = $([System.Char]34)`$env:SystemDrive\Users\`${explorer.exe Owner}\WinPE$([System.Char]34)`n"
+  "      #`${WinPE Image Creation Parent Path} = $([System.Char]34)`$env:SystemDrive\Users\`${explorer.exe Owner}\WinPE$([System.Char]34)      `n"
   "      `${WinPE Image Creation Parent Folder} = try {`n"
   "        Get-Item -Path `${WinPE Image Creation Parent Path} -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
   "      } catch {`n"
@@ -115,8 +118,8 @@ ${Unique WinPE ISO Command Here-String Precursor} = $(
   "        # Example of wpeinit in action: `n"
   "        #     Wpeinit -unattend:$([System.Char]34)C:\Unattend-PE.xml$([System.Char]34)`n"
   "        # So can Startnet.cmd launch a PowerShell script? `n"
-  "        # I think it can. See the Unattend setting titled Microsoft-Windows-Setup/RunSynchronous. `n"
-  "        # That's probably how the PowerShell script is going to launch. `n"
+  "        # I think it can. See the Unattend setting titled Microsoft-Windows-Setup/RunSynchronous.`n"
+  "        # That$([System.Char]39)s probably how the PowerShell script is going to launch.`n"
   "        #endregion`n"
   "`n"
   "        .\amd64\DISM\dism.exe /Unmount-Image /MountDir:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /Commit`n"
@@ -132,14 +135,14 @@ ${Unique WinPE ISO Command Here-String Precursor} = $(
   "`t`t"
 
 
-  [System.Void]{
+  {
     & { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
       ${WinPE x64 Tools Path} = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64"
       ${ADK x64 Tools Path} = Resolve-Path -Path "${WinPE x64 Tools Path}\..\..\Deployment Tools\amd64" | Select-Object -ExpandProperty 'Path'
-      ${WinPE Workspace Folder Name},${explorer.exe Owner} = '%_WinPE Workspace Folder Name_%','%_explorer_owner_%'
+      ${WinPE Workspace Folder Name},${explorer.exe Owner},${WinPE Image Creation Parent Path} = '%_WinPE Workspace Folder Name_%','%_explorer_owner_%',"%_WinPE Image Creation Parent Path_%"
 
       # Define directory that contains unmodified files for WinPE ISO file generation
-      ${WinPE Image Creation Parent Path} = "$env:SystemDrive\Users\${explorer.exe Owner}\WinPE"
+      #${WinPE Image Creation Parent Path} = "$env:SystemDrive\Users\${explorer.exe Owner}\WinPE"      
       ${WinPE Image Creation Parent Folder} = try {
         Get-Item -Path ${WinPE Image Creation Parent Path} -ErrorAction 'Stop'
       } catch {
@@ -249,6 +252,7 @@ ${Unique WinPE ISO Command Here-String Precursor} = $(
 
 ${Unique WinPE ISO Command Here-String} = ${Unique WinPE ISO Command Here-String Precursor} -replace '%_explorer_owner_%',${explorer.exe Owner}
 ${Unique WinPE ISO Command Here-String} = ${Unique WinPE ISO Command Here-String} -replace '%_WinPE Workspace Folder Name_%',${WinPE Workspace Folder Name}
+${Unique WinPE ISO Command Here-String} = ${Unique WinPE ISO Command Here-String} -replace '%_WinPE Image Creation Parent Path_%',${WinPE Image Creation Parent Path}
 
 ${Unique WinPE ISO Script Path} = "${WinPE Image Creation Parent Folder}\Unique WinPE ISO Script.ps1"
 Set-Content -Path ${Unique WinPE ISO Script Path} -Value (${Unique WinPE ISO Command Here-String})
