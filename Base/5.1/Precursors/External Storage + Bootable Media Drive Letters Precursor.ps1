@@ -1,8 +1,14 @@
 #region | Detect Removable External Storage Media |
 #region | Patterns |
 #${Pattern UniqueId Raw-OLD} = '^(?<Unique_ID>.+)\:(?<Computer_Name>(?!(\d{1,15}|ANONYMOUS|BATCH|BUILTIN|DIALUP|DOMAIN|ENTERPRISE|INTERACTIVE|INTERNET|LOCAL|NETWORK|NULL|PROXY|RESTRICTED|SELF|SERVER|SERVICE|SYSTEM|USERS|WORLD)$)[a-z0-9][a-z0-9-]{1,13}[a-z0-9])$'
-${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(\:)?$'
+#${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(\:)?$'
+#${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(\:.*)?$'
+#${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)((?<Discarded>\:.*))?$'
+#${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(?<Discarded>\:.*)?$'
+${Pattern UniqueId Raw} = '^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?$'
 #endregion
+
+
 #region | Save to variable the volume letter of the external storage containing application installation files, VHDX files, and OS images. |
 ${usb0 FriendlyName} = '%_usb0 FriendlyName_%'
 ${usb0 UniqueId Raw} = '%_usb0 UniqueId Raw_%'
