@@ -120,9 +120,9 @@ $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml
 
 
 # Collect and export to .clixml the unique identifiers of bootable media
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Enumerate the unique identifiers of bootable media.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Enumerate the unique identifiers of bootable media.ps1"
 #. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect the unique identifiers of bootable media.ps1"
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Export to .clixml the unique identifiers of bootable media.ps1"
+. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Export to .clixml the unique identifiers of bootable media.ps1"
 
 
 
