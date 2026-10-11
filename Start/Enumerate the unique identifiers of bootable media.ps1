@@ -19,7 +19,7 @@ $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.cli
 ${External Media Eligible for OS Deployment Here-String} = @"
   Read all subsequent steps before pressing Enter to continue: 
 
-  1. Insert removable external storage media. 
+  1. Insert removable external bootable media. 
   2. Launch another instance of Windows PowerShell. 
   3. Execute the code below in that newly created session to view 
      details of removable drives eligible for OS deployment: 
@@ -29,16 +29,18 @@ ${External Media Eligible for OS Deployment Here-String} = @"
         `$_.OperationalStatus -eq 'Online'  -and $([System.Char]96)
         `$_.HealthStatus      -eq 'Healthy' -and $([System.Char]96)
         (
-          `$_.FriendlyName -ne '${usb0 FriendlyName}' -and $([System.Char]96)
-          `$_.FriendlyName -ne '${usb1 FriendlyName}'
+          -not (
+            `$_.FriendlyName -eq '${usb0 FriendlyName}' -and $([System.Char]96)
+            `$_.SerialNumber -eq '${usb0 SerialNumber}' -and $([System.Char]96)
+            `$_.UniqueId     -eq '${usb0 UniqueId Raw}'
+          )
         ) -and $([System.Char]96)
         (
-          `$_.SerialNumber -ne '${usb0 SerialNumber}' -and $([System.Char]96)
-          `$_.SerialNumber -ne '${usb1 SerialNumber}'
-        ) -and $([System.Char]96)
-        (
-          `$_.UniqueId -ne '${usb0 UniqueId Raw}' -and $([System.Char]96)
-          `$_.UniqueId -ne '${usb1 UniqueId Raw}'
+          -not (
+            `$_.FriendlyName -eq '${usb1 FriendlyName}' -and $([System.Char]96)
+            `$_.SerialNumber -eq '${usb1 SerialNumber}' -and $([System.Char]96)
+            `$_.UniqueId     -eq '${usb1 UniqueId Raw}'
+          )
         )
       } | ForEach-Object -Process {
         `$DiskFriendlyName = $([System.Char]36)Disk.FriendlyName
@@ -58,7 +60,16 @@ ${External Media Eligible for OS Deployment Here-String} = @"
 "@
 ""
 Write-Host -Object ${External Media Eligible for OS Deployment Here-String} -ForegroundColor ([System.ConsoleColor]::Blue)
-pause
+
+${Do any remaining unique identifiers of removable external bootable media require exportation to clixml} = -not (
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\OSDeploy FriendlyName.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\OSDeploy SerialNumber.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\OSDeploy UniqueId Raw.clixml")
+)
+if (${Do any remaining unique identifiers of removable external bootable media require exportation to clixml}) {
+  pause
+}
+
 
 ${External Storage Media Note Preamble Here-String} = -join $(
   "`n"
@@ -68,7 +79,16 @@ ${External Storage Media Note Preamble Here-String} = -join $(
   "`n"
 )
 Write-Host -Object ${External Storage Media Note Preamble Here-String} -ForegroundColor ([System.ConsoleColor]::Cyan)
-pause
+
+${Do any remaining unique identifiers of removable external bootable media require exportation to clixml} = -not (
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\OSDeploy FriendlyName.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\OSDeploy SerialNumber.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\OSDeploy UniqueId Raw.clixml")
+)
+if (${Do any remaining unique identifiers of removable external bootable media require exportation to clixml}) {
+  pause
+}
+
 
 ${External Storage Media Note Here-String} = -join $(
   "`n"
