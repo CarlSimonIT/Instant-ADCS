@@ -33,9 +33,6 @@ param (
   #endregion
 )
 
-Write-Host -Object 'External Bootable Media Drive Letters'
-pause
-
 #region | External Bootable Media Drive Letters |
 ${External Bootable Media Drive Letters Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\External Bootable Media Drive Letters Precursor.ps1"
 ${External Bootable Media Drive Letters} = ${External Bootable Media Drive Letters Precursor} `
