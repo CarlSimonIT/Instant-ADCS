@@ -33,6 +33,10 @@ Write-Host -Object "`n  Supply admin credentials when the UAC prompt appears:`n 
 pause
 
 ${Command Here-String} = $(
+  "#Requires -Version 5.1`n"    
+  "#Requires -PSEdition Desktop`n"    
+  "#Requires -RunAsAdministrator`n"    
+  "`n"
   "& {`n"
   "  `$InstallScript = Invoke-RestMethod $([System.Char]39)https://aka.ms/install-powershell.ps1$([System.Char]39)`n"
   "  `$InstallScriptBlock = [ScriptBlock]::Create(`$InstallScript)`n"
