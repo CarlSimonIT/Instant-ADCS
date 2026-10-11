@@ -51,8 +51,6 @@ param (
   #endregion
 )
 
-Write-Host -Object 'External Storage Media Drive Letters'
-pause
 
 #region | External Storage Media Drive Letters |
 ${External Storage Media Drive Letters Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\External Storage Media Drive Letters Precursor.ps1"
