@@ -2,7 +2,6 @@
 #Requires -PSEdition Desktop
 
 
-
 [CmdletBinding()]
 param (
   #region | External Storage Media |
@@ -40,9 +39,20 @@ param (
     Mandatory = $true
   )]
   [System.String]
-  ${usb1 SerialNumber}
+  ${usb1 SerialNumber},
+  #endregion
+
+  #region | Location for ofautput content inside '.\output' directory of project root |
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${New Windows PowerShell Base Folder PARTIAL Path}
   #endregion
 )
+
+Write-Host -Object 'External Storage Media Drive Letters'
+pause
 
 #region | External Storage Media Drive Letters |
 ${External Storage Media Drive Letters Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\External Storage Media Drive Letters Precursor.ps1"
