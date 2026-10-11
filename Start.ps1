@@ -540,11 +540,18 @@ switch ($true) {
 #endregion
 
 #region | External Removable Bootable Media > Clear Disk > EFS (EFI System Partition) |
+. "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
+
+
+${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+  $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
+  $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
+  $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
+}
+$DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
+
 & "$PSScriptRoot\Start\ADK + WinPE\EFI System Partition on Removable External Bootable Media.ps1"
 #endregion
-
-
-
 #region | PowerShell-enabled WinPE ISO File |
 # [ ] Implementation Complete
 # Use newer version of DISM in WinPE: 
@@ -555,6 +562,10 @@ $HT = @{
 }
 #& "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
 #endregion
+
+
+
+
 #region | Windows Server on bootable physical media? How does WinPE play into this? |
 #endregion
 
