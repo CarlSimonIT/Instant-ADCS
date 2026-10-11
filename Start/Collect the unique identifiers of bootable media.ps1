@@ -1,13 +1,16 @@
 #Requires -Version 5.1
 #Requires -PSEdition Desktop
 
-${usb0 FriendlyName} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb0 FriendlyName.clixml"
-${usb0 SerialNumber} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb0 SerialNumber.clixml"
-${usb0 UniqueId Raw} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb0 UniqueId Raw.clixml"
 
-${usb1 FriendlyName} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb1 FriendlyName.clixml"
-${usb1 SerialNumber} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb1 SerialNumber.clixml"
-${usb1 UniqueId Raw} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb1 UniqueId Raw.clixml"
+<#
+  ${usb0 FriendlyName} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb0 FriendlyName.clixml"
+  ${usb0 SerialNumber} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb0 SerialNumber.clixml"
+  ${usb0 UniqueId Raw} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb0 UniqueId Raw.clixml"
+
+  ${usb1 FriendlyName} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb1 FriendlyName.clixml"
+  ${usb1 SerialNumber} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb1 SerialNumber.clixml"
+  ${usb1 UniqueId Raw} = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\usb1 UniqueId Raw.clixml"
+#>
 
 
 . "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\External Storage Media Drive Letters.ps1"
