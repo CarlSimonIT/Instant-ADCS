@@ -61,16 +61,14 @@ ${usb1 SerialNumber} = ${usb1 SerialNumber} -replace $([System.Char]39),'' -repl
 
 $HT = @{
   #region | External Storage Media |
-  'usb0 FriendlyName'     = ${usb0 FriendlyName}
-  'usb0 UniqueId Raw'     = ${usb0 UniqueId Raw}
-  'usb0 SerialNumber'     = ${usb0 SerialNumber}
-  'usb1 FriendlyName'     = ${usb1 FriendlyName}
-  'usb1 UniqueId Raw'     = ${usb1 UniqueId Raw}
-  'usb1 SerialNumber'     = ${usb1 SerialNumber}
+  'usb0 FriendlyName'                               = ${usb0 FriendlyName}
+  'usb0 UniqueId Raw'                               = ${usb0 UniqueId Raw}
+  'usb0 SerialNumber'                               = ${usb0 SerialNumber}
+  'usb1 FriendlyName'                               = ${usb1 FriendlyName}
+  'usb1 UniqueId Raw'                               = ${usb1 UniqueId Raw}
+  'usb1 SerialNumber'                               = ${usb1 SerialNumber}
+  'New Windows PowerShell Base Folder PARTIAL Path' = ${New Windows PowerShell Base Folder PARTIAL Path}
   #endregion
-
-
-
 }
 
 Push-Location -Path "$PSScriptRoot\..\Base\5.1"
