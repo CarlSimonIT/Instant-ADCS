@@ -21,16 +21,13 @@ Get-Disk | Where-Object -FilterScript {$_.FriendlyName -eq 'Samsung Flash Drive'
 ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
   $_.FriendlyName -eq 'Samsung Flash Drive'
 } | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$false -PassThru
-
 ${Disk CIM Instance} | Set-Disk -PartitionStyle 'GPT'
-
 ${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 628MB -AssignDriveLetter -GptType '{c12a7328-f81f-11d2-ba4b-00a0c93ec93b}'
-
 # The entirety of the EFI System Partition must contain a FAT32-formatted volume:
 $NewFileSystemLabel = 'WINPE_BOOT'
-${EFS FAT32 Volume CIM Instance} = Format-Volume -FileSystem 'FAT32' -DriveLetter ${EFI System Partition CIM Instance}.DriveLetter -NewFileSystemLabel $NewFileSystemLabel
+${FAT32 Volume on ESP CIM Instance} = Format-Volume -FileSystem 'FAT32' -DriveLetter ${EFI System Partition CIM Instance}.DriveLetter -NewFileSystemLabel $NewFileSystemLabel
 ${WinPE Volume} = Get-Volume -FriendlyName $NewFileSystemLabel
-${WinPE Bootable USB Volume Letter} = ${EFS FAT32 Volume CIM Instance}.DriveLetter + ':'
+${WinPE Bootable USB Volume Letter} = ${FAT32 Volume on ESP CIM Instance}.DriveLetter + ':'
 
 
 <#
