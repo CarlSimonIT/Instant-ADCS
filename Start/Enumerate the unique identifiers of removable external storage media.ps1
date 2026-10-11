@@ -46,7 +46,18 @@ ${External Storage Media Here-String} = @'
 '@
 ""
 Write-Host -Object ${External Storage Media Here-String} -ForegroundColor ([System.ConsoleColor]::Blue)
-pause
+
+${Do any remaining unique identifiers of removable external storage media require exportation to clixml} = -not (
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb0 FriendlyName.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb0 SerialNumber.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb0 UniqueId Raw.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb1 FriendlyName.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb1 SerialNumber.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb1 UniqueId Raw.clixml")
+)
+if (${Do any remaining unique identifiers of removable external storage media require exportation to clixml}) {
+  pause
+}
 
 ${External Storage Media Note Preamble Here-String} = -join $(
   "`n"
@@ -58,7 +69,19 @@ ${External Storage Media Note Preamble Here-String} = -join $(
   "`n"
 )
 Write-Host -Object ${External Storage Media Note Preamble Here-String} -ForegroundColor ([System.ConsoleColor]::Cyan)
-pause
+
+${Do any remaining unique identifiers of removable external storage media require exportation to clixml} = -not (
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb0 FriendlyName.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb0 SerialNumber.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb0 UniqueId Raw.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb1 FriendlyName.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb1 SerialNumber.clixml") -and `
+  (Test-Path -Path "$PSScriptRoot\..\..\.CommonItems\usb1 UniqueId Raw.clixml")
+)
+if (${Do any remaining unique identifiers of removable external storage media require exportation to clixml}) {
+  pause
+}
+
 
 ${External Storage Media Note Here-String} = -join $(
   "`n"
