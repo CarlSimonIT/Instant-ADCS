@@ -52,7 +52,10 @@ ${Win32_Product Name} = Get-CimInstance -ClassName 'Win32_Product' `
 if (${Win32_Product Name} -eq $null) {
   Start-Process powershell.exe $Command -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
 
-  Write-Host -Object "`n  Registering the PowerShell 7 event log provider: " -ForegroundColor ([System.ConsoleColor]::DarkRed)
+  Write-Host -Object "`n  Registering the PowerShell 7 event log provider." -ForegroundColor ([System.ConsoleColor]::DarkRed)
+  Write-Host -Object "`n  Supply admin credentials when the UAC prompt appears:`n  " -ForegroundColor ([System.ConsoleColor]::DarkMagenta)
+  pause
+
   ${Command Here-String} = $(
     "& {`n"
     "  $([System.Char]34)`$PSHOME\RegisterManifest.ps1 -Verbose$([System.Char]34)`n"
