@@ -17,7 +17,7 @@ $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.cli
 . "$PSScriptRoot\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
 
 ${External Media Eligible for OS Deployment Here-String} = @"
-  Read all subsequent steps before pressing Enter to continue: 
+  Read all subsequent steps BEFORE pressing Enter to continue: 
 
   1. Insert removable external bootable media. 
   2. Launch another instance of Windows PowerShell. 
