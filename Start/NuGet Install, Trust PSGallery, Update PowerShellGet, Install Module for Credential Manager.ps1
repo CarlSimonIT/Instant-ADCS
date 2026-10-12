@@ -56,7 +56,6 @@ if (${PowerShellGet Needs to be Updated}) {
 #endregion
 
 #region | Install 'TUN.CredentialManager' module for Windows PowerShell in 'CurrentUser' scope |
-Write-Host -Object "  Ensuring that the 'TUN.CredentialManager' module`n  for Windows PowerShell is installed in 'CurrentUser' scope:"
 $InstallModuleHT = @{
   Scope      = 'CurrentUser'
   Repository = 'PSGallery'
@@ -66,8 +65,8 @@ $ModuleName = 'TUN.CredentialManager'
 try {
   ${PSCustomObject InstalledModule} = Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' -Verbose:$false
   # For some reason the 'TUN.CredentialManager' isn't detectable by Get-InstalledModule, Import-Module, Get-Module, etc. 
-
 } catch {
+  Write-Host -Object "  Ensuring that the 'TUN.CredentialManager' module`n  for Windows PowerShell is installed in 'CurrentUser' scope:"
   Install-Module -Name $ModuleName @InstallModuleHT
 }
 #endregion
