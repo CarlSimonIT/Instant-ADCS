@@ -49,6 +49,8 @@
 [System.Text.RegularExpressions.Regex]${regex OU DistinguishedName}         = '^OU=[^,]+(?:,OU=[^,]+)*,DC=[^,]+(?:,DC=[^,]+)*$'                                                                  # All possible values for the 'DistinguishedName' property of an Organizational Unit in Active Directory: 
 [System.Text.RegularExpressions.Regex]${regex Object DistinguishedName}     = 'OU=[^,]+(?:,OU=[^,]+)*,DC=[^,]+(?:,DC=[^,]+)*$'
 [System.Text.RegularExpressions.Regex]${regex GUID}                         = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+[System.String]${regex literal GUID}                                        = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+[System.String]${regex literal GUID (Anchorless)}                           = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 [System.Text.RegularExpressions.Regex]${regex DNS Domain Name}              = '^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$'
 [System.Text.RegularExpressions.Regex]${regex DNS Domain Name (Anchorless)} = '(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})'
 [System.String]${regex literal All ASCII}                                   = "$([System.Char]91)$([System.Char]32)$([System.Char]45)$([System.Char]126)$([System.Char]93)"                      # All printable ASCII characters, from space to tilde.   (32..126) | % {[System.Char]$_}
@@ -58,7 +60,7 @@
 [System.String]${regex literal DNS CNAME}              = '^[a-z0-9_-]{1,63}$'
 [System.String]${regex literal DNS CNAME (Anchorless)} = '[a-z0-9_-]{1,63}'
 <# -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- |
-  This ^ is a valid CNAME for Windows DNS clients and DNS servers!
+  Yes, this ^ is a valid CNAME for Windows DNS clients and DNS servers!
 #>
 
 <# ${regex literal UPN Prefix (Anchorless)} |
