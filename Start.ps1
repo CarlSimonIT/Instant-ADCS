@@ -86,7 +86,7 @@ param (
 <#
   $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'
-  (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
+  (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
 #>
 
 #region | Export non-senstive strings to .clixml for later import by other applications |
@@ -540,17 +540,19 @@ switch ($true) {
 #endregion
 
 #region | External Removable Bootable Media > Clear Disk > EFS (EFI System Partition) |
-. "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
+<#
+  . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
 
 
-${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
-  $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
-  $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
-  $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
-}
-$DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
+  ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+    $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
+    $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
+    $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
+  }
+  $DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
 
-& "$PSScriptRoot\Start\ADK + WinPE\EFI System Partition on Removable External Bootable Media.ps1"
+  & "$PSScriptRoot\Start\ADK + WinPE\EFI System Partition on Removable External Bootable Media.ps1"
+#>
 #endregion
 #region | PowerShell-enabled WinPE ISO File |
 # [ ] Implementation Complete
@@ -562,61 +564,57 @@ $HT = @{
 }
 #& "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
 #endregion
-
-
-
-
 #region | Windows Server on bootable physical media? How does WinPE play into this? |
 #endregion
-
-
-
-
-
-
-
-
 
 #region | Compacted |
 #region | Download, but do not install, DSC Resource modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
+#            $path = 'C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$ModuleSavePath = "$folder"
+${DSC Resource module Save Path} = "$folder"
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource module Save Path.clixml" -InputObject (${DSC Resource module Save Path})
 
-$ArrayList = [System.Collections.ArrayList]::New()
-[System.Void]$ArrayList.Add('ActiveDirectoryCSDsc')
-[System.Void]$ArrayList.Add('ActiveDirectoryDsc')
-[System.Void]$ArrayList.Add('cDhcpServerDynamicUpdate')
-[System.Void]$ArrayList.Add('CertificateDsc')
-[System.Void]$ArrayList.Add('cHyper-V')
-[System.Void]$ArrayList.Add('ComputerManagementDsc')
-[System.Void]$ArrayList.Add('DhcpServerDsc')
-[System.Void]$ArrayList.Add('DnsServerDsc')
-[System.Void]$ArrayList.Add('GroupPolicyDsc')
-[System.Void]$ArrayList.Add('HyperVDsc')
-[System.Void]$ArrayList.Add('NetworkingDsc')
-[System.Void]$ArrayList.Add('StorageDsc')
-[System.Void]$ArrayList.Add('UpdateServicesDsc')
-[System.Void]$ArrayList.Add('WebAdministrationDsc')
-[System.Void]$ArrayList.Add('WmiNamespaceSecurity')
-[System.Void]$ArrayList.Add('WSManDsc')
-[System.Void]$ArrayList.Add('xCIMSecurity')
-[System.Void]$ArrayList.Add('xComputerManagement')
-[System.Void]$ArrayList.Add('xPendingReboot')
-[System.Void]$ArrayList.Add('xPSDesiredStateConfiguration')
+#$ArrayList = [System.Collections.ArrayList]::New()
 
-foreach ($Element in $ArrayList) {
-  $IsZipPresent = Test-Path -Path "$ModuleSavePath\$Element.zip"
-  if (-not $IsZipPresent) {
-    Write-Verbose -Message "Downloading installation files for the '$Element' DSC Resource module."
-    Save-Module -Name $Element -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
-    Start-Sleep 5
-    Write-Verbose -Message "Compressing installation files for the '$Element' DSC Resource module to .zip"
-    Compress-Archive -Path "$ModuleSavePath\$Element" -DestinationPath "$ModuleSavePath\$Element.zip"
-    Start-Sleep 5
-    Write-Verbose -Message "Removinging downloaded & uncompressed '$Element' installation files"
-    Remove-Item -Path "$ModuleSavePath\$Element" -Recurse -Force
+${DSC Resource Module Names} = @(
+  'ActiveDirectoryCSDsc'
+  'ActiveDirectoryDsc'
+  'cDhcpServerDynamicUpdate'
+  'CertificateDsc'
+  'cHyper-V'
+  'ComputerManagementDsc'
+  'DhcpServerDsc'
+  'DnsServerDsc'
+  'GroupPolicyDsc'
+  'HyperVDsc'
+  'NetworkingDsc'
+  'StorageDsc'
+  'UpdateServicesDsc'
+  'WebAdministrationDsc'
+  'WmiNamespaceSecurity'
+  'WSManDsc'
+  'xCIMSecurity'
+  'xComputerManagement'
+  'xPendingReboot'
+  'xPSDesiredStateConfiguration'
+)
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource Module Names.clixml" -InputObject (${DSC Resource Module Names})
+
+
+
+$_Var_Name = 'DetectionSet'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+Set-Variable -Name $_Var_Name -Value (& {
+  foreach (${DSC Resource Module Name} in ${DSC Resource Module Names}) {
+    $IsZipAbsent = -not (Test-Path -Path "${DSC Resource module Save Path}\${DSC Resource Module Name}.zip")
+    $DetectionSet += [System.Int32]$IsZipAbsent
   }
+  return $DetectionSet
+})
+
+if ($DetectionSet -gt 0) {
+  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PSGallery.ps1"
 }
 
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN"
@@ -625,26 +623,29 @@ $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $
 #region | Download, but do not install, Windows PowerShell Modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\5.1"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$ModuleSavePath = "$folder"
+${Windows PowerShell module Save Path} = "$folder"
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\Windows PowerShell module Save Path.clixml" -InputObject (${Windows PowerShell module Save Path})
 
-$ArrayList = [System.Collections.ArrayList]::New()
-[System.Void]$ArrayList.Add('xDscDiagnostics')
-[System.Void]$ArrayList.Add('TUN.CredentialManager')
-[System.Void]$ArrayList.Add('Indented.Net.IP')
-[System.Void]$ArrayList.Add('PSPKI')
+${Windows PowerShell Module Names} = @(
+  'xDscDiagnostics'
+  'TUN.CredentialManager'
+  'Indented.Net.IP'
+  'PSPKI'
+)
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\Windows PowerShell Module Names.clixml" -InputObject (${Windows PowerShell Module Names})
 
-foreach ($Element in $ArrayList) {
-  $IsZipPresent = Test-Path -Path "$ModuleSavePath\$Element.zip"
-  if (-not $IsZipPresent) {
-    Write-Verbose -Message "Downloading installation files for the '$Element' Windows PowerShell module."
-    Save-Module -Name $Element -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
-    Start-Sleep 5
-    Write-Verbose -Message "Compressing installation files for the '$Element' Windows PowerShell module to .zip"
-    Compress-Archive -Path "$ModuleSavePath\$Element" -DestinationPath "$ModuleSavePath\$Element.zip"
-    Start-Sleep 5
-    Write-Verbose -Message "Removinging downloaded & uncompressed '$Element' installation files"
-    Remove-Item -Path "$ModuleSavePath\$Element" -Recurse -Force
+$_Var_Name = 'DetectionSet'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+Set-Variable -Name $_Var_Name -Value (& {
+  foreach (${Windows PowerShell Module Name} in ${Windows PowerShell Module Names}) {
+    $IsZipAbsent = -not (Test-Path -Path "${Windows PowerShell module Save Path}\${Windows PowerShell Module Name}.zip")
+    $DetectionSet += [System.Int32]$IsZipAbsent
   }
+  return $DetectionSet
+})
+
+if ($DetectionSet -gt 0) {
+  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\Windows PowerShell Module (non-DSC) Downloads from PSGallery.ps1"
 }
 #endregion
 #region | Download, but do not install, PowerShell 7 .msi files |
@@ -774,26 +775,50 @@ if (-not $IsPresent) {
 #region | Download, but do not install, PowerShell 7 modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\7"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$ModuleSavePath = "$folder"
+${PowerShell 7 module Save Path} = "$folder"
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\PowerShell 7 module Save Path.clixml" -InputObject (${PowerShell 7 module Save Path})
 
-$ArrayList = [System.Collections.ArrayList]::New()
-[System.Void]$ArrayList.Add('SecretManagement.Warden')
-[System.Void]$ArrayList.Add('TUN.CredentialManager')
-[System.Void]$ArrayList.Add('Microsoft.PowerShell.SecretManagement')
+${PowerShell 7 Module Names} = @(
+  'SecretManagement.Warden'
+  'TUN.CredentialManager'
+  'Microsoft.PowerShell.SecretManagement'
+)
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\PowerShell 7 Module Names.clixml" -InputObject (${PowerShell 7 Module Names})
 
-foreach ($Element in $ArrayList) {
-  $IsZipPresent = Test-Path -Path "$ModuleSavePath\$Element.zip"
-  if (-not $IsZipPresent) {
-    Write-Verbose -Message "Downloading installation files for the '$Element' PowerShell 7 module."
-    Save-Module -Name $Element -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
-    Start-Sleep 5
-    Write-Verbose -Message "Compressing installation files for the '$Element' PowerShell 7 module to .zip"
-    Compress-Archive -Path "$ModuleSavePath\$Element" -DestinationPath "$ModuleSavePath\$Element.zip"
-    Start-Sleep 5
-    Write-Verbose -Message "Removinging downloaded & uncompressed '$Element' installation files"
-    Remove-Item -Path "$ModuleSavePath\$Element" -Recurse -Force
+$_Var_Name = 'DetectionSet'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+Set-Variable -Name $_Var_Name -Value (& {
+  foreach (${PowerShell 7 Module Name} in ${PowerShell 7 Module Names}) {
+    $IsZipAbsent = -not (Test-Path -Path "${PowerShell 7 module Save Path}\${PowerShell 7 Module Name}.zip")
+    $DetectionSet += [System.Int32]$IsZipAbsent
   }
+  return $DetectionSet
+})
+
+if ($DetectionSet -gt 0) {
+  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Download Jobs\PowerShell 7 Module Downloads from PSGallery.ps1"
 }
+
+<#
+  $ArrayList = [System.Collections.ArrayList]::New()
+  [System.Void]$ArrayList.Add()
+  [System.Void]$ArrayList.Add()
+  [System.Void]$ArrayList.Add()
+
+  foreach ($Element in $ArrayList) {
+    $IsZipPresent = Test-Path -Path "$ModuleSavePath\$Element.zip"
+    if (-not $IsZipPresent) {
+      Write-Verbose -Message "Downloading installation files for the '$Element' PowerShell 7 module."
+      Save-Module -Name $Element -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
+      Start-Sleep 5
+      Write-Verbose -Message "Compressing installation files for the '$Element' PowerShell 7 module to .zip"
+      Compress-Archive -Path "$ModuleSavePath\$Element" -DestinationPath "$ModuleSavePath\$Element.zip"
+      Start-Sleep 5
+      Write-Verbose -Message "Removinging downloaded & uncompressed '$Element' installation files"
+      Remove-Item -Path "$ModuleSavePath\$Element" -Recurse -Force
+    }
+  }
+#>
 #endregion
 #region | Download OneDriveSetup.exe | Download latest version of Visual Studio Code |
 #endregion
@@ -807,7 +832,7 @@ if (-not $IsPresent) {
 #endregion
 #region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion |
 #endregion
-#region | XML File |
+#region | XML Files |
 #endregion
 #endregion
 
