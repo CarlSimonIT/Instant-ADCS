@@ -3,7 +3,7 @@
 
 ""
 ${External Storage Media Here-String} = @'
-  Read all subsequent steps before pressing Enter to continue: 
+  Read all subsequent steps BEFORE pressing Enter to continue: 
 
   1. Insert removable external storage media. 
   2. Launch another instance of Windows PowerShell. 
