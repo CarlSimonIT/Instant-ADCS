@@ -556,11 +556,53 @@ $DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandPrope
 # Use newer version of DISM in WinPE: 
 # Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
 # Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
-$HT = @{
-  'WinPE Workspace Folder Name' = 'PowerShell-Infused-12'
+${WinPE Workspace Folder Name} = 'PowerShell-Infused-37'
+$InputHT = @{
+  'WinPE Workspace Folder Name' = ${WinPE Workspace Folder Name}
 }
-#& "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
-& "$PSScriptRoot\Start\ADK + WinPE\Bootable USB with PowerShell-enabled WinPE.ps1" @HT
+#   & "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
+$OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Bootable USB with PowerShell-enabled WinPE.ps1" @InputHT
+#   ${Command Here-String} = Get-Content -Raw -Path "C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\WinPE\Bootable USB with PowerShell-enabled WinPE Script.ps1"; ${Command ScriptBlock} = [ScriptBlock]::Create(${Command Here-String}); & ${Command ScriptBlock}
+
+${Bootable USB with PowerShell-enabled WinPE Script Path} = $OutputHT['Bootable USB with PowerShell-enabled WinPE Script Path']
+Write-Host -Object "`${Bootable USB with PowerShell-enabled WinPE Script Path} = ${Bootable USB with PowerShell-enabled WinPE Script Path}"
+$WorkingDirectory = $OutputHT['WorkingDirectory']
+Write-Host -Object "`$WorkingDirectory = $WorkingDirectory"
+${WinPE Image Creation Parent Folder} = $OutputHT['WinPE Image Creation Parent Folder']
+Write-Host -Object "`${WinPE Image Creation Parent Folder} = ${WinPE Image Creation Parent Folder}"
+# $WorkingDirectory = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
+#         ${cmd H-S} = Get-Content -Raw -Path ${Bootable USB with PowerShell-enabled WinPE Script Path}; ${cmd ScBk} = [ScriptBlock]::Create(${cmd H-S}); & ${cmd ScBk}
+$path = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Updated ISO"
+Write-Host -Object "`$path = $path"
+$IsPresent = Test-Path -Path $path
+Write-Host -Object "`$IsPresent = $IsPresent"
+pause
+if (-not $IsPresent) {
+  $ArgumentList2 = @(
+    $WorkingDirectory
+    ${Bootable USB with PowerShell-enabled WinPE Script Path}
+  ) 
+  Start-Job -Name 'Bootable USB with PowerShell-enabled WinPE' -ArgumentList $ArgumentList2 -ScriptBlock {
+    $WorkingDirectory = $args[0]
+
+    ${Bootable USB with PowerShell-enabled WinPE Script Path} = $args[1]
+
+    $ArgumentList = @(
+      "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
+      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; `${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}"
+      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Start-Job {`${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}}"
+      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (Start-Job {`${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}})"
+      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (`${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk})"
+      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (`${cmd ScBk} = [ScriptBlock]::Create((gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}')); & `${cmd ScBk})"
+      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (& ([ScriptBlock]::Create((gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'))))"
+    ) 
+    Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'Hidden' -Wait  #  -NoNewWindow
+  }
+}
+
+
+
+
 #endregion
 #region | Windows Server on bootable physical media? How does WinPE play into this? |
 #endregion
