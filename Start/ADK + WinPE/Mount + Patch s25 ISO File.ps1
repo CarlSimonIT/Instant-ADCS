@@ -2,6 +2,35 @@
 #Requires -PSEdition Desktop
 #Requires -RunAsAdministrator
 
+param (
+  ${Windows Server 2025 ISO Original File Path},
+  ${Windows Server 2025 ISO Patched File Path}
+)
+
+<#
+  ${Windows Server 2025 ISO Original File Path} = "C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\Microsoft\OS\Server 25\Original\Windows Server 2025.iso"
+  ${Windows Server 2025 ISO Patched File Path}  = "C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
+#>
+
+
+  #########################################-BOUNDARY-#########################################
+  {
+    ${Windows Server 2025 ISO Original File Path} = '%_Windows Server 2025 ISO Original File Path_%'
+    ${Windows Server 2025 ISO Patched File Path} = '%_Windows Server 2025 ISO Patched File Path_%'
+    & { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
+
+
+    }
+  } | Out-Null
+  #########################################-BOUNDARY-#########################################
+
+
+
+
+
+& {
+
+}
 
 Get-Disk | Where-Object -FilterScript {$_.FriendlyName -eq 'Samsung Flash Drive'} | Clear-Disk -RemoveData -Confirm:$false -Verbose:$false
 Get-Disk | Where-Object -FilterScript {$_.FriendlyName -eq 'Samsung Flash Drive'} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$false
