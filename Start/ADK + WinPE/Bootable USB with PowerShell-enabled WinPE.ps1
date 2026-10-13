@@ -40,25 +40,22 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "  `${Cleared Disk CIM Instance} = `${Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$true -PassThru`n"
   "`n"
   "  #`${Cleared Disk CIM Instance} | Set-Disk -PartitionStyle $([System.Char]39)GPT$([System.Char]39) -Verbose:`$true`n"
-  "  #`${EFI System Partition CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 632MB -AssignDriveLetter -GptType $([System.Char]39){c12a7328-f81f-11d2-ba4b-00a0c93ec93b}$([System.Char]39) -Verbose:`$true`n"
-  "  #`${EFI System Partition CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 632MB -AssignDriveLetter -GptType $([System.Char]39){ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}$([System.Char]39) -Verbose:`$true`n"
+  "  #`${EFI System Partition CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 1500MB -AssignDriveLetter -GptType $([System.Char]39){c12a7328-f81f-11d2-ba4b-00a0c93ec93b}$([System.Char]39) -Verbose:`$true`n"
+  "  #`${EFI System Partition CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 1500MB -AssignDriveLetter -GptType $([System.Char]39){ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}$([System.Char]39) -Verbose:`$true`n"
   "`n"
   "  `${Cleared Disk CIM Instance} | Set-Disk -PartitionStyle $([System.Char]39)MBR$([System.Char]39) -Verbose:`$true`n"
-  "  `${EFI System Partition CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 632MB -AssignDriveLetter -MbrType $([System.Char]39)FAT32$([System.Char]39) -Verbose:`$true`n"
+  "  `${EFI System Partition CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 1500MB -AssignDriveLetter -MbrType $([System.Char]39)FAT32$([System.Char]39) -Verbose:`$true`n"
   "`n"
   "  # The entirety of the EFI System Partition must contain a FAT32-formatted volume:`n"
-  "  `$NewFileSystemLabel = $([System.Char]39)DOG_POO$([System.Char]39)`n"
+  "  `$NewFileSystemLabel = $([System.Char]39)PRE_WINPE$([System.Char]39)`n"
   "  `${FAT32 Volume on ESP CIM Instance} = Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -DriveLetter `${EFI System Partition CIM Instance}.DriveLetter -NewFileSystemLabel `$NewFileSystemLabel -Verbose:`$true`n"
   "  <# NOTE! |`n"
-  "    # The code below does not resolve any volume letters because at this point $([System.Char]39)DOG_POO$([System.Char]39) is a partition, and not a volume! |`n"
+  "    # The code below does not resolve any volume letters because at this point $([System.Char]39)PRE_WINPE$([System.Char]39) is a partition, and not a volume! |`n"
   "    `${WinPE Volume} = Get-Volume -FriendlyName `$NewFileSystemLabel -Verbose:`$true; `n"
   "    `${WinPE Bootable USB Volume Letter} = `${FAT32 Volume on ESP CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
   "  #>`n"
   "}`n"
   "`t`t"
-
-
-
   #endregion
   #########################################-BOUNDARY-#########################################
   {
@@ -73,17 +70,17 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
       ${Cleared Disk CIM Instance} = ${Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$true -PassThru
 
       #${Cleared Disk CIM Instance} | Set-Disk -PartitionStyle 'GPT' -Verbose:$true
-      #${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 632MB -AssignDriveLetter -GptType '{c12a7328-f81f-11d2-ba4b-00a0c93ec93b}' -Verbose:$true
-      #${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 632MB -AssignDriveLetter -GptType '{ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}' -Verbose:$true
+      #${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 1500MB -AssignDriveLetter -GptType '{c12a7328-f81f-11d2-ba4b-00a0c93ec93b}' -Verbose:$true
+      #${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 1500MB -AssignDriveLetter -GptType '{ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}' -Verbose:$true
 
       ${Cleared Disk CIM Instance} | Set-Disk -PartitionStyle 'MBR' -Verbose:$true
-      ${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 632MB -AssignDriveLetter -MbrType 'FAT32' -Verbose:$true
+      ${EFI System Partition CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 1500MB -AssignDriveLetter -MbrType 'FAT32' -Verbose:$true
 
       # The entirety of the EFI System Partition must contain a FAT32-formatted volume:
-      $NewFileSystemLabel = 'DOG_POO'
+      $NewFileSystemLabel = 'PRE_WINPE'
       ${FAT32 Volume on ESP CIM Instance} = Format-Volume -FileSystem 'FAT32' -DriveLetter ${EFI System Partition CIM Instance}.DriveLetter -NewFileSystemLabel $NewFileSystemLabel -Verbose:$true
       <# NOTE! |
-        # The code below does not resolve any volume letters because at this point 'DOG_POO' is a partition, and not a volume! |
+        # The code below does not resolve any volume letters because at this point 'PRE_WINPE' is a partition, and not a volume! |
         ${WinPE Volume} = Get-Volume -FriendlyName $NewFileSystemLabel -Verbose:$true; 
         ${WinPE Bootable USB Volume Letter} = ${FAT32 Volume on ESP CIM Instance}.DriveLetter + ':'
       #>
