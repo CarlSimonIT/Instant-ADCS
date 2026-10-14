@@ -133,6 +133,42 @@ if (${1 or more sensitive strings providing access to online Bitwarden Vault nee
 #region | Ensure target 'output' directory is present in project root |
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Ensure target output directory is present in project root.ps1"
 #endregion
+#region | Calculate date of the Patch Tuesday for this month |
+${Target Get-XDayOfMonth.ps1 File} = [System.IO.FileInfo]"$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Get-XDayOfMonth.ps1"
+#Write-Host -Object "`${Target Get-XDayOfMonth.ps1 File}.FullName = $(${Target Get-XDayOfMonth.ps1 File}.FullName)"
+
+${SHA256 of Get-XDayOfMonth.ps1 File} = '3601BA876957FBCF3B6E0A9A448B5177A952954F951D1441AF8F5720F9D6A820'
+$hash = ${SHA256 of Get-XDayOfMonth.ps1 File}
+${Local Get-XDayOfMonth.ps1 File} = Get-ChildItem -Path "$PSScriptRoot\output" -Recurse -File `
+| Where-Object -PipelineVariable 'file' -FilterScript {$_.Name -eq 'Get-XDayOfMonth.ps1'} `
+| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+| Sort-Object -Property 'LastWriteTime' -Descending `
+| Select-Object -First 1
+#Write-Host -Object "`${Local Get-XDayOfMonth.ps1 File}.FullName = $(${Local Get-XDayOfMonth.ps1 File}.FullName)"
+
+if ($null -ne ${Local Get-XDayOfMonth.ps1 File}) {
+  Copy-Item -Path ${Local Get-XDayOfMonth.ps1 File}.FullName -Destination ${Target Get-XDayOfMonth.ps1 File}.DirectoryName
+} else {
+  $Uri = 'https://gist.githubusercontent.com/andyzib/22c4732627ae9a1d3f1776374980ec9c/raw/6442a572cbf096b62004c30097cd1aac1e99d18a/Get-XDayOfMonth.ps1'
+  do {
+    Invoke-WebRequest -Uri $Uri -OutFile ${Target Get-XDayOfMonth.ps1 File}.FullName
+    Start-Sleep 5
+  } while ({
+    $IsAbsent = -not (Test-Path -Path ${Target Get-XDayOfMonth.ps1 File}.FullName)
+    return $IsAbsent
+  })
+}
+. ${Target Get-XDayOfMonth.ps1 File}
+$HT = @{
+  Find    = 'Second'
+  Weekday = 'Tuesday'
+  Month   = $([System.String]::Format('{0:MM}',[System.DateTime]::Now))
+  Year    = $([System.String]::Format('{0:yyyy}',[System.DateTime]::Now))
+}
+${Patch Tuesday Of This Month} = Get-XDayOfMonth @HT
+#endregion
 #region | Unique Identifiers of Removable (both Storage & Bootable) External Media |
 # If all of the .clixml files containing unique identifiers of external removable 
 # media have been defined, then don't display the instructions to 
@@ -594,6 +630,10 @@ switch ($true) {
 #endregion
 #endregion
 
+
+
+
+
 #region | External Removable Bootable Media > Clear Disk > EFS (EFI System Partition) |
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
 ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
@@ -603,14 +643,17 @@ ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
 }
 $DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
 
-#& "$PSScriptRoot\Start\ADK + WinPE\EFI System Partition on Removable External Bootable Media.ps1"
 #endregion
 #region | PowerShell-enabled WinPE ISO File |
+
+
+
+
 # [ ] Implementation Complete
 # Use newer version of DISM in WinPE: 
 # Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
 # Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
-${WinPE Workspace Folder Name} = 'PowerShell-Infused-38'
+${WinPE Workspace Folder Name} = 'PowerShell-Infused-00'
 $InputHT = @{
   'WinPE Workspace Folder Name' = ${WinPE Workspace Folder Name}
 }
@@ -670,64 +713,15 @@ ${Windows Server 2025 ISO Original File} = Get-ChildItem -Path "$folder" -File `
 | Select-Object -First 1
 #endregion
 #region | Deploy new directory for downloading latest Windows Updates |
-
-${Target Get-XDayOfMonth.ps1 File} = [System.IO.FileInfo]"$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Get-XDayOfMonth.ps1"
-Write-Host -Object "`${Target Get-XDayOfMonth.ps1 File}.FullName = $(${Target Get-XDayOfMonth.ps1 File}.FullName)"
-
-${SHA256 of Get-XDayOfMonth.ps1 File} = '3601BA876957FBCF3B6E0A9A448B5177A952954F951D1441AF8F5720F9D6A820'
-$hash = ${SHA256 of Get-XDayOfMonth.ps1 File}
-${Local Get-XDayOfMonth.ps1 File} = Get-ChildItem -Path "$PSScriptRoot\output" -Recurse -File `
-| Where-Object -PipelineVariable 'file' -FilterScript {$_.Name -eq 'Get-XDayOfMonth.ps1'} `
-| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
-| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
-| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
-| Sort-Object -Property 'LastWriteTime' -Descending `
-| Select-Object -First 1
-Write-Host -Object "`${Local Get-XDayOfMonth.ps1 File}.FullName = $(${Local Get-XDayOfMonth.ps1 File}.FullName)"
-
-
-<#
-#>
-
-if ($null -ne ${Local Get-XDayOfMonth.ps1 File}) {
-  Copy-Item -Path ${Local Get-XDayOfMonth.ps1 File}.FullName -Destination ${Target Get-XDayOfMonth.ps1 File}.DirectoryName
-} else {
-  $Uri = 'https://gist.githubusercontent.com/andyzib/22c4732627ae9a1d3f1776374980ec9c/raw/6442a572cbf096b62004c30097cd1aac1e99d18a/Get-XDayOfMonth.ps1'
-  
-  do {
-    Invoke-WebRequest -Uri $Uri -OutFile ${Target Get-XDayOfMonth.ps1 File}.FullName
-    Start-Sleep 5
-  } while ({
-    $IsAbsent = -not (Test-Path -Path ${Target Get-XDayOfMonth.ps1 File}.FullName)
-    return $IsAbsent
-  })
-  
-}
-
-
-<#
-#>
-. ${Target Get-XDayOfMonth.ps1 File}
-$HT = @{
-  Find    = 'Second'
-  Weekday = 'Tuesday'
-  Month   = $([System.String]::Format('{0:MM}',[System.DateTime]::Now))
-  Year    = $([System.String]::Format('{0:yyyy}',[System.DateTime]::Now))
-}
-${Patch Tuesday Of This Month} = Get-XDayOfMonth @HT
-Write-Host "`n`tPatch Tuesday Of This Month:`n"
-${Patch Tuesday Of This Month}
+# Write-Host "`n`tPatch Tuesday Of This Month:`n"
+# ${Patch Tuesday Of This Month}
 ${Patch Tuesday Of This Month Has Already Arrived} = [System.DateTime]::Now -gt ${Patch Tuesday Of This Month}
-Write-Host "`n`t[System.DateTime]::Now`n"
-[System.DateTime]::Now
-
-Write-Host "`n`tPatch Tuesday Of This Month Has Already Arrived`n"
-${Patch Tuesday Of This Month Has Already Arrived}
-
-
-
-$_Var_Name = 'Windows Updates Directory BaseName'
-try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+#Write-Host "`n`t[System.DateTime]::Now`n"
+#[System.DateTime]::Now
+# Write-Host "`n`tPatch Tuesday Of This Month Has Already Arrived`n"
+# ${Patch Tuesday Of This Month Has Already Arrived}
+#$_Var_Name = 'Windows Updates Directory BaseName'
+#try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
 
 if (${Patch Tuesday Of This Month Has Already Arrived}) {
   ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',[System.DateTime]::Now)
@@ -735,16 +729,8 @@ if (${Patch Tuesday Of This Month Has Already Arrived}) {
   ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',([System.DateTime]::Now).AddMonths(-1))
 }
 
-${Windows Updates Directory BaseName}
-Write-Host -Object "`${Windows Updates Directory BaseName} = ${Windows Updates Directory BaseName}"
-
-pause
-
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-
-pause
 #endregion
 #region | Download Latest Windows Updates for Server 2025 |
 ${Windows Updates Directory FullName} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}" | Select-Object -ExpandProperty 'Path'
@@ -799,7 +785,7 @@ Get-ChildItem -Path ${Windows Updates Directory FullName} -File | ForEach-Object
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
 #>
 
-if ($null -ne ${Windows Server 2025 ISO Original File}) {
+if ($false) { # $null -ne ${Windows Server 2025 ISO Original File} |
   $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
   $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
   ${Windows Server 2025 ISO Patched File} = [System.IO.FileInfo]"$folder\Windows Server 2025.iso"
