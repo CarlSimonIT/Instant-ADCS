@@ -42,14 +42,15 @@ Install Git with WinGet in the user scope:
   <summary>Install Git</summary>
 
   ```powershell
-  ${Current powershell.exe process instance is running at Integrity Level-High} = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-  if (${Current powershell.exe process instance is running at Integrity Level-High}) {
-    throw "Re-launch Windows PowerShell without selecting 'Run As Administrator'"
+  ${powershell.exe owner Identity} = [Security.Principal.WindowsIdentity]::GetCurrent()
+  ${powershell.exe owner Access} = [Security.Principal.WindowsPrincipal]${powershell.exe owner Identity}
+  ${Current powershell.exe process is running at Integrity Level-High} = (${powershell.exe owner Access}).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+  
+  if (${Current powershell.exe process is running at Integrity Level-High}) {
+    throw "Re-launch Windows PowerShell WITHOUT selecting Run As Administrator!"
     exit
   } 
-  else {
-    winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'
-  }
+  else {winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'}
   ```
 </details>
 
