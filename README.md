@@ -7,6 +7,7 @@ Exporting the contents of the Windows Credential Manager is a critical step in t
 Launch Windows PowerShell in a elevated security context and execute the lines below.    
 
 ```powershell
+
 $Name = 'Delete This Account'
 $BadPassword = ConvertTo-SecureString -AsPlainText 'BadPassword!' -Force
 $HT = @{
@@ -23,30 +24,51 @@ New-LocalUser @HT
 Add-LocalGroupMember -Group 'Users' -Member $Name
 ```
 
-Log off this current session and authenticate into Windows with the newly created local account. 
+Log off this current session, authenticate into Windows with the newly created local account, and return to these instructions. 
 
 ### Build External Media
-Launch Windows PowerShell and install Git with WinGet in the user scope.  
+Launch Windows PowerShell in a nonelevated security context. Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. Install Git with WinGet in the user scope.  
 
-```powershell
-winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'
-```
+<details>
+  <summary>Install Git</summary>
+
+  ```powershell
+  
+  winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'
+  ```
+</details>
 
 Supply the fully qualified path of a directory for cloning multiple GitHub repositories.  
-Ensure the folder exists and set as working directory.  
+Ensure the folder exists and then set as current working directory.  
 
-```powershell
-$CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
-```
+<details>
+  <summary>Relocate to Empty Working Directory</summary>
 
-Clone the Instant-ADCS and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories. Set new temporary and hidden directory for information exchange between PowerShell versions. 
+  ```powershell
+  ${Intermediary Directory} = Read-Host -Prompt 'Optional: Partial path of intermediary directory'
+  $CloningRepoPath = "$env:UserProfile\GitHub\${Intermediary Directory}\CarlSimonIT"
+  $CloningRepoFolder = try {
+    Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'
+  } catch {
+    New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force
+  }
+  Set-Location -Path "$CloningRepoFolder"
+  ```
+</details>
+
+
+Clone the Instant-ADCS and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories. 
 
 ```powershell
 $GitHubRepositoryName = 'Secure-Automations-Toolset'
-. "$env:LocalAppData\Programs\Git\cmd\git.exe"` clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
 $GitHubRepositoryName = 'Instant-ADCS'
-. "$env:LocalAppData\Programs\Git\cmd\git.exe" clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+```
 
+Define new temporary and hidden directory for information exchange between and PowerShell versions and PowerShell process instances. 
+
+```powershell
 $path = ".\.CommonItems"
 $folder = try {
   Get-Item -Path $path -ErrorAction 'Stop'
@@ -56,25 +78,25 @@ $folder = try {
 ($folder).Attributes += 'Hidden'
 ```
 
-Set the Execution Policy for the Windows PowerShell process to RemoteSigned.  
-Run <u>Start.ps1</u> and follow the subsequent on-screen instructions.  
+Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>.  
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
+```
+
+Declare input variables, run <u>Start.ps1</u> and follow the subsequent on-screen instructions.  
+
+```powershell
 $EmailAddressOfBitwardenAccount = Read-Host -Prompt 'Email Address of Bitwarden Account'
 ${NetBIOS Name of Root Domain in AD Forest} = Read-Host -Prompt 'NetBIOS Name of Root Domain in AD Forest'
 ${DNS Name of Root Domain in AD Forest} = Read-Host -Prompt 'DNS Name of Root Domain in AD Forest'
 
-$HT = @{
-  EmailAddressOfBitwardenAccount              =   $EmailAddressOfBitwardenAccount
-  'NetBIOS Name of Root Domain in AD Forest'  =   ${NetBIOS Name of Root Domain in AD Forest}
-  'DNS Name of Root Domain in AD Forest'      =   ${DNS Name of Root Domain in AD Forest}
+$InputHT = @{
+  EmailAddressOfBitwardenAccount             = $EmailAddressOfBitwardenAccount
+  'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
+  'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
 }
-& '.\Instant-ADCS\Start.ps1' @HT
-```
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; 
+& '.\Instant-ADCS\Start.ps1' @InputHT
 ```
 
 ### (Refine)
