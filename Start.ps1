@@ -85,8 +85,9 @@ param (
 
 <#
   $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'
-  (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
+  $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
+  (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
 #>
 
 #region | Export non-senstive strings to .clixml for later import by other applications |
@@ -101,6 +102,13 @@ $HT = @{
 & "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1" @HT
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
+
+
+#region | Define new folder structures. Same code is re-executed later in Start.ps1 when applicable |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
+
 #endregion
 <##>
 #region | Compacted |
@@ -126,21 +134,33 @@ if (${1 or more sensitive strings providing access to online Bitwarden Vault nee
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Ensure target output directory is present in project root.ps1"
 #endregion
 #region | Unique Identifiers of Removable (both Storage & Bootable) External Media |
-# Collect and export to .clixml the unique identifiers of removable external storage media
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Enumerate the unique identifiers of removable external storage media.ps1"
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect the unique identifiers of removable external storage media.ps1"
+# If all of the .clixml files containing unique identifiers of external removable 
+# media have been defined, then don't display the instructions to 
+# collect those unique identifiers. 
+if (
+  -not (
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb0 FriendlyName.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb0 UniqueId Raw.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb0 SerialNumber.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb1 FriendlyName.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb1 UniqueId Raw.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb1 SerialNumber.clixml")
+  )
+) { # Collect and export to .clixml the unique identifiers of removable external storage media |
+  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Enumerate the unique identifiers of removable external storage media.ps1"
+}
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Export to .clixml the unique identifiers of removable external storage media.ps1"
 
-# Collect and export to .clixml the unique identifiers of bootable media
-. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Enumerate the unique identifiers of bootable media.ps1"
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect the unique identifiers of bootable media.ps1"
+if (
+  -not (
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\OSDeploy FriendlyName.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\OSDeploy UniqueId Raw.clixml") -and `
+    (Test-Path -Path "$PSScriptRoot\..\.CommonItems\OSDeploy SerialNumber.clixml")
+  )
+) { # Collect and export to .clixml the unique identifiers of bootable media |
+  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Enumerate the unique identifiers of bootable media.ps1"
+}
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Export to .clixml the unique identifiers of bootable media.ps1"
-
-# Collect and export to .clixml the unique identifiers of removable external storage media
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage media.ps1"
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of removable external storage + bootable media.ps1"
-# Collect and export to .clixml the unique identifiers of bootable media
-#. powershell.exe -NoProfile -File "$PSScriptRoot\Start\Collect and export to .clixml the unique identifiers of bootable media.ps1"
 #endregion
 #region | Generate Windows PowerShell-compatible profile.ps1 file for Instant-ADCS |
 $HT = @{
@@ -211,19 +231,26 @@ if ($RunningJob -eq $null) {
 }
 #endregion
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
+#region | Ensure the 'Original' and 'Patched' Folders have been created |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
+${Original Server 2025 ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
+${Patched Server 2025 ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
 ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
 $hash = ${SHA256 of Windows Server 2025 ISO File}
-${Windows Server 2025 ISO Original File} = Get-ChildItem -Path "$folder" -File `
+#Write-Host -Object "`${env:.CommonItems} = ${env:.CommonItems}"
+${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File `
 | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
 | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
 | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
 | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
 | Sort-Object -Property 'LastWriteTime' -Descending `
 | Select-Object -First 1
-if (${Windows Server 2025 ISO Original File} -eq $null) {
+
+#Write-Host -Object "`${Windows Server 2025 ISO Original File}.FullName = $(${Windows Server 2025 ISO Original File}.FullName)"
+
+if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
   $JobName = 'Download Windows Server 2025 ISO File'
   $RunningJob = Get-Job | Where-Object -FilterScript {
     $_.Name  -eq $JobName  -and `
@@ -246,6 +273,14 @@ if (${Windows Server 2025 ISO Original File} -eq $null) {
       $ProgressPreference = $OriginalProgressPreference
     }
     $Job | Format-Table -AutoSize
+  }
+} 
+else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
+  ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Original Server 2025 ISO Folder}\Windows Server 2025.iso"
+  if (-not ${Is ISO Already Relocated and Renamed}) {
+    Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Original Server 2025 ISO Folder}\Windows Server 2025.iso"
+    #Copy-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Original Server 2025 ISO Folder}"
+    #Get-Item -Path "${Original Server 2025 ISO Folder}\$(${Windows Server 2025 ISO Original File}.Name)" | Rename-Item -NewName 'Windows Server 2025.iso'
   }
 }
 #endregion
@@ -635,13 +670,44 @@ ${Windows Server 2025 ISO Original File} = Get-ChildItem -Path "$folder" -File `
 | Select-Object -First 1
 #endregion
 #region | Deploy new directory for downloading latest Windows Updates |
-$Uri = 'https://gist.githubusercontent.com/andyzib/22c4732627ae9a1d3f1776374980ec9c/raw/6442a572cbf096b62004c30097cd1aac1e99d18a/Get-XDayOfMonth.ps1'
-$OutFile = "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Get-XDayOfMonth.ps1"
-$IsPresent = Test-Path -Path $OutFile
-if (-not $IsPresent) {
-  Invoke-WebRequest -Uri $Uri -OutFile $OutFile
+
+${Target Get-XDayOfMonth.ps1 File} = [System.IO.FileInfo]"$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Get-XDayOfMonth.ps1"
+Write-Host -Object "`${Target Get-XDayOfMonth.ps1 File}.FullName = $(${Target Get-XDayOfMonth.ps1 File}.FullName)"
+
+${SHA256 of Get-XDayOfMonth.ps1 File} = '3601BA876957FBCF3B6E0A9A448B5177A952954F951D1441AF8F5720F9D6A820'
+$hash = ${SHA256 of Get-XDayOfMonth.ps1 File}
+${Local Get-XDayOfMonth.ps1 File} = Get-ChildItem -Path "$PSScriptRoot\output" -Recurse -File `
+| Where-Object -PipelineVariable 'file' -FilterScript {$_.Name -eq 'Get-XDayOfMonth.ps1'} `
+| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+| Sort-Object -Property 'LastWriteTime' -Descending `
+| Select-Object -First 1
+Write-Host -Object "`${Local Get-XDayOfMonth.ps1 File}.FullName = $(${Local Get-XDayOfMonth.ps1 File}.FullName)"
+
+
+<#
+#>
+
+if ($null -ne ${Local Get-XDayOfMonth.ps1 File}) {
+  Copy-Item -Path ${Local Get-XDayOfMonth.ps1 File}.FullName -Destination ${Target Get-XDayOfMonth.ps1 File}.DirectoryName
+} else {
+  $Uri = 'https://gist.githubusercontent.com/andyzib/22c4732627ae9a1d3f1776374980ec9c/raw/6442a572cbf096b62004c30097cd1aac1e99d18a/Get-XDayOfMonth.ps1'
+  
+  do {
+    Invoke-WebRequest -Uri $Uri -OutFile ${Target Get-XDayOfMonth.ps1 File}.FullName
+    Start-Sleep 5
+  } while ({
+    $IsAbsent = -not (Test-Path -Path ${Target Get-XDayOfMonth.ps1 File}.FullName)
+    return $IsAbsent
+  })
+  
 }
-. $OutFile
+
+
+<#
+#>
+. ${Target Get-XDayOfMonth.ps1 File}
 $HT = @{
   Find    = 'Second'
   Weekday = 'Tuesday'
@@ -649,16 +715,36 @@ $HT = @{
   Year    = $([System.String]::Format('{0:yyyy}',[System.DateTime]::Now))
 }
 ${Patch Tuesday Of This Month} = Get-XDayOfMonth @HT
+Write-Host "`n`tPatch Tuesday Of This Month:`n"
+${Patch Tuesday Of This Month}
 ${Patch Tuesday Of This Month Has Already Arrived} = [System.DateTime]::Now -gt ${Patch Tuesday Of This Month}
+Write-Host "`n`t[System.DateTime]::Now`n"
+[System.DateTime]::Now
+
+Write-Host "`n`tPatch Tuesday Of This Month Has Already Arrived`n"
+${Patch Tuesday Of This Month Has Already Arrived}
+
+
+
+$_Var_Name = 'Windows Updates Directory BaseName'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
 
 if (${Patch Tuesday Of This Month Has Already Arrived}) {
   ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',[System.DateTime]::Now)
 } else {
-  ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',([System.DateTime]::Now).AddMonths(-1))  
+  ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',([System.DateTime]::Now).AddMonths(-1))
 }
+
+${Windows Updates Directory BaseName}
+Write-Host -Object "`${Windows Updates Directory BaseName} = ${Windows Updates Directory BaseName}"
+
+pause
 
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+
+pause
 #endregion
 #region | Download Latest Windows Updates for Server 2025 |
 ${Windows Updates Directory FullName} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}" | Select-Object -ExpandProperty 'Path'
@@ -675,7 +761,7 @@ ${Download Latest Windows Updates for Server 2025-Note to User} = @"
 
   OPTIONAL: Find the latest .NET Framework update
   > Search the Microsoft Update web portal for the string below: 
-    ${Windows Updates Directory BaseName} Cumulative Update for .NET Framework 3.5 and 4.8.1 for Windows 11, version 26H2 for x64
+    ${Windows Updates Directory BaseName} Cumulative Update for .NET Framework 3.5 and 4.8.1 for Microsoft server operating system version 24H2 for x64
     > Download the latest .NET Framework update. 
 
   Relocate the three .msu files to the following directory: 
@@ -806,274 +892,4 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) {
   }
 }
 #endregion
-
-#region | Windows Server on bootable physical media? How does WinPE play into this? |
-#endregion
-
-#region | Compacted |
-#region | Download, but do not install, DSC Resource modules |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
-#            $path = 'C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${DSC Resource module Save Path} = "$folder"
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource module Save Path.clixml" -InputObject (${DSC Resource module Save Path})
-
-#$ArrayList = [System.Collections.ArrayList]::New()
-
-${DSC Resource Module Names} = @(
-  'ActiveDirectoryCSDsc'
-  'ActiveDirectoryDsc'
-  'cDhcpServerDynamicUpdate'
-  'CertificateDsc'
-  'cHyper-V'
-  'ComputerManagementDsc'
-  'DhcpServerDsc'
-  'DnsServerDsc'
-  'GroupPolicyDsc'
-  'HyperVDsc'
-  'NetworkingDsc'
-  'StorageDsc'
-  'UpdateServicesDsc'
-  'WebAdministrationDsc'
-  'WmiNamespaceSecurity'
-  'WSManDsc'
-  'xCIMSecurity'
-  'xComputerManagement'
-  'xPendingReboot'
-  'xPSDesiredStateConfiguration'
-)
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource Module Names.clixml" -InputObject (${DSC Resource Module Names})
-
-
-
-$_Var_Name = 'DetectionSet'
-try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
-Set-Variable -Name $_Var_Name -Value (& {
-  foreach (${DSC Resource Module Name} in ${DSC Resource Module Names}) {
-    $IsZipAbsent = -not (Test-Path -Path "${DSC Resource module Save Path}\${DSC Resource Module Name}.zip")
-    $DetectionSet += [System.Int32]$IsZipAbsent
-  }
-  return $DetectionSet
-})
-
-if ($DetectionSet -gt 0) {
-  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PSGallery.ps1"
-}
-
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-#endregion
-#region | Download, but do not install, Windows PowerShell Modules |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\5.1"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${Windows PowerShell module Save Path} = "$folder"
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\Windows PowerShell module Save Path.clixml" -InputObject (${Windows PowerShell module Save Path})
-
-${Windows PowerShell Module Names} = @(
-  'xDscDiagnostics'
-  'TUN.CredentialManager'
-  'Indented.Net.IP'
-  'PSPKI'
-  'MSCatalog'
-)
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\Windows PowerShell Module Names.clixml" -InputObject (${Windows PowerShell Module Names})
-
-$_Var_Name = 'DetectionSet'
-try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
-Set-Variable -Name $_Var_Name -Value (& {
-  foreach (${Windows PowerShell Module Name} in ${Windows PowerShell Module Names}) {
-    $IsZipAbsent = -not (Test-Path -Path "${Windows PowerShell module Save Path}\${Windows PowerShell Module Name}.zip")
-    $DetectionSet += [System.Int32]$IsZipAbsent
-  }
-  return $DetectionSet
-})
-
-if ($DetectionSet -gt 0) {
-  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\Windows PowerShell Module (non-DSC) Downloads from PSGallery.ps1"
-}
-#endregion
-#region | Download, but do not install, PowerShell 7 .msi files |
-#region | End-of-Support announcements | Versioning Explained |
-#     End-of-Support latest announcements:
-#     start msedge.exe 'https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-support-lifecycle'
-#     Releases:
-#     start msedge.exe 'https://github.com/powershell/powershell/releases'
-#     
-#     # Versioning
-#     $PSVersionTable
-#     ($PSVersionTable).GetType().Name
-#     $PSVersionTable['PSVersion']
-#     $PSVersionTable['PSVersion'].Major
-#     $PSVersionTable['PSVersion'].Minor
-#     $PSVersionTable['PSVersion'].Patch
-#endregion
-#region | PowerShell 7.4 |
-$Minor = 4
-$Patch = 20
-
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
-$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
-$IsPresent = Test-Path -Path $FilePath
-if (-not $IsPresent) {
-  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      $WebPath
-      $FilePath
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                    = $args[0]
-      $FilePath                   = $args[1]
-      $OriginalProgressPreference = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
-  }
-}
-#endregion
-#region | PowerShell 7.5 |
-$Minor = 5
-$Patch = 11
-
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
-$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
-$IsPresent = Test-Path -Path $FilePath
-if (-not $IsPresent) {
-  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      $WebPath
-      $FilePath
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                    = $args[0]
-      $FilePath                   = $args[1]
-      $OriginalProgressPreference = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
-  }
-}
-#endregion
-#region | PowerShell 7.6 |
-$Minor = 6
-$Patch = 6
-
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
-$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
-$IsPresent = Test-Path -Path $FilePath
-if (-not $IsPresent) {
-  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      $WebPath
-      $FilePath
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                    = $args[0]
-      $FilePath                   = $args[1]
-      $OriginalProgressPreference = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
-  }
-}
-#endregion
-#endregion
-#region | Download, but do not install, PowerShell 7 modules |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\7"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${PowerShell 7 module Save Path} = "$folder"
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\PowerShell 7 module Save Path.clixml" -InputObject (${PowerShell 7 module Save Path})
-
-${PowerShell 7 Module Names} = @(
-  'SecretManagement.Warden'
-  'TUN.CredentialManager'
-  'Microsoft.PowerShell.SecretManagement'
-)
-Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\PowerShell 7 Module Names.clixml" -InputObject (${PowerShell 7 Module Names})
-
-$_Var_Name = 'DetectionSet'
-try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
-Set-Variable -Name $_Var_Name -Value (& {
-  foreach (${PowerShell 7 Module Name} in ${PowerShell 7 Module Names}) {
-    $IsZipAbsent = -not (Test-Path -Path "${PowerShell 7 module Save Path}\${PowerShell 7 Module Name}.zip")
-    $DetectionSet += [System.Int32]$IsZipAbsent
-  }
-  return $DetectionSet
-})
-
-if ($DetectionSet -gt 0) {
-  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Download Jobs\PowerShell 7 Module Downloads from PSGallery.ps1"
-}
-
-<#
-  $ArrayList = [System.Collections.ArrayList]::New()
-  [System.Void]$ArrayList.Add()
-  [System.Void]$ArrayList.Add()
-  [System.Void]$ArrayList.Add()
-
-  foreach ($Element in $ArrayList) {
-    $IsZipPresent = Test-Path -Path "$ModuleSavePath\$Element.zip"
-    if (-not $IsZipPresent) {
-      Write-Verbose -Message "Downloading installation files for the '$Element' PowerShell 7 module."
-      Save-Module -Name $Element -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
-      Start-Sleep 5
-      Write-Verbose -Message "Compressing installation files for the '$Element' PowerShell 7 module to .zip"
-      Compress-Archive -Path "$ModuleSavePath\$Element" -DestinationPath "$ModuleSavePath\$Element.zip"
-      Start-Sleep 5
-      Write-Verbose -Message "Removinging downloaded & uncompressed '$Element' installation files"
-      Remove-Item -Path "$ModuleSavePath\$Element" -Recurse -Force
-    }
-  }
-#>
-#endregion
-#region | Download OneDriveSetup.exe | Download latest version of Visual Studio Code |
-#endregion
-#region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion |
-#endregion
-#region | XML Files |
-#endregion
-#endregion
-
-<# Windows ADK Patches |
-  None currently published for Windows ADK 2026-09 but check back periodically. 
-  'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-servicing'
-#>
 
