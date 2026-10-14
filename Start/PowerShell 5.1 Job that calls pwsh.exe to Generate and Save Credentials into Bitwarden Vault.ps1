@@ -6,11 +6,25 @@ $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.cli
 Write-Verbose -Message "Attempting to execute bw.exe sync"
 bw.exe sync
 Write-Verbose -Message "Executed bw.exe sync"
+
 Write-Verbose -Message "Attempting to execute '`$FolderId = New-BitwardenVaultFolder -Verbose:`$true -Name `$FolderFQN -Check'"
 $FolderId = New-BitwardenVaultFolder -Verbose:$true -Name $FolderFQN -Check
 Write-Verbose -Message "Execution of '`$FolderId = New-BitwardenVaultFolder -Verbose:`$true -Name `$FolderFQN -Check' complete"
 Write-Verbose -Message "`$FolderId = $FolderId"
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderId.clixml" -InputObject ($FolderId)
+
+#region | Confirm that current value of FolderId.clixml is indeed a GUID |
+# Import regular expression patterns
+. "$PSScriptRoot\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Regular Expression Patterns.ps1"
+
+$FolderIdImportedFromFile = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderId.clixml"
+${Is FolderId a GUID} = $FolderIdImportedFromFile -match ${regex literal GUID}
+if (-not ${Is FolderId a GUID}) {
+  Write-Host -Object "`$FolderId was NOT a guid. Deleting 'FolderId.clixml' file and exiting"
+  Remove-Item -Path "$PSScriptRoot\..\..\.CommonItems\FolderId.clixml"
+  break
+}
+#endregion
 
 #region | Import variables into PowerShell 7 session via .clixml file |
 $CliXmlFile = Get-ChildItem -Path "$PSScriptRoot\..\..\.CommonItems\Variables *.clixml" | Sort-Object | Select-Object -Last 1
