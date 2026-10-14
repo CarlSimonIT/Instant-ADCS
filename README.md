@@ -4,30 +4,39 @@ Quickly and securely build an Active Directory-integrated 3-tier PKI with Window
 ### New Local Standard Account
 Exporting the contents of the Windows Credential Manager is a critical step in this workflow. Using a new non-administrative local account is advised to ensure that only secure strings directly relevant to Instant-ADCS are exported. 
 
-Launch Windows PowerShell in a elevated security context and execute the lines below.    
+Launch Windows PowerShell in a elevated security context and execute the lines below:  
 
-```powershell
+<details>
+  <summary>New Temporary Non-Privileged Local Account</summary>
 
-$Name = 'Delete This Account'
-$BadPassword = ConvertTo-SecureString -AsPlainText 'BadPassword!' -Force
-$HT = @{
-  Name                     = $Name
-  Password                 = $BadPassword
-  FullName                 = $Name
-  AccountExpires           = (Get-Date).AddDays(1)
-  Description              = 'Temp user for new Instant-ADCS external media'
-  Disabled                 = $false
-  PasswordNeverExpires     = $false
-  UserMayNotChangePassword = $false
-}
-New-LocalUser @HT
-Add-LocalGroupMember -Group 'Users' -Member $Name
-```
+  ```powershell
+  # 
+  $Name = 'Delete This Account'
+  $BadPassword = ConvertTo-SecureString -AsPlainText 'BadPassword!' -Force
+  $HT = @{
+    Name                     = $Name
+    Password                 = $BadPassword
+    FullName                 = $Name
+    AccountExpires           = (Get-Date).AddDays(1)
+    Description              = 'Temp user for new Instant-ADCS external media'
+    Disabled                 = $false
+    PasswordNeverExpires     = $false
+    UserMayNotChangePassword = $false
+  }
+  New-LocalUser @HT
+  Add-LocalGroupMember -Group 'Users' -Member $Name
+  ```
+</details>
 
-Log off this current session, authenticate into Windows with the newly created local account, and return to these instructions. 
+Log off this current session, authenticate back into Windows with the newly created local account, and return to these instructions. 
 
 ### Build External Media
-Launch Windows PowerShell in a nonelevated security context. Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. Install Git with WinGet in the user scope.  
+Launch Windows PowerShell in a nonelevated security context. 
+
+> [!NOTE]
+> Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. 
+
+Install Git with WinGet in the user scope:  
 
 <details>
   <summary>Install Git</summary>
