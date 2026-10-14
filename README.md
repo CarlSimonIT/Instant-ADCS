@@ -54,7 +54,7 @@ Install Git with WinGet in the user scope:
   ```
 </details>
 
-Supply a fully qualified path of a directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory:   
+Configure a new directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory:   
 
 <details>
   <summary>Relocate to Empty Working Directory</summary>
