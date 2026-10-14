@@ -31,7 +31,7 @@ Launch Windows PowerShell in a elevated security context and execute the lines b
 Log off this current session, authenticate back into Windows with the newly created local account, and return to these instructions. 
 
 ### Build External Media
-Launch Windows PowerShell in a nonelevated security context. 
+Launch Windows PowerShell in a non-elevated security context. 
 
 > [!NOTE]
 > Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. 
@@ -42,13 +42,18 @@ Install Git with WinGet in the user scope:
   <summary>Install Git</summary>
 
   ```powershell
-  
-  winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'
+  ${Current powershell.exe process instance is running at Integrity Level-High} = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+  if (${Current powershell.exe process instance is running at Integrity Level-High}) {
+    throw "Re-launch Windows PowerShell without selecting 'Run As Administrator'"
+    exit
+  } 
+  else {
+    winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'
+  }
   ```
 </details>
 
-Supply the fully qualified path of a directory for cloning multiple GitHub repositories.  
-Ensure the folder exists and then set as current working directory.  
+Supply a fully qualified path of a directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory:   
 
 <details>
   <summary>Relocate to Empty Working Directory</summary>
@@ -66,28 +71,38 @@ Ensure the folder exists and then set as current working directory.
 </details>
 
 
-Clone the Instant-ADCS and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories. 
+Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories. 
 
-```powershell
-$GitHubRepositoryName = 'Secure-Automations-Toolset'
-git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
-$GitHubRepositoryName = 'Instant-ADCS'
-git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
-```
 
-Define new temporary and hidden directory for information exchange between and PowerShell versions and PowerShell process instances. 
+<details>
+  <summary>Clone from GitHub to Local Host</summary>
 
-```powershell
-$path = ".\.CommonItems"
-$folder = try {
-  Get-Item -Path $path -ErrorAction 'Stop'
-} catch {
-  New-Item -Path $path -ItemType 'Directory' -Force
-}
-($folder).Attributes += 'Hidden'
-```
+  ```powershell
+  $GitHubRepositoryName = 'Secure-Automations-Toolset'
+  git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+  $GitHubRepositoryName = 'Instant-ADCS'
+  git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+  ```
+</details>
 
-Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>.  
+Define new hidden directory for information exchange between PowerShell versions and PowerShell process instances: 
+
+<details>
+  <summary>Temporary Folder</summary>
+
+  ```powershell
+  $path = ".\.CommonItems"
+  $folder = try {
+    Get-Item -Path $path -ErrorAction 'Stop'
+  } catch {
+    New-Item -Path $path -ItemType 'Directory' -Force
+  }
+  ($folder).Attributes += 'Hidden'
+  ```
+</details>
+
+
+Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>. 
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
