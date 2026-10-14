@@ -28,11 +28,22 @@ if (${NuGet Needs To Be Installed}) {
   Microsoft never portrayed PSGallery as an online repository to be trusted. 
   Therefore, the PowerShell Gallery is as trustworthy as any other location on the public Internet. 
 #>
+
+<#
+  $Repository = 'PSGallery'
+  $InstallationPolicy = (Get-PSRepository -Name $Repository).InstallationPolicy
+  if ($InstallationPolicy -eq 'Untrusted') {
+    Set-PSRepository -Name $Repository -InstallationPolicy 'Trusted' -Verbose:$true
+  }
+#>
+
+
 $Repository = 'PSGallery'
-$InstallationPolicy = (Get-PSRepository -Name $Repository).InstallationPolicy
-if ($InstallationPolicy -eq 'Untrusted') {
+$IsTrusted = (Get-PSRepository -Name $Repository).Trusted
+if (-not $IsTrusted) {
   Set-PSRepository -Name $Repository -InstallationPolicy 'Trusted' -Verbose:$true
 }
+
 #endregion
 
 #region | Deduce version of PowerShellGet and install if built-in version is still present |
