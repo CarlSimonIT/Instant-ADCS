@@ -71,9 +71,7 @@ Configure a new directory for cloning multiple GitHub repositories. <span style=
   ```
 </details>
 
-
-Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories. 
-
+Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories:  
 
 <details>
   <summary>Clone from GitHub to Local Host</summary>
