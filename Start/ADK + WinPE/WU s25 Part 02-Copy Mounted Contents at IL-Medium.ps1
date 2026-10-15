@@ -19,7 +19,7 @@ ${WU Server25 Scripts Parent Folder Path} = "${env:.CommonItems}\Offline WU\Serv
 
 <#
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-HereStringCompatible.ps1"
+  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-NoTabsHereStringCompatible.ps1"
 #>
 
 ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Command Here-String Precursor} = $(
@@ -53,7 +53,7 @@ ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Command Here-String Precurso
 
   #endregion
   #########################################-BOUNDARY-#########################################
-  { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
+  { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
     ${.CommonItems} = '%_.CommonItems_%'
     [System.Environment]::SetEnvironmentVariable('.CommonItems','%_.CommonItems_%')
     ${WU Server25 Scripts Parent Folder Path} = '%_WU Server25 Scripts Parent Folder Path_%'
