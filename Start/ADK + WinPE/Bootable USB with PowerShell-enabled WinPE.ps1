@@ -30,6 +30,8 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
 
 
 
+
+
   "`n"
   "`${OSDeploy FriendlyName},`${OSDeploy SerialNumber},`${OSDeploy UniqueId Raw} = $([System.Char]39)%_OSDeploy FriendlyName_%$([System.Char]39),$([System.Char]39)%_OSDeploy SerialNumber_%$([System.Char]39),$([System.Char]39)%_OSDeploy UniqueId Raw_%$([System.Char]39)`n"
   "`${WinPE Workspace Folder Name},`${explorer.exe Owner},`${WinPE Image Creation Parent Path} = $([System.Char]39)%_WinPE Workspace Folder Name_%$([System.Char]39),$([System.Char]39)%_explorer_owner_%$([System.Char]39),$([System.Char]39)%_WinPE Image Creation Parent Path_%$([System.Char]39)`n"
@@ -38,7 +40,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`${Cultures Defined} = Import-CliXml -Path $([System.Char]34)`$PSScriptRoot\..\Cultures Defined.clixml$([System.Char]34)`n"
   "`${Cultures Excluded} = `${Cultures Defined}.Where({`$_ -ne `${UserLocale}})`n"
   "`n"
-  "& { # Created with $([System.Char]39).\ConvertTo-HereStringCompatible.ps1$([System.Char]39) |`n"
+  "& { # Created with $([System.Char]39).\ConvertTo-NoTabsHereStringCompatible.ps1$([System.Char]39) |`n"
   "  `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
   "    `$_.FriendlyName -eq `${OSDeploy FriendlyName} -and $([System.Char]96)`n"
   "    `$_.SerialNumber -eq `${OSDeploy SerialNumber} -and $([System.Char]96)`n"
@@ -68,6 +70,11 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
 
 
 
+
+
+
+
+
   #endregion
   #########################################-BOUNDARY-#########################################
   {
@@ -78,7 +85,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
     ${Cultures Defined} = Import-CliXml -Path "$PSScriptRoot\..\Cultures Defined.clixml"
     ${Cultures Excluded} = ${Cultures Defined}.Where({$_ -ne ${UserLocale}})
 
-    & { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
+    & { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
       ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
         $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
         $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
@@ -108,18 +115,8 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
 
 
 
-
-
-
-
-
-
-
-
-
-
   "`n"
-  "& { # Created with $([System.Char]39).\ConvertTo-HereStringCompatible.ps1$([System.Char]39) |`n"
+  "& { # Created with $([System.Char]39).\ConvertTo-NoTabsHereStringCompatible.ps1$([System.Char]39) |`n"
   "  `${WinPE x64 Tools Path} = $([System.Char]34)`${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64$([System.Char]34)`n"
   "  `${ADK x64 Tools Path} = Resolve-Path -Path $([System.Char]34)`${WinPE x64 Tools Path}\..\..\Deployment Tools\amd64$([System.Char]34) | Select-Object -ExpandProperty $([System.Char]39)Path$([System.Char]39)`n"
   "`n"
@@ -143,19 +140,21 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "  if (-not `$IsPresent) {`n"
   "    copype.cmd .\amd64\ `${Updated ISO Folder Path}`n"
   "`n"
-  "    foreach (`${Culture Excluded} in `${Cultures Excluded}) {`n"
-  "      Get-ChildItem -Depth 0 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
-  "      | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
-  "      | Remove-Item -Recurse -Force`n"
+  "    <#`n"
+  "      foreach (`${Culture Excluded} in `${Cultures Excluded}) {`n"
+  "        Get-ChildItem -Depth 0 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
+  "        | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
+  "        | Remove-Item -Recurse -Force`n"
   "`n"
-  "      Get-ChildItem -Depth 1 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
-  "      | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
-  "      | Remove-Item -Recurse -Force`n"
+  "        Get-ChildItem -Depth 1 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
+  "        | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
+  "        | Remove-Item -Recurse -Force`n"
   "`n"
-  "      Get-ChildItem -Depth 2 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
-  "      | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
-  "      | Remove-Item -Recurse -Force`n"
-  "    }`n"
+  "        Get-ChildItem -Depth 2 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
+  "        | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
+  "        | Remove-Item -Recurse -Force`n"
+  "      }`n"
+  "    #>`n"
   "    `n"
   "    `${Mount Directory Path} = $([System.Char]34)`${WinPE Image Creation Parent Folder}\`${WinPE Workspace Folder Name}\Outside Mount$([System.Char]34); `n"
   "    `$path = `${Mount Directory Path}; `n"
@@ -231,125 +230,118 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
 
 
 
-
-
-
-
-
-
-
-
-
   #endregion
   #########################################-BOUNDARY-#########################################
   {
-    & { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
-      ${WinPE x64 Tools Path} = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64"
-      ${ADK x64 Tools Path} = Resolve-Path -Path "${WinPE x64 Tools Path}\..\..\Deployment Tools\amd64" | Select-Object -ExpandProperty 'Path'
+& { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
+  ${WinPE x64 Tools Path} = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64"
+  ${ADK x64 Tools Path} = Resolve-Path -Path "${WinPE x64 Tools Path}\..\..\Deployment Tools\amd64" | Select-Object -ExpandProperty 'Path'
 
-      # Define directory that contains unmodified files for WinPE ISO file generation
-      ${WinPE Image Creation Parent Folder} = try {
-        Get-Item -Path ${WinPE Image Creation Parent Path} -ErrorAction 'Stop'
-      } catch {
-        New-Item -Path ${WinPE Image Creation Parent Path} -ItemType 'Directory' -Force
+  # Define directory that contains unmodified files for WinPE ISO file generation
+  ${WinPE Image Creation Parent Folder} = try {
+    Get-Item -Path ${WinPE Image Creation Parent Path} -ErrorAction 'Stop'
+  } catch {
+    New-Item -Path ${WinPE Image Creation Parent Path} -ItemType 'Directory' -Force
+  }
+  ${WinPE Image Creation Path} = "${WinPE Image Creation Parent Path}\${WinPE Workspace Folder Name}"
+  ${WinPE Default ISO Folder Path} = "${WinPE Image Creation Path}\.Default ISO"
+
+  # Populate the contents of '.\.Default ISO\' with unmodified files for WinPE ISO file generation
+  copype.cmd .\amd64\ ${WinPE Default ISO Folder Path}
+
+  # Write to disk an .iso file of an original, unmodified instance of WinPE
+  MakeWinPeMedia.cmd /ISO ${WinPE Default ISO Folder Path} "${WinPE Default ISO Folder Path}\WinPE Original.iso" /bootex
+
+  ${Updated ISO Folder Path} = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Updated ISO"
+  $IsPresent = Test-Path -Path ${Updated ISO Folder Path}
+  if (-not $IsPresent) {
+    copype.cmd .\amd64\ ${Updated ISO Folder Path}
+
+    <#
+      foreach (${Culture Excluded} in ${Cultures Excluded}) {
+        Get-ChildItem -Depth 0 -Path ${Updated ISO Folder Path} -Directory `
+        | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
+        | Remove-Item -Recurse -Force
+
+        Get-ChildItem -Depth 1 -Path ${Updated ISO Folder Path} -Directory `
+        | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
+        | Remove-Item -Recurse -Force
+
+        Get-ChildItem -Depth 2 -Path ${Updated ISO Folder Path} -Directory `
+        | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
+        | Remove-Item -Recurse -Force
       }
-      ${WinPE Image Creation Path} = "${WinPE Image Creation Parent Path}\${WinPE Workspace Folder Name}"
-      ${WinPE Default ISO Folder Path} = "${WinPE Image Creation Path}\.Default ISO"
+    #>
+    
+    ${Mount Directory Path} = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Outside Mount"; 
+    $path = ${Mount Directory Path}; 
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    $lang = "en-us"
+    .\amd64\DISM\dism.exe /Mount-Image /ImageFile:"${Updated ISO Folder Path}\media\sources\boot.wim" /Index:1 /MountDir:"${Mount Directory Path}"
 
-      # Populate the contents of '.\.Default ISO\' with unmodified files for WinPE ISO file generation
-      copype.cmd .\amd64\ ${WinPE Default ISO Folder Path}
+    #region | Enable Windows PowerShell support in the WinPE operating system |
+    $path = "${Mount Directory Path}\Canary 00.txt"
+    $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
 
-      # Write to disk an .iso file of an original, unmodified instance of WinPE
-      MakeWinPeMedia.cmd /ISO ${WinPE Default ISO Folder Path} "${WinPE Default ISO Folder Path}\WinPE Original.iso" /bootex
+    $PackagePath = "${WinPE x64 Tools Path}\WinPE_OCs"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-WMI.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-WMI_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-NetFX.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-NetFX_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-Scripting.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-Scripting_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-PowerShell.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-PowerShell_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-StorageWMI.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-StorageWMI_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-DismCmdlets.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-DismCmdlets_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-SecureStartup.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-SecureStartup_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-EnhancedStorage.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-EnhancedStorage_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-PmemCmdlets.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-PmemCmdlets_$lang.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-PlatformId.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-SecureBootCmdlets.cab"
+    .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-HSP-Driver.cab"
 
-      ${Updated ISO Folder Path} = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Updated ISO"
-      $IsPresent = Test-Path -Path ${Updated ISO Folder Path}
-      if (-not $IsPresent) {
-        copype.cmd .\amd64\ ${Updated ISO Folder Path}
+    $path = "${Mount Directory Path}\Canary 05.txt"
+    $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
+    #endregion
 
-        foreach (${Culture Excluded} in ${Cultures Excluded}) {
-          Get-ChildItem -Depth 0 -Path ${Updated ISO Folder Path} -Directory `
-          | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
-          | Remove-Item -Recurse -Force
+    #region | Use newer version of DISM in WinPE | Update Startup script to load drivers for DISM |
+    Copy-Item -Path "${ADK x64 Tools Path}\DISM" -Destination "${Mount Directory Path}" -Recurse
+    #endregion
 
-          Get-ChildItem -Depth 1 -Path ${Updated ISO Folder Path} -Directory `
-          | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
-          | Remove-Item -Recurse -Force
+    $path = "${Mount Directory Path}\Canary 10.txt"
+    $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
 
-          Get-ChildItem -Depth 2 -Path ${Updated ISO Folder Path} -Directory `
-          | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
-          | Remove-Item -Recurse -Force
-        }
-        
-        ${Mount Directory Path} = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Outside Mount"; 
-        $path = ${Mount Directory Path}; 
-        $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-        $lang = "en-us"
-        .\amd64\DISM\dism.exe /Mount-Image /ImageFile:"${Updated ISO Folder Path}\media\sources\boot.wim" /Index:1 /MountDir:"${Mount Directory Path}"
+    #region | Startup Script |
+    # Best performed separately. "${Mount Directory Path}\Windows\System32\startnet.cmd" begins with a call to wpeinit
+    # Syntax for wpeinit is simple: 
+    #     Wpeinit [-unattend:<path_to_answer_file>]
+    # Example of wpeinit in action: 
+    #     Wpeinit -unattend:"C:\Unattend-PE.xml"
+    # So can Startnet.cmd launch a PowerShell script? 
+    # I think it can. See the Unattend setting titled Microsoft-Windows-Setup/RunSynchronous.
+    # That's probably how the PowerShell script is going to launch.
+    #endregion
 
-        #region | Enable Windows PowerShell support in the WinPE operating system |
-        $path = "${Mount Directory Path}\Canary 00.txt"
-        $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
+    # Unmount the WinPE image and create media
+    .\amd64\DISM\dism.exe /Unmount-Image /MountDir:"${Mount Directory Path}" /Commit
 
-        $PackagePath = "${WinPE x64 Tools Path}\WinPE_OCs"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-WMI.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-WMI_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-NetFX.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-NetFX_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-Scripting.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-Scripting_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-PowerShell.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-PowerShell_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-StorageWMI.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-StorageWMI_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-DismCmdlets.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-DismCmdlets_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-SecureStartup.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-SecureStartup_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-EnhancedStorage.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-EnhancedStorage_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-PmemCmdlets.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\$lang\WinPE-PmemCmdlets_$lang.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-PlatformId.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-SecureBootCmdlets.cab"
-        .\amd64\DISM\dism.exe /Add-Package /Image:"${Mount Directory Path}" /PackagePath:"$PackagePath\WinPE-HSP-Driver.cab"
-
-        $path = "${Mount Directory Path}\Canary 05.txt"
-        $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
-        #endregion
-
-        #region | Use newer version of DISM in WinPE | Update Startup script to load drivers for DISM |
-        Copy-Item -Path "${ADK x64 Tools Path}\DISM" -Destination "${Mount Directory Path}" -Recurse
-        #endregion
-
-        $path = "${Mount Directory Path}\Canary 10.txt"
-        $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
-
-        #region | Startup Script |
-        # Best performed separately. "${Mount Directory Path}\Windows\System32\startnet.cmd" begins with a call to wpeinit
-        # Syntax for wpeinit is simple: 
-        #     Wpeinit [-unattend:<path_to_answer_file>]
-        # Example of wpeinit in action: 
-        #     Wpeinit -unattend:"C:\Unattend-PE.xml"
-        # So can Startnet.cmd launch a PowerShell script? 
-        # I think it can. See the Unattend setting titled Microsoft-Windows-Setup/RunSynchronous.
-        # That's probably how the PowerShell script is going to launch.
-        #endregion
-
-        # Unmount the WinPE image and create media
-        .\amd64\DISM\dism.exe /Unmount-Image /MountDir:"${Mount Directory Path}" /Commit
-
-        ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
-          $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
-          $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
-          $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
-        }
-        ${WinPE Partition Drive Letter Precursor} = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
-        ${WinPE Partition Drive Letter} = [System.String]${WinPE Partition Drive Letter Precursor} + ':'
-
-        MakeWinPeMedia.cmd /UFD /f ${Updated ISO Folder Path} ${WinPE Partition Drive Letter} /bootex
-      }
+    ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+      $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
+      $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
+      $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
     }
+    ${WinPE Partition Drive Letter Precursor} = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
+    ${WinPE Partition Drive Letter} = [System.String]${WinPE Partition Drive Letter Precursor} + ':'
+
+    MakeWinPeMedia.cmd /UFD /f ${Updated ISO Folder Path} ${WinPE Partition Drive Letter} /bootex
+  }
+}
   } | Out-Null
   #########################################-BOUNDARY-#########################################
 ) -join ''
