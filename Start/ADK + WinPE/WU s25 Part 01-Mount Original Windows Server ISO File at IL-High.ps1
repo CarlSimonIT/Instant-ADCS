@@ -25,7 +25,7 @@ ${mounted_wim Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\mounted_w
 
 <#
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-HereStringCompatible.ps1"
+  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-NoTabsHereStringCompatible.ps1"
 #>
 
 ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-String Precursor} = $(
@@ -36,7 +36,7 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
   "Set-StrictMode -Version $([System.Char]39)Latest$([System.Char]39)`n"
   "`n"
   #########################################-BOUNDARY-#########################################
-  { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
+  { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
     #     #     Requires -Version 5.1
     #     #     Requires -PSEdition Desktop
     #     #     Requires -RunAsAdministrator
@@ -81,7 +81,7 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
   "`t`t"
   #endregion
   #########################################-BOUNDARY-#########################################
-  { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
+  { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
     ${.CommonItems} = '%_.CommonItems_%'
     [System.Environment]::SetEnvironmentVariable('.CommonItems','%_.CommonItems_%')
     ${Windows Server 2025 ISO Original File Path} = '%_Windows Server 2025 ISO Original File Path_%'
