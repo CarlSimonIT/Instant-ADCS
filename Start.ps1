@@ -89,8 +89,6 @@ param (
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
   $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
-
-  
 #>
 
 #       Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
@@ -865,12 +863,8 @@ Write-Host -Object "`n  Supply admin credentials when the UAC prompt appears:`n 
 pause
 
 
-
-
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\Packages"
 $PackagesFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-
 
 Get-ChildItem -Path ${Windows Updates Directory FullName} -File | ForEach-Object -Process {
   $IsPresent = Test-Path -Path "$PackagesFolder\$($_.Name)"
@@ -917,7 +911,7 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     }
     $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 01-Mount Original Windows Server ISO File at IL-High.ps1" @InputHT
     ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = $OutputHT['WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path']
-    Write-Host -Object "`${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path}"
+    #Write-Host -Object "`${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path}"
     $ArgumentList = @(
       "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path}')"
     )
@@ -965,7 +959,7 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     }
     $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 02-Copy Mounted Contents at IL-Medium.ps1" @InputHT
     ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path} = $OutputHT['WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path']
-    Write-Host -Object "`${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path} = ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path}"
+    #Write-Host -Object "`${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path} = ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path}"
     $ArgumentList = @(
       "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path}')"
     )
@@ -989,8 +983,8 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Windows Server Image Index.ps1"
 
     ${Windows Server Image Index Set} = [System.UInt32[]]@(
-      [System.UInt32][WindowsServerImageIndex]::StandardServerCore
-      [System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
+      #[System.UInt32][WindowsServerImageIndex]::StandardServerCore
+      #[System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
       #[System.UInt32][WindowsServerImageIndex]::DatacenterServerCore
       [System.UInt32][WindowsServerImageIndex]::DatacenterDesktopExperience
     )
@@ -1009,7 +1003,7 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High.ps1" @InputHT
 
     ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path} = $OutputHT['WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path']
-    Write-Host -Object "`${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path} = ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path}"
+    #Write-Host -Object "`${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path} = ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path}"
     $ArgumentListProcess = @(
       "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path}')"
     )
@@ -1071,6 +1065,7 @@ ${DSC Resource Module Names} = @(
   'DnsServerDsc'
   'GroupPolicyDsc'
   'HyperVDsc'
+  #'JeaDsc'
   'NetworkingDsc'
   'StorageDsc'
   'UpdateServicesDsc'
@@ -1306,7 +1301,11 @@ if ($DetectionSet -gt 0) {
 #endregion
 #region | Download OneDriveSetup.exe | Download latest version of Visual Studio Code |
 #endregion
-#region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion |
+#region | Resume authoring the custom AdHocInstantAdcsDsc DSC Resource module | Write build script upon completion |
+# This is not going to be easy. 
+# . powershell.exe -NoProfile -File "$PSScriptRoot\Start\AdHocInstantAdcsDsc\build.ps1"
+# Best if rewritten on the Unclustered Hyper-V host
+
 #endregion
 #region | XML Files |
 #endregion
