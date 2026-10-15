@@ -83,13 +83,32 @@ param (
   ${DNS Name of Root Domain in AD Forest}
 )
 
+
 <#
   $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
   $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
+
+  
 #>
 
+#       Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+
+#region | Set latest Strict Mode | Exit '.\Start.ps1' script if launched in a powershell.exe process instance running at Integrity Level-High |
+Set-StrictMode -Version 'Latest'
+
+${powershell.exe owner Identity} = [Security.Principal.WindowsIdentity]::GetCurrent()
+${powershell.exe owner Access} = [Security.Principal.WindowsPrincipal]${powershell.exe owner Identity}
+${Current powershell.exe process is running at Integrity Level-High} = (${powershell.exe owner Access}).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (${Current powershell.exe process is running at Integrity Level-High}) {
+  #throw "`n`n`tExiting Start.ps1 script.`n`n`tRe-launch Windows PowerShell WITHOUT selecting Run As Administrator!`n`n"
+  Write-Error -Message "`n`n`tExiting Start.ps1 script.`n`n`tRe-launch Windows PowerShell WITHOUT selecting Run As Administrator!`n`n"
+  pause
+  Get-Process -Id $PID | Stop-Process -Force
+} 
+#endregion
 #region | Export non-senstive strings to .clixml for later import by other applications |
 $HT = @{
   'SHA256 of Windows Server 2025 ISO File' = ${SHA256 of Windows Server 2025 ISO File}
@@ -105,13 +124,23 @@ $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml
 
 
 #region | Define new folder structures. Same code is re-executed later in Start.ps1 when applicable |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server  25\Original"
+#$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
+${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
+${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+$InstallsPath = "$PSScriptRoot\..\.CommonItems\WinPE"
+$path = "$InstallsPath\ADK + WinPE (2026-09)"
+$AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+
 #endregion
 
 #endregion
-<##>
-#region | Compacted |
+
 #region | Install NuGet | Set PSGallery as Trusted | Update PowerShellGet module | Install 'TUN.CredentialManager' module | Install 'MSCatalog' module
 & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1"
 # Delete Shortly # & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Module for Credential Manager.ps1"
@@ -130,6 +159,7 @@ if (${1 or more sensitive strings providing access to online Bitwarden Vault nee
   . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
 }
 #endregion
+
 #region | Ensure target 'output' directory is present in project root |
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Ensure target output directory is present in project root.ps1"
 #endregion
@@ -155,9 +185,9 @@ if ($null -ne ${Local Get-XDayOfMonth.ps1 File}) {
   do {
     Invoke-WebRequest -Uri $Uri -OutFile ${Target Get-XDayOfMonth.ps1 File}.FullName
     Start-Sleep 5
-  } while ({
-    $IsAbsent = -not (Test-Path -Path ${Target Get-XDayOfMonth.ps1 File}.FullName)
-    return $IsAbsent
+  } until ({
+    $IsPresent = Test-Path -Path ${Target Get-XDayOfMonth.ps1 File}.FullName
+    return $IsPresent
   })
 }
 . ${Target Get-XDayOfMonth.ps1 File}
@@ -210,6 +240,7 @@ $HT = @{
 # Import '.\Regular Expression Patterns.ps1' for later use
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Regular Expression Patterns.ps1"
 #endregion
+
 #region | Install machine-scope PowerShell 7 and register Event Logging Manifest |
 <#
   ${Win32_Product Name} = Get-CimInstance -ClassName 'Win32_Product' `
@@ -263,20 +294,26 @@ if ($RunningJob -eq $null) {
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
   }
-  $Job | Format-Table -AutoSize
 }
 #endregion
+
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
 #region | Ensure the 'Original' and 'Patched' Folders have been created |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-${Original Server 2025 ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
-${Patched Server 2025 ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
+#${Original Server 2025 IS0 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
+#${Patched Server 2025 IS0 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
+${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
+${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
 #endregion
 ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
 $hash = ${SHA256 of Windows Server 2025 ISO File}
-#Write-Host -Object "`${env:.CommonItems} = ${env:.CommonItems}"
-${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File `
+${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
 | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
 | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
 | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
@@ -284,7 +321,6 @@ ${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItem
 | Sort-Object -Property 'LastWriteTime' -Descending `
 | Select-Object -First 1
 
-#Write-Host -Object "`${Windows Server 2025 ISO Original File}.FullName = $(${Windows Server 2025 ISO Original File}.FullName)"
 
 if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
   $JobName = 'Download Windows Server 2025 ISO File'
@@ -295,7 +331,7 @@ if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatch
   if ($RunningJob -eq $null) {
     $ArgumentList = @(
       'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
-      "$folder\Windows Server 2025.iso"
+      "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
       $ProgressPreference
     )
 
@@ -312,22 +348,30 @@ if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatch
   }
 } 
 else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
-  ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Original Server 2025 ISO Folder}\Windows Server 2025.iso"
+  ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
   if (-not ${Is ISO Already Relocated and Renamed}) {
-    Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Original Server 2025 ISO Folder}\Windows Server 2025.iso"
-    #Copy-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Original Server 2025 ISO Folder}"
-    #Get-Item -Path "${Original Server 2025 ISO Folder}\$(${Windows Server 2025 ISO Original File}.Name)" | Rename-Item -NewName 'Windows Server 2025.iso'
+    Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+    #Copy-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}"
+    #Get-Item -Path "${Offline WU-Original Server 2025 Folder}\$(${Windows Server 2025 ISO Original File}.Name)" | Rename-Item -NewName 'Windows Server 2025.iso'
   }
 }
 #endregion
 #region | Download, but do not install, the setup file for the Windows ADK and the Windows PE Add-on |
 #region | Download the Windows ADK installer EXE File |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
+#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
+$path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 ${SHA256 of Windows ADK 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml"
 $hash = ${SHA256 of Windows ADK 2026-09 EXE File}
-${Windows ADK 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+${Windows ADK 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File `
+| Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} `
+| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+| Sort-Object -Property 'LastWriteTime' -Descending `
+| Select-Object -First 1
+
 if (${Windows ADK 2026-09 EXE File} -eq $null) {
   $JobName = 'Download Windows ADK 2026-09 EXE File'
   $RunningJob = Get-Job | Where-Object -FilterScript {
@@ -350,19 +394,27 @@ if (${Windows ADK 2026-09 EXE File} -eq $null) {
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
     }
-    $Job | Format-Table -AutoSize
   }
 }
 #endregion
 #region | Download the WinPE installer EXE File |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
+#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
+$path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 ${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
 $hash = ${SHA256 of WinPE 2026-09 EXE File}
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
+#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
+$path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} | Sort-Object -Property 'LastWriteTime' -Descending | Select-Object -First 1
+${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File `
+| Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} `
+| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+| Sort-Object -Property 'LastWriteTime' -Descending `
+| Select-Object -First 1
+
 if (${WinPE 2026-09 EXE File} -eq $null) {
   $JobName = 'Download WinPE 2026-09 EXE File'
   $RunningJob = Get-Job | Where-Object -FilterScript {
@@ -385,12 +437,14 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
     }
-    $Job | Format-Table -AutoSize
   }
 }
 #endregion
 #endregion
 #region | Download-Install-Compress ADK + WinPE |
+## Windows ADK Patches
+#  None currently published for Windows ADK 2026-09 but check back periodically. 
+#  'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-servicing'
 $JobName0 = 'Download Windows ADK 2026-09 EXE File'
 $RunningJob0 = Get-Job | Where-Object -FilterScript {
   $_.Name  -eq $JobName0  -and `
@@ -401,7 +455,8 @@ if ($null -ne $RunningJob0) {
   Get-Job -Name $JobName0 | Wait-Job | Format-Table -AutoSize
 }
 #region | Bring ADK + WinPE Offline Installation Files into a %UserProfile% Container |
-$InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+#$InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$InstallsPath = "$PSScriptRoot\..\.CommonItems\WinPE"
 $path = "$InstallsPath\ADK + WinPE (2026-09)"
 $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
@@ -520,7 +575,8 @@ if (
 ) {Start-Process -ArgumentList $ArgumentList -FilePath powershell.exe -Wait -Verb 'RunAs'}
 #endregion
 #region | Groundwork Variables for offline install of ADK + WinPE |
-$InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+#$InstallsPath = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs"
+$InstallsPath = "$PSScriptRoot\..\.CommonItems\WinPE"
 $path = "$InstallsPath\ADK + WinPE (2026-09)"
 $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 #endregion
@@ -628,12 +684,6 @@ switch ($true) {
 }
 #endregion
 #endregion
-#endregion
-
-
-
-
-
 #region | External Removable Bootable Media > Clear Disk > EFS (EFI System Partition) |
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
 ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
@@ -644,16 +694,21 @@ ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
 $DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
 
 #endregion
+
+<# Unmount the WinPE image and create media |
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11#unmount-the-windows-pe-image-and-create-media'
+#>
+<# CLI Options for the MakeWinPeMedia.cmd batch file |
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/makewinpemedia-command-line-options?view=windows-11&source=recommendations#makewinpemedia-parameters'
+#>
+
+
 #region | PowerShell-enabled WinPE ISO File |
-
-
-
-
 # [ ] Implementation Complete
 # Use newer version of DISM in WinPE: 
 # Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
 # Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
-${WinPE Workspace Folder Name} = 'PowerShell-Infused-00'
+${WinPE Workspace Folder Name} = 'PowerShell-Infused'
 $InputHT = @{
   'WinPE Workspace Folder Name' = ${WinPE Workspace Folder Name}
 }
@@ -697,20 +752,58 @@ if (-not $IsPresent) {
   }
 }
 #endregion
+
 #region | Patch offline Windows Server 2025 .iso file |
 #region | Re-confirm that 'Windows Server 2025.iso' has downloaded to the 'Original' directory |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
+#$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
+${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
+${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
 $hash = ${SHA256 of Windows Server 2025 ISO File}
-${Windows Server 2025 ISO Original File} = Get-ChildItem -Path "$folder" -File `
+${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
 | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
 | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
 | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
 | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
 | Sort-Object -Property 'LastWriteTime' -Descending `
 | Select-Object -First 1
+
+if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
+  $JobName = 'Download Windows Server 2025 ISO File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+      "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+} 
+else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
+  ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+  if (-not ${Is ISO Already Relocated and Renamed}) {
+    Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+  }
+}
 #endregion
 #region | Deploy new directory for downloading latest Windows Updates |
 # Write-Host "`n`tPatch Tuesday Of This Month:`n"
@@ -729,11 +822,12 @@ if (${Patch Tuesday Of This Month Has Already Arrived}) {
   ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',([System.DateTime]::Now).AddMonths(-1))
 }
 
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}"
+#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}"
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\${Windows Updates Directory BaseName}"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 #endregion
 #region | Download Latest Windows Updates for Server 2025 |
-${Windows Updates Directory FullName} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}" | Select-Object -ExpandProperty 'Path'
+${Windows Updates Directory FullName} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\${Windows Updates Directory BaseName}" | Select-Object -ExpandProperty 'Path'
 Write-host -object "`${Windows Updates Directory FullName} = ${Windows Updates Directory FullName}"
 
 ${Download Latest Windows Updates for Server 2025-Note to User} = @"
@@ -769,10 +863,14 @@ Write-Host -Object "  Literal text representation of command being executed is:`
 Write-Host -Object ${Executed Command} -ForegroundColor ([System.ConsoleColor]::DarkYellow)
 Write-Host -Object "`n  Supply admin credentials when the UAC prompt appears:`n  " -ForegroundColor ([System.ConsoleColor]::DarkMagenta)
 pause
-#endregion
 
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\Packages"
+
+
+
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\Packages"
 $PackagesFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+
 
 Get-ChildItem -Path ${Windows Updates Directory FullName} -File | ForEach-Object -Process {
   $IsPresent = Test-Path -Path "$PackagesFolder\$($_.Name)"
@@ -781,41 +879,36 @@ Get-ChildItem -Path ${Windows Updates Directory FullName} -File | ForEach-Object
   }
 }
 
-<#
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
-#>
-
-if ($false) { # $null -ne ${Windows Server 2025 ISO Original File} |
-  $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
+if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
+  $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
   $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
   ${Windows Server 2025 ISO Patched File} = [System.IO.FileInfo]"$folder\Windows Server 2025.iso"
   $IsPresent = Test-Path -Path ${Windows Server 2025 ISO Patched File}.FullName
   if (-not $IsPresent) {
+    $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
+    ${Extracted ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+    $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
+    ${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
     <#
-      $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Extracted ISO"
-      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-      $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\mounted_wim"
-      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      $InputHT = @{
+        'Windows Server 2025 ISO Original File Path' = ${Windows Server 2025 ISO Original File}.FullName
+        'Windows Server 2025 ISO Patched File Path'  = ${Windows Server 2025 ISO Patched File}.FullName
+      }
+      #$OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Mount + Patch s25 ISO File.ps1" @InputHT
+      $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Patch Windows Server ISO File with Latest Windows Updates.ps1" @InputHT
+      ${Patch Windows Server ISO File with Latest Windows Updates Script Path} = $OutputHT['Patch Windows Server ISO File with Latest Windows Updates Script Path']
+      $ArgumentList = @(
+        "Invoke-Expression -Command (Get-Content -Raw -Path '${Patch Windows Server ISO File with Latest Windows Updates Script Path}')"
+      )
+      Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
     #>
-
-    $InputHT = @{
-      'Windows Server 2025 ISO Original File Path' = ${Windows Server 2025 ISO Original File}.FullName
-      'Windows Server 2025 ISO Patched File Path'  = ${Windows Server 2025 ISO Patched File}.FullName
-    }
-    #$OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Mount + Patch s25 ISO File.ps1" @InputHT
-    $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Patch Windows Server ISO File with Latest Windows Updates.ps1" @InputHT
-    ${Patch Windows Server ISO File with Latest Windows Updates Script Path} = $OutputHT['Patch Windows Server ISO File with Latest Windows Updates Script Path']
-    
-    $ArgumentList = @(
-      "Invoke-Expression -Command (Get-Content -Raw -Path '${Patch Windows Server ISO File with Latest Windows Updates Script Path}')"
-    )
-    #Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
-
     <#
       Set-Location -Path "${env:.CommonItems}\..\Instant-ADCS\Start\ADK + WinPE"
       code '.\WU s25 Part 01-Mount Original Windows Server ISO File at IL-High.ps1'
       code '.\WU s25 Part 02-Copy Mounted Contents at IL-Medium.ps1'
-      code '.\WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High.ps1'
+      code '.\WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High.ps1'
     #>
 
     $InputHT = @{
@@ -824,11 +917,20 @@ if ($false) { # $null -ne ${Windows Server 2025 ISO Original File} |
     }
     $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 01-Mount Original Windows Server ISO File at IL-High.ps1" @InputHT
     ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = $OutputHT['WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path']
-    #Write-Host -Object "`${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path}"
+    Write-Host -Object "`${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path}"
     $ArgumentList = @(
       "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path}')"
     )
-    Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
+    $JobName = "WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High"
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
+    }
+    if ($RunningJob -eq $null) {
+      Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
+    }
+
+    
 
     <#
       ${Key Title 0} = $OutputHT['Key Title 0']
@@ -858,24 +960,363 @@ if ($false) { # $null -ne ${Windows Server 2025 ISO Original File} |
 
     #>
 
-    $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 02-Copy Mounted Contents at IL-Medium.ps1"
+    $InputHT = @{
+      'Extracted ISO Folder Path' = "${Extracted ISO Folder}"
+    }
+    $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 02-Copy Mounted Contents at IL-Medium.ps1" @InputHT
     ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path} = $OutputHT['WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path']
     Write-Host -Object "`${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path} = ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path}"
     $ArgumentList = @(
       "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path}')"
     )
-    Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -WindowStyle 'Hidden' -Wait
+    $JobName = "WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High"
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
+    }
+    if ($RunningJob -eq $null) {
+      Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -WindowStyle 'Hidden' -Wait
+    }
 
-    Start-Sleep 10
-    
-    $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High.ps1"
-    ${WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High Script Path} = $OutputHT['WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High Script Path']
-    Write-Host -Object "`${WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High Script Path} = ${WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High Script Path}"
-    $ArgumentList = @(
-      "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 03-Dismount ISO Apply Updates Package into Patched ISO at IL-High Script Path}')"
+  
+    Start-Sleep 3
+
+    <#
+      Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+    #>
+
+    # Import custom class to enumerate the Windows Server Image Index collection
+    . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Windows Server Image Index.ps1"
+
+    ${Windows Server Image Index Set} = [System.UInt32[]]@(
+      [System.UInt32][WindowsServerImageIndex]::StandardServerCore
+      [System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
+      #[System.UInt32][WindowsServerImageIndex]::DatacenterServerCore
+      [System.UInt32][WindowsServerImageIndex]::DatacenterDesktopExperience
     )
-    Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WindowStyle 'Normal' -Wait
+
+    #${install.wim File Path} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO\sources\install.wim" | Select-Object -ExpandProperty 'Path'
+    ${install.wim File Path} = "${env:.CommonItems}\Offline WU\Server 25\Extracted ISO\sources\install.wim"
+
+    $InputHT = @{
+      'Windows Server Image Index Set'            = ${Windows Server Image Index Set}
+      'install.wim File Path'                     = ${install.wim File Path}
+      'mounted_wim Folder Path'                   = "${mounted_wim Folder}"
+      'Package Directory Path'                    = "$PackagesFolder"
+      'Windows Server 2025 ISO Patched File Path' = ${Windows Server 2025 ISO Patched File}.FullName
+    }
+    
+    $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High.ps1" @InputHT
+
+    ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path} = $OutputHT['WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path']
+    Write-Host -Object "`${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path} = ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path}"
+    $ArgumentListProcess = @(
+      "Invoke-Expression -Command (Get-Content -Raw -Path '${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Script Path}')"
+    )
+
+    $JobName = "WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High"
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
+    }
+    if ($RunningJob -eq $null) {
+      $ArgumentListJob = @(
+        $ArgumentListProcess
+      )
+      $IsPresent = Test-Path -Path "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched\Windows Server 2025.iso"
+      if (-not $IsPresent) {
+        Start-Job -Name $JobName -ArgumentList $ArgumentListJob -ScriptBlock {
+          $ArgumentListProcess = $args[0]
+          Start-Process -FilePath powershell.exe -ArgumentList $ArgumentListProcess -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+#endregion
+#endregion
+
+
+
+
+
+
+
+
+#region | Download, but do not install, DSC Resource modules |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
+#            $path = 'C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${DSC Resource module Save Path} = "$folder"
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource module Save Path.clixml" -InputObject (${DSC Resource module Save Path})
+
+#$ArrayList = [System.Collections.ArrayList]::New()
+
+${DSC Resource Module Names} = @(
+  'ActiveDirectoryCSDsc'
+  'ActiveDirectoryDsc'
+  'cDhcpServerDynamicUpdate'
+  'CertificateDsc'
+  'cHyper-V'
+  'ComputerManagementDsc'
+  'DhcpServerDsc'
+  'DnsServerDsc'
+  'GroupPolicyDsc'
+  'HyperVDsc'
+  'NetworkingDsc'
+  'StorageDsc'
+  'UpdateServicesDsc'
+  'WebAdministrationDsc'
+  'WmiNamespaceSecurity'
+  'WSManDsc'
+  'xCIMSecurity'
+  'xComputerManagement'
+  'xPendingReboot'
+  'xPSDesiredStateConfiguration'
+)
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource Module Names.clixml" -InputObject (${DSC Resource Module Names})
+
+
+
+$_Var_Name = 'DetectionSet'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+Set-Variable -Name $_Var_Name -Value (& {
+  foreach (${DSC Resource Module Name} in ${DSC Resource Module Names}) {
+    $IsZipAbsent = -not (Test-Path -Path "${DSC Resource module Save Path}\${DSC Resource Module Name}.zip")
+    $DetectionSet += [System.Int32]$IsZipAbsent
+  }
+  return $DetectionSet
+})
+
+if ($DetectionSet -gt 0) {
+  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\DSC Resource Module Downloads from PSGallery.ps1"
+}
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
+#region | Download, but do not install, Windows PowerShell Modules |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\5.1"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${Windows PowerShell module Save Path} = "$folder"
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\Windows PowerShell module Save Path.clixml" -InputObject (${Windows PowerShell module Save Path})
+
+${Windows PowerShell Module Names} = @(
+  'xDscDiagnostics'
+  'TUN.CredentialManager'
+  'Indented.Net.IP'
+  'PSPKI'
+  'MSCatalog'
+)
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\Windows PowerShell Module Names.clixml" -InputObject (${Windows PowerShell Module Names})
+
+$_Var_Name = 'DetectionSet'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+Set-Variable -Name $_Var_Name -Value (& {
+  foreach (${Windows PowerShell Module Name} in ${Windows PowerShell Module Names}) {
+    $IsZipAbsent = -not (Test-Path -Path "${Windows PowerShell module Save Path}\${Windows PowerShell Module Name}.zip")
+    $DetectionSet += [System.Int32]$IsZipAbsent
+  }
+  return $DetectionSet
+})
+
+if ($DetectionSet -gt 0) {
+  . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Download Jobs\Windows PowerShell Module (non-DSC) Downloads from PSGallery.ps1"
+}
+#endregion
+#region | Download, but do not install, PowerShell 7 .msi files |
+#region | End-of-Support announcements | Versioning Explained |
+#     End-of-Support latest announcements:
+#     start msedge.exe 'https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-support-lifecycle'
+#     Releases:
+#     start msedge.exe 'https://github.com/powershell/powershell/releases'
+#     
+#     # Versioning
+#     $PSVersionTable
+#     ($PSVersionTable).GetType().Name
+#     $PSVersionTable['PSVersion']
+#     $PSVersionTable['PSVersion'].Major
+#     $PSVersionTable['PSVersion'].Minor
+#     $PSVersionTable['PSVersion'].Patch
+#endregion
+#region | PowerShell 7.4 |
+$Minor = 4
+$Patch = 20
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
   }
 }
 #endregion
+#region | PowerShell 7.5 |
+$Minor = 5
+$Patch = 11
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+#region | PowerShell 7.6 |
+$Minor = 6
+$Patch = 6
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    }
+    $Job | Format-Table -AutoSize
+  }
+}
+#endregion
+#endregion
+#region | Download, but do not install, PowerShell 7 modules |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Modules\7"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${PowerShell 7 module Save Path} = "$folder"
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\PowerShell 7 module Save Path.clixml" -InputObject (${PowerShell 7 module Save Path})
+
+${PowerShell 7 Module Names} = @(
+  'SecretManagement.Warden'
+  'TUN.CredentialManager'
+  'Microsoft.PowerShell.SecretManagement'
+)
+Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\PowerShell 7 Module Names.clixml" -InputObject (${PowerShell 7 Module Names})
+
+$_Var_Name = 'DetectionSet'
+try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
+Set-Variable -Name $_Var_Name -Value (& {
+  foreach (${PowerShell 7 Module Name} in ${PowerShell 7 Module Names}) {
+    $IsZipAbsent = -not (Test-Path -Path "${PowerShell 7 module Save Path}\${PowerShell 7 Module Name}.zip")
+    $DetectionSet += [System.Int32]$IsZipAbsent
+  }
+  return $DetectionSet
+})
+
+if ($DetectionSet -gt 0) {
+  . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$PSScriptRoot\Start\Download Jobs\PowerShell 7 Module Downloads from PSGallery.ps1"
+}
+
+<#
+  $ArrayList = [System.Collections.ArrayList]::New()
+  [System.Void]$ArrayList.Add()
+  [System.Void]$ArrayList.Add()
+  [System.Void]$ArrayList.Add()
+
+  foreach ($Element in $ArrayList) {
+    $IsZipPresent = Test-Path -Path "$ModuleSavePath\$Element.zip"
+    if (-not $IsZipPresent) {
+      Write-Verbose -Message "Downloading installation files for the '$Element' PowerShell 7 module."
+      Save-Module -Name $Element -Path $ModuleSavePath -Repository 'PSGallery' -AllowPrerelease
+      Start-Sleep 5
+      Write-Verbose -Message "Compressing installation files for the '$Element' PowerShell 7 module to .zip"
+      Compress-Archive -Path "$ModuleSavePath\$Element" -DestinationPath "$ModuleSavePath\$Element.zip"
+      Start-Sleep 5
+      Write-Verbose -Message "Removinging downloaded & uncompressed '$Element' installation files"
+      Remove-Item -Path "$ModuleSavePath\$Element" -Recurse -Force
+    }
+  }
+#>
+#endregion
+#region | Download OneDriveSetup.exe | Download latest version of Visual Studio Code |
+#endregion
+#region | Resume authoring the custom InstantAdcsRev5 DSC Resource module | Write build script upon completion |
+#endregion
+#region | XML Files |
+#endregion
+
+
+
+
+
+
+
+
+
 
