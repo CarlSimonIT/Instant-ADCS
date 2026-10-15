@@ -10,7 +10,6 @@ Launch Windows PowerShell in a elevated security context and execute the lines b
   <summary>New Temporary Non-Privileged Local Account</summary>
 
   ```powershell
-  # 
   $Name = 'Delete This Account'
   $BadPassword = ConvertTo-SecureString -AsPlainText 'BadPassword!' -Force
   $HT = @{
