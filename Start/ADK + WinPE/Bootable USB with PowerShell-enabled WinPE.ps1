@@ -6,20 +6,17 @@ param (
 )
 
 ${explorer.exe Owner} = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\explorer.exe Owner.clixml"
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 ${WinPE Image Creation Parent Path} = "$PSScriptRoot\..\..\..\.CommonItems\WinPE"
 ${WinPE Image Creation Parent Folder} = try {
   Get-Item -Path ${WinPE Image Creation Parent Path} -ErrorAction 'Stop'
 } catch {
   New-Item -Path ${WinPE Image Creation Parent Path} -ItemType 'Directory' -Force
 }
-$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
+${Cultures Defined} = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\Cultures Defined.clixml"
+
 # Import into memory the unique identifiers for the disk holding the external removable bootable media: 
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
-
-
-#region | ESP (EFI System Partition) |
-#endregion
-
 
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   #region | Keep |
@@ -29,8 +26,18 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`n"
   #endregion
   #region | EFI System Partition on Removable External Bootable Media |
+
+
+
+
+  "`n"
   "`${OSDeploy FriendlyName},`${OSDeploy SerialNumber},`${OSDeploy UniqueId Raw} = $([System.Char]39)%_OSDeploy FriendlyName_%$([System.Char]39),$([System.Char]39)%_OSDeploy SerialNumber_%$([System.Char]39),$([System.Char]39)%_OSDeploy UniqueId Raw_%$([System.Char]39)`n"
   "`${WinPE Workspace Folder Name},`${explorer.exe Owner},`${WinPE Image Creation Parent Path} = $([System.Char]39)%_WinPE Workspace Folder Name_%$([System.Char]39),$([System.Char]39)%_explorer_owner_%$([System.Char]39),$([System.Char]39)%_WinPE Image Creation Parent Path_%$([System.Char]39)`n"
+  "`$FolderFQN = $([System.Char]39)%_FolderFQN_%$([System.Char]39)`n"
+  ". $([System.Char]34)`$PSScriptRoot\..\..\`$FolderFQN\output\usb1\`$FolderFQN\Base\5.1\Location - Culture - Geography.ps1$([System.Char]34)`n"
+  "`${Cultures Defined} = Import-CliXml -Path $([System.Char]34)`$PSScriptRoot\..\Cultures Defined.clixml$([System.Char]34)`n"
+  "`${Cultures Excluded} = `${Cultures Defined}.Where({`$_ -ne `${UserLocale}})`n"
+  "`n"
   "& { # Created with $([System.Char]39).\ConvertTo-HereStringCompatible.ps1$([System.Char]39) |`n"
   "  `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
   "    `$_.FriendlyName -eq `${OSDeploy FriendlyName} -and $([System.Char]96)`n"
@@ -56,11 +63,21 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "  #>`n"
   "}`n"
   "`t`t"
+
+
+
+
+
   #endregion
   #########################################-BOUNDARY-#########################################
   {
     ${OSDeploy FriendlyName},${OSDeploy SerialNumber},${OSDeploy UniqueId Raw} = '%_OSDeploy FriendlyName_%','%_OSDeploy SerialNumber_%','%_OSDeploy UniqueId Raw_%'
     ${WinPE Workspace Folder Name},${explorer.exe Owner},${WinPE Image Creation Parent Path} = '%_WinPE Workspace Folder Name_%','%_explorer_owner_%','%_WinPE Image Creation Parent Path_%'
+    $FolderFQN = '%_FolderFQN_%'
+    . "$PSScriptRoot\..\..\$FolderFQN\output\usb1\$FolderFQN\Base\5.1\Location - Culture - Geography.ps1"
+    ${Cultures Defined} = Import-CliXml -Path "$PSScriptRoot\..\Cultures Defined.clixml"
+    ${Cultures Excluded} = ${Cultures Defined}.Where({$_ -ne ${UserLocale}})
+
     & { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
       ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
         $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
@@ -91,6 +108,16 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
 
 
 
+
+
+
+
+
+
+
+
+
+
   "`n"
   "& { # Created with $([System.Char]39).\ConvertTo-HereStringCompatible.ps1$([System.Char]39) |`n"
   "  `${WinPE x64 Tools Path} = $([System.Char]34)`${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64$([System.Char]34)`n"
@@ -110,23 +137,36 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`n"
   "  # Write to disk an .iso file of an original, unmodified instance of WinPE`n"
   "  MakeWinPeMedia.cmd /ISO `${WinPE Default ISO Folder Path} $([System.Char]34)`${WinPE Default ISO Folder Path}\WinPE Original.iso$([System.Char]34) /bootex`n"
-  "  #      MakeWinPeMedia.cmd /UFD `${WinPE Default ISO Folder Path} F: /bootex`n"
   "`n"
   "  `${Updated ISO Folder Path} = $([System.Char]34)`${WinPE Image Creation Parent Folder}\`${WinPE Workspace Folder Name}\Updated ISO$([System.Char]34)`n"
   "  `$IsPresent = Test-Path -Path `${Updated ISO Folder Path}`n"
   "  if (-not `$IsPresent) {`n"
   "    copype.cmd .\amd64\ `${Updated ISO Folder Path}`n"
-  "    #`${Mount Directory Path} = $([System.Char]34)`${Updated ISO Folder Path}\mount$([System.Char]34)`n"
+  "`n"
+  "    foreach (`${Culture Excluded} in `${Cultures Excluded}) {`n"
+  "      Get-ChildItem -Depth 0 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
+  "      | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
+  "      | Remove-Item -Recurse -Force`n"
+  "`n"
+  "      Get-ChildItem -Depth 1 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
+  "      | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
+  "      | Remove-Item -Recurse -Force`n"
+  "`n"
+  "      Get-ChildItem -Depth 2 -Path `${Updated ISO Folder Path} -Directory $([System.Char]96)`n"
+  "      | Where-Object -FilterScript {`$_.BaseName -eq `${Culture Excluded}} $([System.Char]96)`n"
+  "      | Remove-Item -Recurse -Force`n"
+  "    }`n"
+  "    `n"
   "    `${Mount Directory Path} = $([System.Char]34)`${WinPE Image Creation Parent Folder}\`${WinPE Workspace Folder Name}\Outside Mount$([System.Char]34); `n"
   "    `$path = `${Mount Directory Path}; `n"
   "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "    `$lang = $([System.Char]34)en-us$([System.Char]34)`n"
   "    .\amd64\DISM\dism.exe /Mount-Image /ImageFile:$([System.Char]34)`${Updated ISO Folder Path}\media\sources\boot.wim$([System.Char]34) /Index:1 /MountDir:$([System.Char]34)`${Mount Directory Path}$([System.Char]34)`n"
   "`n"
+  "    #region | Enable Windows PowerShell support in the WinPE operating system |`n"
   "    `$path = $([System.Char]34)`${Mount Directory Path}\Canary 00.txt$([System.Char]34)`n"
   "    `$file = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)File$([System.Char]39) -Force}`n"
   "`n"
-  "    #region | Enable Windows PowerShell support in the WinPE operating system |`n"
   "    `$PackagePath = $([System.Char]34)`${WinPE x64 Tools Path}\WinPE_OCs$([System.Char]34)`n"
   "    .\amd64\DISM\dism.exe /Add-Package /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /PackagePath:$([System.Char]34)`$PackagePath\WinPE-WMI.cab$([System.Char]34)`n"
   "    .\amd64\DISM\dism.exe /Add-Package /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /PackagePath:$([System.Char]34)`$PackagePath\`$lang\WinPE-WMI_`$lang.cab$([System.Char]34)`n"
@@ -149,10 +189,10 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    .\amd64\DISM\dism.exe /Add-Package /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /PackagePath:$([System.Char]34)`$PackagePath\WinPE-PlatformId.cab$([System.Char]34)`n"
   "    .\amd64\DISM\dism.exe /Add-Package /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /PackagePath:$([System.Char]34)`$PackagePath\WinPE-SecureBootCmdlets.cab$([System.Char]34)`n"
   "    .\amd64\DISM\dism.exe /Add-Package /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /PackagePath:$([System.Char]34)`$PackagePath\WinPE-HSP-Driver.cab$([System.Char]34)`n"
-  "    #endregion`n"
   "`n"
   "    `$path = $([System.Char]34)`${Mount Directory Path}\Canary 05.txt$([System.Char]34)`n"
   "    `$file = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)File$([System.Char]39) -Force}`n"
+  "    #endregion`n"
   "`n"
   "    #region | Use newer version of DISM in WinPE | Update Startup script to load drivers for DISM |`n"
   "    Copy-Item -Path $([System.Char]34)`${ADK x64 Tools Path}\DISM$([System.Char]34) -Destination $([System.Char]34)`${Mount Directory Path}$([System.Char]34) -Recurse`n"
@@ -172,13 +212,8 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    # That$([System.Char]39)s probably how the PowerShell script is going to launch.`n"
   "    #endregion`n"
   "`n"
-  "    <# Unmount the WinPE image and create media |`n"
-  "      start msedge.exe $([System.Char]39)https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11#unmount-the-windows-pe-image-and-create-media$([System.Char]39)`n"
-  "    #>`n"
+  "    # Unmount the WinPE image and create media`n"
   "    .\amd64\DISM\dism.exe /Unmount-Image /MountDir:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /Commit`n"
-  "    #copype.cmd .\amd64\ $([System.Char]34)`${Updated ISO Folder Path}$([System.Char]34)`n"
-  "    #MakeWinPeMedia.cmd /ISO $([System.Char]34)`${Updated ISO Folder Path}$([System.Char]34) $([System.Char]34)`${Updated ISO Folder Path}\`${WinPE Workspace Folder Name}.iso$([System.Char]34) /bootex`n"
-  "`n"
   "`n"
   "    `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
   "      `$_.FriendlyName -eq `${OSDeploy FriendlyName} -and $([System.Char]96)`n"
@@ -188,17 +223,20 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    `${WinPE Partition Drive Letter Precursor} = `${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty $([System.Char]39)DriveLetter$([System.Char]39)`n"
   "    `${WinPE Partition Drive Letter} = [System.String]`${WinPE Partition Drive Letter Precursor} + $([System.Char]39):$([System.Char]39)`n"
   "`n"
-  "    #MakeWinPeMedia.cmd /UFD /f $([System.Char]34)`${Updated ISO Folder Path}$([System.Char]34) $([System.Char]34)`${WinPE Partition Drive Letter}$([System.Char]34) /bootex`n"
-  "    #MakeWinPeMedia.cmd /UFD /f $([System.Char]34)`${WinPE Default ISO Folder Path}$([System.Char]34) $([System.Char]34)`${WinPE Partition Drive Letter}$([System.Char]34) /bootex`n"
-  "    #MakeWinPeMedia.cmd /UFD /f $([System.Char]34)`${Mount Directory Path}$([System.Char]34) $([System.Char]34)`${WinPE Partition Drive Letter}$([System.Char]34) /bootex`n"
-  "    #MakeWinPeMedia.cmd /UFD /f `${Mount Directory Path} `${WinPE Partition Drive Letter} /bootex`n"
-  "    <#`n"
-  "      start msedge.exe $([System.Char]39)https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/makewinpemedia-command-line-options?view=windows-11&source=recommendations#makewinpemedia-parameters$([System.Char]39)`n"
-  "    #>`n"
   "    MakeWinPeMedia.cmd /UFD /f `${Updated ISO Folder Path} `${WinPE Partition Drive Letter} /bootex`n"
   "  }`n"
   "}`n"
   "`t`t"
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -228,6 +266,21 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
       $IsPresent = Test-Path -Path ${Updated ISO Folder Path}
       if (-not $IsPresent) {
         copype.cmd .\amd64\ ${Updated ISO Folder Path}
+
+        foreach (${Culture Excluded} in ${Cultures Excluded}) {
+          Get-ChildItem -Depth 0 -Path ${Updated ISO Folder Path} -Directory `
+          | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
+          | Remove-Item -Recurse -Force
+
+          Get-ChildItem -Depth 1 -Path ${Updated ISO Folder Path} -Directory `
+          | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
+          | Remove-Item -Recurse -Force
+
+          Get-ChildItem -Depth 2 -Path ${Updated ISO Folder Path} -Directory `
+          | Where-Object -FilterScript {$_.BaseName -eq ${Culture Excluded}} `
+          | Remove-Item -Recurse -Force
+        }
+        
         ${Mount Directory Path} = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Outside Mount"; 
         $path = ${Mount Directory Path}; 
         $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -301,22 +354,16 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-<#
-  Prep And  Burn
-  Bootable USB with PowerShell-enabled WinPE
-#>
-
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} -replace '%_OSDeploy FriendlyName_%',${OSDeploy FriendlyName}
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String} -replace '%_OSDeploy SerialNumber_%',${OSDeploy SerialNumber}
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String} -replace '%_OSDeploy UniqueId Raw_%',${OSDeploy UniqueId Raw}
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String} -replace '%_explorer_owner_%',${explorer.exe Owner}
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String} -replace '%_WinPE Workspace Folder Name_%',${WinPE Workspace Folder Name}
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String} -replace '%_WinPE Image Creation Parent Path_%',${WinPE Image Creation Parent Path}
-
+${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable USB with PowerShell-enabled WinPE Command Here-String} -replace '%_FolderFQN_%',$FolderFQN
 
 ${Bootable USB with PowerShell-enabled WinPE Command} = [ScriptBlock]::Create(${Bootable USB with PowerShell-enabled WinPE Command Here-String})
 
-<##>
 ${Bootable USB with PowerShell-enabled WinPE Script Path} = "${WinPE Image Creation Parent Folder}\Bootable USB with PowerShell-enabled WinPE Script.ps1"
 Set-Content -Path ${Bootable USB with PowerShell-enabled WinPE Script Path} -Value (${Bootable USB with PowerShell-enabled WinPE Command Here-String})
 
@@ -326,66 +373,3 @@ return @{
   WorkingDirectory                                         = ${WorkingDirectory}
   'WinPE Image Creation Parent Folder'                     = ${WinPE Image Creation Parent Folder}
 }
-
-<#
-  Start-Process powershell.exe -ArgumentList @(
-    ${Bootable USB with PowerShell-enabled WinPE Command}
-  ) -Verb 'RunAs' -Verbose:$true -WindowStyle 'Normal' -Wait
-#>
-
-<#
-  Start-Process powershell.exe -ArgumentList ${Bootable USB with PowerShell-enabled WinPE Command} -Verb 'RunAs' -Verbose:$true -WindowStyle 'Normal' -Wait
-#>
-<# Unmount the WinPE image and create media |
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11#unmount-the-windows-pe-image-and-create-media'
-#>
-<# CLI Options for the MakeWinPeMedia.cmd batch file |
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/makewinpemedia-command-line-options?view=windows-11&source=recommendations#makewinpemedia-parameters'
-#>
-
-<#
-  $ArgumentList = @(
-    "`${Here-String} = Get-Item -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}' | Get-Content -Raw; `$ScriptBlock = [ScriptBlock]::Create(`${Here-String}); `$ScriptBlock | Invoke-Expression"
-  )
-  Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -Verbose:$true -WindowStyle 'Normal' -Wait
-#>
-
-
-<#
-
-  $WorkingDirectory = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
-  #         ${cmd H-S} = Get-Content -Raw -Path ${Bootable USB with PowerShell-enabled WinPE Script Path}; ${cmd ScBk} = [ScriptBlock]::Create(${cmd H-S}); & ${cmd ScBk}
-  $path = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Updated ISO"
-  $IsPresent = Test-Path -Path $path
-  if (-not $IsPresent) {
-    Start-Process -FilePath cmd.exe -ArgumentList @(
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
-      "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; `${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}"
-    ) -Verb 'RunAs' -Wait
-  }
-#>
-
-<#
-  $path = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Updated ISO"
-  $IsPresent = Test-Path -Path $path
-  if (-not $IsPresent) {
-    $ArgumentList = @(
-      $WorkingDirectory
-      ${Bootable USB with PowerShell-enabled WinPE Script Path}
-    )
-    Start-Job -Name ${WinPE Workspace Folder Name} -ArgumentList $ArgumentList -ScriptBlock {
-      $WorkingDirectory = $args[0]
-      ${Bootable USB with PowerShell-enabled WinPE Script Path} = $args[1]
-      Start-Process -FilePath cmd.exe -ArgumentList @(
-        "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
-      ) -Verb 'RunAs' -Verbose:$true -WindowStyle 'Hidden' -Wait
-    }
-  }
-#>
-
-
-
-
-
-
-
