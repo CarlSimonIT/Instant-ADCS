@@ -1,20 +1,13 @@
 #region | Location - Culture - Geography |
-
-
-
-
-
+$PSModuleInfo = Import-Module 'LanguagePackManagement' -PassThru -Force
 
 if (${Computer Info Lite}.WindowsInstallationType -ne 'Server Core') {
   ${SetupUILanguage-UILanguage} = Get-SystemPreferredUILanguage
 }
 
-
 ${InputLocale} = ('{0:x4}' -f (Get-Culture).LCID) + ':' + ('{0:x8}' -f (Get-Culture).KeyboardLayoutId)
 
-
 ${SystemLocale} = ('{0:x4}' -f (Get-Culture).LCID) + ':' + ('{0:x8}' -f (Get-Culture).KeyboardLayoutId)
-
 
 if (${Computer Info Lite}.WindowsInstallationType -ne 'Server Core') {
   ${UILanguage} = Get-SystemPreferredUILanguage
@@ -22,11 +15,8 @@ if (${Computer Info Lite}.WindowsInstallationType -ne 'Server Core') {
 
 ${UserLocale} = (Get-Culture).IetfLanguageTag
 
-
-<# Use the .NET class instead of a cmdlet! 
+<# Use the .NET class instead of a cmdlet? |
   [System.Globalization.CultureInfo]::CurrentCulture
   (Get-Culture).GetType().FullName
 #>
-
 #endregion
-
