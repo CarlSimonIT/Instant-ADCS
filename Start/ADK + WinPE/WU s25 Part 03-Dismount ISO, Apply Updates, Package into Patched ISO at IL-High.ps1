@@ -48,7 +48,7 @@ ${Extracted ISO Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\Extract
 
 <#
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-HereStringCompatible.ps1"
+  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-NoTabsHereStringCompatible.ps1"
 #>
 
 ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Command Here-String Precursor} = $(
@@ -136,7 +136,7 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "`t`t"
 
   #endregion
-  { # Created with '.\ConvertTo-HereStringCompatible.ps1' |
+  { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
     ${.CommonItems} = '%_.CommonItems_%'
     [System.Environment]::SetEnvironmentVariable('.CommonItems','%_.CommonItems_%')
     $PSModuleInfo = Import-Module 'Storage' -PassThru -Force
