@@ -2,16 +2,26 @@
 #Requires -PSEdition Desktop
 
 param (
-  ${Windows Server 2025 ISO Original File Path},
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${Windows Server 2025 ISO Original File Path}, 
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
   ${Windows Server 2025 ISO Patched File Path}
 )
 
+Set-StrictMode -Version 'Latest'
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$PSScriptRoot\..\..\..\.CommonItems")
 
 $FolderFQN = Import-CliXml -Path "${env:.CommonItems}\FolderFQN.clixml"
-${WU Server25 Scripts Parent Folder Path} = "${env:.CommonItems}\usb0\$FolderFQN\Microsoft\OS\Server 25" 
-${Extracted ISO Folder Path} = "${env:.CommonItems}\usb0\$FolderFQN\Microsoft\OS\Server 25\Extracted ISO"
-${mounted_wim Folder Path} = "${env:.CommonItems}\usb0\$FolderFQN\Microsoft\OS\Server 25\mounted_wim"
+${WU Server25 Scripts Parent Folder Path} = "${env:.CommonItems}\Offline WU\Server 25" 
+${Extracted ISO Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\Extracted ISO"
+${mounted_wim Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\mounted_wim"
 
 <#
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
