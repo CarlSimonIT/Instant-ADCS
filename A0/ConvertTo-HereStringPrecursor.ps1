@@ -16,7 +16,7 @@ function ConvertTo-HereStringPrecursor {
     )]
     [System.UInt32]
     [Alias('esq')]
-    $ExternalSpacesQuantity = 1
+    $ExternalSpacesQuantity = 2
   )
 
   # Copy PowerShell code to Windows Clipboard BEFORE to executing ConvertTo-HereStringPrecursor. 
@@ -45,25 +45,25 @@ function ConvertTo-HereStringPrecursor {
   )
 
   # Process each line 
-  $LinesNew = foreach ($LineOld in $LinesOld) {
+  $LinesNewPrecursor = foreach ($LineOld in $LinesOld) {
     ## replace all grave accent characters with $([System.Char]96)
-    $LineNew = $LineOld -replace '`$','$([System.Char]96)'
+    $LineNewPrecursor = $LineOld -replace '`$','$([System.Char]96)'
     
     ## Escape all PowerShell variables by replacing dollar-sign characters with `$
-    $LineNew = $LineNew -replace '\$','`$'
+    $LineNewPrecursor = $LineNewPrecursor -replace '\$','`$'
 
     ## Replace all single-quote characters with $([System.Char]39)
-    $LineNew = $LineNew -replace [Regex]::Escape($([System.Char]39)),'$([System.Char]39)'
+    $LineNewPrecursor = $LineNewPrecursor -replace [Regex]::Escape($([System.Char]39)),'$([System.Char]39)'
 
     ## Replace all double-quote characters with $([System.Char]34)
-    $LineNew = $LineNew -replace [Regex]::Escape($([System.Char]34)),'$([System.Char]34)'
+    $LineNewPrecursor = $LineNewPrecursor -replace [Regex]::Escape($([System.Char]34)),'$([System.Char]34)'
 
     ## Un-escape any pattern that matches an element of the
     ## 'Escaped text sequences' array
     foreach (${Escaped text sequence} in ${Escaped text sequences}) {
       $Length = ${Escaped text sequence}.Length
       ${Un-escaped text sequence} = ${Escaped text sequence}.Substring(1,$Length - 1)
-      $LineNew = $LineNew.Replace(${Escaped text sequence},${Un-escaped text sequence})
+      $LineNewPrecursor = $LineNewPrecursor.Replace(${Escaped text sequence},${Un-escaped text sequence})
     }
 
     ## Left-concatenate "$InternalTabsQuantity" tab characters represented as plain-text
@@ -71,38 +71,44 @@ function ConvertTo-HereStringPrecursor {
       ${Tabs To Left-Concatenate} = [System.String]::Join(
         (1..$InternalTabsQuantity).ForEach({"`t"}),''
       )
-      $LineNew = ${Tabs To Left-Concatenate} + $LineNew
+      $LineNewPrecursor = ${Tabs To Left-Concatenate} + $LineNewPrecursor
     }
 
     ## Right-concatenate a NewLine character represented as plain-text (`n)
-    $LineNew = $LineNew + '`n'
+    $LineNewPrecursor = $LineNewPrecursor + '`n'
+
 
     ## Enclose in double-quotes. 
-    $LineNew = $([System.Char]34) + $LineNew + $([System.Char]34)
+    $LineNewPrecursor = $([System.Char]34) + $LineNewPrecursor + $([System.Char]34)
 
-    <# Left-concatenate "$ExternalSpacesQuantity" spaces on the double-quoted string |
-      if ($ExternalSpacesQuantity -gt 0) {
-        ${Spaces To Left-Concatenate} = [System.String]::Join(
-          (1..$ExternalSpacesQuantity).ForEach({' '}),''
-        )
-        $LineNew = ${Spaces To Left-Concatenate} + $LineNew
-      }
-    #>
     <# Eliminate all spacing characters left of the double-quoted string |
       if (
-        $LineNew -match '^(?<Extraneous_SpacingChars>\s+)(?<Double_Quoted_String>.*)$'
+        $LineNewPrecursor -match '^(?<Extraneous_SpacingChars>\s+)(?<Double_Quoted_String>.*)$'
       ) {
-        $LineNew = $Matches['Double_Quoted_String']
+        $LineNewPrecursor = $Matches['Double_Quoted_String']
       }
     #>
 
-    ## Return the $LineNew
-    $LineNew
+    ## Return the $LineNewPrecursor
+    $LineNewPrecursor
   }
 
   ## Top-concatenate a double quote-enclosed NewLine character represented as plain-text
   ## Lower-concatenate two double quote-enclosed tab characters represented as plain-text
-  $LinesNew = @('"`n"') + $LinesNew + @('"`t`t"')
+  $LinesNewPrecursor = @('"`n"') + $LinesNewPrecursor + @('"`t`t"')
+
+
+  ${Spaces To Left-Concatenate} = ''
+  if ($ExternalSpacesQuantity -gt 0) {
+    ${Spaces To Left-Concatenate} = (1..$ExternalSpacesQuantity | ForEach-Object -Process {Write-Output ' '}) -join ''
+    #${Spaces To Left-Concatenate} = [System.String]::Join((1..$ExternalSpacesQuantity).ForEach({''}),' ')
+  }
+  #write-host -object "`${Spaces To Left-Concatenate}.Length = $(${Spaces To Left-Concatenate}.Length)"
+  #write-host -object "`${Spaces To Left-Concatenate}.Count = $(${Spaces To Left-Concatenate}.Count)"
+
+  $LinesNew = foreach ($LineNewPrecursor in $LinesNewPrecursor) {
+    "${Spaces To Left-Concatenate}" + $LineNewPrecursor
+  }
 
   # Define & write modified text to new temporary file
   $FileNew = New-TemporaryFile
@@ -111,4 +117,3 @@ function ConvertTo-HereStringPrecursor {
   # Copy modified text to Windows Clipboard
   $LinesNew | Set-Clipboard
 }
-
