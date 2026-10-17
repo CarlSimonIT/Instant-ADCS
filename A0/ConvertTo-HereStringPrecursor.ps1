@@ -33,15 +33,15 @@ function ConvertTo-HereStringPrecursor {
   ${Escaped text sequences} = @(
     '`$__DirectoryForDscConfigs'
     '`$([System.Char]96)'
-    '${usb0 FriendlyName}'
-    '${usb0 UniqueId}'
-    '${usb0 SerialNumber}'
-    '${usb1 FriendlyName}'
-    '${usb1 UniqueId Raw}'
-    '${usb1 SerialNumber}'
-    '${OSDeploy FriendlyName}'
-    '${OSDeploy UniqueId Raw}'
-    '${OSDeploy SerialNumber}'
+    '`${usb0 FriendlyName}'
+    '`${usb0 UniqueId}'
+    '`${usb0 SerialNumber}'
+    '`${usb1 FriendlyName}'
+    '`${usb1 UniqueId Raw}'
+    '`${usb1 SerialNumber}'
+    '`${OSDeploy FriendlyName}'
+    '`${OSDeploy UniqueId Raw}'
+    '`${OSDeploy SerialNumber}'
   )
 
   # Process each line 
