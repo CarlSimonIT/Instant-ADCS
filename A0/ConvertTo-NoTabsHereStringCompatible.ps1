@@ -16,12 +16,23 @@ $LinesOld = Get-Content -Path $FileOld.FullName
 ## that must be resolved prior to compiling the here-string.
 ${Escaped text sequences} = @(
   '`$__DirectoryForDscConfigs'
-  '`$usb0_FriendlyName'
-  '`$usb0_UniqueId'
-  '`$usb0_SerialNumber'
-  '`$usb1_FriendlyName'
-  '`$usb1_UniqueId'
-  '`$usb1_SerialNumber'
+  #'`$usb0_FriendlyName'
+  #'`$usb0_UniqueId'
+  #'`$usb0_SerialNumber'
+  #'`$usb1_FriendlyName'
+  #'`$usb1_UniqueId'
+  #'`$usb1_SerialNumber'
+
+
+  '${usb0 FriendlyName}'
+  '${usb0 UniqueId}'
+  '${usb0 SerialNumber}'
+  '${usb1 FriendlyName}'
+  '${usb1 UniqueId Raw}'
+  '${usb1 SerialNumber}'
+  '${OSDeploy FriendlyName}'
+  '${OSDeploy UniqueId Raw}'
+  '${OSDeploy SerialNumber}'
   '`$([System.Char]96)'
 )
 
@@ -65,6 +76,8 @@ $LinesNew = foreach ($LineOld in $LinesOld) {
 ## Top-concatenate a double quote-enclosed NewLine character represented as plain-text
 ## Lower-concatenate two double quote-enclosed tab characters represented as plain-text
 $LinesNew = @('"`n"') + $LinesNew + @('"`t`t"')
+
+
 
 # Define & write modified text to new temporary file
 $FileNew = New-TemporaryFile
