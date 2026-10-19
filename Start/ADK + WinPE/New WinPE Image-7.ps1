@@ -1,18 +1,4 @@
 <#
-  Deployment Tools Reference for WinPE. 
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
-
-  All changes to the running instance of a WinPE OS are lost when WinPE reboots, including drivers, drive letters, and the WinPE Registry. 
-  You'll want a customized WinPE image to work with:  
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11'
-
-  Create bootable WinPE Media
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
-
-  start msedge.exe ''
-
-  Boot To WinPE
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
 #>
 #region | Default WinPE ISO File |
 $amd64_XX = 'amd64_03'
@@ -23,7 +9,7 @@ ${Make WinPE Media Here-String Precursor} = @'
   copype.cmd amd64 $WinPeIsoFolderPath
   MakeWinPeMedia.cmd /ISO $WinPeIsoFolderPath $WinPeIsoFolderPath\WinPE_amd64.iso
 '@
-${Make WinPE Media Here-String} = ${Make WinPE Media Here-String Precursor} -replace '%_amd64_XX_%',$amd64_XX
+${Make WinPE Media Here-String} = ${Make WinPE Media Here-String Precursor} -replace '%_amd64_XX_%', $amd64_XX
 Set-Content -Path "$env:Temp\Make_WinPE_Media_Script.ps1" -Value (${Make WinPE Media Here-String})
 $WorkingDirectory = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
 Start-Process -FilePath cmd.exe -ArgumentList @(
@@ -31,9 +17,7 @@ Start-Process -FilePath cmd.exe -ArgumentList @(
 ) -Verb 'RunAs'
 #endregion
 #region | Custom WinPE ISO File derived from default WinPE .iso |
-#region | Add Windows PowerShell support to the WinPE OS |
-# start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11'
-
+#region |  |
 
 
 ${DISM_Testing Here-String} = @'
@@ -384,15 +368,7 @@ foreach ($WindowsPowerShellModuleName in $WindowsPowerShellModuleNames) {
   write "Extract the Dell-provided drivers and don't forget the Mellanox drivers!"
   Dism.exe /Image:"$ns\reimages\m0unted_w1m" /Get-Capabilities > "$env:NoSync\Hyper-V Prep\Capabilities.txt"
 #>
-<# Installation of the RSATs on an offline mounted image of Windows 11 Enterprise | I'm starting to accept that this isn't possible! |
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-non-language-fod?view=windows-11#remote-server-administration-tools-rsat'
-  start msedge.exe 'https://github.com/IrrevocableNoob/RSAT-FOD-Offline-Install'
-  start msedge.exe 'https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs'
-  start msedge.exe 'https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites'
-  start msedge.exe 'https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.6584.250904-1728.ge_release_svc_prod1_amd64fre_InboxApps.iso'
-
-  # Add Windows Capabilities: 
-  DISM.exe /Image:"$ns\reimages\m0unted_w1m" /Add-Capability /CapabilityName:"Rsat.ServerManager.Tools~~~~0.0.1.0" /Source:"$usb0\"
+<# 
 #>
 
 # Apply Update Package
