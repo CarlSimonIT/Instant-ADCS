@@ -30,11 +30,6 @@ ${WinPE Image Creation Parent Folder} = try {
 
 
 <#
-  On GPT drives the System partition is the "EFI System Partition", or the ESP. 
-  Stored on primary hard drive, which means the hard drive that contains an OS for the end-user? 
-  A device boots to the ESP. 
-
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#system-partition'
 #>
 
 
@@ -84,7 +79,7 @@ ${EFI System Partition on Removable External Bootable Media Command Here-String 
       ${WinPE Bootable USB Volume Letter} = ${FAT32 Volume on ESP CIM Instance}.DriveLetter + ':'
     }
     #########################################-BOUNDARY-#########################################
-   } | Out-Null  
+  } | Out-Null
 ) -join ''
 
 
