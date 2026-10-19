@@ -45,12 +45,6 @@ ${Extracted ISO Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\Extract
 #. "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Lightweight Functions.ps1"
 # "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\output\Instant-ADCS\usb1\Instant-ADCS\Base\5.1\Lightweight Functions.ps1"
 
-
-<#
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  . "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\A0\ConvertTo-NoTabsHereStringCompatible.ps1"
-#>
-
 ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Command Here-String Precursor} = $(
   #region | usings | #requirements | Strict Mode | Variables |
   "#Requires -Version 5.1`n"
@@ -61,7 +55,13 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "`n"
   #endregion
   #########################################-BOUNDARY-#########################################
-  #region | Dismount Original ISO of Windows Server 2025 |
+  #region | Dismount Original ISO of Windows Server 2025 | Mount .wim file | Patch images & dismount .wim | split .wim | Generate patched .iso file |
+
+
+
+
+
+
   "`n"
   "`${.CommonItems} = $([System.Char]39)%_.CommonItems_%$([System.Char]39)`n"
   "[System.Environment]::SetEnvironmentVariable($([System.Char]39).CommonItems$([System.Char]39),$([System.Char]39)%_.CommonItems_%$([System.Char]39))`n"
@@ -82,14 +82,16 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "`n"
   "# Ensure $([System.Char]39)Windows Server Image Index Set$([System.Char]39) is an array, not a string.`n"
   "`${Windows Server Image Index Set As String} = $([System.Char]39)%_Windows Server Image Index Set As String_%$([System.Char]39)`n"
-  "`${Windows Server Image Index Set} = `${Windows Server Image Index Set As String} -split $([System.Char]39),$([System.Char]39)    `n"
-  "`n"
+  "`${Windows Server Image Index Set} = `${Windows Server Image Index Set As String} -split $([System.Char]39),$([System.Char]39)`n"
   "`n"
   "`${Extracted ISO Folder Path} = $([System.Char]39)%_Extracted ISO Folder Path_%$([System.Char]39)`n"
   "`${Windows Server 2025 ISO Patched File Path} = $([System.Char]39)%_Windows Server 2025 ISO Patched File Path_%$([System.Char]39)`n"
   "`${WU Server25 Scripts Parent Folder Path} = $([System.Char]39)%_WU Server25 Scripts Parent Folder Path_%$([System.Char]39)`n"
   "`n"
   "& { # Mount .wim | Apply packages to images | Generate patched .iso |`n"
+  "  `$path = `${mounted_wim Folder Path}`n"
+  "  `${mounted_wim Folder} = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "`n"
   "  Set-Location -Path $([System.Char]34)`${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM$([System.Char]34)`n"
   "  `${ForEach Loop Start Time} = [DateTime]::Now`n"
   "`n"
@@ -124,19 +126,30 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "  `$sec = `${ForEach Loop TimeSpan}.Seconds`n"
   "  Write-Verbose -Message $([System.Char]34)  Function total duration on $([System.Char]39)Windows Server Image Index$([System.Char]39) = `${Windows Server Image Index}`$([System.Char]58) `$(`$min)m`$(`$sec)s$([System.Char]34)`n"
   "`n"
+  "  `$path = $([System.Char]34)`${Extracted ISO Folder Path}\..\Split$([System.Char]34)`n"
+  "  `${Split Folder} = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  dism.exe /Split-Image /ImageFile:$([System.Char]34)`${Extracted ISO Folder Path}\sources\install.wim$([System.Char]34) /SWMFile:$([System.Char]34)`${Split Folder}\install.swm$([System.Char]34) /FileSize:4000`n"
+  "`n"
   "  Set-Location -Path $([System.Char]34)`${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg$([System.Char]34)`n"
   "  #Copy-Item -Path $([System.Char]34).\efisys.bin$([System.Char]34) -Destination $([System.Char]34)`$ns\reimages\HelpFiles$([System.Char]34) -Force`n"
+  "  # start msedge.exe $([System.Char]39)https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options?view=windows-11$([System.Char]39)`n"
   "  .\oscdimg.exe -b$([System.Char]34).\efisys.bin$([System.Char]34) -pEF -u1 -udfver102 `${Extracted ISO Folder Path} `${Windows Server 2025 ISO Patched File Path}`n"
   "  #Set-Location $([System.Char]34)`$env:SystemDrive$([System.Char]34)`n"
   "`n"
-  "  Start-Sleep 10`n"
-  "  Get-Item -Path `${Extracted ISO Folder Path} | Remove-Item -Recurse -Force`n"
+  "  Start-Sleep 5`n"
+  "  #Get-Item -Path `${Extracted ISO Folder Path} | Remove-Item -Recurse -Force`n"
   "  Get-Item -Path `${mounted_wim Folder Path} | Remove-Item -Recurse -Force`n"
   "}`n"
   "`t`t"
+  
+
+
+
+
+
 
   #endregion
-  { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
+  { # Created with ConvertTo-HereStringPrecursor |
     ${.CommonItems} = '%_.CommonItems_%'
     [System.Environment]::SetEnvironmentVariable('.CommonItems','%_.CommonItems_%')
     $PSModuleInfo = Import-Module 'Storage' -PassThru -Force
@@ -156,14 +169,16 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
 
     # Ensure 'Windows Server Image Index Set' is an array, not a string.
     ${Windows Server Image Index Set As String} = '%_Windows Server Image Index Set As String_%'
-    ${Windows Server Image Index Set} = ${Windows Server Image Index Set As String} -split ','    
-
+    ${Windows Server Image Index Set} = ${Windows Server Image Index Set As String} -split ','
 
     ${Extracted ISO Folder Path} = '%_Extracted ISO Folder Path_%'
     ${Windows Server 2025 ISO Patched File Path} = '%_Windows Server 2025 ISO Patched File Path_%'
     ${WU Server25 Scripts Parent Folder Path} = '%_WU Server25 Scripts Parent Folder Path_%'
 
     & { # Mount .wim | Apply packages to images | Generate patched .iso |
+      $path = ${mounted_wim Folder Path}
+      ${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
       Set-Location -Path "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM"
       ${ForEach Loop Start Time} = [DateTime]::Now
 
@@ -198,13 +213,18 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
       $sec = ${ForEach Loop TimeSpan}.Seconds
       Write-Verbose -Message "  Function total duration on 'Windows Server Image Index' = ${Windows Server Image Index}$([System.Char]58) $($min)m$($sec)s"
 
+      $path = "${Extracted ISO Folder Path}\..\Split"
+      ${Split Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      dism.exe /Split-Image /ImageFile:"${Extracted ISO Folder Path}\sources\install.wim" /SWMFile:"${Split Folder}\install.swm" /FileSize:4000
+
       Set-Location -Path "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg"
       #Copy-Item -Path ".\efisys.bin" -Destination "$ns\reimages\HelpFiles" -Force
+      # start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options?view=windows-11'
       .\oscdimg.exe -b".\efisys.bin" -pEF -u1 -udfver102 ${Extracted ISO Folder Path} ${Windows Server 2025 ISO Patched File Path}
       #Set-Location "$env:SystemDrive"
 
-      Start-Sleep 10
-      Get-Item -Path ${Extracted ISO Folder Path} | Remove-Item -Recurse -Force
+      Start-Sleep 5
+      #Get-Item -Path ${Extracted ISO Folder Path} | Remove-Item -Recurse -Force
       Get-Item -Path ${mounted_wim Folder Path} | Remove-Item -Recurse -Force
     }
 
