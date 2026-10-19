@@ -39,14 +39,6 @@ Get-Disk | Where-Object -FilterScript {$_.FriendlyName -eq 'Samsung Flash Drive'
 Get-Disk | Where-Object -FilterScript {$_.FriendlyName -eq 'Samsung Flash Drive'} | Initialize-Disk -PartitionStyle 'GPT'
 
 #region | System Partition |
-<#
-  On GPT drives the System partition is the "EFI System Partition", or the ESP. 
-  Stored on primary hard drive, which means the hard drive that contains an OS for the end-user? 
-  A device boots to the ESP. 
-
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#system-partition'
-#>
-
 ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
   $_.FriendlyName -eq 'Samsung Flash Drive'
 } | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$false -PassThru
@@ -85,29 +77,4 @@ Get-ChildItem -Path ${WinPE Monted ISO Volume Letter} -Directory | ForEach-Objec
 Get-ChildItem -Path ${WinPE Monted ISO Volume Letter} -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination ${WinPE Bootable USB Volume Letter}}
 
 ${Dismounted ISO CIM Instance} = ${Mounted ISO CIM Instance} | Dismount-DiskImage
-
-
 #endregion
-
-
-
-
-
-start msedge.exe 'https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/set-id'
-start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11'
-
-# WinPE Startup Scripts: 
-start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/wpeinit-and-startnetcmd-using-winpe-startup-scripts?view=windows-11'
-# 
-
-
-
-# Apply Windows images on a newly created partition: 
-start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-system-and-recovery-partitions?view=windows-11'
-# Windows Factory OS for OEMs. Windows Factory OS is targeted at two use cases: factory floor and driver development. 
-start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/factoryos/?view=windows-11'
-# Install Windows from a Flash Drive
-'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive?view=windows-11'
-# Deployment Lab Sample Scripts
-start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oem-deployment-of-windows-desktop-editions-sample-scripts?view=windows-11&preserve-view=true#-createpartitions-uefitxt'
-
