@@ -21,7 +21,7 @@ Set-StrictMode -Version 'Latest'
 $FolderFQN = Import-CliXml -Path "${env:.CommonItems}\FolderFQN.clixml"
 ${WU Server25 Scripts Parent Folder Path} = "${env:.CommonItems}\Offline WU\Server 25" 
 ${Extracted ISO Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\Extracted ISO"
-${mounted_wim Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\mounted_wim"
+#${mounted_wim Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\mounted_wim"
 
 <#
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
@@ -46,6 +46,8 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
   #endregion
   #region | Mount Original Unpatched ISO File |
 
+
+
   "`n"
   "`${.CommonItems} = $([System.Char]39)%_.CommonItems_%$([System.Char]39)`n"
   "[System.Environment]::SetEnvironmentVariable($([System.Char]39).CommonItems$([System.Char]39),$([System.Char]39)%_.CommonItems_%$([System.Char]39))`n"
@@ -54,11 +56,12 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
   "`$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
   "`${WU Server25 Scripts Parent Folder Path} = $([System.Char]39)%_WU Server25 Scripts Parent Folder Path_%$([System.Char]39)`n"
   "`${Extracted ISO Folder Path} = $([System.Char]39)%_Extracted ISO Folder Path_%$([System.Char]39)`n"
-  "`${mounted_wim Folder Path} = $([System.Char]39)%_mounted_wim Folder Path_%$([System.Char]39)`n"
+  "#`${mounted_wim Folder Path} = $([System.Char]39)%_mounted_wim Folder Path_%$([System.Char]39)`n"
+  "`n"
   "`n"
   "& {`n"
   "  `$path = `${Extracted ISO Folder Path}; `${Extracted ISO Folder} = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
-  "  `$path = `${mounted_wim Folder Path}; `${mounted_wim Folder} = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  #`$path = `${mounted_wim Folder Path}; `${mounted_wim Folder} = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "`n"
   "  `$HT = @{`n"
   "    ImagePath     = `${Windows Server 2025 ISO Original File Path}`n"
@@ -79,6 +82,12 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
   "  Export-CliXml -Path $([System.Char]34)`${env:.CommonItems}\Mounted ISO Drive Letter.clixml$([System.Char]34) -InputObject (`${Mounted ISO Drive Letter})`n"
   "}`n"
   "`t`t"
+
+
+
+
+
+
   #endregion
   #########################################-BOUNDARY-#########################################
   { # Created with '.\ConvertTo-NoTabsHereStringCompatible.ps1' |
@@ -89,11 +98,12 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
     $PSModuleInfo = Import-Module 'Storage' -PassThru -Force
     ${WU Server25 Scripts Parent Folder Path} = '%_WU Server25 Scripts Parent Folder Path_%'
     ${Extracted ISO Folder Path} = '%_Extracted ISO Folder Path_%'
-    ${mounted_wim Folder Path} = '%_mounted_wim Folder Path_%'
+    #${mounted_wim Folder Path} = '%_mounted_wim Folder Path_%'
+
 
     & {
-      $path = ${Extracted ISO Folder Path}; ${Extracted ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-      $path = ${mounted_wim Folder Path}; ${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      #$path = ${Extracted ISO Folder Path}; ${Extracted ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      #$path = ${mounted_wim Folder Path}; ${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
       $HT = @{
         ImagePath     = ${Windows Server 2025 ISO Original File Path}
@@ -113,6 +123,7 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
       ${Mounted ISO Drive Letter} = [System.String]${Mounted ISO Drive Letter Precursor} + ':'
       Export-CliXml -Path "${env:.CommonItems}\Mounted ISO Drive Letter.clixml" -InputObject (${Mounted ISO Drive Letter})
     }
+
   } | Out-Null
   #########################################-BOUNDARY-#########################################
 ) -join ''
@@ -121,9 +132,9 @@ ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-
   -replace '%_\.CommonItems_%',${env:.CommonItems} `
   -replace '%_Windows Server 2025 ISO Original File Path_%',${Windows Server 2025 ISO Original File Path} `
   -replace '%_Windows Server 2025 ISO Patched File Path_%',${Windows Server 2025 ISO Patched File Path} `
-  -replace '%_WU Server25 Scripts Parent Folder Path_%',${WU Server25 Scripts Parent Folder Path} `
-  -replace '%_Extracted ISO Folder Path_%',${Extracted ISO Folder Path} `
-  -replace '%_mounted_wim Folder Path_%',${mounted_wim Folder Path}
+  -replace '%_WU Server25 Scripts Parent Folder Path_%',${WU Server25 Scripts Parent Folder Path}
+  #-replace '%_Extracted ISO Folder Path_%',${Extracted ISO Folder Path}
+  #-replace '%_mounted_wim Folder Path_%',${mounted_wim Folder Path}
 ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} = "${WU Server25 Scripts Parent Folder Path}\WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script.ps1"
 Set-Content -Path ${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Script Path} -Value (${WU s25 Part 01-Mount Original Windows Server ISO File at IL-High Command Here-String})
 
