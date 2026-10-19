@@ -2,6 +2,7 @@
 #Requires -Version 5.1
 
 function ConvertTo-HereStringPrecursor {
+  [CmdletBinding()]
   [Alias('c2hsp')]
   param (
     [Parameter(
@@ -120,6 +121,7 @@ function ConvertTo-HereStringPrecursor {
 
 function ConvertTo-HereStringCompatible {
   [CmdletBinding()]
+  [Alias('c2hsc')]
   param ()
 
   # Copy PowerShell code to Windows Clipboard prior to executing ConvertTo-HereStringCompatible. 
@@ -289,3 +291,4 @@ function ConvertTo-NoTabsHereStringCompatible {
   # Copy modified text to Windows Clipboard
   $LinesNew | Set-Clipboard
 }
+
