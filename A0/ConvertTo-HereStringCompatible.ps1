@@ -16,12 +16,21 @@ $LinesOld = Get-Content -Path $FileOld.FullName
 ## that must be resolved prior to compiling the here-string.
 ${Escaped text sequences} = @(
   '`$__DirectoryForDscConfigs'
-  '`$usb0_FriendlyName'
-  '`$usb0_UniqueId'
-  '`$usb0_SerialNumber'
-  '`$usb1_FriendlyName'
-  '`$usb1_UniqueId'
-  '`$usb1_SerialNumber'
+  #'`$usb0_FriendlyName'
+  '`${usb0 FriendlyName}'
+  #'`$usb0_UniqueId'
+  '`${usb0 UniqueId}'
+  #'`$usb0_SerialNumber'
+  '`${usb0 SerialNumber}'
+  #'`$usb1_FriendlyName'
+  '`${usb1 FriendlyName}'
+  #'`$usb1_UniqueId'
+  '`${usb1 UniqueId}'
+  #'`$usb1_SerialNumber'
+  '`${usb1 SerialNumber}'
+  '`${OSDeploy FriendlyName}'
+  '`${OSDeploy UniqueId}'
+  '`${OSDeploy SerialNumber}'
   '`$([System.Char]96)'
 )
 
