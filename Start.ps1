@@ -83,15 +83,14 @@ param (
   ${DNS Name of Root Domain in AD Forest}
 )
 
-
 <#
   $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
   $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
-#>
 
-#       Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BlackCoffee'; 'DNS Name of Root Domain in AD Forest' = 'ad.black-coffee-black-coffee-black-coffee-black-coffee.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+#>
 
 #region | Set latest Strict Mode | Exit '.\Start.ps1' script if launched in a powershell.exe process instance running at Integrity Level-High |
 Set-StrictMode -Version 'Latest'
@@ -105,7 +104,7 @@ if (${Current powershell.exe process is running at Integrity Level-High}) {
   Write-Error -Message "`n`n`tExiting Start.ps1 script.`n`n`tRe-launch Windows PowerShell WITHOUT selecting Run As Administrator!`n`n"
   pause
   Get-Process -Id $PID | Stop-Process -Force
-} 
+}
 #endregion
 #region | Export non-senstive strings to .clixml for later import by other applications |
 $HT = @{
@@ -138,7 +137,6 @@ $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Pat
 #endregion
 
 #endregion
-
 #region | Install NuGet | Set PSGallery as Trusted | Update PowerShellGet module | Install 'TUN.CredentialManager' module | Install 'MSCatalog' module
 & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1"
 # Delete Shortly # & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Module for Credential Manager.ps1"
@@ -146,18 +144,15 @@ $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Pat
 #endregion
 #region | Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager |
 $PSModuleInfo = Import-Module 'TUN.CredentialManager' -Force -PassThru
-
 ${1 or more sensitive strings providing access to online Bitwarden Vault need to be written into local Windows Credential Manager} = (
   ((Get-StoredCredential -Target "!BW_CLIENTID $FolderFQN")                 -eq $null) -or `
   ((Get-StoredCredential -Target "!BW_CLIENTSECRET $FolderFQN")             -eq $null) -or `
   ((Get-StoredCredential -Target "!Bitwarden Account Password-DELETE THIS") -eq $null)
 )
-
 if (${1 or more sensitive strings providing access to online Bitwarden Vault need to be written into local Windows Credential Manager}) {
   . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager.ps1"
 }
 #endregion
-
 #region | Ensure target 'output' directory is present in project root |
 . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Ensure target output directory is present in project root.ps1"
 #endregion
@@ -238,7 +233,6 @@ $HT = @{
 # Import '.\Regular Expression Patterns.ps1' for later use
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Regular Expression Patterns.ps1"
 #endregion
-
 #region | Install machine-scope PowerShell 7 and register Event Logging Manifest |
 <#
   ${Win32_Product Name} = Get-CimInstance -ClassName 'Win32_Product' `
@@ -251,6 +245,7 @@ ${Win32_Product Name} = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\Windows\Cu
 | ForEach-Object -Process {
   Get-ItemPropertyValue -Path ${Candidate Registry Key}.PSPath -Name 'DisplayName' | Where-Object -FilterScript {$_ -eq 'PowerShell 7-x64'}
 }
+
 
 if (${Win32_Product Name} -eq $null) {
   . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
@@ -294,65 +289,60 @@ if ($RunningJob -eq $null) {
   }
 }
 #endregion
-
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
 #region | Ensure the 'Original' and 'Patched' Folders have been created |
-#$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
-#${Original Server 2025 IS0 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-#$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
-#${Patched Server 2025 IS0 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
 ${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
 ${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
 #endregion
-${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
-$hash = ${SHA256 of Windows Server 2025 ISO File}
-${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
-| Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
-| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
-| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
-| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
-| Sort-Object -Property 'LastWriteTime' -Descending `
-| Select-Object -First 1
+${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+if (-not ${Is ISO Already Relocated and Renamed}) {
+  ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
+  $hash = ${SHA256 of Windows Server 2025 ISO File}
+  ${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
+  | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
+  | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+  | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+  | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+  | Sort-Object -Property 'LastWriteTime' -Descending `
+  | Select-Object -First 1
 
 
-if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
-  $JobName = 'Download Windows Server 2025 ISO File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
-      "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                    = $args[0]
-      $FilePath                   = $args[1]
-      $OriginalProgressPreference = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
+  if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
+    $JobName = 'Download Windows Server 2025 ISO File'
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
     }
-    $Job | Format-Table -AutoSize
+    if ($RunningJob -eq $null) {
+      $ArgumentList = @(
+        'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+        "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+        $ProgressPreference
+      )
+
+      $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+        $WebPath                    = $args[0]
+        $FilePath                   = $args[1]
+        $OriginalProgressPreference = $args[2]
+
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+        $ProgressPreference = $OriginalProgressPreference
+      } | Out-Null
+      #$Job | Format-Table -AutoSize
+    }
+  } 
+  else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
+    ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+    if (-not ${Is ISO Already Relocated and Renamed}) {
+      Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+      #Copy-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}"
+      #Get-Item -Path "${Offline WU-Original Server 2025 Folder}\$(${Windows Server 2025 ISO Original File}.Name)" | Rename-Item -NewName 'Windows Server 2025.iso'
+    }
   }
-} 
-else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
-  ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-  if (-not ${Is ISO Already Relocated and Renamed}) {
-    Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-    #Copy-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}"
-    #Get-Item -Path "${Offline WU-Original Server 2025 Folder}\$(${Windows Server 2025 ISO Original File}.Name)" | Rename-Item -NewName 'Windows Server 2025.iso'
-  }
-}
+} else {${Windows Server 2025 ISO Original File} = [System.IO.FileInfo]"${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"}
 #endregion
 #region | Download, but do not install, the setup file for the Windows ADK and the Windows PE Add-on |
 #region | Download the Windows ADK installer EXE File |
@@ -684,124 +674,274 @@ switch ($true) {
 #endregion
 #region | External Removable Bootable Media > Clear Disk > EFS (EFI System Partition) |
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
-${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
-  $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
-  $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
-  $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
-}
-$DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
+## I think we can delete ##
+
+#${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+#  $_.FriendlyName -eq ${OSDeploy FriendlyName} -and `
+#  $_.SerialNumber -eq ${OSDeploy SerialNumber} -and `
+#  $_.UniqueId     -eq ${OSDeploy UniqueId Raw}
+#}
+
+#$DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
+
+#     Write-Host -Object "`${OSDeploy Disk CIM Instance}.FriendlyName = $(${OSDeploy Disk CIM Instance}.FriendlyName)"
 
 #endregion
+<#
+  # Notes on running Windows Setup in Windows PE: 
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11#notes-on-running-windows-setup-in-windows-pe'
+  # Configuration Passes Explained
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-configuration-passes?view=windows-11'
 
-<# Unmount the WinPE image and create media |
+  Pure gold: 
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install#download-the-adk-101280001-november-2025'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/download-winpe--windows-pe?view=windows-11'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/deploy-a-custom-image?view=windows-11'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11'
+
+  # Windows Setup Technical Reference. Install Windows OS from a USB:
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-technical-reference?view=windows-11'
+
+  # [ ] Implementation Complete
+  # Use newer version of DISM in WinPE: 
+  # Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
+  # Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
+
+  # Unmount the WinPE image and create media
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11#unmount-the-windows-pe-image-and-create-media'
-#>
-<# CLI Options for the MakeWinPeMedia.cmd batch file |
+  
+  # CLI Options for the MakeWinPeMedia.cmd batch file
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/makewinpemedia-command-line-options?view=windows-11&source=recommendations#makewinpemedia-parameters'
+
+  # DISM in PowerShell
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/use-dism-in-windows-powershell-s14?view=windows-11'
+
+  # Windows 11 Image Creation for OEMs (professional-level)
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/system-builder-deployment?view=windows-11'
+
+  # Install Windows from a Flash Drive
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive?view=windows-11'
+
+  On GPT drives the System partition is the "EFI System Partition", or the ESP. 
+  Stored on primary hard drive, which means the hard drive that contains an OS for the end-user? 
+  A device boots to the ESP:   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#system-partition'
+
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/set-id'
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11'
+
+  # WinPE Startup Scripts: 
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/wpeinit-and-startnetcmd-using-winpe-startup-scripts?view=windows-11'
+
+  # Apply Windows images on a newly created partition: 
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-system-and-recovery-partitions?view=windows-11'
+
+  # Windows Factory OS for OEMs. Windows Factory OS is targeted at two use cases: factory floor and driver development. 
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/factoryos/?view=windows-11'
+
+  # Install Windows from a Flash Drive
+  'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive?view=windows-11'
+
+  # Deployment Lab Sample Scripts
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oem-deployment-of-windows-desktop-editions-sample-scripts?view=windows-11&preserve-view=true#-createpartitions-uefitxt'
+  
+  
+  
+  
+  
+  
+  
+  
+  # GPT Type
+  start msedge.exe 'https://learn.microsoft.com/en-us/powershell/module/storage/new-partition?view=windowsserver2025-ps#-gpttype'
+
+
+
+
+
+
+
+
+
+  Deployment Tools Reference for WinPE. 
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
+
+  All changes to the running instance of a WinPE OS are lost when WinPE reboots, including drivers, drive letters, and the WinPE Registry. 
+  You'll want a customized WinPE image to work with:  
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11'
+
+  Create bootable WinPE Media
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
+
+  start msedge.exe ''
+
+  Boot To WinPE
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
+
+  
+  
+  # Add Windows PowerShell support to the WinPE OS
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11'
+
+
+  Installation of the RSATs on an offline mounted image of Windows 11 Enterprise | I'm starting to accept that this isn't possible! |
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-non-language-fod?view=windows-11#remote-server-administration-tools-rsat'
+  start msedge.exe 'https://github.com/IrrevocableNoob/RSAT-FOD-Offline-Install'
+  start msedge.exe 'https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs'
+  start msedge.exe 'https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites'
+  start msedge.exe 'https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.6584.250904-1728.ge_release_svc_prod1_amd64fre_InboxApps.iso'
+
+  # Add Windows Capabilities: 
+  DISM.exe /Image:"$ns\reimages\m0unted_w1m" /Add-Capability /CapabilityName:"Rsat.ServerManager.Tools~~~~0.0.1.0" /Source:"$usb0\"
+
+
+  On GPT drives the System partition is the "EFI System Partition", or the ESP. 
+  Stored on primary hard drive, which means the hard drive that contains an OS for the end-user? 
+  A device boots to the ESP. 
+
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#system-partition'
+
+  # Capture and apply a Windows image using a single .WIM file
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-using-a-single-wim?view=windows-11'
 #>
 
+#region | XML Files |
+& "$PSScriptRoot\Start\ADK + WinPE\XML Answer File Writer.ps1"
+#endregion
 
-#region | PowerShell-enabled WinPE ISO File |
-# [ ] Implementation Complete
-# Use newer version of DISM in WinPE: 
-# Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
-# Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
-${WinPE Workspace Folder Name} = 'PowerShell-Infused'
-$InputHT = @{
-  'WinPE Workspace Folder Name' = ${WinPE Workspace Folder Name}
-}
-#   & "$PSScriptRoot\Start\ADK + WinPE\New PowerShell-enabled WinPE ISO File.ps1" @HT
-$OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Bootable USB with PowerShell-enabled WinPE.ps1" @InputHT
-#   ${Command Here-String} = Get-Content -Raw -Path "C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\WinPE\Bootable USB with PowerShell-enabled WinPE Script.ps1"; ${Command ScriptBlock} = [ScriptBlock]::Create(${Command Here-String}); & ${Command ScriptBlock}
 
-${Bootable USB with PowerShell-enabled WinPE Script Path} = $OutputHT['Bootable USB with PowerShell-enabled WinPE Script Path']
-#Write-Host -Object "`${Bootable USB with PowerShell-enabled WinPE Script Path} = ${Bootable USB with PowerShell-enabled WinPE Script Path}"
-$WorkingDirectory = $OutputHT['WorkingDirectory']
-#Write-Host -Object "`$WorkingDirectory = $WorkingDirectory"
-${WinPE Image Creation Parent Folder} = $OutputHT['WinPE Image Creation Parent Folder']
-#Write-Host -Object "`${WinPE Image Creation Parent Folder} = ${WinPE Image Creation Parent Folder}"
-# $WorkingDirectory = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
-#         ${cmd H-S} = Get-Content -Raw -Path ${Bootable USB with PowerShell-enabled WinPE Script Path}; ${cmd ScBk} = [ScriptBlock]::Create(${cmd H-S}); & ${cmd ScBk}
-$path = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}\Updated ISO"
-#Write-Host -Object "`$path = $path"
-$IsPresent = Test-Path -Path $path
-#Write-Host -Object "`$IsPresent = $IsPresent"
-
-if (-not $IsPresent) {
-  $ArgumentList2 = @(
-    $WorkingDirectory
-    ${Bootable USB with PowerShell-enabled WinPE Script Path}
-  ) 
-  Start-Job -Name 'Bootable USB with PowerShell-enabled WinPE' -ArgumentList $ArgumentList2 -ScriptBlock {
-    $WorkingDirectory = $args[0]
-
-    ${Bootable USB with PowerShell-enabled WinPE Script Path} = $args[1]
-
-    $ArgumentList = @(
-      "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; `${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}"
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Start-Job {`${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}}"
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (Start-Job {`${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk}})"
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (`${cmd H-S} = gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'; `${cmd ScBk} = [ScriptBlock]::Create(`${cmd H-S}); & `${cmd ScBk})"
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (`${cmd ScBk} = [ScriptBlock]::Create((gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}')); & `${cmd ScBk})"
-      #"/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; iex -command (& ([ScriptBlock]::Create((gc -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}'))))"
+#region | PowerShell-enabled Removable External Bootable Media for WinPE Deployment |
+if ($null -ne ${OSDeploy Disk CIM Instance}) { # If the USB isn't detected/connected, then don't attempt work on that USB!
+  ${WinPE Workspace Folder Name} = 'PowerShell-Infused'
+  $InputHT = @{
+    'WinPE Workspace Folder Name' = ${WinPE Workspace Folder Name}
+  }
+  $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\Bootable USB with PowerShell-enabled WinPE.ps1" @InputHT
+  ${Bootable USB with PowerShell-enabled WinPE Script Path} = $OutputHT['Bootable USB with PowerShell-enabled WinPE Script Path']
+  $WorkingDirectory = $OutputHT['WorkingDirectory']
+  ${WinPE Image Creation Parent Folder} = $OutputHT['WinPE Image Creation Parent Folder']
+  $path = "${WinPE Image Creation Parent Folder}\${WinPE Workspace Folder Name}"
+  $IsPresent = Test-Path -Path $path
+  if (-not $IsPresent) {
+    $ArgumentList2 = @(
+      $WorkingDirectory
+      ${Bootable USB with PowerShell-enabled WinPE Script Path}
     ) 
-    Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'Hidden' -Wait  #  -NoNewWindow
+    Start-Job -Name 'Bootable USB with PowerShell-enabled WinPE' -ArgumentList $ArgumentList2 -ScriptBlock {
+      $WorkingDirectory = $args[0]
+      ${Bootable USB with PowerShell-enabled WinPE Script Path} = $args[1]
+      $ArgumentList = @(
+        "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
+      )
+      Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'Hidden' -Wait  #  -NoNewWindow
+    } | Out-Null
   }
 }
 #endregion
-
 #region | Patch offline Windows Server 2025 .iso file |
 #region | Re-confirm that 'Windows Server 2025.iso' has downloaded to the 'Original' directory |
-#$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
-#$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
+#region | Ensure the 'Original' and 'Patched' Folders have been created |
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
 ${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
 ${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
+${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+if (-not ${Is ISO Already Relocated and Renamed}) {
+  ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
+  $hash = ${SHA256 of Windows Server 2025 ISO File}
+  ${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
+  | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
+  | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+  | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+  | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+  | Sort-Object -Property 'LastWriteTime' -Descending `
+  | Select-Object -First 1
 
-${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
-$hash = ${SHA256 of Windows Server 2025 ISO File}
-${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
-| Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
-| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
-| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
-| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
-| Sort-Object -Property 'LastWriteTime' -Descending `
-| Select-Object -First 1
 
-if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
-  $JobName = 'Download Windows Server 2025 ISO File'
-  $RunningJob = Get-Job | Where-Object -FilterScript {
-    $_.Name  -eq $JobName  -and `
-    $_.State -eq 'Running'
-  }
-  if ($RunningJob -eq $null) {
-    $ArgumentList = @(
-      'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
-      "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-      $ProgressPreference
-    )
-
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
-      $WebPath                    = $args[0]
-      $FilePath                   = $args[1]
-      $OriginalProgressPreference = $args[2]
-
-      $ProgressPreference = 'SilentlyContinue'
-      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
-      $ProgressPreference = $OriginalProgressPreference
+  if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
+    $JobName = 'Download Windows Server 2025 ISO File'
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
     }
-    $Job | Format-Table -AutoSize
+    if ($RunningJob -eq $null) {
+      $ArgumentList = @(
+        'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+        "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+        $ProgressPreference
+      )
+
+      $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+        $WebPath                    = $args[0]
+        $FilePath                   = $args[1]
+        $OriginalProgressPreference = $args[2]
+
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+        $ProgressPreference = $OriginalProgressPreference
+      } | Out-Null
+      #$Job | Format-Table -AutoSize
+    }
+  } 
+  else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
+    ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+    if (-not ${Is ISO Already Relocated and Renamed}) {
+      Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+      #Copy-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}"
+      #Get-Item -Path "${Offline WU-Original Server 2025 Folder}\$(${Windows Server 2025 ISO Original File}.Name)" | Rename-Item -NewName 'Windows Server 2025.iso'
+    }
   }
-} 
-else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
-  ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-  if (-not ${Is ISO Already Relocated and Renamed}) {
-    Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+} else {${Windows Server 2025 ISO Original File} = [System.IO.FileInfo]"${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"}
+
+<# This takes way to long, so don't bother |
+  $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
+  ${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+  $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
+  ${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+  ${SHA256 of Windows Server 2025 ISO File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Windows Server 2025 ISO File.clixml"
+  $hash = ${SHA256 of Windows Server 2025 ISO File}
+  ${Windows Server 2025 ISO Original File} = Get-ChildItem -Path ${env:.CommonItems} -Recurse -File -ErrorAction 'SilentlyContinue' `
+  | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.iso'} `
+  | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+  | Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+  | ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+  | Sort-Object -Property 'LastWriteTime' -Descending `
+  | Select-Object -First 1
+
+  if (${Windows Server 2025 ISO Original File} -eq $null) { # Download the unpatched ISO file for Server 2025 if not detected anywhere within ${env:.CommonItems} |
+    $JobName = 'Download Windows Server 2025 ISO File'
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
+    }
+    if ($RunningJob -eq $null) {
+      $ArgumentList = @(
+        'https://go.microsoft.com/fwlink/?linkid=2293312&clcid=0x409&culture=en-us&country=us'
+        "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+        $ProgressPreference
+      )
+
+      $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+        $WebPath                    = $args[0]
+        $FilePath                   = $args[1]
+        $OriginalProgressPreference = $args[2]
+
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+        $ProgressPreference = $OriginalProgressPreference
+      }
+      $Job | Format-Table -AutoSize
+    }
+  } 
+  else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
+    ${Is ISO Already Relocated and Renamed} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+    if (-not ${Is ISO Already Relocated and Renamed}) {
+      Move-Item -Path ${Windows Server 2025 ISO Original File}.FullName -Destination "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+    }
   }
-}
+#>
 #endregion
 #region | Deploy new directory for downloading latest Windows Updates |
 # Write-Host "`n`tPatch Tuesday Of This Month:`n"
@@ -826,7 +966,7 @@ $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $
 #endregion
 #region | Download Latest Windows Updates for Server 2025 |
 ${Windows Updates Directory FullName} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\${Windows Updates Directory BaseName}" | Select-Object -ExpandProperty 'Path'
-Write-host -object "`${Windows Updates Directory FullName} = ${Windows Updates Directory FullName}"
+#Write-host -object "`${Windows Updates Directory FullName} = ${Windows Updates Directory FullName}"
 
 ${Download Latest Windows Updates for Server 2025-Note to User} = @"
   MANDATORY: Obtain the latest Cumulative Updates for Windows Server 2025
@@ -855,13 +995,11 @@ pause
 #region | Apply Windows Updates patches to an offline Windows Server 2025 image |
 Write-Host -Object "`n  Apply Windows Updates patches to an offline Windows Server 2025 image.   `n" -ForegroundColor ([System.ConsoleColor]::DarkMagenta)
 ${Executed Command} = @'
-  blah blah blah
 '@
 Write-Host -Object "  Literal text representation of command being executed is:`n" -ForegroundColor ([System.ConsoleColor]::DarkMagenta)
 Write-Host -Object ${Executed Command} -ForegroundColor ([System.ConsoleColor]::DarkYellow)
 Write-Host -Object "`n  Supply admin credentials when the UAC prompt appears:`n  " -ForegroundColor ([System.ConsoleColor]::DarkMagenta)
 pause
-
 
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\Packages"
 $PackagesFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -873,17 +1011,22 @@ Get-ChildItem -Path ${Windows Updates Directory FullName} -File | ForEach-Object
   }
 }
 
-if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
+if (
+  #$null -ne ${Windows Server 2025 ISO Original File}
+  $null -ne "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+) { # $false |
   $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
-  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-  ${Windows Server 2025 ISO Patched File} = [System.IO.FileInfo]"$folder\Windows Server 2025.iso"
+  ${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+  ${Windows Server 2025 ISO Patched File} = [System.IO.FileInfo]"${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso"
   $IsPresent = Test-Path -Path ${Windows Server 2025 ISO Patched File}.FullName
   if (-not $IsPresent) {
-    $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
-    ${Extracted ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-    $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
-    ${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ## Stop creating these directories before they're needed. Causes conflicts with other subsequent operations
+    #$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
+    #${Extracted ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ${Extracted ISO Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
+    #$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
+    #${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ${mounted_wim Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
 
     <#
       $InputHT = @{
@@ -955,7 +1098,7 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     #>
 
     $InputHT = @{
-      'Extracted ISO Folder Path' = "${Extracted ISO Folder}"
+      'Extracted ISO Folder Path' = ${Extracted ISO Folder Path}
     }
     $OutputHT = & "$PSScriptRoot\Start\ADK + WinPE\WU s25 Part 02-Copy Mounted Contents at IL-Medium.ps1" @InputHT
     ${WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path} = $OutputHT['WU s25 Part 02-Copy Mounted Contents at IL-Medium Script Path']
@@ -983,8 +1126,8 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Windows Server Image Index.ps1"
 
     ${Windows Server Image Index Set} = [System.UInt32[]]@(
-      #[System.UInt32][WindowsServerImageIndex]::StandardServerCore
-      #[System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
+      [System.UInt32][WindowsServerImageIndex]::StandardServerCore
+      [System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
       #[System.UInt32][WindowsServerImageIndex]::DatacenterServerCore
       [System.UInt32][WindowsServerImageIndex]::DatacenterDesktopExperience
     )
@@ -995,7 +1138,7 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     $InputHT = @{
       'Windows Server Image Index Set'            = ${Windows Server Image Index Set}
       'install.wim File Path'                     = ${install.wim File Path}
-      'mounted_wim Folder Path'                   = "${mounted_wim Folder}"
+      'mounted_wim Folder Path'                   = ${mounted_wim Folder Path}
       'Package Directory Path'                    = "$PackagesFolder"
       'Windows Server 2025 ISO Patched File Path' = ${Windows Server 2025 ISO Patched File}.FullName
     }
@@ -1027,24 +1170,72 @@ if ($null -ne ${Windows Server 2025 ISO Original File}) { # $false |
     }
   }
 }
+#endregion
+#endregion
+#region | Write install.swm files to OSDeploy |
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Split"
+${Offline WU-Split Wim Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+${Windows Server 2025 Split Wim File} = [System.IO.FileInfo]"${Offline WU-Split Wim Server 2025 Folder}\install.swm"
+$IsPresent = Test-Path -Path ${Windows Server 2025 Split Wim File}
+if ($IsPresent) { # If the .swm is present, then format the other 80% of the $OSDeploy USB drive |
+  # Check if the  |
+  $JobName = "WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($null -ne $RunningJob) {
+    Get-Job -Name $RunningJob | Wait-Job    
+  }
+
+  # Format the other 80% of the $OSDeploy USB drive. It's a simple Robocopy. 
+  # Oh fuck, but then how would the goddamn autounattend.xml work!? 
+  # the .swm is compatible with  autounattend.xml. 
+
+  <#
+    #region | Detect Removable External Storage Media |
+    #region | Patterns |
+    #${Pattern UniqueId Raw-OLD} = '^(?<Unique_ID>.+)\:(?<Computer_Name>(?!(\d{1,15}|ANONYMOUS|BATCH|BUILTIN|DIALUP|DOMAIN|ENTERPRISE|INTERACTIVE|INTERNET|LOCAL|NETWORK|NULL|PROXY|RESTRICTED|SELF|SERVER|SERVICE|SYSTEM|USERS|WORLD)$)[a-z0-9][a-z0-9-]{1,13}[a-z0-9])$'
+    #${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(\:)?$'
+    #${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(\:.*)?$'
+    #${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)((?<Discarded>\:.*))?$'
+    #${Pattern UniqueId Raw} = '^(?<Unique_ID>.+)(?<Discarded>\:.*)?$'
+    ${Pattern UniqueId Raw} = '^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?$'
+    #endregion
+    #region | Save to variable the volume letter of the external bootable media |
+    ${OSDeploy FriendlyName} = 'Samsung Flash Drive'
+    ${OSDeploy UniqueId Raw} = 'USBSTOR\DISK&VEN_SAMSUNG&PROD_FLASH_DRIVE&REV_1100\0373515120000331&0:DESKTOP-6OM9723'
+    ${OSDeploy UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
+    ${OSDeploy UniqueId} = $Matches['Unique_ID']
+    ${OSDeploy SerialNumber} = 'AA00000000000489'
+
+    $disk = Get-Disk | Where-Object -FilterScript {
+      $_.FriendlyName -eq    ${OSDeploy FriendlyName}                                             -and `
+      $_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(${OSDeploy UniqueId}) -and `
+      $_.SerialNumber -eq    ${OSDeploy SerialNumber}
+    }
+    if ($null -ne $disk) {
+      #$partition = Get-Partition -DiskNumber $disk.Number | Select-Object -First 1
+      ${Volume DriveLetters Precursor} = Get-Partition -DiskNumber $disk.Number | Get-Volume | Select-Object -ExpandProperty 'DriveLetter'
+      #$OSDeploy = [System.String]$partition.DriveLetter + ":"
+      foreach (${Volume DriveLetter Precursor} in ${Volume DriveLetters Precursor}) {
+        ${Volume DriveLetter} = [System.String]${Volume DriveLetter Precursor} + ':'
+        $IsWindowsOS = Test-Path -Path "${Volume DriveLetter}\setup.exe"
+        if ($IsWindowsOS) {
+          $OSDeploy = ${Volume DriveLetter}
+        }
+      }
+    }
+    #endregion
+    #endregion
 
 
 
-
-
-
+  #>
+}
 
 
 #endregion
-#endregion
-
-
-
-
-
-
-
-
 #region | Download, but do not install, DSC Resource modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
 #            $path = 'C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
@@ -1078,8 +1269,6 @@ ${DSC Resource Module Names} = @(
   'xPSDesiredStateConfiguration'
 )
 Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource Module Names.clixml" -InputObject (${DSC Resource Module Names})
-
-
 
 $_Var_Name = 'DetectionSet'
 try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
@@ -1304,18 +1493,5 @@ if ($DetectionSet -gt 0) {
 #region | Resume authoring the custom AdHocInstantAdcsDsc DSC Resource module | Write build script upon completion |
 # This is not going to be easy. 
 # . powershell.exe -NoProfile -File "$PSScriptRoot\Start\AdHocInstantAdcsDsc\build.ps1"
-# Best if rewritten on the Unclustered Hyper-V host
-
+# Best if rewritten on the Unclustered Hyper-V host. 
 #endregion
-#region | XML Files |
-#endregion
-
-
-
-
-
-
-
-
-
-
