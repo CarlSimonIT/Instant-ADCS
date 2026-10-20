@@ -806,7 +806,7 @@ switch ($true) {
 #>
 
 #region | XML Files |
-& "$PSScriptRoot\Start\ADK + WinPE\XML Answer File Writer.ps1"
+#& "$PSScriptRoot\Start\ADK + WinPE\XML Answer File Writer.ps1"
 #endregion
 
 
@@ -833,7 +833,7 @@ if ($null -ne ${OSDeploy Disk CIM Instance}) { # If the USB isn't detected/conne
       $ArgumentList = @(
         "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
       )
-      Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'Hidden' -Wait  #  -NoNewWindow
+      Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'Normal' -Wait  #  -NoNewWindow
     } | Out-Null
   }
 }
@@ -1233,8 +1233,6 @@ if ($IsPresent) { # If the .swm is present, then format the other 80% of the $OS
 
   #>
 }
-
-
 #endregion
 #region | Download, but do not install, DSC Resource modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
