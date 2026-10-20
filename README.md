@@ -135,8 +135,8 @@ Get these devices. Sign up for these accounts.
 <details>
 <summary>Computers</summary>
 
-1. Your personal computer to deploy bootable media and generate precursor files. Windows 11 Home is sufficient. 
-2. A desktop computer with 1 blank hard drive and no other persistent storage. This Hyper-V host machine will run Windows Server 2025 Datacenter. 
+1. Technician PC running a client edition of Windows 11.  
+2. A desktop computer with at least 1 blank hard drive. This Hyper-V host machine will run Windows Server 2025 Datacenter. 
     * Minimum 16GB RAM
     * Virtualization-capable CPU
     * 3+ USB ports. 
