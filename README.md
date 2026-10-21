@@ -59,8 +59,8 @@ Configure a new directory for cloning multiple GitHub repositories. <span style=
   <summary>Relocate to Empty Working Directory</summary>
 
   ```powershell
-  ${Intermediary Directory} = Read-Host -Prompt 'Optional: Partial path of intermediary directory'
-  $CloningRepoPath = "$env:UserProfile\GitHub\${Intermediary Directory}\CarlSimonIT"
+  ${Intermediary Partial Path} = Read-Host -Prompt 'Optional: Partial path of Intermediary Partial Path'
+  $CloningRepoPath = "$env:UserProfile\GitHub\${Intermediary Partial Path}\CarlSimonIT"
   $CloningRepoFolder = try {
     Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'
   } catch {
@@ -102,9 +102,32 @@ Define new hidden directory for information exchange between PowerShell versions
 
 Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>. 
 
+
+
+<details>
+  <summary></summary>
+
+  ```powershell
+  ```
+</details>
+
+
+
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
 ```
+
+
+
+<details>
+  <summary></summary>
+
+  ```powershell
+  ```
+</details>
+
+
 
 Declare input variables, run <u>Start.ps1</u> and follow the subsequent on-screen instructions.  
 
@@ -120,6 +143,55 @@ $InputHT = @{
 }
 & '.\Instant-ADCS\Start.ps1' @InputHT
 ```
+
+
+#### Hardware-specific Drivers (Optional)
+Drivers specific to your hardware is not something this project can automate. You will have to undertake this manual work yourself, if you so desire. My example will feature a Dell Precision 3460 SFF. 
+
+
+
+<details>
+  <summary>WinPE Drivers</summary>
+
+  Dell Command | Deploy WinPE 11.0 Driver Pack
+  Driver Id : KHF4P 
+  Importance : Optional
+  Version : 1.0, A11
+  Release Date : 14 Oct 2026
+  Download Type : Driver
+  Category : Systems Management
+  This package contains the Dell Command | Deploy WinPE Driver Pack. 
+  Dell Command | Deploy WinPE Driver Pack contains the drivers in the form of .cab files for Dell systems. 
+  This driver pack helps with the Windows operating system deployment process by using 
+    Microsoft End Point Manager Configuration Manager (MEMCM) or 
+    Microsoft System Center Configuration Manager (SCCM), and 
+    Microsoft Deployment Toolkit (MDT). 
+  To see the list of drivers that are updated as part of the driver pack, open Dell Command | Deploy Driver Pack and 
+  click the download link for your system.
+
+
+
+  https://dl.dell.com/FOLDER15124565M/1/WinPE11.0-Drivers-A11-KHF4P.xml
+  https://dl.dell.com/FOLDER15124566M/1/WinPE11.0-Drivers-A11-KHF4P.html
+
+  Confirm working directory is still cloning repo folder.   
+  ```powershell
+  ${Intermediary Partial Path} = 'InterM3d\mc3'
+  $CloningRepoFolder = Get-Item -Path "$env:UserProfile\GitHub\${Intermediary Partial Path}\CarlSimonIT"
+  Set-Location -Path "$CloningRepoFolder"
+  $FolderFQN = Import-CliXml -Path ".\.CommonItems\FolderFQN.clixml"
+  & ".\$FolderFQN\Drivers.ps1"
+  ```
+
+  Dot-source the unique identifers for removable external bootable media. Mount the boot.wim inside the WinPE volume. 
+  ```powershell
+
+  ```
+</details>
+
+
+
+
 
 ### (Refine)
 
