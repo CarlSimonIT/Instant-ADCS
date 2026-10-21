@@ -119,11 +119,7 @@ $HT = @{
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 
-
 #region | Define new folder structures. Same code is re-executed later in Start.ps1 when applicable |
-#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server  25\Original"
-#$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Original"
 ${Offline WU-Original Server 2025 Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Patched"
@@ -132,10 +128,7 @@ ${Offline WU-Patched Server 2025 Folder} = try {Get-Item -Path $path -ErrorActio
 $InstallsPath = "$PSScriptRoot\..\.CommonItems\WinPE"
 $path = "$InstallsPath\ADK + WinPE (2026-09)"
 $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-
 #endregion
-
 #endregion
 #region | Install NuGet | Set PSGallery as Trusted | Update PowerShellGet module | Install 'TUN.CredentialManager' module | Install 'MSCatalog' module
 & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1"
@@ -280,13 +273,13 @@ if ($RunningJob -eq $null) {
   $ArgumentList = @(
     "$PSScriptRoot\Start"
   )
-  $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+  Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
     $StartFolder = $args[0]
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that calls pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that compiles the Quick Lookup Table.csv File.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that updates the password for logging into the bare-metal unclustered Hyper-V host.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$StartFolder\PowerShell 5.1 Job that writes passwords from local Secrets Vault into local Windows Credential Manager.ps1"
-  }
+  } | Out-Null
 }
 #endregion
 #region | Download Windows Server .ISO file | Download Windows 11 Enterprise .ISO file |
@@ -322,7 +315,7 @@ if (-not ${Is ISO Already Relocated and Renamed}) {
         $ProgressPreference
       )
 
-      $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
         $WebPath                    = $args[0]
         $FilePath                   = $args[1]
         $OriginalProgressPreference = $args[2]
@@ -373,7 +366,7 @@ if (${Windows ADK 2026-09 EXE File} -eq $null) {
       $ProgressPreference
     )
 
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                    = $args[0]
       $FilePath                   = $args[1]
       $OriginalProgressPreference = $args[2]
@@ -381,7 +374,7 @@ if (${Windows ADK 2026-09 EXE File} -eq $null) {
       $ProgressPreference = 'SilentlyContinue'
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
-    }
+    } | Out-Nul
   }
 }
 #endregion
@@ -416,7 +409,7 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
       $ProgressPreference
     )
 
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                    = $args[0]
       $FilePath                   = $args[1]
       $OriginalProgressPreference = $args[2]
@@ -424,7 +417,7 @@ if (${WinPE 2026-09 EXE File} -eq $null) {
       $ProgressPreference = 'SilentlyContinue'
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
-    }
+    } | Out-Null
   }
 }
 #endregion
@@ -684,8 +677,8 @@ switch ($true) {
 
 #$DriveLetter = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
 
-Write-Host -Object "`${OSDeploy Disk CIM Instance}.FriendlyName = $(${OSDeploy Disk CIM Instance}.FriendlyName)"
-pause
+# Write-Host -Object "`${OSDeploy Disk CIM Instance}.FriendlyName = $(${OSDeploy Disk CIM Instance}.FriendlyName)"
+# pause
 #endregion
 <#
   # Notes on running Windows Setup in Windows PE: 
@@ -699,9 +692,6 @@ pause
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/deploy-a-custom-image?view=windows-11'
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11'
-
-  # Windows Setup Technical Reference. Install Windows OS from a USB:
-  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-technical-reference?view=windows-11'
 
   # [ ] Implementation Complete
   # Use newer version of DISM in WinPE: 
@@ -805,8 +795,20 @@ pause
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-using-a-single-wim?view=windows-11'
 #>
 
+<#
+  # Windows Setup Technical Reference. Install Windows OS from a USB:
+  start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-technical-reference?view=windows-11'
+
+
+
+  
+
+
+
+#>
+
 #region | XML Files |
-#& "$PSScriptRoot\Start\ADK + WinPE\XML Answer File Writer.ps1"
+& "$PSScriptRoot\Start\ADK + WinPE\XML Answer File Writer.ps1"
 #endregion
 
 
@@ -833,7 +835,7 @@ if ($null -ne ${OSDeploy Disk CIM Instance}) { # If the USB isn't detected/conne
       $ArgumentList = @(
         "/c $([System.Char]34)$WorkingDirectory\DandISetEnv.bat$([System.Char]34) && powershell.exe -NoProfile -ExecutionPolicy 'RemoteSigned'; Invoke-Expression -Command (Get-Content -Raw -Path '${Bootable USB with PowerShell-enabled WinPE Script Path}');"
       )
-      Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'MAximized' -Wait  #  -NoNewWindow
+      Start-Process -FilePath cmd.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WorkingDirectory $WorkingDirectory -WindowStyle 'Hidden' -Wait  #  -NoNewWindow
     } | Out-Null
   }
 }
@@ -872,7 +874,7 @@ if (-not ${Is ISO Already Relocated and Renamed}) {
         $ProgressPreference
       )
 
-      $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
         $WebPath                    = $args[0]
         $FilePath                   = $args[1]
         $OriginalProgressPreference = $args[2]
@@ -881,7 +883,6 @@ if (-not ${Is ISO Already Relocated and Renamed}) {
         Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
         $ProgressPreference = $OriginalProgressPreference
       } | Out-Null
-      #$Job | Format-Table -AutoSize
     }
   } 
   else { # If an unpatched ISO file for Server 2025 is confirmed to be inside ${env:.CommonItems}, ensure that file has been transplanted and appropriately renamed |
@@ -1011,6 +1012,10 @@ Get-ChildItem -Path ${Windows Updates Directory FullName} -File | ForEach-Object
   }
 }
 
+# These variables are referenced elsewhere in '.\Start.ps1' so they must be defined unconditionally. 
+${Extracted ISO Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
+${mounted_wim Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
+
 if (
   #$null -ne ${Windows Server 2025 ISO Original File}
   $null -ne "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
@@ -1023,10 +1028,10 @@ if (
     ## Stop creating these directories before they're needed. Causes conflicts with other subsequent operations
     #$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
     #${Extracted ISO Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-    ${Extracted ISO Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
+    #${Extracted ISO Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\Extracted ISO"
     #$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
     #${mounted_wim Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-    ${mounted_wim Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
+    #${mounted_wim Folder Path} = "$PSScriptRoot\..\.CommonItems\Offline WU\Server 25\mounted_wim"
 
     <#
       $InputHT = @{
@@ -1165,7 +1170,7 @@ if (
         Start-Job -Name $JobName -ArgumentList $ArgumentListJob -ScriptBlock {
           $ArgumentListProcess = $args[0]
           Start-Process -FilePath powershell.exe -ArgumentList $ArgumentListProcess -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
-        }
+        } | Out-Null
       }
     }
   }
@@ -1352,7 +1357,7 @@ if (-not $IsPresent) {
       $ProgressPreference
     )
 
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                    = $args[0]
       $FilePath                   = $args[1]
       $OriginalProgressPreference = $args[2]
@@ -1360,8 +1365,7 @@ if (-not $IsPresent) {
       $ProgressPreference = 'SilentlyContinue'
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
+    } | Out-Null
   }
 }
 #endregion
@@ -1388,7 +1392,7 @@ if (-not $IsPresent) {
       $ProgressPreference
     )
 
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                    = $args[0]
       $FilePath                   = $args[1]
       $OriginalProgressPreference = $args[2]
@@ -1396,8 +1400,7 @@ if (-not $IsPresent) {
       $ProgressPreference = 'SilentlyContinue'
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
+    } | Out-Null
   }
 }
 #endregion
@@ -1424,7 +1427,7 @@ if (-not $IsPresent) {
       $ProgressPreference
     )
 
-    $Job = Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
       $WebPath                    = $args[0]
       $FilePath                   = $args[1]
       $OriginalProgressPreference = $args[2]
@@ -1432,8 +1435,7 @@ if (-not $IsPresent) {
       $ProgressPreference = 'SilentlyContinue'
       Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
       $ProgressPreference = $OriginalProgressPreference
-    }
-    $Job | Format-Table -AutoSize
+    } | Out-Null
   }
 }
 #endregion
@@ -1492,4 +1494,37 @@ if ($DetectionSet -gt 0) {
 # This is not going to be easy. 
 # . powershell.exe -NoProfile -File "$PSScriptRoot\Start\AdHocInstantAdcsDsc\build.ps1"
 # Best if rewritten on the Unclustered Hyper-V host. 
+#endregion
+
+#region |  |
+${Is setup.exe present in Extracted ISO} = Test-Path -Path "${Extracted ISO Folder Path}\setup.exe"
+${Is mounted_wim folder deleted} = -not (Test-Path -Path ${mounted_wim Folder Path})
+
+${Is Extracted ISO ready for copy to UFD} = (${Is setup.exe present in Extracted ISO} -eq $true) -and (${Is mounted_wim folder deleted} -eq $true)
+
+if (${Is Extracted ISO ready for copy to UFD}) {
+  . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
+
+  ${OSDeploy Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+    $_.FriendlyName -eq    ${OSDeploy FriendlyName}                                             -and `
+    $_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(${OSDeploy UniqueId}) -and `
+    $_.SerialNumber -eq    ${OSDeploy SerialNumber}
+  }
+  ${Server25 Volume} = ${OSDeploy Disk CIM Instance} `
+  | Get-Partition `
+  | Where-Object -FilterScript {$_.Type -eq 'IFS'} `
+  | Get-Volume
+  ${Server25 Volume Root} = [System.String]${Server25 Volume}.DriveLetter + ':'
+
+  ${Is Copy of Extracted ISo to UFD Complete} = Test-Path -Path "${Server25 Volume Root}\setup.exe"
+  if (-not ${Is Copy of Extracted ISo to UFD Complete}) {
+    robocopy.exe /e ${Extracted ISO Folder Path} ${Server25 Volume Root} *
+  }
+}
+
+
+
+
+
+
 #endregion
