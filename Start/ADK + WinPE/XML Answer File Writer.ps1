@@ -3356,11 +3356,12 @@ ${LocalAccount Node}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
 #region | Save to removable external storage media |
 $XmlDocument.ChildNodes[0].Encoding = $null
 
-# autounattend.xml belongs on $OSDeploy but will place on $usb1 for the moment. 
+# autounattend.xml belongs on $OSDeploy but will put in 'output\$FolderFQN\usb1' for the moment
 # Rename current autounattend.xml, if present |
 if (Test-Path -Path "$usb1\autounattend.xml") {
   Rename-Item -Path "$usb1\autounattend.xml" -NewName "autounattend $(Call-DateVar).xml"
 }
 # Save XML file to bootable media
 $XmlDocument.Save("$usb1\autounattend.xml")
+$XmlDocument.Save("$PSScriptRoot\..\..\output\$FolderFQN\usb1\autounattend.xml")
 #endregion
