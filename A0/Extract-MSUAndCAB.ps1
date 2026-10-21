@@ -1,3 +1,4 @@
+function Extract-MSUAndCAB {
   <#
     Sourced from SupportArticles-docs repository at 'https://github.com/MicrosoftDocs'
     start msedge.exe 'https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/support-tools/scripts-extract-msu-cab-files.md'
@@ -103,3 +104,4 @@
 
   Write-Host "Extraction completed. Files are located in $destinationPath"
   return $destinationPath
+}
