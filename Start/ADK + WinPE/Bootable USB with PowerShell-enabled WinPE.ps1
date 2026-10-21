@@ -6,6 +6,7 @@ param (
 )
 
 Set-StrictMode -Version 'Latest'
+
 #region | Multi-script common variables |
 ${explorer.exe Owner} = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\explorer.exe Owner.clixml"
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
@@ -435,8 +436,6 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "      #endregion`n"
   "    }`n"
   "`t`t"
-
-
   #endregion
 
   #endregion
@@ -529,33 +528,45 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`${WinPE Workspace Folder Name}      = $([System.Char]39)%_WinPE Workspace Folder Name_%$([System.Char]39)`n"
   "`${explorer.exe Owner}               = $([System.Char]39)%_explorer_owner_%$([System.Char]39)`n"
   "`${WinPE Image Creation Parent Path} = $([System.Char]39)%_WinPE Image Creation Parent Path_%$([System.Char]39)`n"
+  "`$FolderFQN                          = $([System.Char]39)%_FolderFQN_%$([System.Char]39)`n"
+  "`${.CommonItems}                     = $([System.Char]39)%_.CommonItems_%$([System.Char]39)`n"
   "`n"
-  "`$FolderFQN = $([System.Char]39)%_FolderFQN_%$([System.Char]39)`n"
-  "`${.CommonItems} = $([System.Char]39)%_.CommonItems_%$([System.Char]39)`n"
+  "Set-ExecutionPolicy -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -Scope $([System.Char]39)Process$([System.Char]39) -Force`n"
+  ". $([System.Char]34)`${.CommonItems}\..\`$FolderFQN\output\`$FolderFQN\usb1\`$FolderFQN\Base\5.1\Computer Info Lite.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`${.CommonItems}\..\`$FolderFQN\output\`$FolderFQN\usb1\`$FolderFQN\Base\5.1\Location - Culture - Geography.ps1$([System.Char]34)`n"
   "`${Cultures Defined} = Import-CliXml -Path $([System.Char]34)`${.CommonItems}\Cultures Defined.clixml$([System.Char]34)`n"
   "`${Cultures Excluded} = `${Cultures Defined}.Where({`$_ -ne `${UserLocale}})`n"
   "#endregion`n"
   "& {`n"
   "  #region | New Precursor Volume for eventual WinPE |`n"
-  "  `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
+  "  `${Uncleared OSDeploy Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
   "    `$_.FriendlyName -eq $([System.Char]34)${OSDeploy FriendlyName}$([System.Char]34) -and $([System.Char]96)`n"
   "    `$_.SerialNumber -eq $([System.Char]34)${OSDeploy SerialNumber}$([System.Char]34) -and $([System.Char]96)`n"
   "    `$_.UniqueId     -eq $([System.Char]34)${OSDeploy UniqueId Raw}$([System.Char]34)`n"
   "  }`n"
-  "  #`${Cleared Disk CIM Instance} = `${Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$true -PassThru`n"
   "`n"
-  "  `${Disk CIM Instance} | Set-Disk -PartitionStyle $([System.Char]39)MBR$([System.Char]39) -Verbose:`$true`n"
-  "  `${MBR Partition 0 CIM Instance} = `${Disk CIM Instance} | New-Partition -Size 1400MB -AssignDriveLetter -MbrType $([System.Char]39)FAT32$([System.Char]39) -Verbose:`$true`n"
+  "  `${OSDeploy Disk CIM Instance} = `${Uncleared OSDeploy Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$true -PassThru`n"
   "`n"
-  "  # The entirety of the EFI System Partition must contain a FAT32-formatted volume:`n"
+  "  `${OSDeploy Disk CIM Instance} | Set-Disk -PartitionStyle $([System.Char]39)MBR$([System.Char]39) -Verbose:`$true`n"
+  "  `${WinPE Partition Size} = 1400MB`n"
+  "  `${MBR Partition 1 on OSDeploy Disk CIM Instance} = `${OSDeploy Disk CIM Instance} | New-Partition -Size (`${WinPE Partition Size}) -AssignDriveLetter -MbrType $([System.Char]39)FAT32$([System.Char]39) -Verbose:`$true`n"
+  "`n"
+  "  # The volume on the WinPE partition must be FAT32-formatted: `n"
   "  `$NewFileSystemLabel = $([System.Char]39)PRE_WINPE$([System.Char]39)`n"
-  "  `${FAT32 Volume on MBR Partition 0 CIM Instance} = Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -DriveLetter `${MBR Partition 0 CIM Instance}.DriveLetter -NewFileSystemLabel `$NewFileSystemLabel -Verbose:`$true`n"
+  "  `${WinPE Volume on MBR Partition 1 on OSDeploy Disk CIM Instance} = Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -DriveLetter `${MBR Partition 1 on OSDeploy Disk CIM Instance}.DriveLetter -NewFileSystemLabel `$NewFileSystemLabel -Verbose:`$true`n"
+  "  `${WinPE Volume Drive Letter} = [System.String]`${WinPE Volume on MBR Partition 1 on OSDeploy Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
   "  <# NOTE! |`n"
-  "    # The code below does not resolve any volume letters because at this point $([System.Char]39)PRE_WINPE$([System.Char]39) is a partition, and not a volume! |`n"
-  "    `${WinPE Volume} = Get-Volume -FriendlyName `$NewFileSystemLabel -Verbose:`$true; `n"
-  "    `${WinPE Bootable USB Volume Letter} = `${FAT32 Volume on MBR Partition 0 CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "    # The indented code directly below does not resolve any volume letters because at this point $([System.Char]39)PRE_WINPE$([System.Char]39) is a partition, and not a volume: `n"
+  "      `${WinPE Volume} = Get-Volume -FriendlyName `$NewFileSystemLabel -Verbose:`$true; `n"
+  "      `${WinPE Bootable USB Volume Letter} = `${WinPE Volume on MBR Partition 1 on OSDeploy Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
   "  #>`n"
+  "  #endregion`n"
+  "  #region | New volume for eventual Server25 |`n"
+  "  # The remaining space can be NTFS. It will hold an extracted iso with setup.exe at the root. `n"
+  "  `${MBR Partition 2 on OSDeploy Disk CIM Instance} = `${OSDeploy Disk CIM Instance} | New-Partition -UseMaximumSize -AssignDriveLetter -MbrType $([System.Char]39)IFS$([System.Char]39) -Verbose:`$true`n"
+  "  `$NewFileSystemLabel = $([System.Char]39)Server25$([System.Char]39)`n"
+  "  `${Server25 Volume on MBR Partition 2 on OSDeploy Disk CIM Instance} = Format-Volume -FileSystem $([System.Char]39)NTFS$([System.Char]39) -DriveLetter `${MBR Partition 2 on OSDeploy Disk CIM Instance}.DriveLetter -NewFileSystemLabel `$NewFileSystemLabel -Verbose:`$true`n"
+  "  `${OSDeploy Volume Drive Letter} = [System.String]`${Server25 Volume on MBR Partition 2 on OSDeploy Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
   "  #endregion`n"
   "  #region | Unmodified WinPE |`n"
   "  `${WinPE x64 Tools Path} = $([System.Char]34)`${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64$([System.Char]34)`n"
@@ -753,17 +764,16 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    # Unmount the WinPE image and create media`n"
   "    .\amd64\DISM\dism.exe /Unmount-Image /MountDir:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /Commit`n"
   "`n"
-  "    `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
-  "      `$_.FriendlyName -eq $([System.Char]34)${OSDeploy FriendlyName}$([System.Char]34) -and $([System.Char]96)`n"
-  "      `$_.SerialNumber -eq $([System.Char]34)${OSDeploy SerialNumber}$([System.Char]34) -and $([System.Char]96)`n"
-  "      `$_.UniqueId     -eq $([System.Char]34)${OSDeploy UniqueId Raw}$([System.Char]34)`n"
-  "    }`n"
-  "    `${WinPE Partition Drive Letter Precursor} = `${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty $([System.Char]39)DriveLetter$([System.Char]39)`n"
-  "    `${WinPE Partition Drive Letter} = [System.String]`${WinPE Partition Drive Letter Precursor} + $([System.Char]39):$([System.Char]39)`n"
+  "    # `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
+  "    #   `$_.FriendlyName -eq $([System.Char]34)${OSDeploy FriendlyName}$([System.Char]34) -and $([System.Char]96)`n"
+  "    #   `$_.SerialNumber -eq $([System.Char]34)${OSDeploy SerialNumber}$([System.Char]34) -and $([System.Char]96)`n"
+  "    #   `$_.UniqueId     -eq $([System.Char]34)${OSDeploy UniqueId Raw}$([System.Char]34)`n"
+  "    # }`n"
+  "    #`${WinPE Partition Drive Letter Precursor} = `${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty $([System.Char]39)DriveLetter$([System.Char]39)`n"
+  "    #`${WinPE Volume Drive Letter} = [System.String]`${WinPE Partition Drive Letter Precursor} + $([System.Char]39):$([System.Char]39)`n"
   "`n"
-  "    `n"
+  "    MakeWinPeMedia.cmd /UFD /f `${WinPE Updated boot.wim Extracted Folder Path} `${WinPE Volume Drive Letter} /bootex`n"
   "    <# No need to create this .iso file of WinPE either |`n"
-  "      MakeWinPeMedia.cmd /UFD /f `${WinPE Updated boot.wim Extracted Folder Path} `${WinPE Partition Drive Letter} /bootex`n"
   "      `$path = $([System.Char]34)`${WinPE Image Creation Path}\Updated$([System.Char]34); `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "      MakeWinPeMedia.cmd /ISO `${WinPE Updated boot.wim Extracted Folder Path} $([System.Char]34)`$folder\WinPE.iso$([System.Char]34) /bootex`n"
   "    #>`n"
@@ -775,12 +785,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`t`t"
 
 
-
   #endregion
-
-
-
-
 
 
 
@@ -794,30 +799,42 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
     $FolderFQN                          = '%_FolderFQN_%'
     ${.CommonItems}                     = '%_.CommonItems_%'
 
+    Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
+    . "${.CommonItems}\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Computer Info Lite.ps1"
     . "${.CommonItems}\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Location - Culture - Geography.ps1"
     ${Cultures Defined} = Import-CliXml -Path "${.CommonItems}\Cultures Defined.clixml"
     ${Cultures Excluded} = ${Cultures Defined}.Where({$_ -ne ${UserLocale}})
     #endregion
     & {
       #region | New Precursor Volume for eventual WinPE |
-      ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+      ${Uncleared OSDeploy Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
         $_.FriendlyName -eq "${OSDeploy FriendlyName}" -and `
         $_.SerialNumber -eq "${OSDeploy SerialNumber}" -and `
         $_.UniqueId     -eq "${OSDeploy UniqueId Raw}"
       }
-      #${Cleared Disk CIM Instance} = ${Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$true -PassThru
 
-      ${Disk CIM Instance} | Set-Disk -PartitionStyle 'MBR' -Verbose:$true
-      ${MBR Partition 0 CIM Instance} = ${Disk CIM Instance} | New-Partition -Size 1400MB -AssignDriveLetter -MbrType 'FAT32' -Verbose:$true
+      ${OSDeploy Disk CIM Instance} = ${Uncleared OSDeploy Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$true -PassThru
 
-      # The entirety of the EFI System Partition must contain a FAT32-formatted volume:
+      ${OSDeploy Disk CIM Instance} | Set-Disk -PartitionStyle 'MBR' -Verbose:$true
+      ${WinPE Partition Size} = 1400MB
+      ${MBR Partition 1 on OSDeploy Disk CIM Instance} = ${OSDeploy Disk CIM Instance} | New-Partition -Size (${WinPE Partition Size}) -AssignDriveLetter -MbrType 'FAT32' -Verbose:$true
+
+      # The volume on the WinPE partition must be FAT32-formatted: 
       $NewFileSystemLabel = 'PRE_WINPE'
-      ${FAT32 Volume on MBR Partition 0 CIM Instance} = Format-Volume -FileSystem 'FAT32' -DriveLetter ${MBR Partition 0 CIM Instance}.DriveLetter -NewFileSystemLabel $NewFileSystemLabel -Verbose:$true
+      ${WinPE Volume on MBR Partition 1 on OSDeploy Disk CIM Instance} = Format-Volume -FileSystem 'FAT32' -DriveLetter ${MBR Partition 1 on OSDeploy Disk CIM Instance}.DriveLetter -NewFileSystemLabel $NewFileSystemLabel -Verbose:$true
+      ${WinPE Volume Drive Letter} = [System.String]${WinPE Volume on MBR Partition 1 on OSDeploy Disk CIM Instance}.DriveLetter + ':'
       <# NOTE! |
-        # The code below does not resolve any volume letters because at this point 'PRE_WINPE' is a partition, and not a volume! |
-        ${WinPE Volume} = Get-Volume -FriendlyName $NewFileSystemLabel -Verbose:$true; 
-        ${WinPE Bootable USB Volume Letter} = ${FAT32 Volume on MBR Partition 0 CIM Instance}.DriveLetter + ':'
+        # The indented code directly below does not resolve any volume letters because at this point 'PRE_WINPE' is a partition, and not a volume: 
+          ${WinPE Volume} = Get-Volume -FriendlyName $NewFileSystemLabel -Verbose:$true; 
+          ${WinPE Bootable USB Volume Letter} = ${WinPE Volume on MBR Partition 1 on OSDeploy Disk CIM Instance}.DriveLetter + ':'
       #>
+      #endregion
+      #region | New volume for eventual Server25 |
+      # The remaining space can be NTFS. It will hold an extracted iso with setup.exe at the root. 
+      ${MBR Partition 2 on OSDeploy Disk CIM Instance} = ${OSDeploy Disk CIM Instance} | New-Partition -UseMaximumSize -AssignDriveLetter -MbrType 'IFS' -Verbose:$true
+      $NewFileSystemLabel = 'Server25'
+      ${Server25 Volume on MBR Partition 2 on OSDeploy Disk CIM Instance} = Format-Volume -FileSystem 'NTFS' -DriveLetter ${MBR Partition 2 on OSDeploy Disk CIM Instance}.DriveLetter -NewFileSystemLabel $NewFileSystemLabel -Verbose:$true
+      ${OSDeploy Volume Drive Letter} = [System.String]${Server25 Volume on MBR Partition 2 on OSDeploy Disk CIM Instance}.DriveLetter + ':'
       #endregion
       #region | Unmodified WinPE |
       ${WinPE x64 Tools Path} = "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64"
@@ -1015,17 +1032,16 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         # Unmount the WinPE image and create media
         .\amd64\DISM\dism.exe /Unmount-Image /MountDir:"${Mount Directory Path}" /Commit
 
-        ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
-          $_.FriendlyName -eq "${OSDeploy FriendlyName}" -and `
-          $_.SerialNumber -eq "${OSDeploy SerialNumber}" -and `
-          $_.UniqueId     -eq "${OSDeploy UniqueId Raw}"
-        }
-        ${WinPE Partition Drive Letter Precursor} = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
-        ${WinPE Partition Drive Letter} = [System.String]${WinPE Partition Drive Letter Precursor} + ':'
+        # ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+        #   $_.FriendlyName -eq "${OSDeploy FriendlyName}" -and `
+        #   $_.SerialNumber -eq "${OSDeploy SerialNumber}" -and `
+        #   $_.UniqueId     -eq "${OSDeploy UniqueId Raw}"
+        # }
+        #${WinPE Partition Drive Letter Precursor} = ${Disk CIM Instance} | Get-Partition | Select-Object -ExpandProperty 'DriveLetter'
+        #${WinPE Volume Drive Letter} = [System.String]${WinPE Partition Drive Letter Precursor} + ':'
 
-        
+        MakeWinPeMedia.cmd /UFD /f ${WinPE Updated boot.wim Extracted Folder Path} ${WinPE Volume Drive Letter} /bootex
         <# No need to create this .iso file of WinPE either |
-          MakeWinPeMedia.cmd /UFD /f ${WinPE Updated boot.wim Extracted Folder Path} ${WinPE Partition Drive Letter} /bootex
           $path = "${WinPE Image Creation Path}\Updated"; $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
           MakeWinPeMedia.cmd /ISO ${WinPE Updated boot.wim Extracted Folder Path} "$folder\WinPE.iso" /bootex
         #>
