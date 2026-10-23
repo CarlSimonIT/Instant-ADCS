@@ -74,12 +74,13 @@ $InstallModuleHT = @{
 }
 $ModuleNames = @(
   'TUN.CredentialManager'
-  'MSLab'
-  'MSCatalog'
+  #'MSLab'
+  #'MSCatalog'
 )
 foreach ($ModuleName in $ModuleNames) {
   try {
-    ${PSCustomObject InstalledModule} = Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' -Verbose:$false
+    #${PSCustomObject InstalledModule} = Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' -Verbose:$false
+    $PSModuleInfo = Import-Module $ModuleName -PassThru -Force
     # For some reason the 'TUN.CredentialManager' isn't detectable by Get-InstalledModule, Import-Module, Get-Module, etc. 
   } catch {
     Write-Host -Object "  Ensuring that the '$ModuleName' module`n  for Windows PowerShell is installed in 'CurrentUser' scope:"
