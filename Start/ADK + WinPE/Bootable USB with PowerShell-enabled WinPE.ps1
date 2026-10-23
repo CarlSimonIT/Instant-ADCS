@@ -24,8 +24,11 @@ ${WinPE Image Creation Parent Folder} = try {
 
 #${Cultures Defined} = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\Cultures Defined.clixml"
 ${Cultures Defined} = Import-CliXml -Path "${env:.CommonItems}\Cultures Defined.clixml"
+
 # Import into memory the unique identifiers for the disk holding the external removable bootable media: 
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
+
+$__DirectoryForDscConfigs = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\__DirectoryForDscConfigs.clixml"
 #endregion
 
 #region | Write "${env:.CommonItems}\WinPE\startnet.cmd" to the file system of the technician PC |
@@ -35,12 +38,16 @@ ${startnet.cmd File Contents} = $(
   "`n"
   "wpeinit.exe`n"
   "powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-sample.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-ExecPol.ps1$([System.Char]39)$([System.Char]34)`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\01-DiskPartClean.ps1$([System.Char]39)$([System.Char]34)`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\03-OsDiskPart1.ps1$([System.Char]39)$([System.Char]34)`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\03-OsDiskPart2.ps1$([System.Char]39)$([System.Char]34)`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\05-DismLoad-ApplyImage.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\07-x2cCopyOps.ps1$([System.Char]39)$([System.Char]34)`n"
+  "REM wpeutil.exe reboot`n"
+  "powershell.exe`n"
   "`t`t"
+
   #endregion
 
 
@@ -48,15 +55,14 @@ ${startnet.cmd File Contents} = $(
   { # Create with ConvertTo-HereStringPrecursor |
     wpeinit.exe
     powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-    powershell.exe -command "iex 'Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-sample.ps1'"
+    powershell.exe -command "iex 'Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-ExecPol.ps1'"
     powershell.exe -command "iex '& X:\Scriptoids\01-DiskPartClean.ps1'"
     powershell.exe -command "iex '& X:\Scriptoids\03-OsDiskPart1.ps1'"
     powershell.exe -command "iex '& X:\Scriptoids\03-OsDiskPart2.ps1'"
     powershell.exe -command "iex '& X:\Scriptoids\05-DismLoad-ApplyImage.ps1'"
-
-
-
-
+    powershell.exe -command "iex '& X:\Scriptoids\07-x2cCopyOps.ps1'"
+    REM wpeutil.exe reboot
+    powershell.exe
   } | Out-Null
   #########################################-BOUNDARY-#########################################
 ) -join ''
@@ -65,41 +71,53 @@ ${startnet.cmd File Path} = "${WinPE Image Creation Parent Folder}\startnet.cmd"
 Set-Content -Path ${startnet.cmd File Path} -Value (${startnet.cmd File Contents})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\00-sample.ps1" to the file system of the technician PC |
-${00-sample Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\00-ExecPol.ps1" to the file system of the technician PC |
+${00-ExecPol Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
 
 
+
   #region |  |
+
   "`n"
   "& {`n"
-  "  Get-Process`n"
+  "  #Get-Process`n"
+  "  Write-Host -Object $([System.Char]34)Setting ExecutionPolicy to $([System.Char]39)RemoteSigned$([System.Char]39) for LocalMachine scope...$([System.Char]34)`n"
   "  Set-ExecutionPolicy -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -Scope $([System.Char]39)LocalMachine$([System.Char]39) -Force`n"
   "}`n"
   "`t`t"
 
   #endregion
 
+
+
+
   #endregion
   #########################################-BOUNDARY-#########################################
   { # Create with ConvertTo-HereStringPrecursor |
     & {
-      Get-Process
+      #Get-Process
+      Write-Host -Object "Setting ExecutionPolicy to 'RemoteSigned' for LocalMachine scope..."
       Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'LocalMachine' -Force
     }
   } | Out-Null
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${00-sample Command Here-String} = ${00-sample Command Here-String Precursor}
-${00-sample Command} = [ScriptBlock]::Create(${00-sample Command Here-String})
+${00-ExecPol Command Here-String} = ${00-ExecPol Command Here-String Precursor}
+${00-ExecPol Command} = [ScriptBlock]::Create(${00-ExecPol Command Here-String})
 
-${00-sample Script Path} = "${WinPE Image Creation Parent Folder}\00-sample.ps1"
-Set-Content -Path ${00-sample Script Path} -Value (${00-sample Command Here-String})
+${00-ExecPol Script Path} = "${WinPE Image Creation Parent Folder}\00-ExecPol.ps1"
+Set-Content -Path ${00-ExecPol Script Path} -Value (${00-ExecPol Command Here-String})
 #endregion
 
 #region | Write "${env:.CommonItems}\WinPE\01-DiskPartClean.ps1" to the file system of the technician PC |
 ${01-DiskPartClean Command Here-String Precursor} = $(
+  #region | DiskPart.exe > Clean > Initialize to GPT |
+
+
+
+
   #region |  |
 
   "`n"
@@ -118,10 +136,13 @@ ${01-DiskPartClean Command Here-String Precursor} = $(
   "    )`n"
   "    Start-Process diskpart.exe -ArgumentList `$ArgumentList -NoNewWindow`n"
   "  }`n"
-  "  Write-Host -Object $([System.Char]34)Sleeping for 3 seconds...$([System.Char]34)`n"
-  "  Start-Sleep 3`n"
+  "  Start-Sleep 5`n"
   "}`n"
   "`t`t"
+
+  #endregion
+
+
 
 
 
@@ -143,8 +164,7 @@ ${01-DiskPartClean Command Here-String Precursor} = $(
         )
         Start-Process diskpart.exe -ArgumentList $ArgumentList -NoNewWindow
       }
-      Write-Host -Object "Sleeping for 3 seconds..."
-      Start-Sleep 3
+      Start-Sleep 5
     }
   } | Out-Null
   #########################################-BOUNDARY-#########################################
@@ -161,86 +181,106 @@ Set-Content -Path ${01-DiskPartClean Script Path} -Value (${01-DiskPartClean Com
 ${03-OsDiskPart1 Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
 
+
+
+
   #region |  |
+
   "`n"
-  "    & {`n"
-  "      `$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
+  "& {`n"
+  "  `$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
+  "  `${non-USB disks} = (Get-Disk).Where({`$_.BusType -match $([System.Char]39)NVMe|SATA$([System.Char]39)}) | Sort-Object -Property $([System.Char]39)Size$([System.Char]39)`n"
   "`n"
-  "      #region | Initialize All SATA/NVMe Disks |`n"
-  "      `${non-USB disks} = (Get-Disk).Where({`$_.BusType -match $([System.Char]39)NVMe|SATA$([System.Char]39)}) | Sort-Object -Property $([System.Char]39)Size$([System.Char]39)`n"
-  "      #   foreach (`${non-USB disk} in `${non-USB disks}) {Clear-Disk -UniqueId `${non-USB disk}.UniqueId -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$false -PassThru}`n"
-  "      foreach (`${non-USB disk} in `${non-USB disks}) {`n"
-  "        Initialize-Disk -UniqueId `${non-USB disk}.UniqueId -PartitionStyle $([System.Char]39)GPT$([System.Char]39) -Confirm:`$false -Verbose:`$true -PassThru`n"
-  "      }`n"
-  "      #endregion`n"
+  "  #region | Initialize All SATA/NVMe Disks |`n"
+  "  #       `${non-USB disks} = (Get-Disk).Where({`$_.BusType -match $([System.Char]39)NVMe|SATA$([System.Char]39)}) | Sort-Object -Property $([System.Char]39)Size$([System.Char]39)`n"
+  "  #       #   foreach (`${non-USB disk} in `${non-USB disks}) {Clear-Disk -UniqueId `${non-USB disk}.UniqueId -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$false -PassThru}`n"
+  "  `${Initialized non-USB Disk CIM Instances} = foreach (`${non-USB disk} in `${non-USB disks}) {`n"
+  "    Initialize-Disk -UniqueId `${non-USB disk}.UniqueId -PartitionStyle $([System.Char]39)GPT$([System.Char]39) -Confirm:`$false -Verbose:`$true -PassThru`n"
+  "  }`n"
+  "  #       `${Initialized non-USB Disk CIM Instances} | Format-Table -AutoSize`n"
+  "  #endregion`n"
+  "  #region | OS Disk |`n"
+  "  `${OS Disk CIM Instance} = `${non-USB disks}[0]`n"
+  "  #`${OS Disk CIM Instance} = `${Discovered OS Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$false -PassThru`n"
+  "  Set-Disk -UniqueId `${OS Disk CIM Instance}.UniqueId -PartitionStyle $([System.Char]39)GPT$([System.Char]39)`n"
   "`n"
-  "      #region | OS Disk |`n"
-  "      `${OS Disk CIM Instance} = `${non-USB disks}[0]`n"
-  "      #`${OS Disk CIM Instance} = `${Discovered OS Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$false -PassThru`n"
-  "      Set-Disk -UniqueId `${OS Disk CIM Instance}.UniqueId -PartitionStyle $([System.Char]39)GPT$([System.Char]39)`n"
-  "      #region | EFI System Partition |`n"
-  "      `${EFI System Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){c12a7328-f81f-11d2-ba4b-00a0c93ec93b}$([System.Char]39) -Size 628MB # -AssignDriveLetter`n"
-  "      # The entirety of the EFI System Partition must contain a FAT32-formatted volume:`n"
-  "      #`$NewFileSystemLabel = $([System.Char]39)EFI_SP$([System.Char]39)`n"
-  "      `$NewFileSystemLabel = $([System.Char]39)System$([System.Char]39)`n"
-  "      #`${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -NewFileSystemLabel `$NewFileSystemLabel # -DriveLetter `${EFI System Partition OS Disk CIM Instance}.DriveLetter`n"
-  "      `${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = `${EFI System Partition OS Disk CIM Instance} | Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -NewFileSystemLabel `$NewFileSystemLabel # -DriveLetter `${EFI System Partition OS Disk CIM Instance}.DriveLetter`n"
-  "      #`${EFI_SP Volume Letter} = `${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
-  "      #endregion`n"
-  "      #region | Microsoft Reserved Partition |`n"
-  "      `${MS Reserved Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){e3c9e316-0b5c-4db8-817d-f92df00215ae}$([System.Char]39) # -Size 20MB # -AssignDriveLetter`n"
-  "      #endregion`n"
-  "      #region | OS Partition |`n"
-  "      `${OS Partition Size} = `${OS Disk CIM Instance}.Size - (`${EFI System Partition OS Disk CIM Instance}.Size + `${MS Reserved Partition OS Disk CIM Instance}.Size + 888MB)`n"
-  "      `${OS Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}$([System.Char]39) -Size (`${OS Partition Size}) -AssignDriveLetter   # -UseMaximumSize`n"
-  "      Export-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${OS Partition OS Disk CIM Instance})`n"
-  "      `${OS Volume OS Partition OS Disk CIM Instance} = `${OS Partition OS Disk CIM Instance} | Format-Volume -FileSystem $([System.Char]39)NTFS$([System.Char]39) -NewFileSystemLabel $([System.Char]39)LocalOS$([System.Char]39)`n"
-  "      Export-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${OS Volume OS Partition OS Disk CIM Instance})`n"
-  "      #endregion`n"
-  "      #region | Recovery Partition |`n"
-  "      Export-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${OS Disk CIM Instance})`n"
-  "      `${Recovery Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){de94bba4-06d1-4d40-a16a-bfd50179d6ac}$([System.Char]39) -UseMaximumSize`n"
-  "      Export-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${Recovery Partition OS Disk CIM Instance})`n"
-  "      `${Recovery Volume OS Disk CIM Instance} = `${Recovery Partition OS Disk CIM Instance} | Format-Volume -FileSystem $([System.Char]39)NTFS$([System.Char]39) -NewFileSystemLabel $([System.Char]39)Recovery$([System.Char]39)`n"
-  "      Export-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${Recovery Volume OS Disk CIM Instance})`n"
-  "      #endregion`n"
+  "  #region | EFI System Partition |`n"
+  "  `${EFI System Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){c12a7328-f81f-11d2-ba4b-00a0c93ec93b}$([System.Char]39) -Size 628MB -AssignDriveLetter`n"
+  "  # The entirety of the EFI System Partition must contain a FAT32-formatted volume:`n"
+  "  #`$NewFileSystemLabel = $([System.Char]39)EFI_SP$([System.Char]39)`n"
+  "  `$NewFileSystemLabel = $([System.Char]39)System$([System.Char]39)`n"
+  "  #`${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -NewFileSystemLabel `$NewFileSystemLabel # -DriveLetter `${EFI System Partition OS Disk CIM Instance}.DriveLetter`n"
+  "  `${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = `${EFI System Partition OS Disk CIM Instance} | Format-Volume -FileSystem $([System.Char]39)FAT32$([System.Char]39) -NewFileSystemLabel `$NewFileSystemLabel # -DriveLetter `${EFI System Partition OS Disk CIM Instance}.DriveLetter`n"
+  "  #`${EFI_SP Volume Letter} = `${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\FAT32 Volume on EFI System Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${FAT32 Volume on EFI System Partition OS Disk CIM Instance})`n"
+  "  #endregion`n"
   "`n"
-  "      #endregion`n"
-  "    }`n"
+  "  #region | Microsoft Reserved Partition |`n"
+  "  `${MS Reserved Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){e3c9e316-0b5c-4db8-817d-f92df00215ae}$([System.Char]39) -Size 20MB # -AssignDriveLetter`n"
+  "  #endregion`n"
+  "`n"
+  "  #region | OS Partition |`n"
+  "  `${OS Partition Size} = `${OS Disk CIM Instance}.Size - (`${EFI System Partition OS Disk CIM Instance}.Size + `${MS Reserved Partition OS Disk CIM Instance}.Size + 888MB)`n"
+  "  `${OS Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}$([System.Char]39) -Size (`${OS Partition Size}) -AssignDriveLetter   # -UseMaximumSize`n"
+  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${OS Partition OS Disk CIM Instance})`n"
+  "  `${OS Volume OS Partition OS Disk CIM Instance} = `${OS Partition OS Disk CIM Instance} | Format-Volume -FileSystem $([System.Char]39)NTFS$([System.Char]39) -NewFileSystemLabel $([System.Char]39)LocalOS$([System.Char]39)`n"
+  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${OS Volume OS Partition OS Disk CIM Instance})`n"
+  "  #endregion`n"
+  "`n"
+  "  #region | Recovery Partition |`n"
+  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${OS Disk CIM Instance})`n"
+  "  `${Recovery Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){de94bba4-06d1-4d40-a16a-bfd50179d6ac}$([System.Char]39) -UseMaximumSize`n"
+  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${Recovery Partition OS Disk CIM Instance})`n"
+  "  `${Recovery Volume OS Disk CIM Instance} = `${Recovery Partition OS Disk CIM Instance} | Format-Volume -FileSystem $([System.Char]39)NTFS$([System.Char]39) -NewFileSystemLabel $([System.Char]39)Recovery$([System.Char]39)`n"
+  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${Recovery Volume OS Disk CIM Instance})`n"
+  "  #endregion`n"
+  "`n"
+  "  #endregion`n"
+  "}`n"
   "`t`t"
 
+
   #endregion
+
+
+
+
 
   #endregion
   #########################################-BOUNDARY-#########################################
   { # Create with ConvertTo-HereStringPrecursor |
     & {
       $PSModuleInfo = Import-Module 'Storage' -PassThru -Force
+      ${non-USB disks} = (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) | Sort-Object -Property 'Size'
 
       #region | Initialize All SATA/NVMe Disks |
-      ${non-USB disks} = (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) | Sort-Object -Property 'Size'
-      #   foreach (${non-USB disk} in ${non-USB disks}) {Clear-Disk -UniqueId ${non-USB disk}.UniqueId -RemoveData -RemoveOEM -Confirm:$false -Verbose:$false -PassThru}
-      foreach (${non-USB disk} in ${non-USB disks}) {
+      #       ${non-USB disks} = (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) | Sort-Object -Property 'Size'
+      #       #   foreach (${non-USB disk} in ${non-USB disks}) {Clear-Disk -UniqueId ${non-USB disk}.UniqueId -RemoveData -RemoveOEM -Confirm:$false -Verbose:$false -PassThru}
+      ${Initialized non-USB Disk CIM Instances} = foreach (${non-USB disk} in ${non-USB disks}) {
         Initialize-Disk -UniqueId ${non-USB disk}.UniqueId -PartitionStyle 'GPT' -Confirm:$false -Verbose:$true -PassThru
       }
+      #       ${Initialized non-USB Disk CIM Instances} | Format-Table -AutoSize
       #endregion
-
       #region | OS Disk |
       ${OS Disk CIM Instance} = ${non-USB disks}[0]
       #${OS Disk CIM Instance} = ${Discovered OS Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$false -PassThru
       Set-Disk -UniqueId ${OS Disk CIM Instance}.UniqueId -PartitionStyle 'GPT'
+
       #region | EFI System Partition |
-      ${EFI System Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{c12a7328-f81f-11d2-ba4b-00a0c93ec93b}' -Size 628MB # -AssignDriveLetter
+      ${EFI System Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{c12a7328-f81f-11d2-ba4b-00a0c93ec93b}' -Size 628MB -AssignDriveLetter
       # The entirety of the EFI System Partition must contain a FAT32-formatted volume:
       #$NewFileSystemLabel = 'EFI_SP'
       $NewFileSystemLabel = 'System'
       #${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Format-Volume -FileSystem 'FAT32' -NewFileSystemLabel $NewFileSystemLabel # -DriveLetter ${EFI System Partition OS Disk CIM Instance}.DriveLetter
       ${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = ${EFI System Partition OS Disk CIM Instance} | Format-Volume -FileSystem 'FAT32' -NewFileSystemLabel $NewFileSystemLabel # -DriveLetter ${EFI System Partition OS Disk CIM Instance}.DriveLetter
       #${EFI_SP Volume Letter} = ${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + ':'
+      Export-CliXml -Path "X:\Scriptoids\FAT32 Volume on EFI System Partition OS Disk CIM Instance.clixml" -InputObject (${FAT32 Volume on EFI System Partition OS Disk CIM Instance})
       #endregion
+
       #region | Microsoft Reserved Partition |
-      ${MS Reserved Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{e3c9e316-0b5c-4db8-817d-f92df00215ae}' # -Size 20MB # -AssignDriveLetter
+      ${MS Reserved Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{e3c9e316-0b5c-4db8-817d-f92df00215ae}' -Size 20MB # -AssignDriveLetter
       #endregion
+
       #region | OS Partition |
       ${OS Partition Size} = ${OS Disk CIM Instance}.Size - (${EFI System Partition OS Disk CIM Instance}.Size + ${MS Reserved Partition OS Disk CIM Instance}.Size + 888MB)
       ${OS Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}' -Size (${OS Partition Size}) -AssignDriveLetter   # -UseMaximumSize
@@ -248,6 +288,7 @@ ${03-OsDiskPart1 Command Here-String Precursor} = $(
       ${OS Volume OS Partition OS Disk CIM Instance} = ${OS Partition OS Disk CIM Instance} | Format-Volume -FileSystem 'NTFS' -NewFileSystemLabel 'LocalOS'
       Export-CliXml -Path "X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml" -InputObject (${OS Volume OS Partition OS Disk CIM Instance})
       #endregion
+
       #region | Recovery Partition |
       Export-CliXml -Path "X:\Scriptoids\OS Disk CIM Instance.clixml" -InputObject (${OS Disk CIM Instance})
       ${Recovery Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{de94bba4-06d1-4d40-a16a-bfd50179d6ac}' -UseMaximumSize
@@ -273,13 +314,13 @@ ${03-OsDiskPart2 Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
 
   #region |  |
+
   "`n"
   "& {`n"
   "  `$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
   "  `${OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34)`n"
   "  `${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
   "  `${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34)`n"
-  "`n"
   "`n"
   "  `${Apply GPT Attributes to Recovery Partition Here-String Precursor} = $([System.Char]34)select disk %_DISK_NUMBER_%$([System.Char]34)`n"
   "  `${Apply GPT Attributes to Recovery Partition Here-String Precursor} += $([System.Char]34)`n$([System.Char]34)`n"
@@ -298,8 +339,8 @@ ${03-OsDiskPart2 Command Here-String Precursor} = $(
   "  )`n"
   "  Start-Process diskpart.exe -ArgumentList `$ArgumentList -NoNewWindow`n"
   "`n"
-  "  Write-Host -Object $([System.Char]34)Sleeping for 3 seconds...$([System.Char]34)`n"
-  "  Start-Sleep 3`n"
+  "  #Write-Host -Object $([System.Char]34)Sleeping for 3 seconds...$([System.Char]34)`n"
+  "  Start-Sleep 1`n"
   "`n"
   "  #     $([System.Char]34)echo CREATE PARTITION PRIMARY$([System.Char]34)`n"
   "  #     $([System.Char]34)&echo FORMAT QUICK FS=NTFS LABEL=`$([System.Char]34)Recovery`$([System.Char]34)$([System.Char]34)`n"
@@ -328,7 +369,6 @@ ${03-OsDiskPart2 Command Here-String Precursor} = $(
       ${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml"
       ${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml"
 
-
       ${Apply GPT Attributes to Recovery Partition Here-String Precursor} = "select disk %_DISK_NUMBER_%"
       ${Apply GPT Attributes to Recovery Partition Here-String Precursor} += "`n"
       ${Apply GPT Attributes to Recovery Partition Here-String Precursor} += "select partition %_PARTITION_NUMBER_%"
@@ -346,8 +386,8 @@ ${03-OsDiskPart2 Command Here-String Precursor} = $(
       )
       Start-Process diskpart.exe -ArgumentList $ArgumentList -NoNewWindow
 
-      Write-Host -Object "Sleeping for 3 seconds..."
-      Start-Sleep 3
+      #Write-Host -Object "Sleeping for 3 seconds..."
+      Start-Sleep 1
 
       #     "echo CREATE PARTITION PRIMARY"
       #     "&echo FORMAT QUICK FS=NTFS LABEL=$([System.Char]34)Recovery$([System.Char]34)"
@@ -376,67 +416,88 @@ Set-Content -Path ${03-OsDiskPart2 Script Path} -Value (${03-OsDiskPart2 Command
 ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
 
-  
   #region |  |
+
   "`n"
-  "    & {`n"
-  "      `$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
-  "      #region | Precursor Variable Series I |`n"
-  "      `${Pattern UniqueId Raw} = $([System.Char]39)^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?`$$([System.Char]39)`n"
+  "& {`n"
+  "  `$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
+  "  #region | Precursor Variable Series I |`n"
+  "  `${Pattern UniqueId Raw} = $([System.Char]39)^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?`$$([System.Char]39)`n"
   "`n"
-  "      # Yes, we need these underscores left of $([System.Char]39)FriendlyName$([System.Char]39), $([System.Char]39)SerialNumber$([System.Char]39), and $([System.Char]39)UniqueId Raw$([System.Char]39) in the variable name`n"
-  "      `${OSDeploy_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${OSDeploy_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${OSDeploy_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${OSDeploy_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
-  "      `${OSDeploy_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "  # Yes, we need these underscores left of $([System.Char]39)FriendlyName$([System.Char]39), $([System.Char]39)SerialNumber$([System.Char]39), and $([System.Char]39)UniqueId Raw$([System.Char]39) in the variable name`n"
+  "  `${OSDeploy_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${OSDeploy_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${OSDeploy_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${OSDeploy_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
+  "  `${OSDeploy_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
   "`n"
-  "      `$OSDeployDisk = Get-Disk | Where-Object -FilterScript {`n"
-  "        `$_.FriendlyName -eq    `${OSDeploy_FriendlyName}                                             -and $([System.Char]96)`n"
-  "        `$_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(`${OSDeploy_UniqueId}) -and $([System.Char]96)`n"
-  "        `$_.SerialNumber -eq    `${OSDeploy_SerialNumber}`n"
+  "  `$OSDeployDisk = Get-Disk | Where-Object -FilterScript {`n"
+  "    `$_.FriendlyName -eq    `${OSDeploy_FriendlyName}                                             -and $([System.Char]96)`n"
+  "    `$_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(`${OSDeploy_UniqueId}) -and $([System.Char]96)`n"
+  "    `$_.SerialNumber -eq    `${OSDeploy_SerialNumber}`n"
+  "  }`n"
+  "`n"
+  "  if (`$null -ne `$OSDeployDisk) {`n"
+  "    `${Volume DriveLetters Precursor} = Get-Partition -DiskNumber `$OSDeployDisk.Number | Get-Volume | Select-Object -ExpandProperty $([System.Char]39)DriveLetter$([System.Char]39)`n"
+  "    foreach (`${Volume DriveLetter Precursor} in `${Volume DriveLetters Precursor}) {`n"
+  "      `${Volume DriveLetter} = [System.String]`${Volume DriveLetter Precursor} + $([System.Char]39):$([System.Char]39)`n"
+  "      `$IsWindowsOS = Test-Path -Path $([System.Char]34)`${Volume DriveLetter}\setup.exe$([System.Char]34)`n"
+  "      if (`$IsWindowsOS) {`n"
+  "        `$OSDeploy = `${Volume DriveLetter}`n"
   "      }`n"
-  "`n"
-  "      if (`$null -ne `$OSDeployDisk) {`n"
-  "        `${Volume DriveLetters Precursor} = Get-Partition -DiskNumber `$OSDeployDisk.Number | Get-Volume | Select-Object -ExpandProperty $([System.Char]39)DriveLetter$([System.Char]39)`n"
-  "        foreach (`${Volume DriveLetter Precursor} in `${Volume DriveLetters Precursor}) {`n"
-  "          `${Volume DriveLetter} = [System.String]`${Volume DriveLetter Precursor} + $([System.Char]39):$([System.Char]39)`n"
-  "          `$IsWindowsOS = Test-Path -Path $([System.Char]34)`${Volume DriveLetter}\setup.exe$([System.Char]34)`n"
-  "          if (`$IsWindowsOS) {`n"
-  "            `$OSDeploy = `${Volume DriveLetter}`n"
-  "          }`n"
-  "        }`n"
-  "      }`n"
-  "`n"
-  "      `${usb0_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${usb0_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${usb0_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${usb0_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
-  "      `${usb0_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
-  "`n"
-  "      `${usb1_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${usb1_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${usb1_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
-  "      `${usb1_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
-  "      `${usb1_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
-  "      #endregion`n"
-  "`n"
-  "      `${OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34)`n"
-  "      `${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
-  "      `${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34)`n"
-  "`n"
-  "      #region | Activate New Version of DISM |`n"
-  "      . $([System.Char]39)X:\DISM\WimMountAdkSetupAmd64.exe$([System.Char]39) /Install /q`n"
-  "      #endregion`n"
-  "      #region | Apply Image |`n"
-  "      `${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
-  "      `${LocalOS Volume Letter} = [System.String]`${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
-  "      `n"
-  "      . $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /CheckIntegrity /Verify`n"
-  "      #endregion`n"
   "    }`n"
+  "  }`n"
+  "`n"
+  "  `${usb0_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb0_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb0_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb0_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
+  "  `${usb0_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "  `${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
+  "    `$_.FriendlyName -eq    `${usb0_FriendlyName}              -and $([System.Char]96)`n"
+  "    `$_.UniqueId     -match [Regex]::Escape(`${usb0_UniqueId}) -and $([System.Char]96)`n"
+  "    `$_.SerialNumber -eq    `${usb0_SerialNumber}`n"
+  "  }`n"
+  "  if (`$null -ne `${Removable External Storage Media Disk CIM Instance}) {`n"
+  "    `${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber `${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1`n"
+  "    `$usb0 = [System.String]`${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + $([System.Char]34):$([System.Char]34)`n"
+  "  }`n"
+  "`n"
+  "  `${usb1_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb1_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb1_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb1_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
+  "  `${usb1_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "`n"
+  "  `${OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "`n"
+  "  `${LocalOS Volume Letter} = [System.String]`${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "  `${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\FAT32 Volume on EFI System Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${EFI System Partition Volume Letter} = [System.String]`${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "`n"
+  "  `$__DirectoryForDscConfigs = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\__DirectoryForDscConfigs.clixml$([System.Char]34)`n"
+  "  `$FolderFQN = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\FolderFQN.clixml$([System.Char]34)`n"
+  "  #endregion`n"
+  "  #region | Activate New Version of DISM |`n"
+  "  . $([System.Char]39)X:\DISM\WimMountAdkSetupAmd64.exe$([System.Char]39) /Install /q`n"
+  "  #endregion`n"
+  "  #region | Apply Image |`n"
+  "  . $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /CheckIntegrity /Verify`n"
+  "  #endregion`n"
+  "  #region | Make the EFI System Partition (the EFS) bootable |`n"
+  "  . $([System.Char]39)X:\Windows\System32\bcdboot.exe$([System.Char]39) $([System.Char]34)`${LocalOS Volume Letter}\Windows$([System.Char]34) /l $([System.Char]34)en-us$([System.Char]34) /s $([System.Char]34)`${EFI System Partition Volume Letter}$([System.Char]34) /f $([System.Char]34)UEFI$([System.Char]34)`n"
+  "  #   . $([System.Char]39)X:\Windows\System32\bcdedit.exe$([System.Char]39) /set {fwbootmgr} bootsequence {bootmgr}`n"
+  "  #endregion`n"
+  "}`n"
   "`t`t"
+
   #endregion
+
+
+
 
   #endregion
   #########################################-BOUNDARY-#########################################
@@ -475,26 +536,43 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
       ${usb0_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\usb0 UniqueId Raw.clixml') -replace "'",""
       ${usb0_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
       ${usb0_UniqueId} = $Matches['Unique_ID']
+      ${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+        $_.FriendlyName -eq    ${usb0_FriendlyName}              -and `
+        $_.UniqueId     -match [Regex]::Escape(${usb0_UniqueId}) -and `
+        $_.SerialNumber -eq    ${usb0_SerialNumber}
+      }
+      if ($null -ne ${Removable External Storage Media Disk CIM Instance}) {
+        ${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber ${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1
+        $usb0 = [System.String]${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + ":"
+      }
 
       ${usb1_FriendlyName} = (Import-CliXml -Path 'X:\Scriptoids\usb1 FriendlyName.clixml') -replace "'",""
       ${usb1_SerialNumber} = (Import-CliXml -Path 'X:\Scriptoids\usb1 SerialNumber.clixml') -replace "'",""
       ${usb1_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\usb1 UniqueId Raw.clixml') -replace "'",""
       ${usb1_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
       ${usb1_UniqueId} = $Matches['Unique_ID']
-      #endregion
 
       ${OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Disk CIM Instance.clixml"
       ${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml"
       ${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml"
+      ${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml"
 
+      ${LocalOS Volume Letter} = [System.String]${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + ':'
+      ${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\FAT32 Volume on EFI System Partition OS Disk CIM Instance.clixml"
+      ${EFI System Partition Volume Letter} = [System.String]${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + ':'
+
+      $__DirectoryForDscConfigs = Import-CliXml -Path "X:\Scriptoids\__DirectoryForDscConfigs.clixml"
+      $FolderFQN = Import-CliXml -Path "X:\Scriptoids\FolderFQN.clixml"
+      #endregion
       #region | Activate New Version of DISM |
       . 'X:\DISM\WimMountAdkSetupAmd64.exe' /Install /q
       #endregion
       #region | Apply Image |
-      ${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml"
-      ${LocalOS Volume Letter} = [System.String]${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + ':'
-      
       . 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:2 /ApplyDir:${LocalOS Volume Letter} /CheckIntegrity /Verify
+      #endregion
+      #region | Make the EFI System Partition (the EFS) bootable |
+      . 'X:\Windows\System32\bcdboot.exe' "${LocalOS Volume Letter}\Windows" /l "en-us" /s "${EFI System Partition Volume Letter}" /f "UEFI"
+      #   . 'X:\Windows\System32\bcdedit.exe' /set {fwbootmgr} bootsequence {bootmgr}
       #endregion
     }
   } | Out-Null
@@ -506,6 +584,435 @@ ${05-DismLoad-ApplyImage Command} = [ScriptBlock]::Create(${05-DismLoad-ApplyIma
 ${05-DismLoad-ApplyImage Script Path} = "${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1"
 Set-Content -Path ${05-DismLoad-ApplyImage Script Path} -Value (${05-DismLoad-ApplyImage Command Here-String})
 #endregion
+
+#region | Write "${env:.CommonItems}\WinPE\07-x2cCopyOps.ps1" to the file system of the technician PC |
+${07-x2cCopyOps Command Here-String Precursor} = $(
+  #region | OS Disk | Hyper-V Disk |
+
+
+
+  #region |  |
+  "`n"
+  "& {`n"
+  "  #region | Precursor Variable Series I |`n"
+  "  `${Pattern UniqueId Raw} = $([System.Char]39)^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?`$$([System.Char]39)`n"
+  "`n"
+  "  # Yes, we need these underscores left of $([System.Char]39)FriendlyName$([System.Char]39), $([System.Char]39)SerialNumber$([System.Char]39), and $([System.Char]39)UniqueId Raw$([System.Char]39) in the variable name`n"
+  "  `${OSDeploy_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${OSDeploy_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${OSDeploy_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\OSDeploy UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${OSDeploy_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
+  "  `${OSDeploy_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "`n"
+  "  `$OSDeployDisk = Get-Disk | Where-Object -FilterScript {`n"
+  "    `$_.FriendlyName -eq    `${OSDeploy_FriendlyName}                                             -and $([System.Char]96)`n"
+  "    `$_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(`${OSDeploy_UniqueId}) -and $([System.Char]96)`n"
+  "    `$_.SerialNumber -eq    `${OSDeploy_SerialNumber}`n"
+  "  }`n"
+  "`n"
+  "  if (`$null -ne `$OSDeployDisk) {`n"
+  "    `${Volume DriveLetters Precursor} = Get-Partition -DiskNumber `$OSDeployDisk.Number | Get-Volume | Select-Object -ExpandProperty $([System.Char]39)DriveLetter$([System.Char]39)`n"
+  "    foreach (`${Volume DriveLetter Precursor} in `${Volume DriveLetters Precursor}) {`n"
+  "      `${Volume DriveLetter} = [System.String]`${Volume DriveLetter Precursor} + $([System.Char]39):$([System.Char]39)`n"
+  "      `$IsWindowsOS = Test-Path -Path $([System.Char]34)`${Volume DriveLetter}\setup.exe$([System.Char]34)`n"
+  "      if (`$IsWindowsOS) {`n"
+  "        `$OSDeploy = `${Volume DriveLetter}`n"
+  "      }`n"
+  "    }`n"
+  "  }`n"
+  "`n"
+  "  `${usb0_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb0_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb0_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb0 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb0_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
+  "  `${usb0_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "  `${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
+  "    `$_.FriendlyName -eq    `${usb0_FriendlyName}              -and $([System.Char]96)`n"
+  "    `$_.UniqueId     -match [Regex]::Escape(`${usb0_UniqueId}) -and $([System.Char]96)`n"
+  "    `$_.SerialNumber -eq    `${usb0_SerialNumber}`n"
+  "  }`n"
+  "  if (`$null -ne `${Removable External Storage Media Disk CIM Instance}) {`n"
+  "    `${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber `${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1`n"
+  "    `$usb0 = [System.String]`${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + $([System.Char]34):$([System.Char]34)`n"
+  "  }`n"
+  "`n"
+  "  `${usb1_FriendlyName} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 FriendlyName.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb1_SerialNumber} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 SerialNumber.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb1_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
+  "  `${usb1_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
+  "  `${usb1_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "`n"
+  "  `${OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "`n"
+  "  `${LocalOS Volume Letter} = [System.String]`${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "  `${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\FAT32 Volume on EFI System Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${EFI System Partition Volume Letter} = [System.String]`${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "`n"
+  "  `$__DirectoryForDscConfigs = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\__DirectoryForDscConfigs.clixml$([System.Char]34)`n"
+  "  `$FolderFQN = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\FolderFQN.clixml$([System.Char]34)`n"
+  "  #endregion`n"
+  "  #region | Copy Operations |`n"
+  "  #region | Copy the All Users All Hosts profile.ps1 file from external storage to local drive. |`n"
+  "  `$HT = @{`n"
+  "    Path        = $([System.Char]34)X:\Scriptoids\5.1\profile.ps1$([System.Char]34)`n"
+  "    Destination = $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile.ps1$([System.Char]34)`n"
+  "    Force         = `$true`n"
+  "    Verbose       = `$true`n"
+  "  }`n"
+  "  Copy-Item @HT`n"
+  "  #endregion`n"
+  "  #region | Copy autounattend.xml into root of local drive | Copy autounattend.xml into Panther directory and rename to unattend.xml |`n"
+  "  `$HT = @{`n"
+  "    Path        = $([System.Char]34)`$usb0\autounattend.xml$([System.Char]34)`n"
+  "    Destination = $([System.Char]34)`${LocalOS Volume Letter}$([System.Char]34)`n"
+  "    Force       = `$false`n"
+  "    Verbose     = `$true`n"
+  "  }`n"
+  "  Copy-Item @HT`n"
+  "`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\Windows\Panther$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  `$HT = @{`n"
+  "    Path        = $([System.Char]34)`$usb0\autounattend.xml$([System.Char]34)`n"
+  "    Destination = $([System.Char]34)`$folder\unattend.xml$([System.Char]34)`n"
+  "    Force       = `$true`n"
+  "    Verbose     = `$true`n"
+  "  }`n"
+  "  Copy-Item @HT`n"
+  "  #endregion`n"
+  "  #region | Copy modules to local fixed disk |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Managed Object Format Files$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Statics$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb0\`$FolderFQN\cfg\DSC Resources$([System.Char]34) -Filter $([System.Char]39)*.zip$([System.Char]39) -Recurse $([System.Char]96)`n"
+  "  | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force         = `$false`n"
+  "      Verbose       = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\Modules\5.1$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\Modules\5.1$([System.Char]34) -Filter $([System.Char]39)*.zip$([System.Char]39) -Recurse $([System.Char]96)`n"
+  "  | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force         = `$false`n"
+  "      Verbose       = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "  #region | Copy lockscreen.png into root of local drive |`n"
+  "  `$HT = @{`n"
+  "    Path        = $([System.Char]34)`$usb0\lockscreen.png$([System.Char]34)`n"
+  "    Destination = $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
+  "    Force       = `$false`n"
+  "    Verbose     = `$true`n"
+  "  }`n"
+  "  Copy-Item @HT`n"
+  "  #endregion`n"
+  "  #region | Copy Application Installation Files |`n"
+  "  #region | Visual Studio Code |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\Visual Studio Code\##$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\Visual Studio Code\##$([System.Char]34) -Recurse -File $([System.Char]96)`n"
+  "  | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "  #region | OneDrive |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\OneDrive\##$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\OneDrive\##$([System.Char]34) -Recurse -File $([System.Char]96)`n"
+  "  | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "  #region | PowerShell 7 |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\PowerShell 7$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\PowerShell 7$([System.Char]34) -Directory $([System.Char]96)`n"
+  "  | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "      Recurse     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "`n"
+  "  #endregion`n"
+  "`n"
+  "  #region | Credential Manager backup file |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN\sec$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  `$IsPresent = Test-Path -Path $([System.Char]34)`$usb0\`$FolderFQN\sec\`$FolderFQN.crd$([System.Char]34)`n"
+  "  if (`$IsPresent) {`n"
+  "    Get-Item -Path $([System.Char]34)`$usb0\`$FolderFQN\sec\`$FolderFQN.crd$([System.Char]34) | ForEach-Object -Process {`n"
+  "      `$HT = @{`n"
+  "        Path        = `$_.FullName`n"
+  "        Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "        Force       = `$false`n"
+  "        Verbose     = `$true`n"
+  "      }`n"
+  "      Copy-Item @HT`n"
+  "    }`n"
+  "  }`n"
+  "  #endregion`n"
+  "  #endregion`n"
+  "}`n"
+  "`t`t"
+  #endregion
+
+
+
+
+  #endregion
+  #########################################-BOUNDARY-#########################################
+  { # Create with ConvertTo-HereStringPrecursor |
+    & {
+      #region | Precursor Variable Series I |
+      ${Pattern UniqueId Raw} = '^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?$'
+
+      # Yes, we need these underscores left of 'FriendlyName', 'SerialNumber', and 'UniqueId Raw' in the variable name
+      ${OSDeploy_FriendlyName} = (Import-CliXml -Path 'X:\Scriptoids\OSDeploy FriendlyName.clixml') -replace "'",""
+      ${OSDeploy_SerialNumber} = (Import-CliXml -Path 'X:\Scriptoids\OSDeploy SerialNumber.clixml') -replace "'",""
+      ${OSDeploy_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\OSDeploy UniqueId Raw.clixml') -replace "'",""
+      ${OSDeploy_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
+      ${OSDeploy_UniqueId} = $Matches['Unique_ID']
+
+      $OSDeployDisk = Get-Disk | Where-Object -FilterScript {
+        $_.FriendlyName -eq    ${OSDeploy_FriendlyName}                                             -and `
+        $_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(${OSDeploy_UniqueId}) -and `
+        $_.SerialNumber -eq    ${OSDeploy_SerialNumber}
+      }
+
+      if ($null -ne $OSDeployDisk) {
+        ${Volume DriveLetters Precursor} = Get-Partition -DiskNumber $OSDeployDisk.Number | Get-Volume | Select-Object -ExpandProperty 'DriveLetter'
+        foreach (${Volume DriveLetter Precursor} in ${Volume DriveLetters Precursor}) {
+          ${Volume DriveLetter} = [System.String]${Volume DriveLetter Precursor} + ':'
+          $IsWindowsOS = Test-Path -Path "${Volume DriveLetter}\setup.exe"
+          if ($IsWindowsOS) {
+            $OSDeploy = ${Volume DriveLetter}
+          }
+        }
+      }
+
+      ${usb0_FriendlyName} = (Import-CliXml -Path 'X:\Scriptoids\usb0 FriendlyName.clixml') -replace "'",""
+      ${usb0_SerialNumber} = (Import-CliXml -Path 'X:\Scriptoids\usb0 SerialNumber.clixml') -replace "'",""
+      ${usb0_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\usb0 UniqueId Raw.clixml') -replace "'",""
+      ${usb0_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
+      ${usb0_UniqueId} = $Matches['Unique_ID']
+      ${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+        $_.FriendlyName -eq    ${usb0_FriendlyName}              -and `
+        $_.UniqueId     -match [Regex]::Escape(${usb0_UniqueId}) -and `
+        $_.SerialNumber -eq    ${usb0_SerialNumber}
+      }
+      if ($null -ne ${Removable External Storage Media Disk CIM Instance}) {
+        ${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber ${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1
+        $usb0 = [System.String]${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + ":"
+      }
+
+      ${usb1_FriendlyName} = (Import-CliXml -Path 'X:\Scriptoids\usb1 FriendlyName.clixml') -replace "'",""
+      ${usb1_SerialNumber} = (Import-CliXml -Path 'X:\Scriptoids\usb1 SerialNumber.clixml') -replace "'",""
+      ${usb1_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\usb1 UniqueId Raw.clixml') -replace "'",""
+      ${usb1_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
+      ${usb1_UniqueId} = $Matches['Unique_ID']
+
+      ${OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Disk CIM Instance.clixml"
+      ${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml"
+      ${Recovery Volume OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml"
+      ${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml"
+
+      ${LocalOS Volume Letter} = [System.String]${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + ':'
+      ${FAT32 Volume on EFI System Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\FAT32 Volume on EFI System Partition OS Disk CIM Instance.clixml"
+      ${EFI System Partition Volume Letter} = [System.String]${FAT32 Volume on EFI System Partition OS Disk CIM Instance}.DriveLetter + ':'
+
+      $__DirectoryForDscConfigs = Import-CliXml -Path "X:\Scriptoids\__DirectoryForDscConfigs.clixml"
+      $FolderFQN = Import-CliXml -Path "X:\Scriptoids\FolderFQN.clixml"
+      #endregion
+      #region | Copy Operations |
+      #region | Copy the All Users All Hosts profile.ps1 file from external storage to local drive. |
+      $HT = @{
+        Path        = "X:\Scriptoids\5.1\profile.ps1"
+        Destination = "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile.ps1"
+        Force         = $true
+        Verbose       = $true
+      }
+      Copy-Item @HT
+      #endregion
+      #region | Copy autounattend.xml into root of local drive | Copy autounattend.xml into Panther directory and rename to unattend.xml |
+      $HT = @{
+        Path        = "$usb0\autounattend.xml"
+        Destination = "${LocalOS Volume Letter}"
+        Force       = $false
+        Verbose     = $true
+      }
+      Copy-Item @HT
+
+      $path = "${LocalOS Volume Letter}\Windows\Panther"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      $HT = @{
+        Path        = "$usb0\autounattend.xml"
+        Destination = "$folder\unattend.xml"
+        Force       = $true
+        Verbose     = $true
+      }
+      Copy-Item @HT
+      #endregion
+      #region | Copy modules to local fixed disk |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Managed Object Format Files"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Statics"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb0\$FolderFQN\cfg\DSC Resources" -Filter '*.zip' -Recurse `
+      | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force         = $false
+          Verbose       = $true
+        }
+        Copy-Item @HT
+      }
+
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\Modules\5.1"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb0\$FolderFQN\cfg\installs\Modules\5.1" -Filter '*.zip' -Recurse `
+      | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force         = $false
+          Verbose       = $true
+        }
+        Copy-Item @HT
+      }
+      #endregion
+      #region | Copy lockscreen.png into root of local drive |
+      $HT = @{
+        Path        = "$usb0\lockscreen.png"
+        Destination = "${LocalOS Volume Letter}\"
+        Force       = $false
+        Verbose     = $true
+      }
+      Copy-Item @HT
+      #endregion
+      #region | Copy Application Installation Files |
+      #region | Visual Studio Code |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\Visual Studio Code\##"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb0\$FolderFQN\cfg\installs\Visual Studio Code\##" -Recurse -File `
+      | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force       = $false
+          Verbose     = $true
+        }
+        Copy-Item @HT
+      }
+      #endregion
+      #region | OneDrive |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\OneDrive\##"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb0\$FolderFQN\cfg\installs\OneDrive\##" -Recurse -File `
+      | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force       = $false
+          Verbose     = $true
+        }
+        Copy-Item @HT
+      }
+      #endregion
+      #region | PowerShell 7 |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\PowerShell 7"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb0\$FolderFQN\cfg\installs\PowerShell 7" -Directory `
+      | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force       = $false
+          Verbose     = $true
+          Recurse     = $true
+        }
+        Copy-Item @HT
+      }
+      #endregion
+
+      #endregion
+
+      #region | Credential Manager backup file |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN\sec"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      $IsPresent = Test-Path -Path "$usb0\$FolderFQN\sec\$FolderFQN.crd"
+      if ($IsPresent) {
+        Get-Item -Path "$usb0\$FolderFQN\sec\$FolderFQN.crd" | ForEach-Object -Process {
+          $HT = @{
+            Path        = $_.FullName
+            Destination = "$folder"
+            Force       = $false
+            Verbose     = $true
+          }
+          Copy-Item @HT
+        }
+      }
+      #endregion
+      #endregion
+    }
+  } | Out-Null
+  #########################################-BOUNDARY-#########################################
+) -join ''
+
+${07-x2cCopyOps Command Here-String} = ${07-x2cCopyOps Command Here-String Precursor}
+${07-x2cCopyOps Command} = [ScriptBlock]::Create(${07-x2cCopyOps Command Here-String})
+${07-x2cCopyOps Script Path} = "${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1"
+Set-Content -Path ${07-x2cCopyOps Script Path} -Value (${07-x2cCopyOps Command Here-String})
+#endregion
+
+
 
 #region | Write "${env:.CommonItems}\WinPE\Bootable USB with PowerShell-enabled WinPE Script.ps1" to the file system of the technician PC |
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
@@ -521,14 +1028,15 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   #region | New Precursor Volume for eventual WinPE | Custom WinPE image written to USB Flash Drive |
 
 
-  #region |  |
 
+  #region |  |
   "`n"
   "#region | Script-wide Variables |`n"
   "`${WinPE Workspace Folder Name}      = $([System.Char]39)%_WinPE Workspace Folder Name_%$([System.Char]39)`n"
   "`${explorer.exe Owner}               = $([System.Char]39)%_explorer_owner_%$([System.Char]39)`n"
   "`${WinPE Image Creation Parent Path} = $([System.Char]39)%_WinPE Image Creation Parent Path_%$([System.Char]39)`n"
   "`$FolderFQN                          = $([System.Char]39)%_FolderFQN_%$([System.Char]39)`n"
+  "`$__DirectoryForDscConfigs           = $([System.Char]39)%___DirectoryForDscConfigs_%$([System.Char]39)`n"
   "`${.CommonItems}                     = $([System.Char]39)%_.CommonItems_%$([System.Char]39)`n"
   "`n"
   "Set-ExecutionPolicy -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -Scope $([System.Char]39)Process$([System.Char]39) -Force`n"
@@ -716,14 +1224,35 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    #region | Scriptoids |`n"
   "    `$path = $([System.Char]34)`${Mount Directory Path}\Scriptoids$([System.Char]34)`n"
   "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
-  "    Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\* FriendlyName.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
-  "    Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\* SerialNumber.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
-  "    Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\* UniqueId Raw.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\00-sample.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    # Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\* FriendlyName.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
+  "    # Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\* SerialNumber.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
+  "    # Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\* UniqueId Raw.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
+  "    Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\*.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
+  "`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\00-ExecPol.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\01-DiskPartClean.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\03-OsDiskPart1.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "`n"
+  "    `$path = $([System.Char]34)`${Mount Directory Path}\Scriptoids\5.1$([System.Char]34)`n"
+  "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    `$InputHT = @{`n"
+  "      Path        = $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\..\`$FolderFQN\output\`$FolderFQN\usb1\`$FolderFQN\Base\5.1\profile.ps1$([System.Char]34)`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "    }`n"
+  "    Copy-Item @InputHT`n"
+  "`n"
+  "    `$path = $([System.Char]34)`${Mount Directory Path}\Scriptoids$([System.Char]34)`n"
+  "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    `$InputHT = @{`n"
+  "      Path        = $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\..\`$FolderFQN\output\`$FolderFQN\usb1\autounattend.xml$([System.Char]34)`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "    }`n"
+  "    Copy-Item @InputHT`n"
   "    #endregion`n"
   "`n"
   "    #region | Use newer version of DISM in WinPE | Update Startup script to load drivers for DISM |`n"
@@ -732,9 +1261,6 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "    robocopy $([System.Char]34)C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM$([System.Char]34) $([System.Char]34)`$folder$([System.Char]34)`n"
   "    #endregion`n"
-  "`n"
-  "    `$path = $([System.Char]34)`${Mount Directory Path}\Canary 10.txt$([System.Char]34)`n"
-  "    `$file = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)File$([System.Char]39) -Force}`n"
   "`n"
   "    #region | startnet.cmd > Startup Script |`n"
   "    # Best performed separately. $([System.Char]34)`${Mount Directory Path}\Windows\System32\startnet.cmd$([System.Char]34) begins with a call to wpeinit`n"
@@ -745,23 +1271,23 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    # So can Startnet.cmd launch a PowerShell script? `n"
   "    # I think it can. See the Unattend setting titled Microsoft-Windows-Setup/RunSynchronous.`n"
   "    # That$([System.Char]39)s probably how the PowerShell script is going to launch.`n"
+  "`n"
   "    Get-Item -Path $([System.Char]34)`${Mount Directory Path}\Windows\System32\startnet.cmd$([System.Char]34) | Rename-Item -NewName $([System.Char]39)startnet.cmd.old$([System.Char]39)`n"
-  "    `n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\startnet.cmd$([System.Char]34) -Destination $([System.Char]34)`${Mount Directory Path}\Windows\System32$([System.Char]34)`n"
-  "`n"
-  "    #  `$content = Get-Content -Path $([System.Char]34)`$PSScriptRoot\startnet.cmd$([System.Char]34) -Raw`n"
-  "    #  Get-Item -Path $([System.Char]34)`${Mount Directory Path}\Windows\System32\startnet.cmd$([System.Char]34) | Set-Content -Value `$content`n"
-  "`n"
-  "    #Get-Item -Path $([System.Char]34)`${Mount Directory Path}\Windows\System32\startnet.cmd$([System.Char]34) | Add-Content -Value $([System.Char]34)powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c$([System.Char]34)`n"
-  "    #Get-Item -Path $([System.Char]34)`${Mount Directory Path}\Windows\System32\startnet.cmd$([System.Char]34) | Add-Content -Value $([System.Char]34)powershell.exe$([System.Char]34)`n"
   "    #endregion`n"
   "`n"
-  "    #region | Increase temporary storage on the RAMDisk (scratch space) |`n"
-  "    # Probably not necessary`n"
+  "    #region | Increase temporary storage on the RAMDisk (scratch space) | Probably not necessary |`n"
   "    .\amd64\DISM\dism.exe /Set-ScratchSpace:512 /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34)`n"
   "    #endregion`n"
   "`n"
-  "    # Unmount the WinPE image and create media`n"
+  "    #region | Load WinPE Driver Pack Contents |`n"
+  "    #`${Extracted Dell A11 folder path} = $([System.Char]34)`${WinPE Image Creation Parent Folder}\ADK + WinPE (2026-09)\WinPE Driver Packs\Dell A11$([System.Char]34)`n"
+  "    `${Extracted WinPE Driver Pack Dell A11 Folder} = [System.IO.FileInfo]$([System.Char]34)`${WinPE Image Creation Parent Folder}\ADK + WinPE (2026-09)\WinPE Driver Packs\Dell A11$([System.Char]34)`n"
+  "    #.\amd64\DISM\dism.exe /Add-Driver /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /Driver:`${Extracted Dell A11 folder path} /Recurse`n"
+  "    .\amd64\DISM\dism.exe /Add-Driver /Image:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /Driver:$([System.Char]34)`${Extracted WinPE Driver Pack Dell A11 Folder}$([System.Char]34) /Recurse`n"
+  "    #endregion`n"
+  "`n"
+  "    #region | Unmount the WinPE image and create media |`n"
   "    .\amd64\DISM\dism.exe /Unmount-Image /MountDir:$([System.Char]34)`${Mount Directory Path}$([System.Char]34) /Commit`n"
   "`n"
   "    # `${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
@@ -779,11 +1305,11 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    #>`n"
   "    `n"
   "    Remove-Item -Path $([System.Char]34)`${Mount Directory Path}$([System.Char]34)`n"
+  "    #endregion`n"
   "  }`n"
   "  #endregion`n"
   "}`n"
   "`t`t"
-
 
   #endregion
 
@@ -797,6 +1323,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
     ${explorer.exe Owner}               = '%_explorer_owner_%'
     ${WinPE Image Creation Parent Path} = '%_WinPE Image Creation Parent Path_%'
     $FolderFQN                          = '%_FolderFQN_%'
+    $__DirectoryForDscConfigs           = '%___DirectoryForDscConfigs_%'
     ${.CommonItems}                     = '%_.CommonItems_%'
 
     Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
@@ -984,14 +1511,35 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         #region | Scriptoids |
         $path = "${Mount Directory Path}\Scriptoids"
         $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-        Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\* FriendlyName.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
-        Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\* SerialNumber.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
-        Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\* UniqueId Raw.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\00-sample.ps1" -Destination "$folder"
+        # Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\* FriendlyName.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+        # Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\* SerialNumber.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+        # Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\* UniqueId Raw.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+        Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\*.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\00-ExecPol.ps1" -Destination "$folder"
         Move-Item -Path "${WinPE Image Creation Parent Folder}\01-DiskPartClean.ps1" -Destination "$folder"
         Move-Item -Path "${WinPE Image Creation Parent Folder}\03-OsDiskPart1.ps1" -Destination "$folder"
         Move-Item -Path "${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1" -Destination "$folder"
         Move-Item -Path "${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1" -Destination "$folder"
+
+        $path = "${Mount Directory Path}\Scriptoids\5.1"
+        $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+        $InputHT = @{
+          Path        = "${WinPE Image Creation Parent Folder}\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\profile.ps1"
+          Destination = "$folder"
+          Force       = $false
+        }
+        Copy-Item @InputHT
+
+        $path = "${Mount Directory Path}\Scriptoids"
+        $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+        $InputHT = @{
+          Path        = "${WinPE Image Creation Parent Folder}\..\..\$FolderFQN\output\$FolderFQN\usb1\autounattend.xml"
+          Destination = "$folder"
+          Force       = $false
+        }
+        Copy-Item @InputHT
         #endregion
 
         #region | Use newer version of DISM in WinPE | Update Startup script to load drivers for DISM |
@@ -1000,9 +1548,6 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
         robocopy "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM" "$folder"
         #endregion
-
-        $path = "${Mount Directory Path}\Canary 10.txt"
-        $file = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'File' -Force}
 
         #region | startnet.cmd > Startup Script |
         # Best performed separately. "${Mount Directory Path}\Windows\System32\startnet.cmd" begins with a call to wpeinit
@@ -1013,23 +1558,23 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         # So can Startnet.cmd launch a PowerShell script? 
         # I think it can. See the Unattend setting titled Microsoft-Windows-Setup/RunSynchronous.
         # That's probably how the PowerShell script is going to launch.
+
         Get-Item -Path "${Mount Directory Path}\Windows\System32\startnet.cmd" | Rename-Item -NewName 'startnet.cmd.old'
-        
         Move-Item -Path "${WinPE Image Creation Parent Folder}\startnet.cmd" -Destination "${Mount Directory Path}\Windows\System32"
-
-        #  $content = Get-Content -Path "$PSScriptRoot\startnet.cmd" -Raw
-        #  Get-Item -Path "${Mount Directory Path}\Windows\System32\startnet.cmd" | Set-Content -Value $content
-
-        #Get-Item -Path "${Mount Directory Path}\Windows\System32\startnet.cmd" | Add-Content -Value "powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
-        #Get-Item -Path "${Mount Directory Path}\Windows\System32\startnet.cmd" | Add-Content -Value "powershell.exe"
         #endregion
 
-        #region | Increase temporary storage on the RAMDisk (scratch space) |
-        # Probably not necessary
+        #region | Increase temporary storage on the RAMDisk (scratch space) | Probably not necessary |
         .\amd64\DISM\dism.exe /Set-ScratchSpace:512 /Image:"${Mount Directory Path}"
         #endregion
 
-        # Unmount the WinPE image and create media
+        #region | Load WinPE Driver Pack Contents |
+        #${Extracted Dell A11 folder path} = "${WinPE Image Creation Parent Folder}\ADK + WinPE (2026-09)\WinPE Driver Packs\Dell A11"
+        ${Extracted WinPE Driver Pack Dell A11 Folder} = [System.IO.FileInfo]"${WinPE Image Creation Parent Folder}\ADK + WinPE (2026-09)\WinPE Driver Packs\Dell A11"
+        #.\amd64\DISM\dism.exe /Add-Driver /Image:"${Mount Directory Path}" /Driver:${Extracted Dell A11 folder path} /Recurse
+        .\amd64\DISM\dism.exe /Add-Driver /Image:"${Mount Directory Path}" /Driver:"${Extracted WinPE Driver Pack Dell A11 Folder}" /Recurse
+        #endregion
+
+        #region | Unmount the WinPE image and create media |
         .\amd64\DISM\dism.exe /Unmount-Image /MountDir:"${Mount Directory Path}" /Commit
 
         # ${Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
@@ -1047,6 +1592,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         #>
         
         Remove-Item -Path "${Mount Directory Path}"
+        #endregion
       }
       #endregion
     }
@@ -1059,6 +1605,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String} = ${Bootable U
   -replace '%_explorer_owner_%',${explorer.exe Owner} `
   -replace '%_WinPE Image Creation Parent Path_%',${WinPE Image Creation Parent Path} `
   -replace '%_FolderFQN_%',$FolderFQN `
+  -replace '%___DirectoryForDscConfigs_%',$__DirectoryForDscConfigs `
   -replace '%_\.CommonItems_%',${env:.CommonItems}
 ${Bootable USB with PowerShell-enabled WinPE Command} = [ScriptBlock]::Create(${Bootable USB with PowerShell-enabled WinPE Command Here-String})
 
@@ -1072,7 +1619,4 @@ return @{
   'WinPE Image Creation Parent Folder'                     = ${WinPE Image Creation Parent Folder}
 }
 #endregion
-
-
-
 
