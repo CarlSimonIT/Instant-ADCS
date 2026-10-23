@@ -24,6 +24,16 @@ param (
 
   [Parameter(
     Mandatory = $false,
+    HelpMessage = "Download link: 'https://downloads.dell.com/FOLDER15124725M/1/WinPE11.0-Drivers-A11-KHF4P.cab'"
+  )]
+  [ValidatePattern(
+    '^[0-9a-f]{64}$'
+  )]
+  [System.String]
+  ${SHA256 of Dell WinPE Driver Pack A11} = '39665D324E4B090F4BCFC7DB434B0D9B3924C554694E1BCD7C55675984576830',
+
+  [Parameter(
+    Mandatory = $false,
     HelpMessage = "Download link: 'https://go.microsoft.com/fwlink/?linkid=2289980'"
   )]
   [ValidatePattern(
@@ -65,6 +75,12 @@ param (
   $FolderFQN = 'Instant-ADCS',
 
   [Parameter(
+    Mandatory = $false
+  )]
+  [System.String]
+  $__DirectoryForDscConfigs = '_Zeta',
+
+  [Parameter(
     Mandatory = $true
   )]
   [ValidatePattern(
@@ -88,8 +104,8 @@ param (
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
   $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
-
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\InterM3d\mc3\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\InterM3d\mc3\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; Clear-Host; 
 #>
 
 #region | Set latest Strict Mode | Exit '.\Start.ps1' script if launched in a powershell.exe process instance running at Integrity Level-High |
@@ -107,15 +123,17 @@ if (${Current powershell.exe process is running at Integrity Level-High}) {
 }
 #endregion
 #region | Export non-senstive strings to .clixml for later import by other applications |
-$HT = @{
+$InputHT = @{
   'SHA256 of Windows Server 2025 ISO File' = ${SHA256 of Windows Server 2025 ISO File}
   'SHA256 of WinPE 2026-09 EXE File'       = ${SHA256 of WinPE 2026-09 EXE File}
+  'SHA256 of Dell WinPE Driver Pack A11'   = ${SHA256 of Dell WinPE Driver Pack A11}
   'SHA256 of Windows ADK 2026-09 EXE File' = ${SHA256 of Windows ADK 2026-09 EXE File}
   EmailAddressOfBitwardenAccount           = $EmailAddressOfBitwardenAccount
   BadPassword                              = $BadPassword
   FolderFQN                                = $FolderFQN
+  __DirectoryForDscConfigs                 = $__DirectoryForDscConfigs
 }
-& "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1" @HT
+& "$PSScriptRoot\Start\Export non-senstive strings to .clixml for later import by other applications.ps1" @InputHT
 [System.Environment]::SetEnvironmentVariable('.CommonItems',"$CloningRepoPath\.CommonItems")
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\FolderFQN.clixml"
 
@@ -132,8 +150,6 @@ $AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Pat
 #endregion
 #region | Install NuGet | Set PSGallery as Trusted | Update PowerShellGet module | Install 'TUN.CredentialManager' module | Install 'MSCatalog' module
 & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1"
-# Delete Shortly # & "$PSScriptRoot\Start\NuGet Install, Trust PSGallery, Update PowerShellGet, Install Module for Credential Manager.ps1"
-# Delete Shortly # . powershell.exe -NoProfile -File "$PSScriptRoot\Start\NuGet-PSGallery-Windows PowerShell Module Install.ps1"
 #endregion
 #region | Write sensitive strings providing access to online Bitwarden Vault into local Windows Credential Manager |
 $PSModuleInfo = Import-Module 'TUN.CredentialManager' -Force -PassThru
@@ -339,7 +355,6 @@ if (-not ${Is ISO Already Relocated and Renamed}) {
 #endregion
 #region | Download, but do not install, the setup file for the Windows ADK and the Windows PE Add-on |
 #region | Download the Windows ADK installer EXE File |
-#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
 $path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\Windows ADK 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
@@ -379,15 +394,11 @@ if (${Windows ADK 2026-09 EXE File} -eq $null) {
 }
 #endregion
 #region | Download the WinPE installer EXE File |
-#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
 $path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 ${SHA256 of WinPE 2026-09 EXE File} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml"
 $hash = ${SHA256 of WinPE 2026-09 EXE File}
-#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
-$path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\WinPE 2026-09 Installer"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 ${WinPE 2026-09 EXE File} = Get-ChildItem -Path "$folder" -File `
 | Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.exe'} `
 | ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
@@ -664,6 +675,58 @@ switch ($true) {
   }
 }
 #endregion
+#endregion
+#region | Download WinPE Driver Pack from Dell or HP |
+$path = "$PSScriptRoot\..\.CommonItems\WinPE\ADK + WinPE (2026-09)\WinPE Driver Packs"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+${SHA256 of Dell WinPE Driver Pack A11} = Import-CliXml -Path "$PSScriptRoot\..\.CommonItems\SHA256 of Dell WinPE Driver Pack A11.clixml"
+$hash = ${SHA256 of Dell WinPE Driver Pack A11}
+${Dell WinPE Driver Pack A11 File} = Get-ChildItem -Path "$folder" -File `
+| Where-Object -PipelineVariable 'file' -FilterScript {$_.Extension -eq '.cab'} `
+| ForEach-Object -Process {Get-FileHash -Path $file.FullName -Algorithm 'SHA256' `
+| Where-Object -PipelineVariable 'AlgoHashPath' -FilterScript {$_.Hash -eq $hash} `
+| ForEach-Object -Process {Get-Item -Path $AlgoHashPath.Path}} `
+| Sort-Object -Property 'LastWriteTime' -Descending `
+| Select-Object -First 1
+
+if (${Dell WinPE Driver Pack A11 File} -eq $null) {
+  $JobName = 'Download Dell WinPE Driver Pack A11 File'
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      'https://downloads.dell.com/FOLDER15124725M/1/WinPE11.0-Drivers-A11-KHF4P.cab'
+      "$folder\WinPE11.0-Drivers-A11-KHF4P.cab"
+      $ProgressPreference
+      "$PSScriptRoot\A0\Extract-MSUAndCAB.ps1"
+    )
+
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                           = $args[0]
+      $FilePath                          = $args[1]
+      $OriginalProgressPreference        = $args[2]
+      ${Extract-MSUAndCAB.ps1 File Path} = $args[3]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+
+      $ParentFolder = [System.IO.FileInfo]$FilePath | Select-Object -ExpandProperty 'DirectoryName'
+      $path = "$ParentFolder\Dell A11"; 
+      ${Extracted WinPE Driver Pack Dell A11 folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      
+      $InputHT = @{
+        FilePath        = $FilePath
+        DestinationPath = "${Extracted WinPE Driver Pack Dell A11 folder}"
+      }
+      . ${Extract-MSUAndCAB.ps1 File Path}
+      Extract-MSUAndCAB @InputHT
+    } | Out-Null
+  }
+}
 #endregion
 #region | External Removable Bootable Media > Clear Disk > EFS (EFI System Partition) |
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
@@ -961,9 +1024,20 @@ if (${Patch Tuesday Of This Month Has Already Arrived}) {
   ${Windows Updates Directory BaseName} = [System.String]::Format('{0:yyyy}-{0:MM}',([System.DateTime]::Now).AddMonths(-1))
 }
 
-#$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Microsoft Update\${Windows Updates Directory BaseName}"
 $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\${Windows Updates Directory BaseName}"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+#endregion
+#region | Drivers |
+$path = "$PSScriptRoot\..\.CommonItems\Offline WU\Drivers"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+Write-Host -Object "`n  Prepare your Drivers folder. Press Enter when ready to proceed.`n" -ForegroundColor $(rFc)
+
+
+#         "$drivers128\drivers\realtek\RTL8168E\Install_PCIE_WinServer2025"
+#         "$drivers128\drivers\realtek\RTL8168E\Install_Win11"
+
+
+pause
 #endregion
 #region | Download Latest Windows Updates for Server 2025 |
 ${Windows Updates Directory FullName} = Resolve-Path -Path "$PSScriptRoot\..\.CommonItems\Offline WU\Microsoft Update\${Windows Updates Directory BaseName}" | Select-Object -ExpandProperty 'Path'
@@ -1131,8 +1205,8 @@ if (
     . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Windows Server Image Index.ps1"
 
     ${Windows Server Image Index Set} = [System.UInt32[]]@(
-      [System.UInt32][WindowsServerImageIndex]::StandardServerCore
-      [System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
+      #[System.UInt32][WindowsServerImageIndex]::StandardServerCore
+      #[System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
       #[System.UInt32][WindowsServerImageIndex]::DatacenterServerCore
       [System.UInt32][WindowsServerImageIndex]::DatacenterDesktopExperience
     )
@@ -1169,7 +1243,7 @@ if (
       if (-not $IsPresent) {
         Start-Job -Name $JobName -ArgumentList $ArgumentListJob -ScriptBlock {
           $ArgumentListProcess = $args[0]
-          Start-Process -FilePath powershell.exe -ArgumentList $ArgumentListProcess -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
+          Start-Process -FilePath powershell.exe -ArgumentList $ArgumentListProcess -Verb 'RunAs' -WindowStyle 'Normal' -Wait
         } | Out-Null
       }
     }
@@ -1489,6 +1563,23 @@ if ($DetectionSet -gt 0) {
 #>
 #endregion
 #region | Download OneDriveSetup.exe | Download latest version of Visual Studio Code |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\Visual Studio Code\##"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\OneDrive\##"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+#endregion
+#region | Misc. |
+#region | lockscreen.png |
+$IsPresent = Test-Path -Path "$PSScriptRoot\Start\lockscreen.png"
+$IsPresent = Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb0\lockscreen.png"
+
+if (-not $IsPresent) {
+  Copy-Item -Path "$PSScriptRoot\Start\lockscreen.png" -Destination "$PSScriptRoot\..\.CommonItems\usb0"
+}
+#endregion
 #endregion
 #region | Resume authoring the custom AdHocInstantAdcsDsc DSC Resource module | Write build script upon completion |
 # This is not going to be easy. 
@@ -1496,35 +1587,60 @@ if ($DetectionSet -gt 0) {
 # Best if rewritten on the Unclustered Hyper-V host. 
 #endregion
 
-#region |  |
-${Is setup.exe present in Extracted ISO} = Test-Path -Path "${Extracted ISO Folder Path}\setup.exe"
-${Is mounted_wim folder deleted} = -not (Test-Path -Path ${mounted_wim Folder Path})
 
-${Is Extracted ISO ready for copy to UFD} = (${Is setup.exe present in Extracted ISO} -eq $true) -and (${Is mounted_wim folder deleted} -eq $true)
+#region |  |
+. "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
+${OSDeploy Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+  $_.FriendlyName -eq    ${OSDeploy FriendlyName}                                             -and `
+  $_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(${OSDeploy UniqueId}) -and `
+  $_.SerialNumber -eq    ${OSDeploy SerialNumber}
+}
+${Server25 Volume} = ${OSDeploy Disk CIM Instance} | Get-Partition | Where-Object -FilterScript {$_.Type -eq 'IFS'} | Get-Volume
+
+${Is Volume holding Server25 defined}    = $null -ne ${Server25 Volume}
+${Is setup.exe present in Extracted ISO} = Test-Path -Path "${Extracted ISO Folder Path}\setup.exe"
+${Is mounted_wim folder deleted}         = -not (Test-Path -Path ${mounted_wim Folder Path})
+
+${Is Extracted ISO ready for copy to UFD} = (
+  ${Is Volume holding Server25 defined}    -eq $true -and `
+  ${Is setup.exe present in Extracted ISO} -eq $true -and `
+  ${Is mounted_wim folder deleted}         -eq $true
+)
 
 if (${Is Extracted ISO ready for copy to UFD}) {
-  . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Bootable Media Drive Letters.ps1"
-
-  ${OSDeploy Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
-    $_.FriendlyName -eq    ${OSDeploy FriendlyName}                                             -and `
-    $_.UniqueId     -match [System.Text.RegularExpressions.Regex]::Escape(${OSDeploy UniqueId}) -and `
-    $_.SerialNumber -eq    ${OSDeploy SerialNumber}
-  }
-  ${Server25 Volume} = ${OSDeploy Disk CIM Instance} `
-  | Get-Partition `
-  | Where-Object -FilterScript {$_.Type -eq 'IFS'} `
-  | Get-Volume
   ${Server25 Volume Root} = [System.String]${Server25 Volume}.DriveLetter + ':'
 
-  ${Is Copy of Extracted ISo to UFD Complete} = Test-Path -Path "${Server25 Volume Root}\setup.exe"
-  if (-not ${Is Copy of Extracted ISo to UFD Complete}) {
-    robocopy.exe /e ${Extracted ISO Folder Path} ${Server25 Volume Root} *
+  ${Is Copy of Extracted ISO to UFD Complete} = Test-Path -Path "${Server25 Volume Root}\support"
+  if (-not ${Is Copy of Extracted ISO to UFD Complete}) {
+    $JobName = "WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High"
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
+    }
+    if ($null -ne $RunningJob) {
+      Write-Host -Object "Waiting for the '$JobName' job to complete..."
+      Get-Job -Name $RunningJob.Name | Wait-Job
+    }
+
+    $JobName = 'Copy of Extracted ISO to UFD'
+    $RunningJob = Get-Job | Where-Object -FilterScript {
+      $_.Name  -eq $JobName  -and `
+      $_.State -eq 'Running'
+    }
+    if ($RunningJob -eq $null) {
+      $ArgumentList = @(
+        ${Extracted ISO Folder Path}
+        ${Server25 Volume Root}
+      )
+      Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+        ${Extracted ISO Folder Path} = $args[0]
+        ${Server25 Volume Root}      = $args[1]
+
+        #robocopy.exe /e ${Extracted ISO Folder Path} ${Server25 Volume Root} *
+        #robocopy.exe ${Extracted ISO Folder Path} ${Server25 Volume Root} /E
+        robocopy.exe ${Extracted ISO Folder Path} ${Server25 Volume Root} /E /J # /LEV:2
+      } | Out-Null
+    }
   }
 }
-
-
-
-
-
-
 #endregion
