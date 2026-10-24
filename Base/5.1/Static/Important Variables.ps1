@@ -1,9 +1,12 @@
 #region | Important Variables |
-# $MOFs                      = "$env:DSC_CFG_ROOT\DSC\MOFs"
-# $Statics                   = "$env:DSC_CFG_ROOT\DSC\Statics"
-# $ResMod                    = "$env:DSC_CFG_ROOT\DSC\ResMod"
-# #$CertFSOs                 = "$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs"
-# ${Pre-PKI CertFiles}       = "$env:DSC_CFG_ROOT\Self-Signed Certs"
+$MOFs               = "$env:DSC_CFG_ROOT\Managed Object Format Files"
+$Statics            = "$env:DSC_CFG_ROOT\Statics"
+$ResMod             = "$env:DSC_CFG_ROOT\DSC Resource Modules"
+${Pre-PKI CertFSOs} = "$env:DSC_CFG_ROOT\Pre-PKI Certificate File-System Objects"
+
+#  $CertFSOs            = "$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs"
+#  ${Pre-PKI CertFiles} = "$env:DSC_CFG_ROOT\Self-Signed Certs"
+
 ${WSMan MaxEnvelopeSizeKb} = (8192 * 3)
 
 # ".s" stands for "dot-sourced"
@@ -25,7 +28,4 @@ $AuthoredDscResourceModuleZIPs = foreach ($AuthoredDscResourceModule in $Authore
 $_Var_Name = 'InstantAdcsDscRev05 Version'
 try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null -Description "Version of the class-based DSC Resource module titled AdHocUtilsDsc" -ErrorAction 'SilentlyContinue'}
 Set-Variable -Name $_Var_Name -Value ('0.5.0')
-
-
 #endregion
-
