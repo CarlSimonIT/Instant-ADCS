@@ -47,7 +47,6 @@ $EncodedPw = [System.Convert]::ToBase64String($PwBytes)
 ${Windows Server Image Index-XML} = [System.Int32][WindowsServerImageIndex]::DatacenterDesktopExperience
 ${offlineImage Xml Element OS Edition Code} = [System.Int32]${Windows Server Image Index-XML}
 
-
 ${offlineImage cpi source} = "wim:c:/users/$(($UserName -replace ' ',$([System.Char]37 + ('{0:x}' -f [System.Int32][System.Char]' '))).ToLower())/install.wim$([System.Char]35)Windows Server 2025 ${offlineImage Xml Element OS Edition Code}"
 
 $wcmNamespaceUrl = 'http://schemas.microsoft.com/WMIConfig/2002/State'
@@ -374,7 +373,7 @@ $XmlWriter.WriteStartDocument()
                 "-Scope $([System.Char]39)LocalMachine$([System.Char]39) "
                 "-ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) "
                 "-Verbose "
-                "-Force; pause"
+                "-Force"
                 $([System.Char]34)
               )
             ))
@@ -393,11 +392,11 @@ $XmlWriter.WriteStartDocument()
                 "`$xml = [xml]::new(); "
                 "`$xml.Load('C:\Windows\Panther\unattend.xml'); "
                 "`$sb = [ScriptBlock]::Create(`$xml.unattend.Extensions.ExtractScript); "
-                "icm -ArgumentList `$xml -ScriptBlock `$sb; pause"
+                "icm -ArgumentList `$xml -ScriptBlock `$sb"
                 $([System.Char]34)
               )
             ))
-          $XmlWriter.WriteEndElement()            
+          $XmlWriter.WriteEndElement()
 
           $XmlWriter.WriteStartElement('RunSynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
@@ -513,7 +512,7 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteElementString('RegisteredOrganization',${Registered Organization})
         $XmlWriter.WriteElementString('RegisteredOwner',${Registered Owner})
         $XmlWriter.WriteElementString('TimeZone',$([System.String](Get-TimeZone | % 'StandardName')))
-        $XmlWriter.WriteElementString('OEMName','ASRock')
+        $XmlWriter.WriteElementString('OEMName','Dell')
       $XmlWriter.WriteEndElement()
       #endregion
 
@@ -619,7 +618,7 @@ $XmlWriter.WriteStartDocument()
           $XmlWriter.WriteEndElement()
           #endregion
 
-          $XmlWriter.WriteStartElement('SynchronousCommand') # Wait 15 seconds
+          $XmlWriter.WriteStartElement('SynchronousCommand') # Wait 3 seconds
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
             $XmlWriter.WriteElementString('Description',"Just wait, okay?!")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
@@ -630,7 +629,7 @@ $XmlWriter.WriteStartDocument()
                 "-NoProfile "
                 "-Command "
                 $([System.Char]34)
-                "Start-Sleep 15"
+                "Start-Sleep 3"
                 $([System.Char]34)
               )
             ))
@@ -644,7 +643,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -652,8 +651,8 @@ $XmlWriter.WriteStartDocument()
                 "-Path "
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
-                "Invoke-Expression "
-                "-Verbose"
+                "iex "
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -668,7 +667,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -676,8 +675,8 @@ $XmlWriter.WriteStartDocument()
                 "-Path "
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
-                "Invoke-Expression "
-                "-Verbose"
+                "iex "
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -691,7 +690,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -699,8 +698,8 @@ $XmlWriter.WriteStartDocument()
                 "-Path "
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
-                "Invoke-Expression "
-                "-Verbose"
+                "iex "
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -714,7 +713,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -722,8 +721,8 @@ $XmlWriter.WriteStartDocument()
                 "-Path "
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
-                "Invoke-Expression "
-                "-Verbose"
+                "iex "
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -737,7 +736,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -745,8 +744,8 @@ $XmlWriter.WriteStartDocument()
                 "-Path "
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
-                "Invoke-Expression "
-                "-Verbose"
+                "iex "
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -760,7 +759,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -768,8 +767,8 @@ $XmlWriter.WriteStartDocument()
                 "-Path "
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
-                "Invoke-Expression "
-                "-Verbose"
+                "iex "
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -992,7 +991,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Hidden$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_01 Here-String}))"
@@ -1018,315 +1017,315 @@ $XmlWriter.WriteStartDocument()
           $XmlWriter.WriteEndElement()
           #endregion
 
-          #region | pe.cmd investigation |
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:@echo off&echo:call :print ^$([System.Char]34)Setting keyboard layout for PE session^$([System.Char]34)&echo:wpeutil.exe SetKeyboardLayout 0409:00000409&echo:for ^%^%d in (C D E F G H I J K L M N O P Q T U V X Y Z^) do ()"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+          <# pe.cmd investigation |
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:@echo off&echo:call :print ^$([System.Char]34)Setting keyboard layout for PE session^$([System.Char]34)&echo:wpeutil.exe SetKeyboardLayout 0409:00000409&echo:for ^%^%d in (C D E F G H I J K L M N O P Q T U V X Y Z^) do ()"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:if exist ^%^%d:\sources\install.wim set ^$([System.Char]34)IMAGE_FILE=^%^%d:\sources\install.wim^$([System.Char]34)&echo:if exist ^%^%d:\sources\install.esd set ^$([System.Char]34)IMAGE_FILE=^%^%d:\sources\install.esd^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:if exist ^%^%d:\sources\install.wim set ^$([System.Char]34)IMAGE_FILE=^%^%d:\sources\install.wim^$([System.Char]34)&echo:if exist ^%^%d:\sources\install.esd set ^$([System.Char]34)IMAGE_FILE=^%^%d:\sources\install.esd^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:if exist ^%^%d:\sources\install.swm set ^$([System.Char]34)IMAGE_FILE=^%^%d:\sources\install.swm^$([System.Char]34) ^& set ^$([System.Char]34)SWM_PARAM=/SWMFile:^%^%d:\sources\install*.swm^$([System.Char]34)&echo:if exist ^%^%d:\autounattend.xml set ^$([System.Char]34)XML_FILE=^%^%d:\autounattend.xml^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:if exist ^%^%d:\sources\install.swm set ^$([System.Char]34)IMAGE_FILE=^%^%d:\sources\install.swm^$([System.Char]34) ^& set ^$([System.Char]34)SWM_PARAM=/SWMFile:^%^%d:\sources\install*.swm^$([System.Char]34)&echo:if exist ^%^%d:\autounattend.xml set ^$([System.Char]34)XML_FILE=^%^%d:\autounattend.xml^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:if exist ^%^%d:\`$OEM`$ set ^$([System.Char]34)OEM_FOLDER=^%^%d:\`$OEM`$^$([System.Char]34)&echo:if exist ^%^%d:\`$WinPEDriver`$ set ^$([System.Char]34)PEDRIVERS_FOLDER=^%^%d:\`$WinPEDriver`$^$([System.Char]34)&echo:^))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:if exist ^%^%d:\`$OEM`$ set ^$([System.Char]34)OEM_FOLDER=^%^%d:\`$OEM`$^$([System.Char]34)&echo:if exist ^%^%d:\`$WinPEDriver`$ set ^$([System.Char]34)PEDRIVERS_FOLDER=^%^%d:\`$WinPEDriver`$^$([System.Char]34)&echo:^))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:for /f ^$([System.Char]34)tokens=3^$([System.Char]34) ^%^%t in ($([System.Char]39)reg.exe query HKLM\System\Setup /v UnattendFile 2^^^>nul$([System.Char]39)^) do ( if exist ^%^%t set ^$([System.Char]34)XML_FILE=^%^%t^$([System.Char]34) ^))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:for /f ^$([System.Char]34)tokens=3^$([System.Char]34) ^%^%t in ($([System.Char]39)reg.exe query HKLM\System\Setup /v UnattendFile 2^^^>nul$([System.Char]39)^) do ( if exist ^%^%t set ^$([System.Char]34)XML_FILE=^%^%t^$([System.Char]34) ^))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:if not defined IMAGE_FILE call :fail ^$([System.Char]34)Could not locate install.wim, install.esd or install.swm.^$([System.Char]34)&echo:if not defined XML_FILE call :fail ^$([System.Char]34)Could not locate autounattend.xml.^$([System.Char]34)&echo:set ^$([System.Char]34)OS_VERSION=11^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:if not defined IMAGE_FILE call :fail ^$([System.Char]34)Could not locate install.wim, install.esd or install.swm.^$([System.Char]34)&echo:if not defined XML_FILE call :fail ^$([System.Char]34)Could not locate autounattend.xml.^$([System.Char]34)&echo:set ^$([System.Char]34)OS_VERSION=11^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:for /f ^$([System.Char]34)tokens=3 delims=.^$([System.Char]34) ^%^%v in ($([System.Char]39)ver$([System.Char]39)^) do (&echo:if ^%^%v LSS 20000 set ^$([System.Char]34)OS_VERSION=10^$([System.Char]34)&echo:^)&echo:if defined PEDRIVERS_FOLDER (&echo:call :print ^$([System.Char]34)Loading drivers from `$WinPEDriver`$ folder^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:for /f ^$([System.Char]34)tokens=3 delims=.^$([System.Char]34) ^%^%v in ($([System.Char]39)ver$([System.Char]39)^) do (&echo:if ^%^%v LSS 20000 set ^$([System.Char]34)OS_VERSION=10^$([System.Char]34)&echo:^)&echo:if defined PEDRIVERS_FOLDER (&echo:call :print ^$([System.Char]34)Loading drivers from `$WinPEDriver`$ folder^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:for /R ^%PEDRIVERS_FOLDER^% ^%^%f IN (*.inf^) do drvload.exe ^$([System.Char]34)^%^%f^$([System.Char]34)&echo:^)&echo:^>X:\assert.vbs (&echo:echo:Function Fail(message^^^)&echo:echo:WScript.Echo message&echo:echo:WScript.Quit 1&echo:echo:End Function)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:for /R ^%PEDRIVERS_FOLDER^% ^%^%f IN (*.inf^) do drvload.exe ^$([System.Char]34)^%^%f^$([System.Char]34)&echo:^)&echo:^>X:\assert.vbs (&echo:echo:Function Fail(message^^^)&echo:echo:WScript.Echo message&echo:echo:WScript.Quit 1&echo:echo:End Function)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:On Error Resume Next&echo:echo:Set wmi = GetObject(^^^$([System.Char]34)winmgmts:\\.\root\cimv2^^^$([System.Char]34)^^^)&echo:echo:Set drive = wmi.Get(^^^$([System.Char]34)Win32_DiskDrive.DeviceID=$([System.Char]39)\\.\PHYSICALDRIVE0$([System.Char]39)^^^$([System.Char]34)^^^)&echo:echo:If Err.Number ^^^<^^^> 0 Then)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:On Error Resume Next&echo:echo:Set wmi = GetObject(^^^$([System.Char]34)winmgmts:\\.\root\cimv2^^^$([System.Char]34)^^^)&echo:echo:Set drive = wmi.Get(^^^$([System.Char]34)Win32_DiskDrive.DeviceID=$([System.Char]39)\\.\PHYSICALDRIVE0$([System.Char]39)^^^$([System.Char]34)^^^)&echo:echo:If Err.Number ^^^<^^^> 0 Then)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)Could not locate disk 0 (^^^$([System.Char]34) ^^^& Err.Description ^^^& ^^^$([System.Char]34)^^^).^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = drive.InterfaceType&echo:echo:If actual ^^^<^^^> ^^^$([System.Char]34)IDE^^^$([System.Char]34) And actual ^^^<^^^> ^^^$([System.Char]34)SCSI^^^$([System.Char]34) Then)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)Could not locate disk 0 (^^^$([System.Char]34) ^^^& Err.Description ^^^& ^^^$([System.Char]34)^^^).^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = drive.InterfaceType&echo:echo:If actual ^^^<^^^> ^^^$([System.Char]34)IDE^^^$([System.Char]34) And actual ^^^<^^^> ^^^$([System.Char]34)SCSI^^^$([System.Char]34) Then)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)InterfaceType $([System.Char]39)^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34)$([System.Char]39) of disk 0 is unexpected.^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = drive.MediaType&echo:echo:If actual ^^^<^^^> ^^^$([System.Char]34)Fixed hard disk media^^^$([System.Char]34) Then)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)InterfaceType $([System.Char]39)^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34)$([System.Char]39) of disk 0 is unexpected.^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = drive.MediaType&echo:echo:If actual ^^^<^^^> ^^^$([System.Char]34)Fixed hard disk media^^^$([System.Char]34) Then)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)MediaType $([System.Char]39)^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34)$([System.Char]39) of disk 0 is unexpected.^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = CInt(drive.Size / 1024 / 1024 / 1024^^^)&echo:echo:expected = 100&echo:echo:If actual ^^^< expected Then)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)MediaType $([System.Char]39)^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34)$([System.Char]39) of disk 0 is unexpected.^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = CInt(drive.Size / 1024 / 1024 / 1024^^^)&echo:echo:expected = 100&echo:echo:If actual ^^^< expected Then)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)Size of disk 0 is expected to be at least ^^^$([System.Char]34) ^^^& expected ^^^& ^^^$([System.Char]34) GiB, but actually is ^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34) GiB.^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = CInt(drive.Size / 1024 / 1024 / 1024^^^))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:Fail ^^^$([System.Char]34)Size of disk 0 is expected to be at least ^^^$([System.Char]34) ^^^& expected ^^^& ^^^$([System.Char]34) GiB, but actually is ^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34) GiB.^^^$([System.Char]34)&echo:echo:End If&echo:echo:actual = CInt(drive.Size / 1024 / 1024 / 1024^^^))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:expected = 4000&echo:echo:If actual ^^^> expected Then&echo:echo:Fail ^^^$([System.Char]34)Size of disk 0 is expected to be at most ^^^$([System.Char]34) ^^^& expected ^^^& ^^^$([System.Char]34) GiB, but actually is ^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34) GiB.^^^$([System.Char]34)&echo:echo:End If)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:expected = 4000&echo:echo:If actual ^^^> expected Then&echo:echo:Fail ^^^$([System.Char]34)Size of disk 0 is expected to be at most ^^^$([System.Char]34) ^^^& expected ^^^& ^^^$([System.Char]34) GiB, but actually is ^^^$([System.Char]34) ^^^& actual ^^^& ^^^$([System.Char]34) GiB.^^^$([System.Char]34)&echo:echo:End If)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:WScript.Echo ^^^$([System.Char]34)Disk assertions were satisfied.^^^$([System.Char]34)&echo:echo:WScript.Quit 0&echo:^)&echo:call :print ^$([System.Char]34)Running disk assertions^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:WScript.Echo ^^^$([System.Char]34)Disk assertions were satisfied.^^^$([System.Char]34)&echo:echo:WScript.Quit 0&echo:^)&echo:call :print ^$([System.Char]34)Running disk assertions^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:cscript.exe //E:vbscript ^$([System.Char]34)X:\assert.vbs^$([System.Char]34) //Nologo ^|^| call :fail ^$([System.Char]34)Disk assertion failed. Windows Setup will halt to avoid potential data loss.^$([System.Char]34)&echo:^>X:\diskpart.txt (&echo:echo:SELECT DISK=0&echo:echo:CLEAN)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:cscript.exe //E:vbscript ^$([System.Char]34)X:\assert.vbs^$([System.Char]34) //Nologo ^|^| call :fail ^$([System.Char]34)Disk assertion failed. Windows Setup will halt to avoid potential data loss.^$([System.Char]34)&echo:^>X:\diskpart.txt (&echo:echo:SELECT DISK=0&echo:echo:CLEAN)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:CONVERT GPT&echo:echo:CREATE PARTITION EFI SIZE=527&echo:echo:FORMAT QUICK FS=FAT32 LABEL=^^^$([System.Char]34)System^^^$([System.Char]34)&echo:echo:ASSIGN LETTER=S&echo:echo:CREATE PARTITION MSR SIZE=16&echo:echo:CREATE PARTITION PRIMARY)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:CONVERT GPT&echo:echo:CREATE PARTITION EFI SIZE=527&echo:echo:FORMAT QUICK FS=FAT32 LABEL=^^^$([System.Char]34)System^^^$([System.Char]34)&echo:echo:ASSIGN LETTER=S&echo:echo:CREATE PARTITION MSR SIZE=16&echo:echo:CREATE PARTITION PRIMARY)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:SHRINK MINIMUM=1238&echo:echo:FORMAT QUICK FS=NTFS LABEL=^^^$([System.Char]34)Windows^^^$([System.Char]34)&echo:echo:ASSIGN LETTER=W&echo:echo:CREATE PARTITION PRIMARY&echo:echo:FORMAT QUICK FS=NTFS LABEL=^^^$([System.Char]34)Recovery^^^$([System.Char]34)&echo:echo:ASSIGN LETTER=R)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:SHRINK MINIMUM=1238&echo:echo:FORMAT QUICK FS=NTFS LABEL=^^^$([System.Char]34)Windows^^^$([System.Char]34)&echo:echo:ASSIGN LETTER=W&echo:echo:CREATE PARTITION PRIMARY&echo:echo:FORMAT QUICK FS=NTFS LABEL=^^^$([System.Char]34)Recovery^^^$([System.Char]34)&echo:echo:ASSIGN LETTER=R)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:echo:SET ID=^^^$([System.Char]34)de94bba4-06d1-4d40-a16a-bfd50179d6ac^^^$([System.Char]34)&echo:echo:GPT ATTRIBUTES=0x8000000000000001&echo:^)&echo:call :print ^$([System.Char]34)diskpart will now partition and format your disk^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:echo:SET ID=^^^$([System.Char]34)de94bba4-06d1-4d40-a16a-bfd50179d6ac^^^$([System.Char]34)&echo:echo:GPT ATTRIBUTES=0x8000000000000001&echo:^)&echo:call :print ^$([System.Char]34)diskpart will now partition and format your disk^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:diskpart.exe /s X:\diskpart.txt ^|^| call :fail ^$([System.Char]34)diskpart.exe encountered an error.^$([System.Char]34)&echo:set ^$([System.Char]34)IMG_PARAM=/Index:4^$([System.Char]34)&echo:call :print ^$([System.Char]34)Applying Windows image to target disk^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:diskpart.exe /s X:\diskpart.txt ^|^| call :fail ^$([System.Char]34)diskpart.exe encountered an error.^$([System.Char]34)&echo:set ^$([System.Char]34)IMG_PARAM=/Index:4^$([System.Char]34)&echo:call :print ^$([System.Char]34)Applying Windows image to target disk^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:dism.exe /Apply-Image /ImageFile:^%IMAGE_FILE^% ^%SWM_PARAM^% ^%IMG_PARAM^% /ApplyDir:W:\ /CheckIntegrity /Verify ^|^| call :fail ^$([System.Char]34)dism.exe encountered an error.^$([System.Char]34)&echo:call :print ^$([System.Char]34)Making system partition bootable^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:dism.exe /Apply-Image /ImageFile:^%IMAGE_FILE^% ^%SWM_PARAM^% ^%IMG_PARAM^% /ApplyDir:W:\ /CheckIntegrity /Verify ^|^| call :fail ^$([System.Char]34)dism.exe encountered an error.^$([System.Char]34)&echo:call :print ^$([System.Char]34)Making system partition bootable^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:bcdboot.exe W:\Windows /s S: ^|^| call :fail ^$([System.Char]34)bcdboot.exe encountered an error.^$([System.Char]34)&echo:bcdedit.exe /set {fwbootmgr} bootsequence {bootmgr}&echo:call :print ^$([System.Char]34)Copying answer file to target disk^$([System.Char]34)&echo:mkdir W:\Windows\Panther)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:bcdboot.exe W:\Windows /s S: ^|^| call :fail ^$([System.Char]34)bcdboot.exe encountered an error.^$([System.Char]34)&echo:bcdedit.exe /set {fwbootmgr} bootsequence {bootmgr}&echo:call :print ^$([System.Char]34)Copying answer file to target disk^$([System.Char]34)&echo:mkdir W:\Windows\Panther)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:copy ^%XML_FILE^% W:\Windows\Panther\unattend.xml&echo:if defined PEDRIVERS_FOLDER (&echo:call :print ^$([System.Char]34)Adding drivers from `$WinPEDriver`$ folder to new installation^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:copy ^%XML_FILE^% W:\Windows\Panther\unattend.xml&echo:if defined PEDRIVERS_FOLDER (&echo:call :print ^$([System.Char]34)Adding drivers from `$WinPEDriver`$ folder to new installation^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:dism.exe /Add-Driver /Image:W:\ /Driver:^$([System.Char]34)^%PEDRIVERS_FOLDER^%^$([System.Char]34) /Recurse&echo:^)&echo:call :print ^$([System.Char]34)Setting time zone^$([System.Char]34)&echo:dism.exe /Image:W:\ /Set-TimeZone:^$([System.Char]34)Central Standard Time^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:dism.exe /Add-Driver /Image:W:\ /Driver:^$([System.Char]34)^%PEDRIVERS_FOLDER^%^$([System.Char]34) /Recurse&echo:^)&echo:call :print ^$([System.Char]34)Setting time zone^$([System.Char]34)&echo:dism.exe /Image:W:\ /Set-TimeZone:^$([System.Char]34)Central Standard Time^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:call :print ^$([System.Char]34)Setting device setup region to United States (GeoID 244^)^$([System.Char]34)&echo:reg.exe LOAD HKLM\mount W:\Windows\System32\config\SOFTWARE)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:call :print ^$([System.Char]34)Setting device setup region to United States (GeoID 244^)^$([System.Char]34)&echo:reg.exe LOAD HKLM\mount W:\Windows\System32\config\SOFTWARE)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:reg.exe ADD ^$([System.Char]34)HKLM\mount\Microsoft\Windows\CurrentVersion\Control Panel\DeviceRegion^$([System.Char]34) /v DeviceRegion /t REG_DWORD /d 244 /f&echo:reg.exe UNLOAD HKLM\mount&echo:call :print ^$([System.Char]34)Computer will now reboot^$([System.Char]34))"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:reg.exe ADD ^$([System.Char]34)HKLM\mount\Microsoft\Windows\CurrentVersion\Control Panel\DeviceRegion^$([System.Char]34) /v DeviceRegion /t REG_DWORD /d 244 /f&echo:reg.exe UNLOAD HKLM\mount&echo:call :print ^$([System.Char]34)Computer will now reboot^$([System.Char]34))"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /c >>C:\pe.cmd (echo:wpeutil.exe reboot&echo:goto :eof&echo::fail&echo:echo:&echo:echo:Fatal error: ^%~1&echo:echo:&echo:pause&echo:exit 1&echo::print&echo:echo:&echo:echo:*** ^%~1 ***&echo:echo:&echo:goto :eof)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /c >>C:\pe.cmd (echo:wpeutil.exe reboot&echo:goto :eof&echo::fail&echo:echo:&echo:echo:Fatal error: ^%~1&echo:echo:&echo:pause&echo:exit 1&echo::print&echo:echo:&echo:echo:*** ^%~1 ***&echo:echo:&echo:goto :eof)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand'); 
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
-            $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
-            $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "cmd.exe /k echo $([System.Char]34)cmd.exe /c C:\pe.cmd$([System.Char]34)"
-              )
-            )); 
-          $XmlWriter.WriteEndElement()
-          #endregion
+            $XmlWriter.WriteStartElement('SynchronousCommand'); 
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%"); 
+              $XmlWriter.WriteElementString('Description',"pe.cmd investigation"); 
+              $XmlWriter.WriteElementString('RequiresUserInput',"false"); 
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "cmd.exe /k echo $([System.Char]34)cmd.exe /c C:\pe.cmd$([System.Char]34)"
+                )
+              )); 
+            $XmlWriter.WriteEndElement()
+          #>
 
         $XmlWriter.WriteEndElement()
         #endregion
@@ -1395,16 +1394,15 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t`n"
       "`t`t`t  if (`$file.GetAttribute($([System.Char]39)transformation$([System.Char]39)) -ieq $([System.Char]39)Base64$([System.Char]39)) {`n"
       "`t`t`t    [System.IO.File]::WriteAllBytes(`$patH, [System.Convert]::FromBase64String(`$content))`n"
+      "`t`t`t    Write-Host -Object $([System.Char]34)patH =   `$patH$([System.Char]34)`n"
       "`t`t`t  } else {`n"
       "`t`t`t    `$encoding = switch ([System.IO.Path]::GetExtension(`$path)) {`n"
       "`t`t`t      {`$_ -in $([System.Char]39).ps1$([System.Char]39),$([System.Char]39).xml$([System.Char]39)}       {[System.Text.Encoding]::UTF8}`n"
       "`t`t`t      {`$_ -in $([System.Char]39).reg$([System.Char]39),$([System.Char]39).vbs$([System.Char]39),$([System.Char]39).js$([System.Char]39)} {[System.Text.UnicodeEncoding]::New(`$false,`$true)}`n"
       "`t`t`t      default                      {[System.Text.Encoding]::Default}`n"
       "`t`t`t    }`n"
-      "`t`t`t`n"
-      "`t`t`t    #Write-Host -Object $([System.Char]34)``$pAth = `$pAth$([System.Char]34)`n"
-      "`t`t`t    Write-Host -Object $([System.Char]34)WTF = `$pAth$([System.Char]34) -ForegroundColor `$(rFC)`n"
       "`t`t`t    [System.IO.File]::WriteAllBytes(`$pAth,(`$encoding.GetPreamble() + `$encoding.GetBytes(`$content)))`n"
+      "`t`t`t    Write-Host -Object $([System.Char]34)pAth =   `$pAth$([System.Char]34)`n"
       "`t`t`t  }`n"
       "`t`t`t}`n"
       "`t`t"
@@ -1425,16 +1423,15 @@ $XmlWriter.WriteStartDocument()
 
           if ($file.GetAttribute('transformation') -ieq 'Base64') {
             [System.IO.File]::WriteAllBytes($patH, [System.Convert]::FromBase64String($content))
+            Write-Host -Object "patH =   $patH"
           } else {
             $encoding = switch ([System.IO.Path]::GetExtension($path)) {
               {$_ -in '.ps1','.xml'}       {[System.Text.Encoding]::UTF8}
               {$_ -in '.reg','.vbs','.js'} {[System.Text.UnicodeEncoding]::New($false,$true)}
               default                      {[System.Text.Encoding]::Default}
             }
-
-            #Write-Host -Object "`$pAth = $pAth"
-            Write-Host -Object "WTF = $pAth" -ForegroundColor $(rFC)
             [System.IO.File]::WriteAllBytes($pAth,($encoding.GetPreamble() + $encoding.GetBytes($content)))
+            Write-Host -Object "pAth =   $pAth"
           }
         }
       } | Out-Null
@@ -1443,8 +1440,8 @@ $XmlWriter.WriteStartDocument()
     #endregion
 
     #region | SpEcialiZe.ps1 Here-String | A-Scripts | Executed by NT Authority\System, before user accounts are created |
-    #region | "PauseWindowsUpdate.ps1" Here-String | Pause Windows Update until AFTER WSUS construction |
-    ${File PauseWindowsUpdate.ps1 Here-String} = $(
+    #region | "Pause Windows Update-Command within Scheduled Task.ps1" Here-String | Pause Windows Update until AFTER WSUS construction |
+    ${File Pause Windows Update-Command within Scheduled Task.ps1 Here-String} = $(
       #region |  |
       "`n"
       "`t`t`t`$Formatter = {`n"
@@ -1484,11 +1481,14 @@ $XmlWriter.WriteStartDocument()
         Set-ItemProperty @params -Name 'PauseQualityUpdatesEndTime' -Value $End
         Set-ItemProperty @params -Name 'PauseUpdatesStartTime' -Value $Start
         Set-ItemProperty @params -Name 'PauseUpdatesExpiryTime' -Value $End
+
+
+        # Register-ScheduledTask -TaskName 'PauseWindowsUpdate' -Xml $( Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\PauseWindowsUpdate.xml' -Raw );
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\PauseWindowsUpdate.ps1')
-        $XmlWriter.WriteString(${File PauseWindowsUpdate.ps1 Here-String})
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Pause Windows Update-Command within Scheduled Task.ps1')
+        $XmlWriter.WriteString(${File Pause Windows Update-Command within Scheduled Task.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
     #region | "PauseWindowsUpdate.xml" XML Element | Pause Windows Update until AFTER WSUS construction |
@@ -1546,7 +1546,7 @@ $XmlWriter.WriteStartDocument()
             ${XmlWriter PauseWindowsUpdate.xml}.WriteAttributeString('Context','Author')
             ${XmlWriter PauseWindowsUpdate.xml}.WriteStartElement('Exec')
               ${XmlWriter PauseWindowsUpdate.xml}.WriteElementString('Command','C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe')
-              ${XmlWriter PauseWindowsUpdate.xml}.WriteElementString('Arguments',"-Command $([System.Char]34)gc -raw -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\PauseWindowsUpdate.ps1$([System.Char]39) | iex -Verbose$([System.Char]34)")
+              ${XmlWriter PauseWindowsUpdate.xml}.WriteElementString('Arguments',"-Command $([System.Char]34)gc -raw -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\Pause Windows Update-Command within Scheduled Task.ps1$([System.Char]39) | iex -Verbose$([System.Char]34)")
             ${XmlWriter PauseWindowsUpdate.xml}.WriteEndElement()
           ${XmlWriter PauseWindowsUpdate.xml}.WriteEndElement()
       ${XmlWriter PauseWindowsUpdate.xml}.WriteEndElement()
@@ -1566,6 +1566,24 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\PauseWindowsUpdate.xml')
         $XmlWriter.WriteString(${File PauseWindowsUpdate.xml Here-String})
       $XmlWriter.WriteEndElement()
+    #endregion
+    #region | "Windows Update-PAUSE.ps1" XML Element | Pause Windows Update until AFTER WSUS construction |
+    ${File Windows Update-PAUSE.ps1 Here-String} = $(
+      #region |  |
+      "`n"
+      "`t`t`tRegister-ScheduledTask -TaskName $([System.Char]39)PauseWindowsUpdate$([System.Char]39) -Xml `$( Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\PauseWindowsUpdate.xml$([System.Char]39) -Raw );`n"
+      "`t`t"
+      #endregion
+      {
+        Register-ScheduledTask -TaskName 'PauseWindowsUpdate' -Xml $( Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\PauseWindowsUpdate.xml' -Raw );
+      } | Out-Null
+    ) -join ''
+      $XmlWriter.WriteStartElement('File')
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Windows Update-PAUSE.ps1')
+        $XmlWriter.WriteString(${File Windows Update-PAUSE.ps1 Here-String})
+      $XmlWriter.WriteEndElement()
+    #endregion
+    #region | "MoveActiveHours.xml" XML Element | Pause Windows Update until AFTER WSUS construction |
     #endregion
 
     #region | "No non-GPO audit policy settings.ps1" Here-String and XML Element |
@@ -1616,10 +1634,10 @@ $XmlWriter.WriteStartDocument()
     #region | "Environment Variables-System Scope.ps1" Here-String and XML Element |
     ${File Environment Variables-System Scope.ps1 Here-String} = $(
       "`n"
-      "`t`t`t`${04f1in3 path} = $([System.Char]34)$__DirectoryForDscConfigs\Instant-ADCS$([System.Char]34)`n"
+      "`t`t`t`${04f1in3 path} = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS$([System.Char]34)`n"
       "`t`t`t`${HKLM Sess Mgr Env} = $([System.Char]39)HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment$([System.Char]39)`n"
       "`t`t`t`$HT = @{`n"
-      "`t`t`t  $([System.Char]39)DSC_CFG_ROOT$([System.Char]39)   = $([System.Char]34)$__DirectoryForDscConfigs$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)DSC_CFG_ROOT$([System.Char]39)   = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs$([System.Char]34)`n"
       "`t`t`t  $([System.Char]39)04f1in3$([System.Char]39)        = `${04f1in3 path}`n"
       "`t`t`t  $([System.Char]39)SystemModules$([System.Char]39)  = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
       "`t`t`t  $([System.Char]39)SysMods$([System.Char]39)        = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
@@ -1638,10 +1656,10 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t}`n"
       "`t`t"
       {
-        ${04f1in3 path} = "$__DirectoryForDscConfigs\Instant-ADCS"
+        ${04f1in3 path} = "$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS"
         ${HKLM Sess Mgr Env} = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
         $HT = @{
-          'DSC_CFG_ROOT'   = "$__DirectoryForDscConfigs"
+          'DSC_CFG_ROOT'   = "$env:SystemDrive\$__DirectoryForDscConfigs"
           '04f1in3'        = ${04f1in3 path}
           'SystemModules'  = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
           'SysMods'        = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
@@ -1670,18 +1688,18 @@ $XmlWriter.WriteStartDocument()
       "`n"
       "`t`t`t# Copy files of DSC structural and environmental data from external storage to local drive`n"
       "`t`t`t`$folder = try {`n"
-      "`t`t`t  Get-Item -Path $([System.Char]34)$__DirectoryForDscConfigs$([System.Char]34) -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
+      "`t`t`t  Get-Item -Path $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs$([System.Char]34) -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
       "`t`t`t} catch {`n"
-      "`t`t`t  New-Item -Path $([System.Char]34)$__DirectoryForDscConfigs$([System.Char]34) -ItemType $([System.Char]39)Directory$([System.Char]39) -Force`n"
+      "`t`t`t  New-Item -Path $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs$([System.Char]34) -ItemType $([System.Char]39)Directory$([System.Char]39) -Force`n"
       "`t`t`t}`n"
       "`t`t`tCopy-Item -Path $([System.Char]34)`$usb1\Instant-ADCS$([System.Char]34) -Destination `$folder.FullName -Recurse`n"
       "`t`t"
       {
         # Copy files of DSC structural and environmental data from external storage to local drive
         $folder = try {
-          Get-Item -Path "$__DirectoryForDscConfigs" -ErrorAction 'Stop'
+          Get-Item -Path "$env:SystemDrive\$__DirectoryForDscConfigs" -ErrorAction 'Stop'
         } catch {
-          New-Item -Path "$__DirectoryForDscConfigs" -ItemType 'Directory' -Force
+          New-Item -Path "$env:SystemDrive\$__DirectoryForDscConfigs" -ItemType 'Directory' -Force
         }
         Copy-Item -Path "$usb1\Instant-ADCS" -Destination $folder.FullName -Recurse
       } | Out-Null
@@ -2327,26 +2345,13 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteEndElement()
     #>
     #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
 
     ${File SpEcialiZe.ps1 Here-String} = $(
 
       #region |  |
       "`n"
       "`t`t`t`$SpEcialiZeScriptBlocks = `$(`n"
+      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Windows Update-PAUSE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\No non-GPO audit policy settings.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\WSMan Envelope Size.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Environment Variables-System Scope.ps1$([System.Char]39)}`n"
@@ -2380,7 +2385,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  foreach (`$script in `$SpEcialiZeScriptBlocks) {`n"
       "`t`t`t    Write-Progress -Activity $([System.Char]39)Running scriptblocks in SpEcialiZe.ps1. Do not close this window.$([System.Char]39) -PercentComplete `$Complete`n"
       "`t`t`t    $([System.Char]34)*** Will now execute command «{0}»$([System.Char]34) -f `$(`n"
-      "`t`t`t      `$script.ToString().Trim() -replace $([System.Char]39)\s+$([System.Char]39), $([System.Char]39) $([System.Char]39) -replace $([System.Char]39)^(.{99})(.+)`$$([System.Char]39), $([System.Char]39)`$1…$([System.Char]39)`n"
+      "`t`t`t      `$script.ToString().Trim() -replace $([System.Char]39)\s+$([System.Char]39), $([System.Char]39) $([System.Char]39) -replace $([System.Char]39)^(.{99})(.+)`$$([System.Char]39), $([System.Char]39)`$1……$([System.Char]39)`n"
       "`t`t`t    )`n"
       "`t`t`t    `$start = [System.DateTime]::Now`n"
       "`t`t`t    & `$script`n"
@@ -2389,12 +2394,11 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  }`n"
       "`t`t`t} *>&1 | Out-String -Width 1KB -Stream >> $([System.Char]34)C:\Windows\Setup\Scripts\SpEcialiZe.log$([System.Char]34)`n"
       "`t`t"
-      
       #endregion
-
 
       {
         $SpEcialiZeScriptBlocks = $(
+          {& 'C:\Windows\Setup\Scripts\Windows Update-PAUSE.ps1'}
           {& 'C:\Windows\Setup\Scripts\No non-GPO audit policy settings.ps1'}
           {& 'C:\Windows\Setup\Scripts\WSMan Envelope Size.ps1'}
           {& 'C:\Windows\Setup\Scripts\Environment Variables-System Scope.ps1'}
@@ -3924,8 +3928,8 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteString(${File Accent Color on Start, Taskbar, Action Center-NONE.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
-    #region | "Execute the UserOnce.ps1 File.ps1" Here-String and XML Element |
-    ${File Execute the UserOnce.ps1 File.ps1 Here-String} = $(
+    #region | "Set the UserOnce.ps1 File to Execute at Next Logon.ps1" Here-String and XML Element |
+    ${File Set the UserOnce.ps1 File to Execute at Next Logon.ps1 Here-String} = $(
       #region |  |
       "`n"
       "`t`t`t#   reg.exe add $([System.Char]34)HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce$([System.Char]34) /v $([System.Char]34)UnattendedSetup$([System.Char]34) /t REG_SZ /d $([System.Char]34)powershell.exe -WindowStyle \$([System.Char]34)$([System.Char]34)Normal\$([System.Char]34)$([System.Char]34) -ExecutionPolicy \$([System.Char]34)$([System.Char]34)Unrestricted\$([System.Char]34)$([System.Char]34) -File \$([System.Char]34)$([System.Char]34)C:\Windows\Setup\Scripts\UserOnce.ps1\$([System.Char]34)$([System.Char]34)$([System.Char]34) /f`n"
@@ -3944,8 +3948,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  `$InputHT = @{`n"
       "`t`t`t    Path    = `$path`n"
       "`t`t`t    Name    = `$name`n"
-      "`t`t`t    Value   = $([System.Char]34)powershell.exe -WindowStyle `$([System.Char]39)Maximized`$([System.Char]39) -ExecutionPolicy `$([System.Char]39)RemoteSigned`$([System.Char]39) -File `$([System.Char]39)C:\Windows\Setup\Scripts\UserOnce.ps1`$([System.Char]39)$([System.Char]34)`n"
-      "`t`t`t    #Value   = $([System.Char]34)powershell.exe -WindowStyle `$([System.Char]34)Maximized`$([System.Char]34) -ExecutionPolicy `$([System.Char]34)RemoteSigned`$([System.Char]34) -File `$([System.Char]34)C:\Windows\Setup\Scripts\UserOnce.ps1`$([System.Char]34)$([System.Char]34)`n"
+      "`t`t`t    #Value   = $([System.Char]34)powershell.exe -WindowStyle `$([System.Char]39)Maximized`$([System.Char]39) -ExecutionPolicy `$([System.Char]39)RemoteSigned`$([System.Char]39) -File `$([System.Char]39)C:\Windows\Setup\Scripts\UserOnce.ps1`$([System.Char]39)$([System.Char]34)`n"
+      "`t`t`t    Value   = $([System.Char]34)powershell.exe -WindowStyle `$([System.Char]34)Maximized`$([System.Char]34) -ExecutionPolicy `$([System.Char]34)RemoteSigned`$([System.Char]34) -File `$([System.Char]34)C:\Windows\Setup\Scripts\UserOnce.ps1`$([System.Char]34)$([System.Char]34)`n"
       "`t`t`t    Type    = $([System.Char]39)String$([System.Char]39)`n"
       "`t`t`t    Force   = `$true`n"
       "`t`t`t    Verbose = `$true`n"
@@ -3971,8 +3975,8 @@ $XmlWriter.WriteStartDocument()
           $InputHT = @{
             Path    = $path
             Name    = $name
-            Value   = "powershell.exe -WindowStyle $([System.Char]39)Maximized$([System.Char]39) -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -File $([System.Char]39)C:\Windows\Setup\Scripts\UserOnce.ps1$([System.Char]39)"
-            #Value   = "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -ExecutionPolicy $([System.Char]34)RemoteSigned$([System.Char]34) -File $([System.Char]34)C:\Windows\Setup\Scripts\UserOnce.ps1$([System.Char]34)"
+            #Value   = "powershell.exe -WindowStyle $([System.Char]39)Maximized$([System.Char]39) -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -File $([System.Char]39)C:\Windows\Setup\Scripts\UserOnce.ps1$([System.Char]39)"
+            Value   = "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -ExecutionPolicy $([System.Char]34)RemoteSigned$([System.Char]34) -File $([System.Char]34)C:\Windows\Setup\Scripts\UserOnce.ps1$([System.Char]34)"
             Type    = 'String'
             Force   = $true
             Verbose = $true
@@ -3982,8 +3986,8 @@ $XmlWriter.WriteStartDocument()
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Execute the UserOnce.ps1 File.ps1')
-        $XmlWriter.WriteString(${File Execute the UserOnce.ps1 File.ps1 Here-String})
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Set the UserOnce.ps1 File to Execute at Next Logon.ps1')
+        $XmlWriter.WriteString(${File Set the UserOnce.ps1 File to Execute at Next Logon.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
     #region | "Display-Scale to 100 Percent (96 DPI)-DefaultUser.ps1" Here-String and XML Element |
@@ -4221,7 +4225,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Sticky Keys-DISABLED DefaultUser version.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Taskbar System Tray Chevron Visibility-Always Show.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Accent Color on Start, Taskbar, Action Center-NONE.ps1$([System.Char]39)}`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Execute the UserOnce.ps1 File.ps1$([System.Char]39)}`n"
+      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Set the UserOnce.ps1 File to Execute at Next Logon.ps1$([System.Char]39)}`n"
       "`t`t`t  # ??? # {reg.exe add $([System.Char]34)HKU\DefaultUser\Software\Microsoft\Internet Explorer\LowRegistry\Audio\PolicyConfig\PropertyStore$([System.Char]34) /f}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Page Space Control Sizer.ps1$([System.Char]39)}               #{Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\Page Space Control Sizer.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Underline Access Keys when Available.ps1$([System.Char]39)}   #{Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\Underline Access Keys when Available.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
@@ -4257,7 +4261,7 @@ $XmlWriter.WriteStartDocument()
           {& 'C:\Windows\Setup\Scripts\Sticky Keys-DISABLED DefaultUser version.ps1'}
           {& 'C:\Windows\Setup\Scripts\Taskbar System Tray Chevron Visibility-Always Show.ps1'}
           {& 'C:\Windows\Setup\Scripts\Accent Color on Start, Taskbar, Action Center-NONE.ps1'}
-          {& 'C:\Windows\Setup\Scripts\Execute the UserOnce.ps1 File.ps1'}
+          {& 'C:\Windows\Setup\Scripts\Set the UserOnce.ps1 File to Execute at Next Logon.ps1'}
           # ??? # {reg.exe add "HKU\DefaultUser\Software\Microsoft\Internet Explorer\LowRegistry\Audio\PolicyConfig\PropertyStore" /f}
           {& 'C:\Windows\Setup\Scripts\Page Space Control Sizer.ps1'}               #{Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\Page Space Control Sizer.ps1' -Raw | Invoke-Expression -Verbose}
           {& 'C:\Windows\Setup\Scripts\Underline Access Keys when Available.ps1'}   #{Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\Underline Access Keys when Available.ps1' -Raw | Invoke-Expression -Verbose}
@@ -4291,11 +4295,11 @@ $XmlWriter.WriteStartDocument()
     #region | UserOnce.ps1 Here-String | C-Scripts | C-Scripts run whenever a user, any user, logs on for the first time |
     #region | "RunMRU Run Box Cache.ps1" Here-String and XML Element |
     ${File RunMRU Run Box Cache.ps1 Here-String} = $(
-
       #region |  |
       "`n"
-      "`t`t`t`$RunMRU = $([System.Char]34)HKU:\`$((Get-LocalUser `${explorer.exe Owner} -ErrorAction Stop).sid.value)\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
+      "`t`t`t#`$RunMRU = $([System.Char]34)HKU:\`$((Get-LocalUser `${explorer.exe Owner} -ErrorAction Stop).sid.value)\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
       "`t`t`t#`$RunMRU = $([System.Char]34)HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
+      "`t`t`t`$RunMRU = $([System.Char]34)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
       "`t`t`t`$AllNumLett = `$(`n"
       "`t`t`t  0..25 | ForEach-Object -Process {`n"
       "`t`t`t    [System.Char]([System.Int32][System.Char]$([System.Char]39)z$([System.Char]39) - `$_)`n"
@@ -4307,7 +4311,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t} catch {`n"
       "`t`t`t  New-Item -Path `$path -Name $([System.Char]39)MRUList$([System.Char]39) -Force`n"
       "`t`t`t}`n"
-      "`t`t`tSet-ItemProperty -Name MRUList -Path `$path -Value $([System.Char]34)`$AllNumLett$([System.Char]34)`n"
+      "`t`t`tSet-ItemProperty -Name $([System.Char]39)MRUList$([System.Char]39) -Path `$path -Value $([System.Char]34)`$AllNumLett$([System.Char]34)`n"
       "`t`t`t`$RunMRU_HT = [System.Collections.Hashtable]@{`n"
       "`t`t`t  a = $([System.Char]39)ms-settings:windowsupdate$([System.Char]39)`n"
       "`t`t`t  b = $([System.Char]39)ms-settings:display$([System.Char]39)`n"
@@ -4338,11 +4342,10 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t}`n"
       "`t`t"
       #endregion
-
-
       {
-        $RunMRU = "HKU:\$((Get-LocalUser ${explorer.exe Owner} -ErrorAction Stop).sid.value)\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
+        #$RunMRU = "HKU:\$((Get-LocalUser ${explorer.exe Owner} -ErrorAction Stop).sid.value)\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
         #$RunMRU = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
+        $RunMRU = "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
         $AllNumLett = $(
           0..25 | ForEach-Object -Process {
             [System.Char]([System.Int32][System.Char]'z' - $_)
@@ -4354,7 +4357,7 @@ $XmlWriter.WriteStartDocument()
         } catch {
           New-Item -Path $path -Name 'MRUList' -Force
         }
-        Set-ItemProperty -Name MRUList -Path $path -Value "$AllNumLett"
+        Set-ItemProperty -Name 'MRUList' -Path $path -Value "$AllNumLett"
         $RunMRU_HT = [System.Collections.Hashtable]@{
           a = 'ms-settings:windowsupdate'
           b = 'ms-settings:display'
@@ -4623,6 +4626,91 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteString(${File Start Menu Icons-HIDE.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
+    #region | "VisualFX-Optimize Speed.ps1" Here-String and XML Element |
+    ${File VisualFX-Optimize Speed.ps1 Here-String} = $(
+      #region |  |
+      "`n"
+      "`t`t`t#  Set-ItemProperty -LiteralPath $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects$([System.Char]39) -Name $([System.Char]39)VisualFXSetting$([System.Char]39) -Type $([System.Char]39)DWord$([System.Char]39) -Value $([System.Char]39)2$([System.Char]39) -Force -Verbose`n"
+      "`t`t`t`$path = $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer$([System.Char]39)`n"
+      "`t`t`t`$name = $([System.Char]39)VisualEffects$([System.Char]39)`n"
+      "`t`t`t`$RegItem = try {`n"
+      "`t`t`t  Get-Item -Path `$path -Name `$name -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
+      "`t`t`t} catch {`n"
+      "`t`t`t  New-Item -Path `$path -Name `$name -Force`n"
+      "`t`t`t}`n"
+      "`t`t`t`n"
+      "`t`t`t`$path = $([System.Char]34)`$path\`$name$([System.Char]34)`n"
+      "`t`t`t`$name = $([System.Char]39)VisualFXSetting$([System.Char]39)`n"
+      "`t`t`tSet-ItemProperty -Path $([System.Char]34)`$path\`$name$([System.Char]34) -Name `$name -Value $([System.Char]39)2$([System.Char]39) -Type $([System.Char]39)DWord$([System.Char]39) -Verbose -Force`n"
+      "`t`t"
+      #endregion
+      {
+        #  Set-ItemProperty -LiteralPath 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects' -Name 'VisualFXSetting' -Type 'DWord' -Value '2' -Force -Verbose
+        $path = 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer'
+        $name = 'VisualEffects'
+        $RegItem = try {
+          Get-Item -Path $path -Name $name -ErrorAction 'Stop'
+        } catch {
+          New-Item -Path $path -Name $name -Force
+        }
+        $path = "$path\$name"
+        $name = 'VisualFXSetting'
+        Set-ItemProperty -Path "$path\$name" -Name $name -Value '2' -Type 'DWord' -Verbose -Force
+      } | Out-Null
+    ) -join ''
+      $XmlWriter.WriteStartElement('File')
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\VisualFX-Optimize Speed.ps1')
+        $XmlWriter.WriteString(${File VisualFX-Optimize Speed.ps1 Here-String})
+      $XmlWriter.WriteEndElement()
+    #endregion
+    #region | "Start Menu Visible Places-NONE.ps1" Here-String and XML Element |
+    ${File Start Menu Visible Places-NONE.ps1 Here-String} = $(
+      #region |  |
+      "`n"
+      "`t`t`t#  Set-ItemProperty -Path $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start$([System.Char]39) -Name $([System.Char]39)VisiblePlaces$([System.Char]39) -Value `$([System.Convert]::FromBase64String($([System.Char]39)$([System.Char]39))) -Type $([System.Char]39)Binary$([System.Char]39) -Verbose`n"
+      "`t`t`t`$path = $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start$([System.Char]39)`n"
+      "`t`t`t`$name = $([System.Char]39)VisiblePlaces$([System.Char]39)`n"
+      "`t`t`t`$RegItem = try {`n"
+      "`t`t`t  Get-Item -Path `$path -Name `$name -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
+      "`t`t`t} catch {`n"
+      "`t`t`t  New-Item -Path `$path -Name `$name -Force`n"
+      "`t`t`t}`n"
+      "`t`t`t`$InputHT = @{`n"
+      "`t`t`t  Path    = $([System.Char]34)`$path\`$name$([System.Char]34)`n"
+      "`t`t`t  Name    = $([System.Char]39)VisiblePlaces$([System.Char]39)`n"
+      "`t`t`t  Value   = `$([System.Convert]::FromBase64String($([System.Char]39)$([System.Char]39)))`n"
+      "`t`t`t  Type    = $([System.Char]39)Binary$([System.Char]39)`n"
+      "`t`t`t  Force   = `$true`n"
+      "`t`t`t  Verbose = `$true`n"
+      "`t`t`t}`n"
+      "`t`t`tSet-ItemProperty @InputHT`n"
+      "`t`t"
+      #endregion
+      {
+        #  Set-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start' -Name 'VisiblePlaces' -Value $([System.Convert]::FromBase64String('')) -Type 'Binary' -Verbose
+        $path = 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start'
+        $name = 'VisiblePlaces'
+        $RegItem = try {
+          Get-Item -Path $path -Name $name -ErrorAction 'Stop'
+        } catch {
+          New-Item -Path $path -Name $name -Force
+        }
+        $InputHT = @{
+          Path    = "$path\$name"
+          Name    = 'VisiblePlaces'
+          Value   = $([System.Convert]::FromBase64String(''))
+          Type    = 'Binary'
+          Force   = $true
+          Verbose = $true
+        }
+        Set-ItemProperty @InputHT
+      } | Out-Null
+    ) -join ''
+      $XmlWriter.WriteStartElement('File')
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Start Menu Visible Places-NONE.ps1')
+        $XmlWriter.WriteString(${File Start Menu Visible Places-NONE.ps1 Here-String})
+      $XmlWriter.WriteEndElement()
+    #endregion
     #region | "SetWallpaper-UserOnce.ps1" Here-String |
     ${File SetWallpaper-UserOnce.ps1 Here-String} = $(
 
@@ -4841,106 +4929,51 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteString(${File SetWallpaper-UserOnce.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
-    #region | "VisualFX-Optimize Speed.ps1" Here-String and XML Element |
-    ${File VisualFX-Optimize Speed.ps1 Here-String} = $(
-      #region |  |
-      "`n"
-      "`t`t`t#  Set-ItemProperty -LiteralPath $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects$([System.Char]39) -Name $([System.Char]39)VisualFXSetting$([System.Char]39) -Type $([System.Char]39)DWord$([System.Char]39) -Value $([System.Char]39)2$([System.Char]39) -Force -Verbose`n"
-      "`t`t`t`$path = $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer$([System.Char]39)`n"
-      "`t`t`t`$name = $([System.Char]39)VisualEffects$([System.Char]39)`n"
-      "`t`t`t`$RegItem = try {`n"
-      "`t`t`t  Get-Item -Path `$path -Name `$name -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
-      "`t`t`t} catch {`n"
-      "`t`t`t  New-Item -Path `$path -Name `$name -Force`n"
-      "`t`t`t}`n"
-      "`t`t`t`n"
-      "`t`t`t`$path = $([System.Char]34)`$path\`$name$([System.Char]34)`n"
-      "`t`t`t`$name = $([System.Char]39)VisualFXSetting$([System.Char]39)`n"
-      "`t`t`tSet-ItemProperty -Path $([System.Char]34)`$path\`$name$([System.Char]34) -Name `$name -Value $([System.Char]39)2$([System.Char]39) -Type $([System.Char]39)DWord$([System.Char]39) -Verbose -Force`n"
-      "`t`t"
-      #endregion
-      {
-        #  Set-ItemProperty -LiteralPath 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects' -Name 'VisualFXSetting' -Type 'DWord' -Value '2' -Force -Verbose
-        $path = 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer'
-        $name = 'VisualEffects'
-        $RegItem = try {
-          Get-Item -Path $path -Name $name -ErrorAction 'Stop'
-        } catch {
-          New-Item -Path $path -Name $name -Force
-        }
-        $path = "$path\$name"
-        $name = 'VisualFXSetting'
-        Set-ItemProperty -Path "$path\$name" -Name $name -Value '2' -Type 'DWord' -Verbose -Force
-      } | Out-Null
-    ) -join ''
-      $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\VisualFX-Optimize Speed.ps1')
-        $XmlWriter.WriteString(${File VisualFX-Optimize Speed.ps1 Here-String})
-      $XmlWriter.WriteEndElement()
-    #endregion
-    #region | "Start Menu Visible Places-NONE.ps1" Here-String and XML Element |
-    ${File Start Menu Visible Places-NONE.ps1 Here-String} = $(
-      #region |  |
-      "`n"
-      "`t`t`t#  Set-ItemProperty -Path $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start$([System.Char]39) -Name $([System.Char]39)VisiblePlaces$([System.Char]39) -Value `$([System.Convert]::FromBase64String($([System.Char]39)$([System.Char]39))) -Type $([System.Char]39)Binary$([System.Char]39) -Verbose`n"
-      "`t`t`t`$path = $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start$([System.Char]39)`n"
-      "`t`t`t`$name = $([System.Char]39)VisiblePlaces$([System.Char]39)`n"
-      "`t`t`t`$RegItem = try {`n"
-      "`t`t`t  Get-Item -Path `$path -Name `$name -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
-      "`t`t`t} catch {`n"
-      "`t`t`t  New-Item -Path `$path -Name `$name -Force`n"
-      "`t`t`t}`n"
-      "`t`t`t`$InputHT = @{`n"
-      "`t`t`t  Path    = $([System.Char]34)`$path\`$name$([System.Char]34)`n"
-      "`t`t`t  Name    = $([System.Char]39)VisiblePlaces$([System.Char]39)`n"
-      "`t`t`t  Value   = `$([System.Convert]::FromBase64String($([System.Char]39)$([System.Char]39)))`n"
-      "`t`t`t  Type    = $([System.Char]39)Binary$([System.Char]39)`n"
-      "`t`t`t  Force   = `$true`n"
-      "`t`t`t  Verbose = `$true`n"
-      "`t`t`t}`n"
-      "`t`t`tSet-ItemProperty @InputHT`n"
-      "`t`t"
-      #endregion
-      {
-        #  Set-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start' -Name 'VisiblePlaces' -Value $([System.Convert]::FromBase64String('')) -Type 'Binary' -Verbose
-        $path = 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start'
-        $name = 'VisiblePlaces'
-        $RegItem = try {
-          Get-Item -Path $path -Name $name -ErrorAction 'Stop'
-        } catch {
-          New-Item -Path $path -Name $name -Force
-        }
-        $InputHT = @{
-          Path    = "$path\$name"
-          Name    = 'VisiblePlaces'
-          Value   = $([System.Convert]::FromBase64String(''))
-          Type    = 'Binary'
-          Force   = $true
-          Verbose = $true
-        }
-        Set-ItemProperty @InputHT
-      } | Out-Null
-    ) -join ''
-      $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Start Menu Visible Places-NONE.ps1')
-        $XmlWriter.WriteString(${File Start Menu Visible Places-NONE.ps1 Here-String})
-      $XmlWriter.WriteEndElement()
-    #endregion
     #region | "HideTaskBar-UserOnce.ps1" Here-String |
     ${File HideTaskBar-UserOnce.ps1 Here-String} = $(
+      #region |  |
       "`n"
-      "`t`t`t`$Path = $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3$([System.Char]39)`n"
-      "`t`t`t`$Value = (Get-ItemProperty -Path `$Path).Settings`n"
+      "`t`t`t`$path = $([System.Char]34)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer$([System.Char]34)`n"
+      "`t`t`t`$name = $([System.Char]39)StuckRects3$([System.Char]39)`n"
+      "`t`t`t`$RegItem = try {`n"
+      "`t`t`t  Get-Item -Path `$path -Name `$name -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
+      "`t`t`t} catch {`n"
+      "`t`t`t  New-Item -Path `$path -Name `$name -Force -Verbose`n"
+      "`t`t`t}`n"
+      "`t`t`t`$path = $([System.Char]34)`$path\`$name$([System.Char]34)`n"
+      "`t`t`t`$name = $([System.Char]39)Settings$([System.Char]39)`n"
+      "`t`t`t`$Value = (Get-ItemProperty -Path `$path).`$name`n"
       "`t`t`t`$Value[8] = 0x7b`n"
-      "`t`t`tSet-ItemProperty -Path `$Path -Name $([System.Char]39)Settings$([System.Char]39) -Value `$Value`n"
+      "`t`t`tSet-ItemProperty -Path `$path -Name `$name -Value `$Value`n"
       "`t`t`tGet-Process -Name explorer | Stop-Process -Force | Start-Process -FilePath $([System.Char]34)`$env:windir\explorer.exe$([System.Char]34)`n"
+      "`t`t`t`n"
+      "`t`t`t# `$Path = $([System.Char]39)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3$([System.Char]39)`n"
+      "`t`t`t# `$Value = (Get-ItemProperty -Path `$Path).Settings`n"
+      "`t`t`t# `$Value[8] = 0x7b`n"
+      "`t`t`t# Set-ItemProperty -Path `$Path -Name $([System.Char]39)Settings$([System.Char]39) -Value `$Value`n"
+      "`t`t`t# Get-Process -Name explorer | Stop-Process -Force | Start-Process -FilePath $([System.Char]34)`$env:windir\explorer.exe$([System.Char]34)`n"
       "`t`t"
+      #endregion
       { # HideTaskBar-UserOnce.ps1 Plain-Text | Converted to ${File HideTaskBar-UserOnce.ps1 Here-String} with 'ConvertTo-HereStringCompatible' |
-        $Path = 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3'
-        $Value = (Get-ItemProperty -Path $Path).Settings
+        $path = "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
+        $name = 'StuckRects3'
+        $RegItem = try {
+          Get-Item -Path $path -Name $name -ErrorAction 'Stop'
+        } catch {
+          New-Item -Path $path -Name $name -Force -Verbose
+        }
+        $path = "$path\$name"
+        $name = 'Settings'
+        $Value = (Get-ItemProperty -Path $path).$name
         $Value[8] = 0x7b
-        Set-ItemProperty -Path $Path -Name 'Settings' -Value $Value
+        Set-ItemProperty -Path $path -Name $name -Value $Value
         Get-Process -Name explorer | Stop-Process -Force | Start-Process -FilePath "$env:windir\explorer.exe"
+
+        # $Path = 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3'
+        # $Value = (Get-ItemProperty -Path $Path).Settings
+        # $Value[8] = 0x7b
+        # Set-ItemProperty -Path $Path -Name 'Settings' -Value $Value
+        # Get-Process -Name explorer | Stop-Process -Force | Start-Process -FilePath "$env:windir\explorer.exe"
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
@@ -4949,51 +4982,7 @@ $XmlWriter.WriteStartDocument()
       $XmlWriter.WriteEndElement()
     #endregion
 
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-
     ${File UserOnce.ps1 Here-String} = $(
-
       #region |  |
       "`n"
       "`t`t`t`$UserOnceScriptBlocks = `$(`n"
@@ -5001,17 +4990,15 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Chat-Hide.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\UWP Copilot Application-REMOVE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Unlock Taskbar Layout.ps1$([System.Char]39)}`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\NTFS Reparse Points-Remove from UserProfile Scope at Depth 2.ps1$([System.Char]39)}`n"
+      "`t`t`t  #{& $([System.Char]39)C:\Windows\Setup\Scripts\NTFS Reparse Points-Remove from UserProfile Scope at Depth 2.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Shortcuts-msedge-DELETE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Classic Context-Sensitive Menu.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Taskbar-Search Box-REMOVE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\VisualFX-Optimize Speed.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Start Menu Icons-HIDE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Start Menu Visible Places-NONE.ps1$([System.Char]39)}`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetColorTheme.ps1$([System.Char]39)}`n"
-      "`t`t`t  #{Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\SetColorTheme.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1$([System.Char]39)}`n"
-      "`t`t`t  #{Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
+      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetColorTheme.ps1$([System.Char]39)}          # {Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\SetColorTheme.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
+      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1$([System.Char]39)}  # {Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\HideTaskBar-UserOnce.ps1$([System.Char]39)}`n"
       "`t`t`t)`n"
       "`t`t`t& {`n"
@@ -5030,24 +5017,21 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t} *>&1 | Out-String -Width 1KB -Stream >> $([System.Char]34)`$env:UserProfile\UserOnce.log$([System.Char]34)`n"
       "`t`t"
       #endregion
-
       {
         $UserOnceScriptBlocks = $(
           {& 'C:\Windows\Setup\Scripts\RunMRU Run Box Cache.ps1'}
           {& 'C:\Windows\Setup\Scripts\Chat-Hide.ps1'}
           {& 'C:\Windows\Setup\Scripts\UWP Copilot Application-REMOVE.ps1'}
           {& 'C:\Windows\Setup\Scripts\Unlock Taskbar Layout.ps1'}
-          {& 'C:\Windows\Setup\Scripts\NTFS Reparse Points-Remove from UserProfile Scope at Depth 2.ps1'}
+          #{& 'C:\Windows\Setup\Scripts\NTFS Reparse Points-Remove from UserProfile Scope at Depth 2.ps1'}
           {& 'C:\Windows\Setup\Scripts\Shortcuts-msedge-DELETE.ps1'}
           {& 'C:\Windows\Setup\Scripts\Classic Context-Sensitive Menu.ps1'}
           {& 'C:\Windows\Setup\Scripts\Taskbar-Search Box-REMOVE.ps1'}
           {& 'C:\Windows\Setup\Scripts\VisualFX-Optimize Speed.ps1'}
           {& 'C:\Windows\Setup\Scripts\Start Menu Icons-HIDE.ps1'}
           {& 'C:\Windows\Setup\Scripts\Start Menu Visible Places-NONE.ps1'}
-          {& 'C:\Windows\Setup\Scripts\SetColorTheme.ps1'}
-          #{Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\SetColorTheme.ps1' -Raw | Invoke-Expression -Verbose}
-          {& 'C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1'}
-          #{Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\SetWallpaper.ps1' -Raw | Invoke-Expression -Verbose}
+          {& 'C:\Windows\Setup\Scripts\SetColorTheme.ps1'}          # {Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\SetColorTheme.ps1' -Raw | Invoke-Expression -Verbose}
+          {& 'C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1'}  # {Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1' -Raw | Invoke-Expression -Verbose}
           {& 'C:\Windows\Setup\Scripts\HideTaskBar-UserOnce.ps1'}
         )
         & {
@@ -5715,7 +5699,7 @@ $XmlWriter.WriteStartDocument()
       #region |  |
       "`n"
       "`t`t`t`$FirstLogonScriptBlocks = `$(`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\NTFS Reparse Points-Partial Removal.ps1$([System.Char]39)}`n"
+      "`t`t`t  #{& $([System.Char]39)C:\Windows\Setup\Scripts\NTFS Reparse Points-Partial Removal.ps1$([System.Char]39)}`n"
       "`t`t`t  # Delete Windows.old with sdelete.exe |`n"
       "`t`t`t  # {`$path = $([System.Char]34)`$env:SystemDrive\Windows.old$([System.Char]34); if (Test-Path -Path `$path) {Remove-Item -Path `$path -Force -Recurse -Verbose}}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Visual Studio Code Install.ps1$([System.Char]39)}`n"
@@ -5746,7 +5730,7 @@ $XmlWriter.WriteStartDocument()
 
       {
         $FirstLogonScriptBlocks = $(
-          {& 'C:\Windows\Setup\Scripts\NTFS Reparse Points-Partial Removal.ps1'}
+          #{& 'C:\Windows\Setup\Scripts\NTFS Reparse Points-Partial Removal.ps1'}
           # Delete Windows.old with sdelete.exe |
           # {$path = "$env:SystemDrive\Windows.old"; if (Test-Path -Path $path) {Remove-Item -Path $path -Force -Recurse -Verbose}}
           {& 'C:\Windows\Setup\Scripts\Visual Studio Code Install.ps1'}
@@ -5839,6 +5823,7 @@ $XmlWriter.WriteStartDocument()
     #endregion
 
     ${File HadeanDscConfigurationDocument.ps1 Here-String} = $(
+      #region |  |
       "`n"
       "`t`t`t`$WaveIndex = $([System.Char]39)00$([System.Char]39)`n"
       "`t`t`t`$EpochIndex = $([System.Char]39)A$([System.Char]39)`n"
@@ -5848,7 +5833,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t`n"
       "`t`t`t[System.Management.Automation.DscLocalConfigurationManagerAttribute()]`n"
       "`t`t`tConfiguration `$LCM_InstanceName {`n"
-      "`t`t`t  Node $([System.Char]39)localhost$([System.Char]39) { # `$env:ComputerName`n"
+      "`t`t`t  Node $([System.Char]39)localhost$([System.Char]39) {`n"
       "`t`t`t    Settings {`n"
       "`t`t`t      ActionAfterReboot              = [System.String]$([System.Char]39)ContinueConfiguration$([System.Char]39)`n"
       "`t`t`t      AllowModuleOverwrite           = [System.Boolean]`$true`n"
@@ -5867,21 +5852,22 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  Verbose      = `$true`n"
       "`t`t`t}`n"
       "`t`t`tInvoke-Expression -Verbose:`$true -Command $([System.Char]34)`$LCM_InstanceName @lcmHT$([System.Char]34)`n"
-      "`t`t`t#Set-DscLocalConfigurationManager -CN `$env:ComputerName -Path `$lcmHT[$([System.Char]39)OutputPath$([System.Char]39)] -Force`n"
       "`t`t`tSet-DscLocalConfigurationManager -ComputerName $([System.Char]39)localhost$([System.Char]39) -Path `$lcmHT[$([System.Char]39)OutputPath$([System.Char]39)] -Force`n"
       "`t`t`t`n"
       "`t`t`tConfiguration `$InstanceName {`n"
+      "`t`t`t  #region | Import DSC Resources into the Configuration Document |`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)PSDesiredStateConfiguration$([System.Char]39)  -ModuleVersion 1.1`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)xPSDesiredStateConfiguration$([System.Char]39) -ModuleVersion 9.2.2`n"
-      "`t`t`t  #Import-DscResource -ModuleName $([System.Char]39)AdHocDsc$([System.Char]39)                     -ModuleVersion 0.77.13.8`n"
-      "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)AdHocCertsDsc$([System.Char]39)                -ModuleVersion ${AdHocCertsDsc Version}`n"
-      "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)AdHocNetsDsc$([System.Char]39)                 -ModuleVersion ${AdHocNetsDsc Version}`n"
-      "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)AdHocPkiDsc$([System.Char]39)                  -ModuleVersion ${AdHocPkiDsc Version}`n"
-      "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)AdHocUtilsDsc$([System.Char]39)                -ModuleVersion ${AdHocUtilsDsc Version}`n"
+      "`t`t`t  # #Import-DscResource -ModuleName $([System.Char]39)AdHocDsc$([System.Char]39)                     -ModuleVersion 0.77.13.8`n"
+      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocCertsDsc$([System.Char]39)                -ModuleVersion`n"
+      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocNetsDsc$([System.Char]39)                 -ModuleVersion`n"
+      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocPkiDsc$([System.Char]39)                  -ModuleVersion`n"
+      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocUtilsDsc$([System.Char]39)                -ModuleVersion`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)ComputerManagementDsc$([System.Char]39)        -ModuleVersion 10.0.1`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)CertificateDsc$([System.Char]39)               -ModuleVersion 6.1.0`n"
+      "`t`t`t  #endregion`n"
       "`t`t`t`n"
-      "`t`t`t  Node $([System.Char]39)localhost$([System.Char]39) { # `$env:ComputerName`n"
+      "`t`t`t  Node $([System.Char]39)localhost$([System.Char]39) {`n"
       "`t`t`t    #region | Strictest Level of Windows PowerShell ScriptBlock and Module Logging |`n"
       "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 ScriptBlock Logging$([System.Char]39) {`n"
       "`t`t`t      ValueName = $([System.Char]39)EnableScriptBlockLogging$([System.Char]39)`n"
@@ -5890,6 +5876,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      ValueType = $([System.Char]39)String$([System.Char]39)`n"
       "`t`t`t      Force     = `$true`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t`n"
       "`t`t`t    }`n"
       "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Module Logging$([System.Char]39) {`n"
       "`t`t`t      ValueName = $([System.Char]39)EnableModuleLogging$([System.Char]39)`n"
@@ -5925,59 +5912,65 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      )`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
+      "`t`t`t`n"
       "`t`t`t    #region | Diagnostics-Enable channels in the Microsoft-Windows-Dsc Event Log Provider |`n"
-      "`t`t`t    TrackDscEvents $([System.Char]39)Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
-      "`t`t`t      Channel   = $([System.Char]39)Operational$([System.Char]39)`n"
-      "`t`t`t      Status    = $([System.Char]39)Enabled$([System.Char]39)`n"
-      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
-      "`t`t`t      )`n"
-      "`t`t`t    }`n"
-      "`t`t`t    TrackDscEvents $([System.Char]39)Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
-      "`t`t`t      Channel   = $([System.Char]39)Analytic$([System.Char]39)`n"
-      "`t`t`t      Status    = $([System.Char]39)Enabled$([System.Char]39)`n"
-      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[TrackDscEvents]Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t      )`n"
-      "`t`t`t    }`n"
-      "`t`t`t    TrackDscEvents $([System.Char]39)Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
-      "`t`t`t      Channel   = $([System.Char]39)Debug$([System.Char]39)`n"
-      "`t`t`t      Status    = $([System.Char]39)Disabled$([System.Char]39)`n"
-      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[TrackDscEvents]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t      )`n"
-      "`t`t`t    }`n"
+      "`t`t`t    <#`n"
+      "`t`t`t      TrackDscEvents $([System.Char]39)Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t        Channel   = $([System.Char]39)Operational$([System.Char]39)`n"
+      "`t`t`t        Status    = $([System.Char]39)Enabled$([System.Char]39)`n"
+      "`t`t`t        Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t        DependsOn = [System.String[]]@(`n"
+      "`t`t`t          $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t        )`n"
+      "`t`t`t      }`n"
+      "`t`t`t      TrackDscEvents $([System.Char]39)Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t        Channel   = $([System.Char]39)Analytic$([System.Char]39)`n"
+      "`t`t`t        Status    = $([System.Char]39)Enabled$([System.Char]39)`n"
+      "`t`t`t        Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t        DependsOn = [System.String[]]@(`n"
+      "`t`t`t          $([System.Char]34)[TrackDscEvents]Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        )`n"
+      "`t`t`t      }`n"
+      "`t`t`t      TrackDscEvents $([System.Char]39)Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t        Channel   = $([System.Char]39)Debug$([System.Char]39)`n"
+      "`t`t`t        Status    = $([System.Char]39)Disabled$([System.Char]39)`n"
+      "`t`t`t        Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t        DependsOn = [System.String[]]@(`n"
+      "`t`t`t          $([System.Char]34)[TrackDscEvents]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        )`n"
+      "`t`t`t      }`n"
+      "`t`t`t    #>`n"
       "`t`t`t    #endregion`n"
+      "`t`t`t`n"
       "`t`t`t    #region | One-time Generation of New Random %ComputerNames% |`n"
-      "`t`t`t    `${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\PMs\`$PushServerCname ComputerName.txt$([System.Char]34)`n"
+      "`t`t`t    `${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
       "`t`t`t    if (-not `${Is file with new random %ComputerNames% present at time of MOF compilation}) {`n"
       "`t`t`t      File $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
-      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\PMs\`$PushServerCname ComputerName.txt$([System.Char]34)`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
       "`t`t`t        Attributes      = @($([System.Char]39)ReadOnly$([System.Char]39))`n"
       "`t`t`t        Contents        = `$(($([System.Char]39)WIN-$([System.Char]39) + ([System.IO.Path]::GetRandomFileName()) -replace $([System.Char]39)\.$([System.Char]39),$([System.Char]39)$([System.Char]39) -join $([System.Char]39)$([System.Char]39)).ToUpper())`n"
       "`t`t`t        Force           = `$true`n"
       "`t`t`t        Type            = $([System.Char]39)File$([System.Char]39)`n"
       "`t`t`t        Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t        DependsOn       = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t          #$([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #region | Rename Computer and Reboot |`n"
       "`t`t`t    if (`${Is file with new random %ComputerNames% present at time of MOF compilation}) {`n"
       "`t`t`t      Computer $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
-      "`t`t`t        Name                  = `$(Get-Content -Path $([System.Char]34)`$Statics\PMs\`$PushServerCname ComputerName.txt$([System.Char]34))`n"
+      "`t`t`t        Name                  = `$(Get-Content -Path $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34))`n"
       "`t`t`t        Description           = $([System.Char]39)Description TBD$([System.Char]39)`n"
       "`t`t`t        WorkGroupName         = $([System.Char]39)NoNetwork$([System.Char]39)`n"
       "`t`t`t        DependsOn             = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t          #$([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t      }`n"
       "`t`t`t      PendingReboot $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
-      "`t`t`t        Name                        = $([System.Char]34)Hostname change on `$PushServerCname leads to Pending Reboot$([System.Char]34)`n"
+      "`t`t`t        Name                        = $([System.Char]34)Hostname change on `${DSC Authoring Station Mgmt Cname} leads to Pending Reboot$([System.Char]34)`n"
       "`t`t`t        SkipPendingComputerRename   = `$false`n"
       "`t`t`t        SkipCcmClientSDK            = `$false`n"
       "`t`t`t        SkipComponentBasedServicing = `$false`n"
@@ -5989,7 +5982,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
-      "`t`t`t    #endregion`n"
+      "`t`t`t    #endregion                            `n"
+      "`t`t`t`n"
       "`t`t`t    #region | Essential Directory Structure |`n"
       "`t`t`t    File $([System.Char]39)Epoch_A__PreDocument_Encryption\Wave_00$([System.Char]39) {`n"
       "`t`t`t      DestinationPath = $([System.Char]34)`$MOFs\Epoch_A__PreDocument_Encryption\Wave_00$([System.Char]34)`n"
@@ -5998,7 +5992,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn       = [System.String[]]@(`n"
       "`t`t`t        #$([System.Char]34)[PendingReboot]New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34)`n"
-      "`t`t`t       $([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        #$([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
       "`t`t`t    `${Dependency Epoch_A__PreDocument_Encryption Wave_00} = [System.String[]]@(`n"
@@ -6027,6 +6022,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      $([System.Char]34)[File]EarlyShare\Self-Signed Certs$([System.Char]34)`n"
       "`t`t`t    )`n"
       "`t`t`t    #endregion`n"
+      "`t`t`t`n"
       "`t`t`t    #region | Write MACs of detected non-USB NICs to .txt file |`n"
       "`t`t`t    File $([System.Char]34)Physical Non-Removable PCIe Adapter MACs Directory$([System.Char]34) {`n"
       "`t`t`t      DestinationPath = $([System.Char]34)`$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs$([System.Char]34)`n"
@@ -6061,49 +6057,52 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
+      "`t`t`t`n"
       "`t`t`t    #region | Global Cert Signer |`n"
-      "`t`t`t    `${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs$([System.Char]34)`n"
-      "`t`t`t    if (`${Is CertFSOs Directory present at time of MOF compilation}) {`n"
-      "`t`t`t      GlobalCertSignerSeq0 $([System.Char]39)Global Cert Signer$([System.Char]39) {`n"
-      "`t`t`t        FriendlyName      =      [System.String]$([System.Char]39)Global Cert Signer$([System.Char]39)`n"
-      "`t`t`t        AltSigAlg         =      [System.Boolean]`$true`n"
-      "`t`t`t        Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      }`n"
-      "`t`t`t      `${Dependency GlobalCertSignerSeq0} = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[GlobalCertSignerSeq0]`$($([System.Char]39)Global Cert Signer$([System.Char]39))$([System.Char]34)`n"
-      "`t`t`t      )`n"
-      "`t`t`t      #region | Document Encryption Certificate for primordial unclustered Hyper-V host |`n"
-      "`t`t`t      `${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path $([System.Char]39)Cert:\LocalMachine\My$([System.Char]39) -Recurse`n"
-      "`t`t`t      `${Global Certificate Signing Certificate} = `${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {`n"
-      "`t`t`t        `$_.FriendlyName -eq $([System.Char]39)Global Cert Signer$([System.Char]39)`n"
-      "`t`t`t      }`n"
-      "`t`t`t      if (`$null -ne `${Global Certificate Signing Certificate}) {`n"
-      "`t`t`t        GlobalCodeSignerSeq0 $([System.Char]39)Global Code Signer$([System.Char]39) {`n"
-      "`t`t`t          FriendlyName      =      [System.String]$([System.Char]39)Global Code Signer$([System.Char]39)`n"
+      "`t`t`t    <#`n"
+      "`t`t`t      `${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs$([System.Char]34)`n"
+      "`t`t`t      if (`${Is CertFSOs Directory present at time of MOF compilation}) {`n"
+      "`t`t`t        GlobalCertificateSignerSequence0 $([System.Char]39)Global Cert Signer$([System.Char]39) {`n"
+      "`t`t`t          FriendlyName      =      [System.String]$([System.Char]39)Global Cert Signer$([System.Char]39)`n"
       "`t`t`t          AltSigAlg         =      [System.Boolean]`$true`n"
       "`t`t`t          Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t          DependsOn         =      `${Dependency GlobalCertSignerSeq0}`n"
       "`t`t`t        }`n"
-      "`t`t`t        `${Dependency GlobalCodeSignerSeq0} = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[GlobalCodeSignerSeq0]`$($([System.Char]39)Global Code Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t        `${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(`n"
+      "`t`t`t          $([System.Char]34)[GlobalCertificateSignerSequence0]`$($([System.Char]39)Global Cert Signer$([System.Char]39))$([System.Char]34)`n"
       "`t`t`t        )`n"
-      "`t`t`t        GlobalCertSignerSeq1 $([System.Char]39)Global Cert Signer$([System.Char]39) {`n"
-      "`t`t`t          FriendlyName = [System.String]$([System.Char]39)Global Cert Signer$([System.Char]39)`n"
-      "`t`t`t          Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t          DependsOn    = `${Dependency GlobalCertSignerSeq0}`n"
+      "`t`t`t        #region | Document Encryption Certificate for primordial unclustered Hyper-V host |`n"
+      "`t`t`t        `${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path $([System.Char]39)Cert:\LocalMachine\My$([System.Char]39) -Recurse`n"
+      "`t`t`t        `${Global Certificate Signing Certificate} = `${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {`n"
+      "`t`t`t          `$_.FriendlyName -eq $([System.Char]39)Global Cert Signer$([System.Char]39)`n"
       "`t`t`t        }`n"
-      "`t`t`t        `${Dependency GlobalCertSignerSeq1} = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[GlobalCertSignerSeq1]`$($([System.Char]39)Global Cert Signer$([System.Char]39))$([System.Char]34)`n"
-      "`t`t`t        )`n"
-      "`t`t`t        MofPasswordProtectionSeq0 $([System.Char]34)Encrypt Passwords in MOF for LCM on `$PushServerCname$([System.Char]34) {`n"
-      "`t`t`t          FriendlyName      =      [System.String]$([System.Char]34)Encrypt Passwords in MOF for LCM on `$PushServerCname$([System.Char]34)`n"
-      "`t`t`t          AltSigAlg         =      [System.Boolean]`$true`n"
-      "`t`t`t          Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t          DependsOn         =      `${Dependency GlobalCertSignerSeq0}`n"
+      "`t`t`t        if (`$null -ne `${Global Certificate Signing Certificate}) {`n"
+      "`t`t`t          GlobalCodeSignerSeq0 $([System.Char]39)Global Code Signer$([System.Char]39) {`n"
+      "`t`t`t            FriendlyName      =      [System.String]$([System.Char]39)Global Code Signer$([System.Char]39)`n"
+      "`t`t`t            AltSigAlg         =      [System.Boolean]`$true`n"
+      "`t`t`t            Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t            DependsOn         =      `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          }`n"
+      "`t`t`t          `${Dependency GlobalCodeSignerSeq0} = [System.String[]]@(`n"
+      "`t`t`t            $([System.Char]34)[GlobalCodeSignerSeq0]`$($([System.Char]39)Global Code Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t          )`n"
+      "`t`t`t          GlobalCertificateSignerSequence1 $([System.Char]39)Global Cert Signer$([System.Char]39) {`n"
+      "`t`t`t            FriendlyName = [System.String]$([System.Char]39)Global Cert Signer$([System.Char]39)`n"
+      "`t`t`t            Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t            DependsOn    = `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          }`n"
+      "`t`t`t          `${Dependency GlobalCertificateSignerSequence1} = [System.String[]]@(`n"
+      "`t`t`t            $([System.Char]34)[GlobalCertificateSignerSequence1]`$($([System.Char]39)Global Cert Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t          )`n"
+      "`t`t`t          MofPasswordProtectionSeq0 $([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34) {`n"
+      "`t`t`t            FriendlyName      =      [System.String]$([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
+      "`t`t`t            AltSigAlg         =      [System.Boolean]`$true`n"
+      "`t`t`t            Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t            DependsOn         =      `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          }`n"
       "`t`t`t        }`n"
+      "`t`t`t        #endregion`n"
       "`t`t`t      }`n"
-      "`t`t`t      #endregion`n"
-      "`t`t`t    }`n"
+      "`t`t`t    #>`n"
       "`t`t`t    #endregion`n"
       "`t`t`t  }`n"
       "`t`t`t}`n"
@@ -6112,11 +6111,304 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  OutputPath   = `$lcmHT[$([System.Char]39)OutputPath$([System.Char]39)]`n"
       "`t`t`t  Verbose      = `$true`n"
       "`t`t`t}`n"
+      "`t`t`t`n"
       "`t`t`tInvoke-Expression -Verbose:`$true -Command $([System.Char]34)`$InstanceName @HT$([System.Char]34)`n"
-      "`t`t`t#Publish-DscConfiguration -CN `$env:ComputerName -Path `$lcmHT[$([System.Char]39)OutputPath$([System.Char]39)] -Force -Verbose:`$true`n"
       "`t`t`tPublish-DscConfiguration -ComputerName $([System.Char]39)localhost$([System.Char]39) -Path `$lcmHT[$([System.Char]39)OutputPath$([System.Char]39)] -Force -Verbose:`$true`n"
       "`t`t`tStart-DscConfiguration -UseExisting -Force -Wait:`$true -Verbose:`$true`n"
       "`t`t"
+      #endregion
+      {
+        $WaveIndex = '00'
+        $EpochIndex = 'A'
+        $EpochLabel = "PreDocument_Encryption"
+        $InstanceName = "Epoch_$($EpochIndex)__$($EpochLabel)__Wave_$($WaveIndex)"
+        $LCM_InstanceName = "LCM_" + $InstanceName
+
+        [System.Management.Automation.DscLocalConfigurationManagerAttribute()]
+        Configuration $LCM_InstanceName {
+          Node 'localhost' {
+            Settings {
+              ActionAfterReboot              = [System.String]'ContinueConfiguration'
+              AllowModuleOverwrite           = [System.Boolean]$true
+              ConfigurationMode              = [System.String]'ApplyAndAutoCorrect'
+              ConfigurationModeFrequencyMins = [System.UInt32]15
+              RefreshFrequencyMins           = [System.UInt32]30
+              RebootNodeIfNeeded             = [System.Boolean]$true
+              RefreshMode                    = [System.String]'Push'
+              StatusRetentionTimeInDays      = [System.UInt32]20
+            }
+          }
+        }
+        $lcmHT = @{
+          InstanceName = $LCM_InstanceName
+          OutputPath   = "$MOFs\Epoch_$($EpochIndex)__$($EpochLabel)\Wave_$WaveIndex"
+          Verbose      = $true
+        }
+        Invoke-Expression -Verbose:$true -Command "$LCM_InstanceName @lcmHT"
+        Set-DscLocalConfigurationManager -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force
+
+        Configuration $InstanceName {
+          #region | Import DSC Resources into the Configuration Document |
+          Imp0rt-DscResource -ModuleName 'PSDesiredStateConfiguration'  -ModuleVersion 1.1
+          Imp0rt-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion 9.2.2
+          # #Imp0rt-DscResource -ModuleName 'AdHocDsc'                     -ModuleVersion 0.77.13.8
+          #  Imp0rt-DscResource -ModuleName 'AdHocCertsDsc'                -ModuleVersion
+          #  Imp0rt-DscResource -ModuleName 'AdHocNetsDsc'                 -ModuleVersion
+          #  Imp0rt-DscResource -ModuleName 'AdHocPkiDsc'                  -ModuleVersion
+          #  Imp0rt-DscResource -ModuleName 'AdHocUtilsDsc'                -ModuleVersion
+          Imp0rt-DscResource -ModuleName 'ComputerManagementDsc'        -ModuleVersion 10.0.1
+          Imp0rt-DscResource -ModuleName 'CertificateDsc'               -ModuleVersion 6.1.0
+          #endregion
+
+          Node 'localhost' {
+            #region | Strictest Level of Windows PowerShell ScriptBlock and Module Logging |
+            xRegistry 'PowerShell 5.1 ScriptBlock Logging' {
+              ValueName = 'EnableScriptBlockLogging'
+              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging'
+              ValueData = '1'
+              ValueType = 'String'
+              Force     = $true
+              Ensure    = 'Present'
+
+            }
+            xRegistry 'PowerShell 5.1 Module Logging' {
+              ValueName = 'EnableModuleLogging'
+              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging'
+              ValueData = '1'
+              ValueType = 'String'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 ScriptBlock Logging"
+              )
+            }
+            xRegistry 'PowerShell 5.1 Transcription 1' {
+              ValueName = 'EnableTranscribing'
+              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'
+              ValueData = '1'
+              ValueType = 'String'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 Module Logging"
+              )
+            }
+            xRegistry 'PowerShell 5.1 Transcription 2' {
+              ValueName = 'EnableInvocationHeader'
+              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'
+              ValueData = '1'
+              ValueType = 'String'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 Transcription 1"
+              )
+            }
+            #endregion
+
+            #region | Diagnostics-Enable channels in the Microsoft-Windows-Dsc Event Log Provider |
+            <#
+              TrackDscEvents 'Status of Operational channel for the Microsoft-Windows-Dsc event log provider' {
+                Channel   = 'Operational'
+                Status    = 'Enabled'
+                Ensure    = 'Present'
+                DependsOn = [System.String[]]@(
+                  "[xRegistry]PowerShell 5.1 Transcription 2"
+                )
+              }
+              TrackDscEvents 'Status of Analytic channel for the Microsoft-Windows-Dsc event log provider' {
+                Channel   = 'Analytic'
+                Status    = 'Enabled'
+                Ensure    = 'Present'
+                DependsOn = [System.String[]]@(
+                  "[TrackDscEvents]Status of Operational channel for the Microsoft-Windows-Dsc event log provider"
+                )
+              }
+              TrackDscEvents 'Status of Debug channel for the Microsoft-Windows-Dsc event log provider' {
+                Channel   = 'Debug'
+                Status    = 'Disabled'
+                Ensure    = 'Present'
+                DependsOn = [System.String[]]@(
+                  "[TrackDscEvents]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider"
+                )
+              }
+            #>
+            #endregion
+
+            #region | One-time Generation of New Random %ComputerNames% |
+            ${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+            if (-not ${Is file with new random %ComputerNames% present at time of MOF compilation}) {
+              File "New Random ComputerName for primordial Unclustered Hyper-V Host" {
+                DestinationPath = "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+                Attributes      = @('ReadOnly')
+                Contents        = $(('WIN-' + ([System.IO.Path]::GetRandomFileName()) -replace '\.','' -join '').ToUpper())
+                Force           = $true
+                Type            = 'File'
+                Ensure          = 'Present'
+                DependsOn       = [System.String[]]@(
+                  #"[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
+                  "[xRegistry]PowerShell 5.1 Transcription 2"
+                )
+              }
+            }
+            #region | Rename Computer and Reboot |
+            if (${Is file with new random %ComputerNames% present at time of MOF compilation}) {
+              Computer "New Random ComputerName for primordial Unclustered Hyper-V Host" {
+                Name                  = $(Get-Content -Path "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt")
+                Description           = 'Description TBD'
+                WorkGroupName         = 'NoNetwork'
+                DependsOn             = [System.String[]]@(
+                  #"[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
+                  "[xRegistry]PowerShell 5.1 Transcription 2"
+                )
+              }
+              PendingReboot "New Random ComputerName for primordial Unclustered Hyper-V Host" {
+                Name                        = "Hostname change on ${DSC Authoring Station Mgmt Cname} leads to Pending Reboot"
+                SkipPendingComputerRename   = $false
+                SkipCcmClientSDK            = $false
+                SkipComponentBasedServicing = $false
+                SkipPendingFileRename       = $false
+                SkipWindowsUpdate           = $false
+                DependsOn                   = [System.String[]]@(
+                  "[Computer]New Random ComputerName for primordial Unclustered Hyper-V Host"
+                )
+              }
+            }
+            #endregion
+            #endregion                            
+
+            #region | Essential Directory Structure |
+            File 'Epoch_A__PreDocument_Encryption\Wave_00' {
+              DestinationPath = "$MOFs\Epoch_A__PreDocument_Encryption\Wave_00"
+              Force           = $true
+              Type            = 'Directory'
+              Ensure          = 'Present'
+              DependsOn       = [System.String[]]@(
+                #"[PendingReboot]New Random ComputerName for primordial Unclustered Hyper-V Host"
+                #"[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
+                "[xRegistry]PowerShell 5.1 Transcription 2"
+              )
+            }
+            ${Dependency Epoch_A__PreDocument_Encryption Wave_00} = [System.String[]]@(
+              "[File]Epoch_A__PreDocument_Encryption\Wave_00"
+            )
+
+            File 'Epoch_B__HvH_with_VMs\Wave_00' {
+              DestinationPath = "$MOFs\Epoch_B__HvH_with_VMs\Wave_00"
+              Force           = $true
+              Type            = 'Directory'
+              Ensure          = 'Present'
+              DependsOn       = ${Dependency Epoch_A__PreDocument_Encryption Wave_00}
+            }
+            ${Dependency Epoch_B__HvH_with_VMs Wave_00} = [System.String[]]@(
+              "[File]Epoch_B__HvH_with_VMs\Wave_00"
+            )
+
+            File 'EarlyShare\Self-Signed Certs' {
+              DestinationPath = "$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs"
+              Force           = $true
+              Type            = 'Directory'
+              Ensure          = 'Present'
+              DependsOn       = ${Dependency Epoch_B__HvH_with_VMs Wave_00}
+            }
+            ${Dependency EarlyShare Self-Signed Certs} = [System.String[]]@(
+              "[File]EarlyShare\Self-Signed Certs"
+            )
+            #endregion
+
+            #region | Write MACs of detected non-USB NICs to .txt file |
+            File "Physical Non-Removable PCIe Adapter MACs Directory" {
+              DestinationPath = "$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs"
+              #Attributes      = @('Hidden')
+              Force           = $true
+              Type            = 'Directory'
+              Ensure          = 'Present'
+              DependsOn       = ${Dependency EarlyShare Self-Signed Certs}
+            }
+            ${Dependency Physical Non-Removable PCIe Adapter MACs Directory} = [System.String[]]@(
+              "[File]Physical Non-Removable PCIe Adapter MACs Directory"
+            )
+            ${Is MaxIP child Directory present at time of MOF compilation} = Test-Path -Path "$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs"
+            if (-not ${Is MaxIP child Directory present at time of MOF compilation}) {
+              Get-CimInstance -ClassName 'Win32_NetworkAdapter' `
+              | Where-Object -FilterScript {$_.PNPDeviceID -cmatch '^PCI\\'} `
+              | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription $_.Name} `
+              | Select-Object -ExpandProperty 'MacAddress' -PipelineVariable 'MacAddress' `
+              | ForEach-Object -Process {
+                $MacAddrNoHyperLowerCase = ($MacAddress -replace '-','').ToLower()
+                ${Guid Value} = [System.Guid]::NewGuid().Guid
+                File "Write MAC Address to ${Guid Value}.txt File" {
+                  DestinationPath = "$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs\${Guid Value}.txt"
+                  #Attributes      = @('Hidden','ReadOnly')
+                  Attributes      = @('ReadOnly')
+                  Contents        = $MacAddrNoHyperLowerCase
+                  Force           = $false
+                  Type            = 'File'
+                  Ensure          = 'Present'
+                  DependsOn       = ${Dependency Physical Non-Removable PCIe Adapter MACs Directory}
+                }
+              }
+            }
+            #endregion
+
+            #region | Global Cert Signer |
+            <#
+              ${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path "$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs"
+              if (${Is CertFSOs Directory present at time of MOF compilation}) {
+                GlobalCertificateSignerSequence0 'Global Cert Signer' {
+                  FriendlyName      =      [System.String]'Global Cert Signer'
+                  AltSigAlg         =      [System.Boolean]$true
+                  Ensure            =      [System.String]'Present'
+                }
+                ${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(
+                  "[GlobalCertificateSignerSequence0]$('Global Cert Signer')"
+                )
+                #region | Document Encryption Certificate for primordial unclustered Hyper-V host |
+                ${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse
+                ${Global Certificate Signing Certificate} = ${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {
+                  $_.FriendlyName -eq 'Global Cert Signer'
+                }
+                if ($null -ne ${Global Certificate Signing Certificate}) {
+                  GlobalCodeSignerSeq0 'Global Code Signer' {
+                    FriendlyName      =      [System.String]'Global Code Signer'
+                    AltSigAlg         =      [System.Boolean]$true
+                    Ensure            =      [System.String]'Present'
+                    DependsOn         =      ${Dependency GlobalCertificateSignerSequence0}
+                  }
+                  ${Dependency GlobalCodeSignerSeq0} = [System.String[]]@(
+                    "[GlobalCodeSignerSeq0]$('Global Code Signer')"
+                  )
+                  GlobalCertificateSignerSequence1 'Global Cert Signer' {
+                    FriendlyName = [System.String]'Global Cert Signer'
+                    Ensure       = [System.String]'Present'
+                    DependsOn    = ${Dependency GlobalCertificateSignerSequence0}
+                  }
+                  ${Dependency GlobalCertificateSignerSequence1} = [System.String[]]@(
+                    "[GlobalCertificateSignerSequence1]$('Global Cert Signer')"
+                  )
+                  MofPasswordProtectionSeq0 "Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}" {
+                    FriendlyName      =      [System.String]"Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}"
+                    AltSigAlg         =      [System.Boolean]$true
+                    Ensure            =      [System.String]'Present'
+                    DependsOn         =      ${Dependency GlobalCertificateSignerSequence0}
+                  }
+                }
+                #endregion
+              }
+            #>
+            #endregion
+          }
+        }
+        $HT = @{
+          InstanceName = $InstanceName
+          OutputPath   = $lcmHT['OutputPath']
+          Verbose      = $true
+        }
+
+        Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
+        Publish-DscConfiguration -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force -Verbose:$true
+        Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$true
+      } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
         $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1')
@@ -6140,6 +6432,51 @@ $XmlWriter.Close()
 Remove-Variable -Name 'XmlWriter'
 Remove-Variable -Name 'XmlWriterSettings'
 #endregion
+
+#region | "___.ps1" Here-String and XML Element |
+<#
+  ${File ___.ps1 Here-String} = $(
+
+    {
+
+    } | Out-Null
+  ) -join ''
+    $XmlWriter.WriteStartElement('File')
+      $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
+      $XmlWriter.WriteString(${File ___.ps1 Here-String})
+    $XmlWriter.WriteEndElement()
+#>
+#endregion
+#region | "___.ps1" Here-String and XML Element |
+<#
+  ${File ___.ps1 Here-String} = $(
+
+    {
+
+    } | Out-Null
+  ) -join ''
+    $XmlWriter.WriteStartElement('File')
+      $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
+      $XmlWriter.WriteString(${File ___.ps1 Here-String})
+    $XmlWriter.WriteEndElement()
+#>
+#endregion
+#region | "___.ps1" Here-String and XML Element |
+<#
+  ${File ___.ps1 Here-String} = $(
+
+    {
+
+    } | Out-Null
+  ) -join ''
+    $XmlWriter.WriteStartElement('File')
+      $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
+      $XmlWriter.WriteString(${File ___.ps1 Here-String})
+    $XmlWriter.WriteEndElement()
+#>
+#endregion
+
+
 
 #region | Set the (wcm:action="add") or (wcm:action="remove") attributes on the relevant elements | Loop through the 'Order' elements |
 #  code $XmlFile.FullName
@@ -6211,5 +6548,13 @@ if ($null -ne $usb1) {
 if ($null -ne $usb0) {
   if (Test-Path -Path "$usb0\autounattend.xml") {Rename-Item -Path "$usb0\autounattend.xml" -NewName "autounattend-$(Call-DateVar).xml"}
   $XmlDocument.Save("$usb0\autounattend.xml")
+}
+
+$IsPresent = Test-Path -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\autounattend.xml"
+if (-not $IsPresent) {
+  $XmlDocument.Save("$PSScriptRoot\..\..\..\.CommonItems\usb0\autounattend.xml")
+} else {
+  Rename-Item -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\autounattend.xml" -NewName "autounattend-$(Call-DateVar).xml"
+  $XmlDocument.Save("$PSScriptRoot\..\..\..\.CommonItems\usb0\autounattend.xml")
 }
 #endregion
