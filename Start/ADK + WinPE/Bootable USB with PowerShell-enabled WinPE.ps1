@@ -78,17 +78,19 @@ ${00-ExecPol Command Here-String Precursor} = $(
 
 
   #region |  |
-
   "`n"
   "& {`n"
   "  #Get-Process`n"
   "  Write-Host -Object $([System.Char]34)Setting ExecutionPolicy to $([System.Char]39)RemoteSigned$([System.Char]39) for LocalMachine scope...$([System.Char]34)`n"
   "  Set-ExecutionPolicy -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -Scope $([System.Char]39)LocalMachine$([System.Char]39) -Force`n"
+  "  `n"
+  "  # https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-uefi-mode-or-legacy-bios-mode?view=windows-11#detect-if-winpe-is-booted-into-bios-or-uefi-mode`n"
+  "  `$PEFirmwareType = Get-ItemProperty -Path $([System.Char]34)HKLM:\System\CurrentControlSet\Control$([System.Char]34) -Name $([System.Char]39)PEFirmwareType$([System.Char]39) | Select-Object -ExpandProperty $([System.Char]39)PEFirmwareType$([System.Char]39)      `n"
+  "  # Return Code $([System.Char]39)0x2$([System.Char]39) means the instance of Windows PE was booted via the UEFI`n"
+  "  Write-Host -Object $([System.Char]34)PEFirmwareType = `$PEFirmwareType$([System.Char]34)`n"
   "}`n"
   "`t`t"
-
   #endregion
-
 
 
 
@@ -99,6 +101,11 @@ ${00-ExecPol Command Here-String Precursor} = $(
       #Get-Process
       Write-Host -Object "Setting ExecutionPolicy to 'RemoteSigned' for LocalMachine scope..."
       Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'LocalMachine' -Force
+      
+      # https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-uefi-mode-or-legacy-bios-mode?view=windows-11#detect-if-winpe-is-booted-into-bios-or-uefi-mode
+      $PEFirmwareType = Get-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control" -Name 'PEFirmwareType' | Select-Object -ExpandProperty 'PEFirmwareType'      
+      # Return Code '0x2' means the instance of Windows PE was booted via the UEFI
+      Write-Host -Object "PEFirmwareType = $PEFirmwareType"
     }
   } | Out-Null
   #########################################-BOUNDARY-#########################################
@@ -468,6 +475,16 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "  `${usb1_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
   "  `${usb1_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
   "  `${usb1_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "  `${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
+  "    `$_.FriendlyName -eq    `${usb1_FriendlyName}              -and $([System.Char]96)`n"
+  "    `$_.UniqueId     -match [Regex]::Escape(`${usb1_UniqueId}) -and $([System.Char]96)`n"
+  "    `$_.SerialNumber -eq    `${usb1_SerialNumber}`n"
+  "  }`n"
+  "  if (`$null -ne `${Removable External Storage Media Disk CIM Instance}) {`n"
+  "    `${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber `${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1`n"
+  "    `$usb1 = [System.String]`${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + $([System.Char]34):$([System.Char]34)`n"
+  "  }`n"
+  "`n"
   "`n"
   "  `${OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34)`n"
   "  `${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
@@ -484,8 +501,9 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "  #region | Activate New Version of DISM |`n"
   "  . $([System.Char]39)X:\DISM\WimMountAdkSetupAmd64.exe$([System.Char]39) /Install /q`n"
   "  #endregion`n"
-  "  #region | Apply Image |`n"
-  "  . $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /CheckIntegrity /Verify`n"
+  "  #region | Apply ImageIndex 2 |`n"
+  "  #. $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /CheckIntegrity /Verify`n"
+  "  . $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /Compact`n"
   "  #endregion`n"
   "  #region | Make the EFI System Partition (the EFS) bootable |`n"
   "  . $([System.Char]39)X:\Windows\System32\bcdboot.exe$([System.Char]39) $([System.Char]34)`${LocalOS Volume Letter}\Windows$([System.Char]34) /l $([System.Char]34)en-us$([System.Char]34) /s $([System.Char]34)`${EFI System Partition Volume Letter}$([System.Char]34) /f $([System.Char]34)UEFI$([System.Char]34)`n"
@@ -494,8 +512,8 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "}`n"
   "`t`t"
 
-  #endregion
 
+  #endregion
 
 
 
@@ -551,6 +569,16 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
       ${usb1_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\usb1 UniqueId Raw.clixml') -replace "'",""
       ${usb1_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
       ${usb1_UniqueId} = $Matches['Unique_ID']
+      ${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+        $_.FriendlyName -eq    ${usb1_FriendlyName}              -and `
+        $_.UniqueId     -match [Regex]::Escape(${usb1_UniqueId}) -and `
+        $_.SerialNumber -eq    ${usb1_SerialNumber}
+      }
+      if ($null -ne ${Removable External Storage Media Disk CIM Instance}) {
+        ${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber ${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1
+        $usb1 = [System.String]${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + ":"
+      }
+
 
       ${OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Disk CIM Instance.clixml"
       ${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml"
@@ -567,8 +595,9 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
       #region | Activate New Version of DISM |
       . 'X:\DISM\WimMountAdkSetupAmd64.exe' /Install /q
       #endregion
-      #region | Apply Image |
-      . 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:2 /ApplyDir:${LocalOS Volume Letter} /CheckIntegrity /Verify
+      #region | Apply ImageIndex 2 |
+      #. 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:2 /ApplyDir:${LocalOS Volume Letter} /CheckIntegrity /Verify
+      . 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:2 /ApplyDir:${LocalOS Volume Letter} /Compact
       #endregion
       #region | Make the EFI System Partition (the EFS) bootable |
       . 'X:\Windows\System32\bcdboot.exe' "${LocalOS Volume Letter}\Windows" /l "en-us" /s "${EFI System Partition Volume Letter}" /f "UEFI"
@@ -592,6 +621,7 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
 
 
   #region |  |
+
   "`n"
   "& {`n"
   "  #region | Precursor Variable Series I |`n"
@@ -641,6 +671,15 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  `${usb1_UniqueId Raw} = (Import-CliXml -Path $([System.Char]39)X:\Scriptoids\usb1 UniqueId Raw.clixml$([System.Char]39)) -replace $([System.Char]34)$([System.Char]39)$([System.Char]34),$([System.Char]34)$([System.Char]34)`n"
   "  `${usb1_UniqueId Raw} -match `${Pattern UniqueId Raw} | Out-Null`n"
   "  `${usb1_UniqueId} = `$Matches[$([System.Char]39)Unique_ID$([System.Char]39)]`n"
+  "  `${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {`n"
+  "    `$_.FriendlyName -eq    `${usb1_FriendlyName}              -and $([System.Char]96)`n"
+  "    `$_.UniqueId     -match [Regex]::Escape(`${usb1_UniqueId}) -and $([System.Char]96)`n"
+  "    `$_.SerialNumber -eq    `${usb1_SerialNumber}`n"
+  "  }`n"
+  "  if (`$null -ne `${Removable External Storage Media Disk CIM Instance}) {`n"
+  "    `${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber `${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1`n"
+  "    `$usb1 = [System.String]`${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + $([System.Char]34):$([System.Char]34)`n"
+  "  }`n"
   "`n"
   "  `${OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Disk CIM Instance.clixml$([System.Char]34)`n"
   "  `${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
@@ -656,13 +695,26 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  #endregion`n"
   "  #region | Copy Operations |`n"
   "  #region | Copy the All Users All Hosts profile.ps1 file from external storage to local drive. |`n"
-  "  `$HT = @{`n"
-  "    Path        = $([System.Char]34)X:\Scriptoids\5.1\profile.ps1$([System.Char]34)`n"
-  "    Destination = $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile.ps1$([System.Char]34)`n"
-  "    Force         = `$true`n"
-  "    Verbose       = `$true`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\Base\5.1$([System.Char]34) -File | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
   "  }`n"
-  "  Copy-Item @HT`n"
+  "`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\Base\5.1$([System.Char]34) -Directory | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "      Recurse     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
   "  #endregion`n"
   "  #region | Copy autounattend.xml into root of local drive | Copy autounattend.xml into Panther directory and rename to unattend.xml |`n"
   "  `$HT = @{`n"
@@ -794,8 +846,8 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  #endregion`n"
   "}`n"
   "`t`t"
-  #endregion
 
+  #endregion
 
 
 
@@ -850,6 +902,15 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       ${usb1_UniqueId Raw} = (Import-CliXml -Path 'X:\Scriptoids\usb1 UniqueId Raw.clixml') -replace "'",""
       ${usb1_UniqueId Raw} -match ${Pattern UniqueId Raw} | Out-Null
       ${usb1_UniqueId} = $Matches['Unique_ID']
+      ${Removable External Storage Media Disk CIM Instance} = Get-Disk | Where-Object -FilterScript {
+        $_.FriendlyName -eq    ${usb1_FriendlyName}              -and `
+        $_.UniqueId     -match [Regex]::Escape(${usb1_UniqueId}) -and `
+        $_.SerialNumber -eq    ${usb1_SerialNumber}
+      }
+      if ($null -ne ${Removable External Storage Media Disk CIM Instance}) {
+        ${Partition on Removable External Storage Media Disk CIM Instance} = Get-Partition -DiskNumber ${Removable External Storage Media Disk CIM Instance}.Number | Select-Object -First 1
+        $usb1 = [System.String]${Partition on Removable External Storage Media Disk CIM Instance}.DriveLetter + ":"
+      }
 
       ${OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Disk CIM Instance.clixml"
       ${Recovery Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\Recovery Partition OS Disk CIM Instance.clixml"
@@ -865,13 +926,26 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       #endregion
       #region | Copy Operations |
       #region | Copy the All Users All Hosts profile.ps1 file from external storage to local drive. |
-      $HT = @{
-        Path        = "X:\Scriptoids\5.1\profile.ps1"
-        Destination = "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile.ps1"
-        Force         = $true
-        Verbose       = $true
+      Get-ChildItem -Path "$usb1\$FolderFQN\Base\5.1" -File | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0"
+          Force       = $false
+          Verbose     = $true
+        }
+        Copy-Item @HT
       }
-      Copy-Item @HT
+
+      Get-ChildItem -Path "$usb1\$FolderFQN\Base\5.1" -Directory | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0"
+          Force       = $false
+          Verbose     = $true
+          Recurse     = $true
+        }
+        Copy-Item @HT
+      }
       #endregion
       #region | Copy autounattend.xml into root of local drive | Copy autounattend.xml into Panther directory and rename to unattend.xml |
       $HT = @{
