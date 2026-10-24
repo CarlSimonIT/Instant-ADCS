@@ -167,6 +167,10 @@ function ConvertTo-HereStringCompatible {
     ## replace all grave accent characters with $([System.Char]96)
     $LineNewPrecursor = $LineOld -replace '`$','$([System.Char]96)'
     
+    ## Packing Import-DscResource into code within an XML file 
+    ## requires a text-replacement workaround. 
+    $LineNewPrecursor = $LineNewPrecursor -replace 'Imp0rt-DscResource','Import-DscResource'
+
     ## Escape all PowerShell variables by replacing dollar-sign characters with `$
     $LineNewPrecursor = $LineNewPrecursor -replace '\$','`$'
 
