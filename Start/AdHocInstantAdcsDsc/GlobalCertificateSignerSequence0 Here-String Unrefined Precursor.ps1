@@ -34,7 +34,8 @@ class GlobalCertificateSignerSequence0 {
   [System.Boolean] Test () {
     #region | Test() Subphase A | Uncover the reality |
     Write-Verbose -Message "Test() Subphase A"
-    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse | Where-Object -FilterScript {
+    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse `
+    | Where-Object -FilterScript {
       $_.FriendlyName -eq $this.FriendlyName
     }
 
@@ -88,7 +89,7 @@ class GlobalCertificateSignerSequence0 {
 
   #%_Set Explained Here-String_%
   [System.Void] Set () {
-    $PSModuleInfo = Import-Module 'PKI' -Force -Passthru
+    #$PSModuleInfo = Import-Module 'PKI' -Force -Passthru
 
     if ($this.Ensure -eq [Ensure]::Present) 
     {
@@ -110,17 +111,15 @@ class GlobalCertificateSignerSequence0 {
       #$PSModuleInfo = Import-Module -Name 'PKI' -Force -PassThru
       Import-Module -Name 'PKI' -Cmdlet 'New-SelfSignedCertificate' -RequiredVersion '1.0.0.0'
       ${Cert-Global Certificate Signer} = New-SelfSignedCertificate @HT
+      ${Cert Thumbprint-Global Certificate Signer} = ${Cert-Global Certificate Signer}.Thumbprint
 
       Write-Verbose -Message "Update FriendlyName of public key cert in Intermediate Certificate Authorities store"
-      (Get-Item -Path "Cert:\LocalMachine\CA\$(${Cert-Global Certificate Signer}.Thumbprint)").FriendlyName = $this.FriendlyName
-
-      Set-Content -Value $() -Path 
-      ${FriendlyName Sanitized} = $this.FriendlyName -replace [System.Char]39,''
-      ${Thumbprint Sanitized} = ${Cert-Global Certificate Signer}.Thumbprint -replace '\s', ''
+      $CertPath = "Cert:\LocalMachine\CA\${Cert Thumbprint-Global Certificate Signer}"
+      (Get-Item -Path $CertPath).FriendlyName = $this.FriendlyName
 
       $HT = @{
-        Path  = "${env:Pre-PKI CertFSOs}\${FriendlyName Sanitized}.txt"
-        Value = ${Thumbprint Sanitized}
+        Path  = "${env:Pre-PKI CertFSOs}\$($this.FriendlyName).txt"
+        Value = ${Cert Thumbprint-Global Certificate Signer}
         Force = $true
       }
       Set-Content @HT | Out-Null
@@ -132,13 +131,12 @@ class GlobalCertificateSignerSequence0 {
       ${Cert-Global Certificate Signer} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse | Where-Object -FilterScript {
         $_.FriendlyName -eq $this.FriendlyName
       }
+      ${Cert Thumbprint-Global Certificate Signer} = ${Cert-Global Certificate Signer}.Thumbprint
       ${Cert-Global Certificate Signer} | Remove-Item -Force
 
       Write-Verbose -Message "Eliminating the self-signed cert from Intermediate Certificate Authorities store"
-
-      $Thumbprint = ${Cert-Global Certificate Signer}.Thumbprint
       
-      Remove-Item -Path "Cert:\LocalMachine\CA\$Thumbprint" -Verbose -Force
+      Remove-Item -Path "Cert:\LocalMachine\CA\${Cert Thumbprint-Global Certificate Signer}" -Verbose -Force
     }
   }
 
@@ -148,7 +146,8 @@ class GlobalCertificateSignerSequence0 {
 
     $CurrentState = [System.Collections.Hashtable]::New()    
 
-    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse | Where-Object -FilterScript {
+    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse `
+    | Where-Object -FilterScript {
       $_.FriendlyName -eq $this.FriendlyName
     }
 
