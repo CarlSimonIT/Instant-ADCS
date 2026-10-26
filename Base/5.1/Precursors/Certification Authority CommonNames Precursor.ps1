@@ -8,4 +8,3 @@ ${Policy CA2 Name}     = '%_Policy CA2 Name_%'
 ${End-Entity CA1 Name} = '%_End-Entity CA1 Name_%'
 ${End-Entity CA1 Name} = '%_End-Entity CA1 Name_%'
 #endregion
-
