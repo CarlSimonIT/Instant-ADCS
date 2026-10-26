@@ -104,8 +104,8 @@ param (
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
   $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
-  
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\InterM3d\mc3\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; Clear-Host; 
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\InterM3d\mc3\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  Clear-Host; 
 #>
 
 #region | Set latest Strict Mode | Exit '.\Start.ps1' script if launched in a powershell.exe process instance running at Integrity Level-High |
@@ -744,6 +744,7 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
 # pause
 #endregion
 <#
+  # [ ] Implementation Complete
   # Notes on running Windows Setup in Windows PE: 
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11#notes-on-running-windows-setup-in-windows-pe'
   # Configuration Passes Explained
@@ -755,11 +756,6 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/deploy-a-custom-image?view=windows-11'
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11'
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11'
-
-  # [ ] Implementation Complete
-  # Use newer version of DISM in WinPE: 
-  # Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
-  # Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
 
   # Unmount the WinPE image and create media
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize?view=windows-11#unmount-the-windows-pe-image-and-create-media'
@@ -856,16 +852,20 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
 
   # Capture and apply a Windows image using a single .WIM file
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-using-a-single-wim?view=windows-11'
+
+
+
+
+
+  # [x] Implementation Complete
+  # Use newer version of DISM in WinPE: 
+  # Step 1: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11'
+  # Step 2: start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/copy-dism-to-another-computer?view=windows-11#use-the-new-version-of-dism'
 #>
 
 <#
   # Windows Setup Technical Reference. Install Windows OS from a USB:
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-technical-reference?view=windows-11'
-
-
-
-  
-
 
 
 #>
@@ -1582,9 +1582,26 @@ if (-not $IsPresent) {
 #endregion
 #endregion
 #region | Resume authoring the custom AdHocInstantAdcsDsc DSC Resource module | Write build script upon completion |
+$path = "$PSScriptRoot\..\.CommonItems\Authored"; 
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+$path = "$PSScriptRoot\..\.CommonItems\Authored\AdHocInstantAdcsDsc"
+$folder = [System.IO.DirectoryInfo]$path
+$IsPresent = Test-Path -Path $folder.FullName
+if ($IsPresent) {
+  Get-Item -Path $folder | Rename-Item -NewName "$($folder.BaseName)-$(Call-DateVar)"
+  New-Item -Path $path -ItemType 'Directory' | Out-Null
+} else {New-Item -Path $path -ItemType 'Directory' | Out-Null}
+
+
 # This is not going to be easy. 
 # . powershell.exe -NoProfile -File "$PSScriptRoot\Start\AdHocInstantAdcsDsc\build.ps1"
 # Best if rewritten on the Unclustered Hyper-V host. 
+$InputHT = @{
+  'PSPKI Module Version' = '4.4.1'
+}
+& "$PSScriptRoot\Start\AdHocInstantAdcsDsc\build.ps1" @InputHT
+
 #endregion
 
 
@@ -1644,3 +1661,17 @@ if (${Is Extracted ISO ready for copy to UFD}) {
   }
 }
 #endregion
+
+#region | Copy usb1 directory into $usb1 |
+. "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
+if ($null -ne $usb1) {
+  $IsPresent = Test-Path -Path "$usb1\$FolderFQN"
+  if (-not $IsPresent) {
+    Copy-Item -Path "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN" -Destination "$usb1" -Recurse
+  } else {
+    Get-Item -Path "$usb1\$FolderFQN" | Rename-Item -NewName "$FolderFQN-$(Call-DateVAr)"
+    Copy-Item -Path "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN" -Destination "$usb1" -Recurse
+  }
+}
+#endregion
+
