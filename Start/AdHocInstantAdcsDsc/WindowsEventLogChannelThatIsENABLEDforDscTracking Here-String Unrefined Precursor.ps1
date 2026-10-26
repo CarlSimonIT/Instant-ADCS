@@ -29,7 +29,8 @@ class WindowsEventLogChannelThatIsENABLEDforDscTracking {
 
     Import-Module -Name 'Microsoft.PowerShell.Diagnostics' -Cmdlet 'Get-WinEvent' -RequiredVersion '3.0.0.0'
 
-    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-WinEvent -ListLog "Microsoft-Windows-Dsc/$($this.Channel)" | Select-Object -ExpandProperty 'IsEnabled'
+    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-WinEvent -ListLog "Microsoft-Windows-Dsc/$($this.Channel)" `
+    | Select-Object -ExpandProperty 'IsEnabled'
     #endregion
 
     #region | Test() Subphase B | Consider whether this reality is desired |
@@ -94,7 +95,8 @@ class WindowsEventLogChannelThatIsENABLEDforDscTracking {
 
     $CurrentState = [System.Collections.Hashtable]::New()    
 
-    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-WinEvent -ListLog "Microsoft-Windows-Dsc/$($this.Channel)" | Select-Object -ExpandProperty 'IsEnabled'
+    ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} = Get-WinEvent -ListLog "Microsoft-Windows-Dsc/$($this.Channel)" `
+    | Select-Object -ExpandProperty 'IsEnabled'
 
     if (${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance} -eq $true) {
       $CurrentState.Add('Channel',$this.Channel)
