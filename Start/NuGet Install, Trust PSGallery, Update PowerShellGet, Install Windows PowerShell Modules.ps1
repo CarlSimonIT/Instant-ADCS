@@ -47,6 +47,7 @@ if (-not $IsTrusted) {
 #endregion
 
 #region | Deduce version of PowerShellGet and install if built-in version is still present |
+#Write-Host -Object "Cabbage"
 $PSModuleInfo = Import-Module -Name 'PowerShellGet' -Force -PassThru
 $PowerShellGetVersion = Get-Module -Name 'PowerShellGet' | Select-Object -ExpandProperty 'Version'
 ${PowerShellGet Needs to be Updated} = "$PowerShellGetVersion" -eq '1.0.0.1'
@@ -67,6 +68,7 @@ if (${PowerShellGet Needs to be Updated}) {
 #endregion
 
 #region | Install 'TUN.CredentialManager' and 'MSCatalog' modules for Windows PowerShell in 'CurrentUser' scope |
+#Write-Host -Object "Carrot"
 $InstallModuleHT = @{
   Scope      = 'CurrentUser'
   Repository = 'PSGallery'
@@ -74,18 +76,33 @@ $InstallModuleHT = @{
 }
 $ModuleNames = @(
   'TUN.CredentialManager'
-  #'MSLab'
-  #'MSCatalog'
 )
 foreach ($ModuleName in $ModuleNames) {
   try {
     #${PSCustomObject InstalledModule} = Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' -Verbose:$false
-    $PSModuleInfo = Import-Module $ModuleName -PassThru -Force
     # For some reason the 'TUN.CredentialManager' isn't detectable by Get-InstalledModule, Import-Module, Get-Module, etc. 
+    $PSModuleInfo = Import-Module $ModuleName -PassThru -Force -ErrorAction 'Stop'
   } catch {
     Write-Host -Object "  Ensuring that the '$ModuleName' module`n  for Windows PowerShell is installed in 'CurrentUser' scope:"
     Install-Module -Name $ModuleName @InstallModuleHT
   }
 }
+
+#Write-Host -Object "Potato"
+$ModuleNames = @(
+  'MSLab'
+  'MSCatalog'
+)
+foreach ($ModuleName in $ModuleNames) {
+  try {
+    #${PSCustomObject InstalledModule} = Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' -Verbose:$false
+    # I'm now starting to suspect that the problem is with the PowerShellGet module. 
+    $PSModuleInfo = Import-Module $ModuleName -PassThru -Force -ErrorAction 'Stop'
+  } catch {
+    Write-Host -Object "  Ensuring that the '$ModuleName' module`n  for Windows PowerShell is installed in 'CurrentUser' scope:"
+    Install-Module -Name $ModuleName @InstallModuleHT
+  }
+}
+#Write-Host -Object "Tomato"
 #endregion
 
