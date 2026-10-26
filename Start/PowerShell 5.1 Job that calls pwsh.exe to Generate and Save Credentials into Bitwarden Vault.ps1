@@ -45,11 +45,11 @@ ${Cname of AD Forest Originator} = ${CanonicalName Set Of Focus} | Where-Object 
 #region | Passwords that protect certs not signed by a Certification Authority |
 #region | Passwords to protect .pfx files of the cert signing cert, the code signing cert, and the DSC Pull Server cert |
 <# NOTE |
-  Prior to creating the PKI, all certs not signed by an in-house CA are signed by the Global Cert Signer. 
-  As such, only a single self-signed certificate is present in our environment: the Global Cert Signer. 
-  All other pre-PKI certificates are signed by the Global Cert Signer. 
+  Prior to creating the PKI, all certs not signed by an in-house CA are signed by the Global Certificate Signer. 
+  As such, only a single self-signed certificate is present in our environment: the Global Certificate Signer. 
+  All other pre-PKI certificates are signed by the Global Certificate Signer. 
 #>
-$ObjectTitle = "Global Cert Signer"
+$ObjectTitle = "Global Certificate Signer"
 New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true -PasswordLength 96 -CheckAuthenticationStatus
 
 $ObjectTitle = "Global Code Signer"
