@@ -39,10 +39,6 @@ ${Organization Name}       = "Organization Name"
 ${Organization Legal Name} = "Organization Legal Name, LLC"
 ${Registered Organization} = "registered-organization.info"
 #endregion
-
-# Set-ExecutionPolicy -ExecutionPolicy 'Unrestricted' -Scope 'CurrentUser'
-# Set-Location -Path "$env:UserProfile\GitHub\CarlSimonIT\Instant-ADCS"
-
 #region | Generate Windows PowerShell-compatible profile.ps1 file for Instant-ADCS | Copy supporting scripts into prep directory for usb1 |
 #region | Import strings for uniquely identifying external media and prompt user if corresponding .clixml hasn't yet been generated |
 $BaseNames = @(
@@ -96,7 +92,7 @@ ${OSDeploy UniqueId Raw} = ${OSDeploy UniqueId Raw} -replace $([System.Char]39),
 ${OSDeploy SerialNumber} = ${OSDeploy SerialNumber} -replace $([System.Char]39),'' -replace $([System.Char]34),''
 #endregion
 
-$HT = @{
+$InputHT = @{
   #region | External Storage Media |
   'usb0 FriendlyName'     = ${usb0 FriendlyName}
   'usb0 UniqueId Raw'     = ${usb0 UniqueId Raw}
@@ -220,14 +216,18 @@ $HT = @{
   'End-Entity CA2 Name' = "Ascii$([System.Char]92) $([System.Char]47)utf7$([System.Char]58)-$([System.Char]42)ANSI$([System.Char]63) z$([System.Char]34)$([System.Char]60)$([System.Char]62)$([System.Char]124) Truncation$([System.Char]63)"
   #endregion
 
+  #region | PKI Misc |
+  'Root CA Validity Period'       = 64
+  'Root CA Validity Period Units' = 'Days'
+  #endregion
+
   #region | Location for output content inside '.\output' directory of project root |
   'New Windows PowerShell Base Folder PARTIAL Path' = ${New Windows PowerShell Base Folder PARTIAL Path}  
   #endregion
 }
 
 Push-Location -Path "$PSScriptRoot\..\Base\5.1"
-.\Construct-WindowsPowerShellProfileDotPs1FileForAllUsersAllHosts.ps1 @HT
+.\Construct-WindowsPowerShellProfileDotPs1FileForAllUsersAllHosts.ps1 @InputHT
 Pop-Location
 #endregion
-
 #endregion
