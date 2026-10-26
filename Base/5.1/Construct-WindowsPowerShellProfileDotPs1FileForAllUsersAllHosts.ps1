@@ -524,6 +524,20 @@ param (
   ${End-Entity CA2 Name},
   #endregion
 
+  #region | PKI Misc |
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.Int32]
+  ${Root CA Validity Period},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${Root CA Validity Period Units},
+  #endregion
+
   #region | Location for output content inside '.\output' directory of project root |
   [Parameter(
     Mandatory = $true
@@ -655,6 +669,14 @@ ${Certification Authority CommonNames} = ${Certification Authority CommonNames P
 Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Certification Authority CommonNames.ps1" -Value (${Certification Authority CommonNames})
 #endregion
 
+#region | PKI Misc |
+${PKI Misc Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\PKI Misc Precursor.ps1"
+${PKI Misc} = ${PKI Misc Precursor} `
+  -replace '%_Root CA Validity Period_%',${Root CA Validity Period} `
+  -replace '%_Root CA Validity Period Units_%',${Root CA Validity Period Units}
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PKI Misc.ps1" -Value (${PKI Misc})
+#endregion
+
 #endregion
 
 ${Constructed Profile} = -join $(
@@ -687,6 +709,7 @@ ${Constructed Profile} = -join $(
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Certification Authority CommonNames.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Location - Culture - Geography.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\RelativeID and CanonicalName Sets.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\Static\Module Imports.ps1"
 
   Get-Content -Raw -Path "$PSScriptRoot\Static\Exercise Control Over Command Resolution.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\PowerShell Cookbook (4th Ed.) Selections.ps1"
