@@ -621,7 +621,6 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
 
 
   #region |  |
-
   "`n"
   "& {`n"
   "  #region | Precursor Variable Series I |`n"
@@ -736,11 +735,11 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  Copy-Item @HT`n"
   "  #endregion`n"
   "  #region | Copy modules to local fixed disk |`n"
-  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Managed Object Format Files$([System.Char]34); `n"
-  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  # Let DSC create this directory #  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Managed Object Format Files$([System.Char]34); `n"
+  "  # Let DSC create this directory #  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "`n"
-  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Statics$([System.Char]34); `n"
-  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  # Let DSC create this directory #  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Statics$([System.Char]34); `n"
+  "  # Let DSC create this directory #  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "`n"
   "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -755,8 +754,8 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "    Copy-Item @HT`n"
   "  }`n"
   "`n"
-  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34); `n"
-  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  # Let DSC create this directory #  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34); `n"
+  "  # Let DSC create this directory #  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "`n"
   "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\Modules\5.1$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -846,7 +845,6 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  #endregion`n"
   "}`n"
   "`t`t"
-
   #endregion
 
 
@@ -967,11 +965,11 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       Copy-Item @HT
       #endregion
       #region | Copy modules to local fixed disk |
-      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Managed Object Format Files"; 
-      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      # Let DSC create this directory #  $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Managed Object Format Files"; 
+      # Let DSC create this directory #  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
-      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Statics"; 
-      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      # Let DSC create this directory #  $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Statics"; 
+      # Let DSC create this directory #  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -986,8 +984,8 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
         Copy-Item @HT
       }
 
-      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"; 
-      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      # Let DSC create this directory #  $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"; 
+      # Let DSC create this directory #  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\Modules\5.1"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
