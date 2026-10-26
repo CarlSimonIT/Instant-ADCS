@@ -52,8 +52,8 @@ ${offlineImage cpi source} = "wim:c:/users/$(($UserName -replace ' ',$([System.C
 $wcmNamespaceUrl = 'http://schemas.microsoft.com/WMIConfig/2002/State'
 
 # Temporary File
-$file = New-TemporaryFile
-$XmlFile = Rename-Item -Path "$file" -NewName $($file.BaseName + '.xml') -PassThru
+$tempfile = New-TemporaryFile
+$XmlFile = Rename-Item -Path "$tempfile" -NewName $($tempfile.BaseName + '.xml') -PassThru
 
 # XML Writer Settings
 $XmlWriterSettings = [System.Xml.XmlWriterSettings]::New()
@@ -643,7 +643,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -652,7 +652,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -667,7 +667,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -676,7 +676,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -690,7 +690,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -699,7 +699,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -713,7 +713,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -722,7 +722,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -736,7 +736,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -745,7 +745,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -759,7 +759,7 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -768,7 +768,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -1633,18 +1633,26 @@ $XmlWriter.WriteStartDocument()
     #endregion
     #region | "Environment Variables-System Scope.ps1" Here-String and XML Element |
     ${File Environment Variables-System Scope.ps1 Here-String} = $(
+      #region |  |
       "`n"
       "`t`t`t`${04f1in3 path} = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS$([System.Char]34)`n"
       "`t`t`t`${HKLM Sess Mgr Env} = $([System.Char]39)HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment$([System.Char]39)`n"
       "`t`t`t`$HT = @{`n"
-      "`t`t`t  $([System.Char]39)DSC_CFG_ROOT$([System.Char]39)   = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)04f1in3$([System.Char]39)        = `${04f1in3 path}`n"
-      "`t`t`t  $([System.Char]39)SystemModules$([System.Char]39)  = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)SysMods$([System.Char]39)        = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)SMs$([System.Char]39)            = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)ProgramModules$([System.Char]39) = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)ProgMods$([System.Char]39)       = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)PMs$([System.Char]39)            = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)DSC_CFG_ROOT$([System.Char]39)                         = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)04f1in3$([System.Char]39)                              = `${04f1in3 path}`n"
+      "`t`t`t  $([System.Char]39)SystemModules$([System.Char]39)                        = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)SysMods$([System.Char]39)                              = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)SMs$([System.Char]39)                                  = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)ProgramModules$([System.Char]39)                       = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)ProgMods$([System.Char]39)                             = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)PMs$([System.Char]39)                                  = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)MOFs$([System.Char]39)                                 = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Managed Object Format Files$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)Statics$([System.Char]39)                              = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Statics$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)ResMod$([System.Char]39)                               = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)Pre-PKI CertFSOs$([System.Char]39)                     = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)regex literal DNS CNAME (Anchorless)$([System.Char]39) = `${regex literal DNS CNAME (Anchorless)}`n"
+      "`t`t`t  # $([System.Char]39)VHDs$([System.Char]39) = $([System.Char]34)`$env:ProgramData\Microsoft\Windows\Virtual Hard Disks$([System.Char]34) # Accomodate for multiple hard disks #`n"
+      "`t`t`t  # $([System.Char]39)VMs$([System.Char]39)  = $([System.Char]34)`$env:ProgramData\Microsoft\Windows\Hyper-V$([System.Char]34)            # Accomodate for multiple hard disks #`n"
       "`t`t`t}`n"
       "`t`t`t`$DictionaryEntrySet = `$HT.GetEnumerator() | Write-Output`n"
       "`t`t`tforeach (`$DictionaryEntry in `$DictionaryEntrySet) {`n"
@@ -1655,18 +1663,26 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  }`n"
       "`t`t`t}`n"
       "`t`t"
+      #endregion
       {
         ${04f1in3 path} = "$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS"
         ${HKLM Sess Mgr Env} = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
         $HT = @{
-          'DSC_CFG_ROOT'   = "$env:SystemDrive\$__DirectoryForDscConfigs"
-          '04f1in3'        = ${04f1in3 path}
-          'SystemModules'  = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
-          'SysMods'        = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
-          'SMs'            = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
-          'ProgramModules' = "$env:ProgramFiles\WindowsPowerShell\Modules"
-          'ProgMods'       = "$env:ProgramFiles\WindowsPowerShell\Modules"
-          'PMs'            = "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'DSC_CFG_ROOT'                         = "$env:SystemDrive\$__DirectoryForDscConfigs"
+          '04f1in3'                              = ${04f1in3 path}
+          'SystemModules'                        = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
+          'SysMods'                              = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
+          'SMs'                                  = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
+          'ProgramModules'                       = "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'ProgMods'                             = "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'PMs'                                  = "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'MOFs'                                 = "$env:SystemDrive\$__DirectoryForDscConfigs\Managed Object Format Files"
+          'Statics'                              = "$env:SystemDrive\$__DirectoryForDscConfigs\Statics"
+          'ResMod'                               = "$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules"
+          'Pre-PKI CertFSOs'                     = "$env:SystemDrive\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"
+          'regex literal DNS CNAME (Anchorless)' = ${regex literal DNS CNAME (Anchorless)}
+          # 'VHDs' = "$env:ProgramData\Microsoft\Windows\Virtual Hard Disks" # Accomodate for multiple hard disks #
+          # 'VMs'  = "$env:ProgramData\Microsoft\Windows\Hyper-V"            # Accomodate for multiple hard disks #
         }
         $DictionaryEntrySet = $HT.GetEnumerator() | Write-Output
         foreach ($DictionaryEntry in $DictionaryEntrySet) {
@@ -4999,7 +5015,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Start Menu Visible Places-NONE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetColorTheme.ps1$([System.Char]39)}          # {Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\SetColorTheme.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1$([System.Char]39)}  # {Get-Content -LiteralPath $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1$([System.Char]39) -Raw | Invoke-Expression -Verbose}`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\HideTaskBar-UserOnce.ps1$([System.Char]39)}`n"
+      "`t`t`t  #{& $([System.Char]39)C:\Windows\Setup\Scripts\HideTaskBar-UserOnce.ps1$([System.Char]39)}`n"
       "`t`t`t)`n"
       "`t`t`t& {`n"
       "`t`t`t  [System.Single] `$Complete = 0`n"
@@ -5032,7 +5048,7 @@ $XmlWriter.WriteStartDocument()
           {& 'C:\Windows\Setup\Scripts\Start Menu Visible Places-NONE.ps1'}
           {& 'C:\Windows\Setup\Scripts\SetColorTheme.ps1'}          # {Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\SetColorTheme.ps1' -Raw | Invoke-Expression -Verbose}
           {& 'C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1'}  # {Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\SetWallpaper-UserOnce.ps1' -Raw | Invoke-Expression -Verbose}
-          {& 'C:\Windows\Setup\Scripts\HideTaskBar-UserOnce.ps1'}
+          #{& 'C:\Windows\Setup\Scripts\HideTaskBar-UserOnce.ps1'}
         )
         & {
           [System.Single] $Complete = 0
@@ -5648,10 +5664,19 @@ $XmlWriter.WriteStartDocument()
 
     #region | "Credential Manager-RESTOREps1" Here-String and XML Element |
     ${File Credential Manager-RESTORE.ps1 Here-String} = $(
-
+      #region |  |
+      "`n"
+      "`t`t`t# Restore Credential Manager data |`n"
+      "`t`t`t$([System.Char]34)`$usb0\sec\`$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
+      "`t`t`tcontrol.exe /Name Microsoft.CredentialManager`n"
+      "`t`t`tpause`n"
+      "`t`t`tStart-Sleep 20`n"
+      "`t`t"
+      #endregion
       {
         # Restore Credential Manager data |
-        "$usb0\sec\$FolderFQN.crd" | Set-Clipboard
+        #"$usb0\sec\$FolderFQN.crd" | Set-Clipboard
+        "$usb0\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
         control.exe /Name Microsoft.CredentialManager
         pause
         Start-Sleep 20
@@ -5765,63 +5790,6 @@ $XmlWriter.WriteStartDocument()
     #endregion
 
     #region | HadeanDscConfigurationDocument.ps1 Here-String |
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-
     ${File HadeanDscConfigurationDocument.ps1 Here-String} = $(
       #region |  |
       "`n"
@@ -5858,7 +5826,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  #region | Import DSC Resources into the Configuration Document |`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)PSDesiredStateConfiguration$([System.Char]39)  -ModuleVersion 1.1`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)xPSDesiredStateConfiguration$([System.Char]39) -ModuleVersion 9.2.2`n"
-      "`t`t`t  # #Import-DscResource -ModuleName $([System.Char]39)AdHocDsc$([System.Char]39)                     -ModuleVersion 0.77.13.8`n"
+      "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)AdHocInstantAdcsDsc$([System.Char]39)          -ModuleVersion 0.4.0`n"
       "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocCertsDsc$([System.Char]39)                -ModuleVersion`n"
       "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocNetsDsc$([System.Char]39)                 -ModuleVersion`n"
       "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocPkiDsc$([System.Char]39)                  -ModuleVersion`n"
@@ -5914,32 +5882,27 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
       "`t`t`t    #region | Diagnostics-Enable channels in the Microsoft-Windows-Dsc Event Log Provider |`n"
-      "`t`t`t    <#`n"
-      "`t`t`t      TrackDscEvents $([System.Char]39)Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
-      "`t`t`t        Channel   = $([System.Char]39)Operational$([System.Char]39)`n"
-      "`t`t`t        Status    = $([System.Char]39)Enabled$([System.Char]39)`n"
-      "`t`t`t        Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t        DependsOn = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
-      "`t`t`t        )`n"
-      "`t`t`t      }`n"
-      "`t`t`t      TrackDscEvents $([System.Char]39)Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
-      "`t`t`t        Channel   = $([System.Char]39)Analytic$([System.Char]39)`n"
-      "`t`t`t        Status    = $([System.Char]39)Enabled$([System.Char]39)`n"
-      "`t`t`t        Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t        DependsOn = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[TrackDscEvents]Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t        )`n"
-      "`t`t`t      }`n"
-      "`t`t`t      TrackDscEvents $([System.Char]39)Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
-      "`t`t`t        Channel   = $([System.Char]39)Debug$([System.Char]39)`n"
-      "`t`t`t        Status    = $([System.Char]39)Disabled$([System.Char]39)`n"
-      "`t`t`t        Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t        DependsOn = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[TrackDscEvents]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t        )`n"
-      "`t`t`t      }`n"
-      "`t`t`t    #>`n"
+      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t      Channel   = $([System.Char]39)Operational$([System.Char]39)`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t      Channel   = $([System.Char]39)Analytic$([System.Char]39)`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t      Channel   = $([System.Char]39)Debug$([System.Char]39)`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
       "`t`t`t    #region | One-time Generation of New Random %ComputerNames% |`n"
@@ -5953,8 +5916,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t        Type            = $([System.Char]39)File$([System.Char]39)`n"
       "`t`t`t        Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t        DependsOn       = [System.String[]]@(`n"
-      "`t`t`t          #$([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t          $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t          #$([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t      }`n"
       "`t`t`t    }`n"
@@ -5965,8 +5928,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t        Description           = $([System.Char]39)Description TBD$([System.Char]39)`n"
       "`t`t`t        WorkGroupName         = $([System.Char]39)NoNetwork$([System.Char]39)`n"
       "`t`t`t        DependsOn             = [System.String[]]@(`n"
-      "`t`t`t          #$([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t          $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t          #$([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t      }`n"
       "`t`t`t      PendingReboot $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
@@ -5991,9 +5954,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
       "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn       = [System.String[]]@(`n"
-      "`t`t`t        #$([System.Char]34)[PendingReboot]New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34)`n"
-      "`t`t`t        #$([System.Char]34)[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
       "`t`t`t    `${Dependency Epoch_A__PreDocument_Encryption Wave_00} = [System.String[]]@(`n"
@@ -6011,15 +5972,15 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      $([System.Char]34)[File]Epoch_B__HvH_with_VMs\Wave_00$([System.Char]34)`n"
       "`t`t`t    )`n"
       "`t`t`t`n"
-      "`t`t`t    File $([System.Char]39)EarlyShare\Self-Signed Certs$([System.Char]39) {`n"
-      "`t`t`t      DestinationPath = $([System.Char]34)`$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs$([System.Char]34)`n"
+      "`t`t`t    File $([System.Char]39)Self-Signed Certs Directory$([System.Char]39) {`n"
+      "`t`t`t      DestinationPath = `${env:Pre-PKI CertFSOs}`n"
       "`t`t`t      Force           = `$true`n"
       "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
       "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn       = `${Dependency Epoch_B__HvH_with_VMs Wave_00}`n"
       "`t`t`t    }`n"
-      "`t`t`t    `${Dependency EarlyShare Self-Signed Certs} = [System.String[]]@(`n"
-      "`t`t`t      $([System.Char]34)[File]EarlyShare\Self-Signed Certs$([System.Char]34)`n"
+      "`t`t`t    `${Dependency Self-Signed Certs Directory} = [System.String[]]@(`n"
+      "`t`t`t      $([System.Char]34)[File]Self-Signed Certs Directory$([System.Char]34)`n"
       "`t`t`t    )`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
@@ -6030,7 +5991,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      Force           = `$true`n"
       "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
       "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn       = `${Dependency EarlyShare Self-Signed Certs}`n"
+      "`t`t`t      DependsOn       = `${Dependency Self-Signed Certs Directory}`n"
       "`t`t`t    }`n"
       "`t`t`t    `${Dependency Physical Non-Removable PCIe Adapter MACs Directory} = [System.String[]]@(`n"
       "`t`t`t      $([System.Char]34)[File]Physical Non-Removable PCIe Adapter MACs Directory$([System.Char]34)`n"
@@ -6058,51 +6019,53 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
-      "`t`t`t    #region | Global Cert Signer |`n"
-      "`t`t`t    <#`n"
-      "`t`t`t      `${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs$([System.Char]34)`n"
-      "`t`t`t      if (`${Is CertFSOs Directory present at time of MOF compilation}) {`n"
-      "`t`t`t        GlobalCertificateSignerSequence0 $([System.Char]39)Global Cert Signer$([System.Char]39) {`n"
-      "`t`t`t          FriendlyName      =      [System.String]$([System.Char]39)Global Cert Signer$([System.Char]39)`n"
-      "`t`t`t          AltSigAlg         =      [System.Boolean]`$true`n"
-      "`t`t`t          Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t    #region | Global Certificate Signer |`n"
+      "`t`t`t    `${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path `${env:Pre-PKI CertFSOs}`n"
+      "`t`t`t    if (`${Is CertFSOs Directory present at time of MOF compilation}) {`n"
+      "`t`t`t      `${New Random ComputerName} = Get-Content -Path $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
+      "`t`t`t      `${Current ComputerName confirmed to match New Random ComputerName} = `${New Random ComputerName} -eq `$env:ComputerName`n"
+      "`t`t`t      if (`${Current ComputerName confirmed to match New Random ComputerName}) {`n"
+      "`t`t`t        GlobalCertificateSignerSequence0 $([System.Char]39)Global Certificate Signer$([System.Char]39) {`n"
+      "`t`t`t          IsSingleInstance            = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t          FriendlyName                = [System.String]$([System.Char]39)Global Certificate Signer$([System.Char]39)`n"
+      "`t`t`t          Ensure                      = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t        }`n"
       "`t`t`t        `${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[GlobalCertificateSignerSequence0]`$($([System.Char]39)Global Cert Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[GlobalCertificateSignerSequence0]`$($([System.Char]39)Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t        #region | Document Encryption Certificate for primordial unclustered Hyper-V host |`n"
       "`t`t`t        `${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path $([System.Char]39)Cert:\LocalMachine\My$([System.Char]39) -Recurse`n"
       "`t`t`t        `${Global Certificate Signing Certificate} = `${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {`n"
-      "`t`t`t          `$_.FriendlyName -eq $([System.Char]39)Global Cert Signer$([System.Char]39)`n"
+      "`t`t`t          `$_.FriendlyName -eq $([System.Char]39)Global Certificate Signer$([System.Char]39)`n"
       "`t`t`t        }`n"
       "`t`t`t        if (`$null -ne `${Global Certificate Signing Certificate}) {`n"
-      "`t`t`t          GlobalCodeSignerSeq0 $([System.Char]39)Global Code Signer$([System.Char]39) {`n"
-      "`t`t`t            FriendlyName      =      [System.String]$([System.Char]39)Global Code Signer$([System.Char]39)`n"
-      "`t`t`t            AltSigAlg         =      [System.Boolean]`$true`n"
-      "`t`t`t            Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t            DependsOn         =      `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          GlobalCodeSignerSequence0 $([System.Char]39)Global Code Signer$([System.Char]39) {`n"
+      "`t`t`t            IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t            FriendlyName     = [System.String]$([System.Char]39)Global Code Signer$([System.Char]39)`n"
+      "`t`t`t            Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t            DependsOn        = `${Dependency GlobalCertificateSignerSequence0}`n"
       "`t`t`t          }`n"
-      "`t`t`t          `${Dependency GlobalCodeSignerSeq0} = [System.String[]]@(`n"
-      "`t`t`t            $([System.Char]34)[GlobalCodeSignerSeq0]`$($([System.Char]39)Global Code Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t          `${Dependency GlobalCodeSignerSequence0} = [System.String[]]@(`n"
+      "`t`t`t            $([System.Char]34)[GlobalCodeSignerSequence0]`$($([System.Char]39)Global Code Signer$([System.Char]39))$([System.Char]34)`n"
       "`t`t`t          )`n"
-      "`t`t`t          GlobalCertificateSignerSequence1 $([System.Char]39)Global Cert Signer$([System.Char]39) {`n"
-      "`t`t`t            FriendlyName = [System.String]$([System.Char]39)Global Cert Signer$([System.Char]39)`n"
-      "`t`t`t            Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t            DependsOn    = `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          GlobalCertificateSignerSequence1 $([System.Char]39)Global Certificate Signer$([System.Char]39) {`n"
+      "`t`t`t            IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t            FriendlyName     = [System.String]$([System.Char]39)Global Certificate Signer$([System.Char]39)`n"
+      "`t`t`t            Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t            DependsOn        = `${Dependency GlobalCertificateSignerSequence0}`n"
       "`t`t`t          }`n"
       "`t`t`t          `${Dependency GlobalCertificateSignerSequence1} = [System.String[]]@(`n"
-      "`t`t`t            $([System.Char]34)[GlobalCertificateSignerSequence1]`$($([System.Char]39)Global Cert Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t            $([System.Char]34)[GlobalCertificateSignerSequence1]`$($([System.Char]39)Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
       "`t`t`t          )`n"
-      "`t`t`t          MofPasswordProtectionSeq0 $([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34) {`n"
-      "`t`t`t            FriendlyName      =      [System.String]$([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
-      "`t`t`t            AltSigAlg         =      [System.Boolean]`$true`n"
-      "`t`t`t            Ensure            =      [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t            DependsOn         =      `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          MofPasswordProtectionSequence0 $([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34) {`n"
+      "`t`t`t            FriendlyName = [System.String]$([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
+      "`t`t`t            Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t            DependsOn    = `${Dependency GlobalCertificateSignerSequence0}`n"
       "`t`t`t          }`n"
       "`t`t`t        }`n"
       "`t`t`t        #endregion`n"
       "`t`t`t      }`n"
-      "`t`t`t    #>`n"
+      "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t  }`n"
       "`t`t`t}`n"
@@ -6151,7 +6114,7 @@ $XmlWriter.WriteStartDocument()
           #region | Import DSC Resources into the Configuration Document |
           Imp0rt-DscResource -ModuleName 'PSDesiredStateConfiguration'  -ModuleVersion 1.1
           Imp0rt-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion 9.2.2
-          # #Imp0rt-DscResource -ModuleName 'AdHocDsc'                     -ModuleVersion 0.77.13.8
+          Imp0rt-DscResource -ModuleName 'AdHocInstantAdcsDsc'          -ModuleVersion 0.4.0
           #  Imp0rt-DscResource -ModuleName 'AdHocCertsDsc'                -ModuleVersion
           #  Imp0rt-DscResource -ModuleName 'AdHocNetsDsc'                 -ModuleVersion
           #  Imp0rt-DscResource -ModuleName 'AdHocPkiDsc'                  -ModuleVersion
@@ -6207,32 +6170,27 @@ $XmlWriter.WriteStartDocument()
             #endregion
 
             #region | Diagnostics-Enable channels in the Microsoft-Windows-Dsc Event Log Provider |
-            <#
-              TrackDscEvents 'Status of Operational channel for the Microsoft-Windows-Dsc event log provider' {
-                Channel   = 'Operational'
-                Status    = 'Enabled'
-                Ensure    = 'Present'
-                DependsOn = [System.String[]]@(
-                  "[xRegistry]PowerShell 5.1 Transcription 2"
-                )
-              }
-              TrackDscEvents 'Status of Analytic channel for the Microsoft-Windows-Dsc event log provider' {
-                Channel   = 'Analytic'
-                Status    = 'Enabled'
-                Ensure    = 'Present'
-                DependsOn = [System.String[]]@(
-                  "[TrackDscEvents]Status of Operational channel for the Microsoft-Windows-Dsc event log provider"
-                )
-              }
-              TrackDscEvents 'Status of Debug channel for the Microsoft-Windows-Dsc event log provider' {
-                Channel   = 'Debug'
-                Status    = 'Disabled'
-                Ensure    = 'Present'
-                DependsOn = [System.String[]]@(
-                  "[TrackDscEvents]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider"
-                )
-              }
-            #>
+            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Status of Operational channel for the Microsoft-Windows-Dsc event log provider' {
+              Channel   = 'Operational'
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 Transcription 2"
+              )
+            }
+            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Status of Analytic channel for the Microsoft-Windows-Dsc event log provider' {
+              Channel   = 'Analytic'
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Operational channel for the Microsoft-Windows-Dsc event log provider"
+              )
+            }
+            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Status of Debug channel for the Microsoft-Windows-Dsc event log provider' {
+              Channel   = 'Debug'
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider"
+              )
+            }
             #endregion
 
             #region | One-time Generation of New Random %ComputerNames% |
@@ -6246,8 +6204,8 @@ $XmlWriter.WriteStartDocument()
                 Type            = 'File'
                 Ensure          = 'Present'
                 DependsOn       = [System.String[]]@(
-                  #"[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
-                  "[xRegistry]PowerShell 5.1 Transcription 2"
+                  "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
+                  #"[xRegistry]PowerShell 5.1 Transcription 2"
                 )
               }
             }
@@ -6258,8 +6216,8 @@ $XmlWriter.WriteStartDocument()
                 Description           = 'Description TBD'
                 WorkGroupName         = 'NoNetwork'
                 DependsOn             = [System.String[]]@(
-                  #"[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
-                  "[xRegistry]PowerShell 5.1 Transcription 2"
+                  "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
+                  #"[xRegistry]PowerShell 5.1 Transcription 2"
                 )
               }
               PendingReboot "New Random ComputerName for primordial Unclustered Hyper-V Host" {
@@ -6284,9 +6242,7 @@ $XmlWriter.WriteStartDocument()
               Type            = 'Directory'
               Ensure          = 'Present'
               DependsOn       = [System.String[]]@(
-                #"[PendingReboot]New Random ComputerName for primordial Unclustered Hyper-V Host"
-                #"[TrackDscEvents]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
-                "[xRegistry]PowerShell 5.1 Transcription 2"
+                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
               )
             }
             ${Dependency Epoch_A__PreDocument_Encryption Wave_00} = [System.String[]]@(
@@ -6304,15 +6260,15 @@ $XmlWriter.WriteStartDocument()
               "[File]Epoch_B__HvH_with_VMs\Wave_00"
             )
 
-            File 'EarlyShare\Self-Signed Certs' {
-              DestinationPath = "$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs"
+            File 'Self-Signed Certs Directory' {
+              DestinationPath = ${env:Pre-PKI CertFSOs}
               Force           = $true
               Type            = 'Directory'
               Ensure          = 'Present'
               DependsOn       = ${Dependency Epoch_B__HvH_with_VMs Wave_00}
             }
-            ${Dependency EarlyShare Self-Signed Certs} = [System.String[]]@(
-              "[File]EarlyShare\Self-Signed Certs"
+            ${Dependency Self-Signed Certs Directory} = [System.String[]]@(
+              "[File]Self-Signed Certs Directory"
             )
             #endregion
 
@@ -6323,7 +6279,7 @@ $XmlWriter.WriteStartDocument()
               Force           = $true
               Type            = 'Directory'
               Ensure          = 'Present'
-              DependsOn       = ${Dependency EarlyShare Self-Signed Certs}
+              DependsOn       = ${Dependency Self-Signed Certs Directory}
             }
             ${Dependency Physical Non-Removable PCIe Adapter MACs Directory} = [System.String[]]@(
               "[File]Physical Non-Removable PCIe Adapter MACs Directory"
@@ -6351,51 +6307,53 @@ $XmlWriter.WriteStartDocument()
             }
             #endregion
 
-            #region | Global Cert Signer |
-            <#
-              ${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path "$env:DSC_CFG_ROOT\EarlyShare\Self-Signed Certs"
-              if (${Is CertFSOs Directory present at time of MOF compilation}) {
-                GlobalCertificateSignerSequence0 'Global Cert Signer' {
-                  FriendlyName      =      [System.String]'Global Cert Signer'
-                  AltSigAlg         =      [System.Boolean]$true
-                  Ensure            =      [System.String]'Present'
+            #region | Global Certificate Signer |
+            ${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path ${env:Pre-PKI CertFSOs}
+            if (${Is CertFSOs Directory present at time of MOF compilation}) {
+              ${New Random ComputerName} = Get-Content -Path "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+              ${Current ComputerName confirmed to match New Random ComputerName} = ${New Random ComputerName} -eq $env:ComputerName
+              if (${Current ComputerName confirmed to match New Random ComputerName}) {
+                GlobalCertificateSignerSequence0 'Global Certificate Signer' {
+                  IsSingleInstance            = [System.String]'Yes'
+                  FriendlyName                = [System.String]'Global Certificate Signer'
+                  Ensure                      = [System.String]'Present'
                 }
                 ${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(
-                  "[GlobalCertificateSignerSequence0]$('Global Cert Signer')"
+                  "[GlobalCertificateSignerSequence0]$('Global Certificate Signer')"
                 )
                 #region | Document Encryption Certificate for primordial unclustered Hyper-V host |
                 ${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse
                 ${Global Certificate Signing Certificate} = ${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {
-                  $_.FriendlyName -eq 'Global Cert Signer'
+                  $_.FriendlyName -eq 'Global Certificate Signer'
                 }
                 if ($null -ne ${Global Certificate Signing Certificate}) {
-                  GlobalCodeSignerSeq0 'Global Code Signer' {
-                    FriendlyName      =      [System.String]'Global Code Signer'
-                    AltSigAlg         =      [System.Boolean]$true
-                    Ensure            =      [System.String]'Present'
-                    DependsOn         =      ${Dependency GlobalCertificateSignerSequence0}
+                  GlobalCodeSignerSequence0 'Global Code Signer' {
+                    IsSingleInstance = [System.String]'Yes'
+                    FriendlyName     = [System.String]'Global Code Signer'
+                    Ensure           = [System.String]'Present'
+                    DependsOn        = ${Dependency GlobalCertificateSignerSequence0}
                   }
-                  ${Dependency GlobalCodeSignerSeq0} = [System.String[]]@(
-                    "[GlobalCodeSignerSeq0]$('Global Code Signer')"
+                  ${Dependency GlobalCodeSignerSequence0} = [System.String[]]@(
+                    "[GlobalCodeSignerSequence0]$('Global Code Signer')"
                   )
-                  GlobalCertificateSignerSequence1 'Global Cert Signer' {
-                    FriendlyName = [System.String]'Global Cert Signer'
-                    Ensure       = [System.String]'Present'
-                    DependsOn    = ${Dependency GlobalCertificateSignerSequence0}
+                  GlobalCertificateSignerSequence1 'Global Certificate Signer' {
+                    IsSingleInstance = [System.String]'Yes'
+                    FriendlyName     = [System.String]'Global Certificate Signer'
+                    Ensure           = [System.String]'Present'
+                    DependsOn        = ${Dependency GlobalCertificateSignerSequence0}
                   }
                   ${Dependency GlobalCertificateSignerSequence1} = [System.String[]]@(
-                    "[GlobalCertificateSignerSequence1]$('Global Cert Signer')"
+                    "[GlobalCertificateSignerSequence1]$('Global Certificate Signer')"
                   )
-                  MofPasswordProtectionSeq0 "Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}" {
-                    FriendlyName      =      [System.String]"Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}"
-                    AltSigAlg         =      [System.Boolean]$true
-                    Ensure            =      [System.String]'Present'
-                    DependsOn         =      ${Dependency GlobalCertificateSignerSequence0}
+                  MofPasswordProtectionSequence0 "Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}" {
+                    FriendlyName = [System.String]"Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}"
+                    Ensure       = [System.String]'Present'
+                    DependsOn    = ${Dependency GlobalCertificateSignerSequence0}
                   }
                 }
                 #endregion
               }
-            #>
+            }
             #endregion
           }
         }
@@ -6475,6 +6433,7 @@ Remove-Variable -Name 'XmlWriterSettings'
     $XmlWriter.WriteEndElement()
 #>
 #endregion
+
 
 
 
