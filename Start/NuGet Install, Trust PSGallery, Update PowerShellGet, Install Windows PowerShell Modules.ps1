@@ -67,7 +67,7 @@ if (${PowerShellGet Needs to be Updated}) {
 }
 #endregion
 
-#region | Install 'TUN.CredentialManager' and 'MSCatalog' modules for Windows PowerShell in 'CurrentUser' scope |
+#region | Install 'TUN.CredentialManager' and 'MSCatalog' modules for Windows PowerShell in 'AllUsers' scope |
 #Write-Host -Object "Carrot"
 $InstallModuleHT = @{
   Scope      = 'CurrentUser'
