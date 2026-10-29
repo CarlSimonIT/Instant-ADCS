@@ -32,6 +32,7 @@ function ConvertTo-HereStringPrecursor {
   ## Un-escape these specific text-sequences which represent variables
   ## that must be resolved prior to compiling the here-string.
   ${Escaped text sequences} = @(
+    '`${Name Of Windows PowerShell Module from PSGallery}' # <---- Used by 'NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1'
     # '`$__DirectoryForDscConfigs'
     '`$([System.Char]96)'
     '`${usb0 FriendlyName}'
