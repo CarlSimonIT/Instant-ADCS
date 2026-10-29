@@ -41,10 +41,6 @@ $FolderFQN = Import-CliXml -Path "${env:.CommonItems}\FolderFQN.clixml"
 ${WU Server25 Scripts Parent Folder Path} = "${env:.CommonItems}\Offline WU\Server 25" 
 ${Extracted ISO Folder Path} = "${env:.CommonItems}\Offline WU\Server 25\Extracted ISO"
 
-#. "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Windows Server Image Index.ps1"
-#. "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Lightweight Functions.ps1"
-# "C:\Users\lowpr\GitHub\CarlSimonIT\Instant-ADCS\output\Instant-ADCS\usb1\Instant-ADCS\Base\5.1\Lightweight Functions.ps1"
-
 $__DirectoryForDscConfigs = Import-CliXml -Path "${env:.CommonItems}\__DirectoryForDscConfigs.clixml"
 
 ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-High Command Here-String Precursor} = $(
@@ -60,7 +56,6 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   #region | Dismount Original ISO of Windows Server 2025 | Mount .wim file | Patch images & dismount .wim | split .wim | Generate patched .iso file |
 
   #region |  |
-
   "`n"
   "& { # Dismount Original ISO of Windows Server 2025 | Mount .wim | Apply packages + drivers to images | dismount .wim | split .wim | Generate patched .iso |`n"
   "  `${.CommonItems} = $([System.Char]39)%_.CommonItems_%$([System.Char]39)`n"
@@ -109,7 +104,7 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "    .\dism.exe /Add-Package /Image:`${mounted_wim Folder Path} /PackagePath:`${Package Directory Path}`n"
   "    `${Add-Packages Finish} = [DateTime]::Now`n"
   "`n"
-  "    if ((4) -contains `${Windows Server Image Index}) {`n"
+  "    if ((3,4) -contains `${Windows Server Image Index}) {`n"
   "      # Will WinPE drivers prevent the BSOD? Probably not, but here goes nothing. `n"
   "      #dism.exe /Add-Driver /Image:$([System.Char]34)`${mounted_wim Folder Path}$([System.Char]34) /Driver:$([System.Char]34)`${Extracted WinPE Driver Pack Dell A11 Folder}$([System.Char]34) /Recurse`n"
   "      .\dism.exe /Add-Driver /Image:$([System.Char]34)`${mounted_wim Folder Path}$([System.Char]34) /Driver:$([System.Char]34)`${Extracted Bare-Metal Windows Server 2025 Drivers Folder}$([System.Char]34) /Recurse`n"
@@ -128,7 +123,7 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "    Write-Verbose -Message $([System.Char]34)  Function total duration on $([System.Char]39)Windows Server Image Index$([System.Char]39) = `${Windows Server Image Index}`$([System.Char]58) `$(`$min)m`$(`$sec)s$([System.Char]34)`n"
   "  }`n"
   "`n"
-  "  `${ForEach Loop Time} = [DateTime]::Now`n"
+  "  `${ForEach Loop End Time} = [DateTime]::Now`n"
   "  `${ForEach Loop TimeSpan} = `${ForEach Loop End Time} - `${ForEach Loop Start Time}`n"
   "  `$min = `${ForEach Loop TimeSpan}.Minutes`n"
   "  `$sec = `${ForEach Loop TimeSpan}.Seconds`n"
@@ -149,7 +144,6 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
   "  Get-Item -Path `${mounted_wim Folder Path} | Remove-Item -Recurse -Force`n"
   "}`n"
   "`t`t"
-
   #endregion
 
   #endregion
@@ -201,9 +195,10 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
         .\dism.exe /Add-Package /Image:${mounted_wim Folder Path} /PackagePath:${Package Directory Path}
         ${Add-Packages Finish} = [DateTime]::Now
 
-        if ((4) -contains ${Windows Server Image Index}) {
+        if ((3,4) -contains ${Windows Server Image Index}) {
           # Will WinPE drivers prevent the BSOD? Probably not, but here goes nothing. 
           #dism.exe /Add-Driver /Image:"${mounted_wim Folder Path}" /Driver:"${Extracted WinPE Driver Pack Dell A11 Folder}" /Recurse
+          # Yes, the computer blue-screened
           .\dism.exe /Add-Driver /Image:"${mounted_wim Folder Path}" /Driver:"${Extracted Bare-Metal Windows Server 2025 Drivers Folder}" /Recurse
         }
 
@@ -220,7 +215,7 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
         Write-Verbose -Message "  Function total duration on 'Windows Server Image Index' = ${Windows Server Image Index}$([System.Char]58) $($min)m$($sec)s"
       }
 
-      ${ForEach Loop Time} = [DateTime]::Now
+      ${ForEach Loop End Time} = [DateTime]::Now
       ${ForEach Loop TimeSpan} = ${ForEach Loop End Time} - ${ForEach Loop Start Time}
       $min = ${ForEach Loop TimeSpan}.Minutes
       $sec = ${ForEach Loop TimeSpan}.Seconds
@@ -231,17 +226,12 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
       .\dism.exe /Split-Image /ImageFile:"${Extracted ISO Folder Path}\sources\install.wim" /SWMFile:"${Split Folder}\install.swm" /FileSize:4000
 
       Set-Location -Path "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg"
-      #Copy-Item -Path ".\efisys.bin" -Destination "$ns\reimages\HelpFiles" -Force
       # start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options?view=windows-11'
       .\oscdimg.exe -b".\efisys.bin" -pEF -u1 -udfver102 ${Extracted ISO Folder Path} ${Windows Server 2025 ISO Patched File Path}
-      #Set-Location "$env:SystemDrive"
 
       Start-Sleep 5
-      #Get-Item -Path ${Extracted ISO Folder Path} | Remove-Item -Recurse -Force
       Get-Item -Path ${mounted_wim Folder Path} | Remove-Item -Recurse -Force
     }
-
-
   } | Out-Null
   #########################################-BOUNDARY-#########################################
 ) -join ''
