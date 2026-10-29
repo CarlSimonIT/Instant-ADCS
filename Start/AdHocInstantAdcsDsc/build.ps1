@@ -26,13 +26,13 @@ ${Requires Module xDscDiagnostics 2.8.0 Here-String} = "$([System.Char]35)Requir
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 . "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\PKI Misc.ps1"
+. "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Important Variables.ps1"
 
 #"C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\Instant-ADCS\Base\5.1\Static\Type Accelerator Instance.ps1"
 #"C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\Instant-ADCS\Base\5.1\Precursors\Certification Authority CommonNames Precursor.ps1"
 
 ${DSC Resource Module Name} = 'AdHocInstantAdcsDsc'
-${DSC Resource Module Vers} = '0.4.0'
-
+${DSC Resource Module Vers} = Get-Variable -Name "${DSC Resource Module Name} Version" | Select-Object -ExpandProperty 'Value'
 
 $path = "$PSScriptRoot\..\..\..\.CommonItems\Authored\${DSC Resource Module Name}\${DSC Resource Module Vers}\DSCClassResources"
 ${DSCClassResources Folder} = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -121,7 +121,7 @@ try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -N
 $_Var_Name = 'DscResourcesToExport'
 try {Clear-Variable -Name $_Var_Name -ErrorAction 'Stop'} catch {New-Variable -Name $_Var_Name -Value $null}
 
-$(${Authored DSC Resource Name} = 'GlobalCertificateSignerSequence0'; $IndividualDscResourceVersion = '2026.10.25.1652';
+$(${Authored DSC Resource Name} = 'PrePKIGlobalCertificateSignerSequence0'; $IndividualDscResourceVersion = '2026.10.25.1652';
   $Path = "$PSScriptRoot\${Authored DSC Resource Name} Here-String Unrefined Precursor.ps1"
   ${Authored Here-String Unrefined Precursor} = Get-Content -Path $Path -Raw
   #region | Adjusted Get/Test/Set explanation here-strings applied to Unrefined Precursor result in Precursor |
@@ -213,7 +213,7 @@ $(${Authored DSC Resource Name} = 'WindowsEventLogChannelThatIsENABLEDforDscTrac
   $DscResourcesToExport += @(${Authored DSC Resource Name})
 )
 #     [System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now) | Set-Clipboard
-$(${Authored DSC Resource Name} = 'GlobalCodeSignerSequence0'; $IndividualDscResourceVersion = '2026.10.26.0921';
+$(${Authored DSC Resource Name} = 'PrePKIGlobalCodeSignerSequence0'; $IndividualDscResourceVersion = '2026.10.26.0921';
   $Path = "$PSScriptRoot\${Authored DSC Resource Name} Here-String Unrefined Precursor.ps1"
   ${Authored Here-String Unrefined Precursor} = Get-Content -Path $Path -Raw
   #region | Adjusted Get/Test/Set explanation here-strings applied to Unrefined Precursor result in Precursor |
@@ -257,7 +257,7 @@ $(${Authored DSC Resource Name} = 'GlobalCodeSignerSequence0'; $IndividualDscRes
   $DscResourcesToExport += @(${Authored DSC Resource Name})
 )
 #     [System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now) | Set-Clipboard
-$(${Authored DSC Resource Name} = 'GlobalCertificateSignerSequence1'; $IndividualDscResourceVersion = '2026.10.26.1400';
+$(${Authored DSC Resource Name} = 'PrePKIGlobalCertificateSignerSequence1'; $IndividualDscResourceVersion = '2026.10.26.1400';
   $Path = "$PSScriptRoot\${Authored DSC Resource Name} Here-String Unrefined Precursor.ps1"
   ${Authored Here-String Unrefined Precursor} = Get-Content -Path $Path -Raw
   #region | Adjusted Get/Test/Set explanation here-strings applied to Unrefined Precursor result in Precursor |
@@ -301,7 +301,51 @@ $(${Authored DSC Resource Name} = 'GlobalCertificateSignerSequence1'; $Individua
   $DscResourcesToExport += @(${Authored DSC Resource Name})
 )
 #     [System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now) | Set-Clipboard
-$(${Authored DSC Resource Name} = 'MofPasswordProtectionSequence0'; $IndividualDscResourceVersion = '2026.10.26.1541';
+$(${Authored DSC Resource Name} = 'PrePKIMofPasswordProtectionSequence0'; $IndividualDscResourceVersion = '2026.10.26.1541';
+  $Path = "$PSScriptRoot\${Authored DSC Resource Name} Here-String Unrefined Precursor.ps1"
+  ${Authored Here-String Unrefined Precursor} = Get-Content -Path $Path -Raw
+  #region | Adjusted Get/Test/Set explanation here-strings applied to Unrefined Precursor result in Precursor |
+  ${Get Explained Here-String}  = ${Get Explained Here-String Precursor}  -replace '%_Authored DSC Resource Name_%',  ${Authored DSC Resource Name}
+  ${Test Explained Here-String} = ${Test Explained Here-String Precursor} -replace '%_Authored DSC Resource Name_%',  ${Authored DSC Resource Name}
+  ${Set Explained Here-String}  = ${Set Explained Here-String Precursor}  -replace '%_Authored DSC Resource Name_%',  ${Authored DSC Resource Name}
+
+  ${Authored Here-String Precursor} = ${Authored Here-String Unrefined Precursor} `
+    -replace '#%_Get Explained Here-String_%',${Get Explained Here-String} `
+    -replace '#%_Test Explained Here-String_%',${Test Explained Here-String} `
+    -replace '#%_Set Explained Here-String_%',${Set Explained Here-String}
+  #endregion
+
+  ${Authored Here-String} = $(
+    ${enum Ensure Here-String}
+    ${Authored Here-String Precursor}
+  ) -join "`n"
+
+  # Define the path of the parent directory for this class-based DSC Resource's module file.
+  $path = "$PSScriptRoot\..\..\..\.CommonItems\Authored\${DSC Resource Module Name}\${DSC Resource Module Vers}\DSCClassResources\${Authored DSC Resource Name}"
+  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+  # Define the module file of this class-based DSC Resource.
+  Set-Content -Path "$folder\${Authored DSC Resource Name}.psm1" -Value (${Authored Here-String})
+
+  # Define the module manifest file of this class-based DSC Resource
+  $HT = @{
+    Path                 = "$folder\${Authored DSC Resource Name}.psd1"
+    RootModule           = "${Authored DSC Resource Name}.psm1"
+    Guid                 = (New-Guid).Guid
+    Author               = 'CarlSimonIT'
+    Company              = 'CarlSimonIT'
+    PowerShellVersion    = '5.1'
+    ModuleVersion        = $IndividualDscResourceVersion
+    DscResourcesToExport = ${Authored DSC Resource Name}
+    Verbose              = $true
+  }
+  New-ModuleManifest @HT
+
+  $NestedModules += @("DSCClassResources\${Authored DSC Resource Name}\${Authored DSC Resource Name}.psd1")
+  $DscResourcesToExport += @(${Authored DSC Resource Name})
+)
+#     [System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now) | Set-Clipboard
+$(${Authored DSC Resource Name} = 'PrePKIEventLogRecordProtectorSequence0'; $IndividualDscResourceVersion = '2026.10.28.0920';
   $Path = "$PSScriptRoot\${Authored DSC Resource Name} Here-String Unrefined Precursor.ps1"
   ${Authored Here-String Unrefined Precursor} = Get-Content -Path $Path -Raw
   #region | Adjusted Get/Test/Set explanation here-strings applied to Unrefined Precursor result in Precursor |
@@ -345,8 +389,6 @@ $(${Authored DSC Resource Name} = 'MofPasswordProtectionSequence0'; $IndividualD
   $DscResourcesToExport += @(${Authored DSC Resource Name})
 )
 
-
-#         code "C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\.CommonItems\Authored\AdHocInstantAdcsDsc\0.4.0\DSCClassResources\GlobalCertificateSignerSequence0\GlobalCertificateSignerSequence0.psm1"
 $InputHT = @{
   Path                 = "$PSScriptRoot\..\..\..\.CommonItems\Authored\${DSC Resource Module Name}\${DSC Resource Module Vers}\${DSC Resource Module Name}.psd1"
   NestedModules        = $NestedModules
@@ -363,112 +405,11 @@ New-ModuleManifest @InputHT
 Test-ModuleManifest -Path $InputHT['Path'] | Format-List -Property '*'
 
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
-#$path = [System.IO.FileInfo]"$usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN\${DSC Resource Module Name}.zip"
-#"C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\Authored for Instant-ADCS"
 $path = [System.IO.FileInfo]"$PSScriptRoot\..\..\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN\${DSC Resource Module Name}.zip"
 $IsPresent = Test-Path -Path $path.FullName
 if ($IsPresent) {Remove-Item -Path $path.FullName}
 Compress-Archive -Path "$PSScriptRoot\..\..\..\.CommonItems\Authored\${DSC Resource Module Name}" -Destination $path.FullName -Force -Verbose
+
 Copy-Item -Path $path.FullName -Destination "$usb0\$FolderFQN\cfg\DSC Resources\Authored for $FolderFQN\${DSC Resource Module Name}.zip" -Force
 
-<#
-  Import-Module "C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\.CommonItems\Authored\AdHocInstantAdcsDsc\0.4.0\DSCClassResources\WindowsEventLogChannelThatIsENABLEDforDscTracking\WindowsEventLogChannelThatIsENABLEDforDscTracking.psm1"
-  Import-Module "C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\.CommonItems\Authored\AdHocInstantAdcsDsc\0.4.0\DSCClassResources\GlobalCertificateSignerSequence0\GlobalCertificateSignerSequence0.psm1"
-#>
-
-<#
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  Get-Item -Path "$env:ProgramFiles\WindowsPowerShell\Modules\AdHocInstantAdcsDsc" | Remove-Item -Recurse
-
-  $PMs = "$env:ProgramFiles\WindowsPowerShell\Modules"
-  $path = "C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\Authored for Instant-ADCS\AdHocInstantAdcsDsc.zip"
-  Expand-Archive -Path $path -DestinationPath $PMs
-#>
-
-<#
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  $PSModuleInfo = Import-Module -Name 'PKI' -PassThru -Force
-
-  $WaveIndex = '00'
-  $EpochIndex = 'A'
-  $EpochLabel = "PreDocument_Encryption"
-  $InstanceName = "Epoch_$($EpochIndex)__$($EpochLabel)__Wave_$($WaveIndex)"
-  $LCM_InstanceName = "LCM_" + $InstanceName
-
-  [System.Management.Automation.DscLocalConfigurationManagerAttribute()]
-  Configuration $LCM_InstanceName {
-    Node 'localhost' {
-      Settings {
-        ActionAfterReboot              = [System.String]'ContinueConfiguration'
-        AllowModuleOverwrite           = [System.Boolean]$true
-        ConfigurationMode              = [System.String]'ApplyAndAutoCorrect'
-        ConfigurationModeFrequencyMins = [System.UInt32]15
-        RefreshFrequencyMins           = [System.UInt32]30
-        RebootNodeIfNeeded             = [System.Boolean]$true
-        RefreshMode                    = [System.String]'Push'
-        StatusRetentionTimeInDays      = [System.UInt32]20
-      }
-    }
-  }
-  $lcmHT = @{
-    InstanceName = $LCM_InstanceName
-    OutputPath   = "$MOFs\Epoch_$($EpochIndex)__$($EpochLabel)\Wave_$WaveIndex"
-    Verbose      = $true
-  }
-  Invoke-Expression -Verbose:$true -Command "$LCM_InstanceName @lcmHT"
-  Set-DscLocalConfigurationManager -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force
-
-  Configuration $InstanceName {
-    Import-DscResource -ModuleName 'PSDesiredStateConfiguration'  -ModuleVersion 1.1
-    Import-DscResource -ModuleName 'AdHocInstantAdcsDsc' -ModuleVersion 0.4.0
-
-    Node 'localhost' {
-      File NoFile {
-        DestinationPath = "$env:SystemDrive\NoFile.txt"
-        Contents        = ''
-        Ensure          = 'Present'
-      }
-
-
-
-
-
-
-      #region | Global Certificate Signer |
-      ${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path ${env:Pre-PKI CertFSOs}
-      if (${Is CertFSOs Directory present at time of MOF compilation}) {
-        GlobalCertificateSignerSequence0 'Global Certificate Signer' {
-          IsSingleInstance            = [System.String]'Yes'
-          FriendlyName                = [System.String]'Global Certificate Signer'
-          Ensure                      = [System.String]'Present'
-        }
-        ${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(
-          "[GlobalCertificateSignerSequence0]$('Global Certificate Signer')"
-        )
-        #region | Document Encryption Certificate for primordial unclustered Hyper-V host |
-        ${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse
-        ${Global Certificate Signing Certificate} = ${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {
-          $_.FriendlyName -eq 'Global Certificate Signer'
-        }
-        #endregion
-      }
-
-      #endregion
-
-
-
-
-    }
-  }
-
-  $HT = @{
-    InstanceName = $InstanceName
-    OutputPath   = $lcmHT['OutputPath']
-    Verbose      = $true
-  }
-
-  Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
-  Publish-DscConfiguration -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force -Verbose:$true
-  Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$true
-#>
 
