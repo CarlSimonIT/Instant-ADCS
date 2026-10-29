@@ -255,11 +255,9 @@ ${Win32_Product Name} = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\Windows\Cu
   Get-ItemPropertyValue -Path ${Candidate Registry Key}.PSPath -Name 'DisplayName' | Where-Object -FilterScript {$_ -eq 'PowerShell 7-x64'}
 }
 
-
 if (${Win32_Product Name} -eq $null) {
   . powershell.exe -NoProfile -File "$PSScriptRoot\Start\Install machine-scope PowerShell 7 and register Event Logging Manifest.ps1"
 }
-
 # Enumerate the list of Cultures defined on this machine with PowerShell 7. Windows PowerShell does not support the -ListAvailable parameter of Get-Culture
 $IsPresent = Test-Path -Path "$PSScriptRoot\..\.CommonItems\Cultures Defined.clixml"
 if (-not $IsPresent) {
@@ -874,7 +872,6 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
 & "$PSScriptRoot\Start\ADK + WinPE\XML Answer File Writer.ps1"
 #endregion
 
-
 #region | PowerShell-enabled Removable External Bootable Media for WinPE Deployment |
 if ($null -ne ${OSDeploy Disk CIM Instance}) { # If the USB isn't detected/connected, then don't attempt work on that USB!
   ${WinPE Workspace Folder Name} = 'PowerShell-Infused'
@@ -1146,8 +1143,6 @@ if (
       Start-Process -FilePath powershell.exe -ArgumentList $ArgumentList -Verb 'RunAs' -WindowStyle 'Hidden' -Wait
     }
 
-    
-
     <#
       ${Key Title 0} = $OutputHT['Key Title 0']
       ${Key Title 1} = $OutputHT['Key Title 1']
@@ -1325,6 +1320,7 @@ Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource module Save Path
 ${DSC Resource Module Names} = @(
   'ActiveDirectoryCSDsc'
   'ActiveDirectoryDsc'
+  'AuditPolicyDsc'
   'cDhcpServerDynamicUpdate'
   'CertificateDsc'
   'cHyper-V'
@@ -1335,6 +1331,7 @@ ${DSC Resource Module Names} = @(
   'HyperVDsc'
   #'JeaDsc'
   'NetworkingDsc'
+  'SecurityPolicyDsc'
   'StorageDsc'
   'UpdateServicesDsc'
   'WebAdministrationDsc'
@@ -1410,7 +1407,7 @@ if ($DetectionSet -gt 0) {
 #endregion
 #region | PowerShell 7.4 |
 $Minor = 4
-$Patch = 20
+$Patch = 22
 
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
 $WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
@@ -1445,7 +1442,7 @@ if (-not $IsPresent) {
 #endregion
 #region | PowerShell 7.5 |
 $Minor = 5
-$Patch = 11
+$Patch = 13
 
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
 $WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
@@ -1480,7 +1477,7 @@ if (-not $IsPresent) {
 #endregion
 #region | PowerShell 7.6 |
 $Minor = 6
-$Patch = 6
+$Patch = 9
 
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
 $WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
@@ -1662,6 +1659,13 @@ if (${Is Extracted ISO ready for copy to UFD}) {
 }
 #endregion
 
+#region | Copy clixml files into usb1 directory |
+$path = "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\clixmls"; 
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+Get-ChildItem -Path "$PSScriptRoot\..\.CommonItems" -Filter '*.clixml' | ForEach-Object -Process {
+  Copy-Item -Path $_.FullName -Destination "$folder"
+}
+#endregion
 #region | Copy usb1 directory into $usb1 |
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
 if ($null -ne $usb1) {
