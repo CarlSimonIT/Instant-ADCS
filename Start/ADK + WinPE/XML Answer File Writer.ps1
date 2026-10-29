@@ -61,6 +61,8 @@ $XmlWriterSettings.Indent = $true
 $XmlWriter = [System.Xml.XmlWriter]::Create($XmlFile.FullName,$XmlWriterSettings)
 #endregion
 
+# 'https://en.wikipedia.org/wiki/Geologic_time_scale'
+
 #region | XML Writer |
 $XmlWriter.WriteStartDocument()
   $XmlWriter.WriteStartElement('unattend','urn:schemas-microsoft-com:unattend')
@@ -373,7 +375,7 @@ $XmlWriter.WriteStartDocument()
                 "-Scope $([System.Char]39)LocalMachine$([System.Char]39) "
                 "-ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) "
                 "-Verbose "
-                "-Force"
+                "-Force; pause"
                 $([System.Char]34)
               )
             ))
@@ -392,7 +394,7 @@ $XmlWriter.WriteStartDocument()
                 "`$xml = [xml]::new(); "
                 "`$xml.Load('C:\Windows\Panther\unattend.xml'); "
                 "`$sb = [ScriptBlock]::Create(`$xml.unattend.Extensions.ExtractScript); "
-                "icm -ArgumentList `$xml -ScriptBlock `$sb"
+                "icm -ArgumentList `$xml -ScriptBlock `$sb; pause"
                 $([System.Char]34)
               )
             ))
@@ -414,7 +416,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\SpEcialiZe.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -449,7 +451,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\DefaultUser.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -611,7 +613,7 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\FirstLogon.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
@@ -635,386 +637,398 @@ $XmlWriter.WriteStartDocument()
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 00 of HadeanDscConfigurationDocument
+          # Pass 00 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Ep0ch_A__PreDocument_Encryption
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 00 of HadeanDscConfigurationDocument.ps1")
+            $XmlWriter.WriteElementString('Description',"Pass 00 of '.\00 Hadean Pre-Document Encryption.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
+                "-NoProfile "
                 "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
 
           # the primordial Hyper-V host / DSC Push server | Burn through 5 passes of the pre-document encryption configuration |
-          # Pass 01 of HadeanDscConfigurationDocument
+          # Pass 01 of ".\00 Hadean Pre-Document Encryption.ps1"
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 01 of HadeanDscConfigurationDocument.ps1")
+            $XmlWriter.WriteElementString('Description',"Pass 01 of '.\00 Hadean Pre-Document Encryption.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
+                "-NoProfile "
                 "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 02 of HadeanDscConfigurationDocument
+          # Pass 02 of ".\00 Hadean Pre-Document Encryption.ps1"
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 02 of HadeanDscConfigurationDocument.ps1")
+            $XmlWriter.WriteElementString('Description',"Pass 02 of '.\00 Hadean Pre-Document Encryption.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
+                "-NoProfile "
                 "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 03 of HadeanDscConfigurationDocument
+          # Pass 03 of ".\00 Hadean Pre-Document Encryption.ps1"
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 03 of HadeanDscConfigurationDocument.ps1")
+            $XmlWriter.WriteElementString('Description',"Pass 03 of '.\00 Hadean Pre-Document Encryption.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
+                "-NoProfile "
                 "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 04 of HadeanDscConfigurationDocument
+          # Pass 04 of ".\00 Hadean Pre-Document Encryption.ps1"
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 04 of HadeanDscConfigurationDocument.ps1")
+            $XmlWriter.WriteElementString('Description',"Pass 04 of '.\00 Hadean Pre-Document Encryption.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
+                "-NoProfile "
                 "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 05 of HadeanDscConfigurationDocument
+          # Pass 05 of ".\00 Hadean Pre-Document Encryption.ps1"
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 05 of HadeanDscConfigurationDocument.ps1")
+            $XmlWriter.WriteElementString('Description',"Pass 05 of '.\00 Hadean Pre-Document Encryption.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
+                "-NoProfile "
                 "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose"
+                "-Verbose; pause"
                 $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
 
           #region | HvH with VMs Epoch |
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 1st time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"Copy from external media .ISOs,install files. Export Code Signing .cer file. Define all DocEnc, Sauth, and Cauth certs. Attach non-system VHDX. IP ExcIncOutline. Install Hyper-V Feature. Reboot.")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
-          
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 2nd time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"Define and export CER + PFX of all DocEnc certs, Sauth, and Cauth certs.. Save to .txt file the non-system VHDX UniqueIDs. IP Inclusion-Exclusion Spaces + ExclusionRangesDDN. VhdxFromIso. Reboot.")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+          <#
+            # Execute '01_Eoarchean__HvH_with_VMs' 'Ep0ch_B__HvH_with_VMs__Wave_00' a 1st time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"Copy from external media .ISOs,install files. Export Code Signing .cer file. Define all DocEnc, Sauth, and Cauth certs. Attach non-system VHDX. IP ExcIncOutline. Install Hyper-V Feature. Reboot.")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
+            
+            # Execute '01_Eoarchean__HvH_with_VMs' a 2nd time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"Define and export CER + PFX of all DocEnc certs, Sauth, and Cauth certs.. Save to .txt file the non-system VHDX UniqueIDs. IP Inclusion-Exclusion Spaces + ExclusionRangesDDN. VhdxFromIso. Reboot.")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 3rd time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
-          
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 4th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            # Execute '01_Eoarchean__HvH_with_VMs' a 3rd time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
+            
+            # Execute '01_Eoarchean__HvH_with_VMs' a 4th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand') # Deploy XML files for VMs |
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Deploy XML files for VMs")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Prepare_XML_Files Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand') # Deploy XML files for VMs |
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('Description',"Deploy XML files for VMs")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${Prepare_XML_Files Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand') # Define MetaConfig.mof + Pending.mof files for VMs
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Define MetaConfig.mof + Pending.mof files for VMs")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Bootstrap_MOFs Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
-          
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 5th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand') # Define MetaConfig.mof + Pending.mof files for VMs
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('Description',"Define MetaConfig.mof + Pending.mof files for VMs")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${Bootstrap_MOFs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
+            
+            # Execute '01_Eoarchean__HvH_with_VMs' a 5th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 6th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            # Execute '01_Eoarchean__HvH_with_VMs' a 6th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 7th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
-          
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' an 8th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            # Execute '01_Eoarchean__HvH_with_VMs' a 7th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
+            
+            # Execute '01_Eoarchean__HvH_with_VMs' an 8th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 9th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            # Execute '01_Eoarchean__HvH_with_VMs' a 9th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 10th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            # Execute '01_Eoarchean__HvH_with_VMs' a 10th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          # Execute 'Epoch_B__HvH_with_VMs__Wave_00' a 11th time
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_00 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            # Execute '01_Eoarchean__HvH_with_VMs' a 11th time
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Minimized$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${01_Eoarchean__HvH_with_VMs Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
+          #>
           #endregion
 
           #region | DSC Push Server Epoch |
-          $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Hidden$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Epoch_B__HvH_with_VMs__Wave_01 Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+          <#
+            $XmlWriter.WriteStartElement('SynchronousCommand'); $XmlWriter.WriteElementString('Description',"")
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Hidden$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  #"& ([ScriptBlock]::Create(`${Ep0ch_B__HvH_with_VMs__Wave_01 Here-String}))"
+                  "& ([ScriptBlock]::Create(`${02_Paleoarchean__Secured_NonDomains Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
 
-          $XmlWriter.WriteStartElement('SynchronousCommand') # Wait for LCM to complete pending.mof.
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Wait for LCM to complete pending.mof.")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
-                "-Command "
-                $([System.Char]34)
-                "& ([ScriptBlock]::Create(`${Wait4LCM + import private Key Here-String}))"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
+            $XmlWriter.WriteStartElement('SynchronousCommand') # Wait for LCM to complete pending.mof.
+              $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+              $XmlWriter.WriteElementString('Description',"Wait for LCM to complete pending.mof.")
+              $XmlWriter.WriteElementString('RequiresUserInput',"false")
+              $XmlWriter.WriteElementString('CommandLine',$(
+                -join @(
+                  "powershell.exe "
+                  "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                  "-Command "
+                  $([System.Char]34)
+                  "& ([ScriptBlock]::Create(`${Wait4LCM + import private Key Here-String}))"
+                  $([System.Char]34)
+                )
+              ))
+            $XmlWriter.WriteEndElement()
+          #>
           #endregion
 
           <# pe.cmd investigation |
@@ -1375,6 +1389,7 @@ $XmlWriter.WriteStartDocument()
 
   #region | Extensions |
   $XmlWriter.WriteStartElement('Extensions','https://schneegans.de/windows/unattend-generator/')
+
     #region | ExtractScript here-string for PowerShell scriptblock |
     ${ExtractScript Here-String} = $(
       #region |  |
@@ -1650,7 +1665,6 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  $([System.Char]39)Statics$([System.Char]39)                              = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Statics$([System.Char]34)`n"
       "`t`t`t  $([System.Char]39)ResMod$([System.Char]39)                               = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34)`n"
       "`t`t`t  $([System.Char]39)Pre-PKI CertFSOs$([System.Char]39)                     = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)regex literal DNS CNAME (Anchorless)$([System.Char]39) = `${regex literal DNS CNAME (Anchorless)}`n"
       "`t`t`t  # $([System.Char]39)VHDs$([System.Char]39) = $([System.Char]34)`$env:ProgramData\Microsoft\Windows\Virtual Hard Disks$([System.Char]34) # Accomodate for multiple hard disks #`n"
       "`t`t`t  # $([System.Char]39)VMs$([System.Char]39)  = $([System.Char]34)`$env:ProgramData\Microsoft\Windows\Hyper-V$([System.Char]34)            # Accomodate for multiple hard disks #`n"
       "`t`t`t}`n"
@@ -1680,7 +1694,6 @@ $XmlWriter.WriteStartDocument()
           'Statics'                              = "$env:SystemDrive\$__DirectoryForDscConfigs\Statics"
           'ResMod'                               = "$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules"
           'Pre-PKI CertFSOs'                     = "$env:SystemDrive\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"
-          'regex literal DNS CNAME (Anchorless)' = ${regex literal DNS CNAME (Anchorless)}
           # 'VHDs' = "$env:ProgramData\Microsoft\Windows\Virtual Hard Disks" # Accomodate for multiple hard disks #
           # 'VMs'  = "$env:ProgramData\Microsoft\Windows\Hyper-V"            # Accomodate for multiple hard disks #
         }
@@ -2295,6 +2308,7 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteString(${File Lock Screen-Do Not Require Ctrl+Alt+Del.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
+
     #region | "Windows Command Processor Default Location.ps1" Here-String and XML Element |
     ${File Windows Command Processor Default Location.ps1 Here-String} = $(
       "`n"
@@ -2319,50 +2333,12 @@ $XmlWriter.WriteStartDocument()
     #endregion
 
 
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
 
-        {
 
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
-    #region | "___.ps1" Here-String and XML Element |
-    <#
-      ${File ___.ps1 Here-String} = $(
-
-        {
-
-        } | Out-Null
-      ) -join ''
-        $XmlWriter.WriteStartElement('File')
-          $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\___.ps1')
-          $XmlWriter.WriteString(${File ___.ps1 Here-String})
-        $XmlWriter.WriteEndElement()
-    #>
-    #endregion
 
     ${File SpEcialiZe.ps1 Here-String} = $(
+
+
 
       #region |  |
       "`n"
@@ -2412,7 +2388,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t"
       #endregion
 
-      {
+
+      { # ConvertTo-HereStringCompatible |
         $SpEcialiZeScriptBlocks = $(
           {& 'C:\Windows\Setup\Scripts\Windows Update-PAUSE.ps1'}
           {& 'C:\Windows\Setup\Scripts\No non-GPO audit policy settings.ps1'}
@@ -2462,6 +2439,7 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\SpEcialiZe.ps1')
         $XmlWriter.WriteString(${File SpEcialiZe.ps1 Here-String})
       $XmlWriter.WriteEndElement()
+
     #endregion
 
     #region | DefaultUser.ps1 Here-String | D-Scripts | D-Scripts run during the Specialize configuration pass, after the 'SpEcialiZe.ps1' script |
@@ -4311,10 +4289,12 @@ $XmlWriter.WriteStartDocument()
     #region | UserOnce.ps1 Here-String | C-Scripts | C-Scripts run whenever a user, any user, logs on for the first time |
     #region | "RunMRU Run Box Cache.ps1" Here-String and XML Element |
     ${File RunMRU Run Box Cache.ps1 Here-String} = $(
+
+
+
+
       #region |  |
       "`n"
-      "`t`t`t#`$RunMRU = $([System.Char]34)HKU:\`$((Get-LocalUser `${explorer.exe Owner} -ErrorAction Stop).sid.value)\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
-      "`t`t`t#`$RunMRU = $([System.Char]34)HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
       "`t`t`t`$RunMRU = $([System.Char]34)Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU$([System.Char]34)`n"
       "`t`t`t`$AllNumLett = `$(`n"
       "`t`t`t  0..25 | ForEach-Object -Process {`n"
@@ -4335,7 +4315,8 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  d = $([System.Char]39)%PMs%$([System.Char]39)`n"
       "`t`t`t  e = $([System.Char]39)ms-settings:personalization-colors$([System.Char]39)`n"
       "`t`t`t  f = $([System.Char]39)cmd.exe /c powershell.exe; Start pwsh -Verb RunAs$([System.Char]39)`n"
-      "`t`t`t  g = $([System.Char]39)cmd.exe /c powershell.exe; Start-process PowerShell.exe -Verb RunAs$([System.Char]39)`n"
+      "`t`t`t  #g = $([System.Char]39)cmd.exe /c $([System.Char]34)powershell.exe -NoProfile -Command ^$([System.Char]34)Start-Process powershell.exe -Verb Runas -ArgumentList @(^$([System.Char]39)-NoProfile^$([System.Char]39))^$([System.Char]34)$([System.Char]34)$([System.Char]39)`n"
+      "`t`t`t  g = $([System.Char]34)cmd.exe /c `$([System.Char]34)powershell.exe -NoProfile -Command ^`$([System.Char]34)Start-Process powershell.exe -Verb Runas -ArgumentList @(^$([System.Char]39)-NoProfile^$([System.Char]39))^`$([System.Char]34)`$([System.Char]34)$([System.Char]34)`n"
       "`t`t`t  k = $([System.Char]39)ms-settings:taskbar$([System.Char]39)`n"
       "`t`t`t  l = $([System.Char]39)shutdown -p$([System.Char]39)`n"
       "`t`t`t  m = $([System.Char]39)control.exe /Name Microsoft.CredentialManager$([System.Char]39)`n"
@@ -4358,9 +4339,10 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t}`n"
       "`t`t"
       #endregion
+
+
+
       {
-        #$RunMRU = "HKU:\$((Get-LocalUser ${explorer.exe Owner} -ErrorAction Stop).sid.value)\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
-        #$RunMRU = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
         $RunMRU = "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
         $AllNumLett = $(
           0..25 | ForEach-Object -Process {
@@ -4381,7 +4363,8 @@ $XmlWriter.WriteStartDocument()
           d = '%PMs%'
           e = 'ms-settings:personalization-colors'
           f = 'cmd.exe /c powershell.exe; Start pwsh -Verb RunAs'
-          g = 'cmd.exe /c powershell.exe; Start-process PowerShell.exe -Verb RunAs'
+          #g = 'cmd.exe /c "powershell.exe -NoProfile -Command ^"Start-Process powershell.exe -Verb Runas -ArgumentList @(^'-NoProfile^')^""'
+          g = "cmd.exe /c $([System.Char]34)powershell.exe -NoProfile -Command ^$([System.Char]34)Start-Process powershell.exe -Verb Runas -ArgumentList @(^'-NoProfile^')^$([System.Char]34)$([System.Char]34)"
           k = 'ms-settings:taskbar'
           l = 'shutdown -p'
           m = 'control.exe /Name Microsoft.CredentialManager'
@@ -5667,7 +5650,7 @@ $XmlWriter.WriteStartDocument()
       #region |  |
       "`n"
       "`t`t`t# Restore Credential Manager data |`n"
-      "`t`t`t$([System.Char]34)`$usb0\sec\`$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
+      "`t`t`t$([System.Char]34)`$usb0\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
       "`t`t`tcontrol.exe /Name Microsoft.CredentialManager`n"
       "`t`t`tpause`n"
       "`t`t`tStart-Sleep 20`n"
@@ -5675,7 +5658,6 @@ $XmlWriter.WriteStartDocument()
       #endregion
       {
         # Restore Credential Manager data |
-        #"$usb0\sec\$FolderFQN.crd" | Set-Clipboard
         "$usb0\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
         control.exe /Name Microsoft.CredentialManager
         pause
@@ -5789,15 +5771,52 @@ $XmlWriter.WriteStartDocument()
       $XmlWriter.WriteEndElement()
     #endregion
 
-    #region | HadeanDscConfigurationDocument.ps1 Here-String |
-    ${File HadeanDscConfigurationDocument.ps1 Here-String} = $(
+    #region | 00 Hadean Pre-Document Encryption.ps1 Here-String |
+    ${File 00 Hadean Pre-Document Encryption.ps1 Here-String} = $(
       #region |  |
       "`n"
-      "`t`t`t`$WaveIndex = $([System.Char]39)00$([System.Char]39)`n"
-      "`t`t`t`$EpochIndex = $([System.Char]39)A$([System.Char]39)`n"
-      "`t`t`t`$EpochLabel = $([System.Char]34)PreDocument_Encryption$([System.Char]34)`n"
-      "`t`t`t`$InstanceName = $([System.Char]34)Epoch_`$(`$EpochIndex)__`$(`$EpochLabel)__Wave_`$(`$WaveIndex)$([System.Char]34)`n"
-      "`t`t`t`$LCM_InstanceName = $([System.Char]34)LCM_$([System.Char]34) + `$InstanceName`n"
+      "`t`t`t#region | Classes/Functions/Variables defined before launching a chronological unit |`n"
+      "`t`t`t`$ProjectName = $([System.Char]34)$FolderFQN$([System.Char]34)`n"
+      "`t`t`t# $([System.Char]34).s$([System.Char]34) stands for $([System.Char]34)dot-sourced$([System.Char]34)`n"
+      "`t`t`t`${.s} = $([System.Char]34)`$env:DSC_CFG_ROOT\`$ProjectName\Dot-Sourced Structural Data$([System.Char]34)`n"
+      "`t`t`t`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Lightweight Functions.ps1$([System.Char]34)`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Important Variables.ps1$([System.Char]34)`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Node Mgmt NetIPInterface CNAMEs.ps1$([System.Char]34)`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Type Accelerator Instance.ps1$([System.Char]34)`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Class Definitions\Windows Server Image Index.ps1$([System.Char]34)`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Class Definitions\Quick Management Cname Conversions.ps1$([System.Char]34)`n"
+      "`t`t`t. $([System.Char]34)`$PSHOME\Regular Expression Patterns.ps1$([System.Char]34)`n"
+      "`t`t`t`n"
+      "`t`t`t#region | Quick Management Cname Conversions |`n"
+      "`t`t`tclass CluelessConversions {`n"
+      "`t`t`t  static [System.String] CN ([System.String] `$cname) {`n"
+      "`t`t`t    `${%ComputerName%-to-DNS Canonical Name Conversion} = [System.Collections.Specialized.OrderedDictionary]@{}`n"
+      "`t`t`t    `$CanonicalName = `${script:DSC Authoring Station Mgmt Cname}`n"
+      "`t`t`t    `${Variable Representation String} = $([System.Char]39)`${$([System.Char]39) + $([System.Char]34)`$env:Statics\CNs\`$CanonicalName ComputerName.txt$([System.Char]34) + $([System.Char]39)}$([System.Char]39)`n"
+      "`t`t`t    `$ComputerName = Invoke-Expression -Command `${Variable Representation String}`n"
+      "`t`t`t    `${%ComputerName%-to-DNS Canonical Name Conversion} += @{`$CanonicalName = `$ComputerName}`n"
+      "`t`t`t    if (`$null -ne `$ComputerName) {`${%ComputerName%-to-DNS Canonical Name Conversion} += @{`$ComputerName = `$CanonicalName}}`n"
+      "`t`t`t    return `${%ComputerName%-to-DNS Canonical Name Conversion}.`$cname`n"
+      "`t`t`t  }`n"
+      "`t`t`t}`n"
+      "`t`t`t#endregion`n"
+      "`t`t`t`n"
+      "`t`t`t`$Host.PrivateData.DebugForegroundColor = `$(rFc)`n"
+      "`t`t`t`$Host.PrivateData.DebugBackgroundColor = `$(rBc)`n"
+      "`t`t`t`n"
+      "`t`t`t`$Host.PrivateData.VerboseForegroundColor = `$(rFc)`n"
+      "`t`t`t`$Host.PrivateData.VerboseBackgroundColor = `$(rBc)`n"
+      "`t`t`t`$error.Clear()`n"
+      "`t`t`t#endregion`n"
+      "`t`t`t`n"
+      "`t`t`t`$InstanceIndex = $([System.Char]39)00$([System.Char]39); `$InstanceChrono = $([System.Char]39)Hadean$([System.Char]39); `$InstanceDesc = $([System.Char]34)Pre-Document Encryption$([System.Char]34)`n"
+      "`t`t`t`$InstanceName = $([System.Char]39)x_$([System.Char]39) + `$InstanceIndex + $([System.Char]39)_$([System.Char]39) + `$InstanceChrono + $([System.Char]39)__$([System.Char]39) + `$(`$InstanceDesc -replace $([System.Char]39)[^\w\.-]$([System.Char]39),$([System.Char]39)_$([System.Char]39))`n"
+      "`t`t`t`$InstanceFolderName = `$InstanceIndex + $([System.Char]39) $([System.Char]39) + `$InstanceChrono + $([System.Char]39) $([System.Char]39) + `$InstanceDesc`n"
+      "`t`t`t`$LCM_InstanceName = $([System.Char]39)LCM_$([System.Char]39) + `$InstanceIndex + $([System.Char]39)_$([System.Char]39) + `$InstanceChrono + $([System.Char]39)__$([System.Char]39) + `$(`$InstanceDesc -replace $([System.Char]39)[^\w\.-]$([System.Char]39),$([System.Char]39)_$([System.Char]39))`n"
+      "`t`t`t`n"
+      "`t`t`t`$path = $([System.Char]34)`$MOFs\`$InstanceFolderName$([System.Char]34); `n"
+      "`t`t`t`$OutputFolder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
       "`t`t`t`n"
       "`t`t`t[System.Management.Automation.DscLocalConfigurationManagerAttribute()]`n"
       "`t`t`tConfiguration `$LCM_InstanceName {`n"
@@ -5816,7 +5835,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t}`n"
       "`t`t`t`$lcmHT = @{`n"
       "`t`t`t  InstanceName = `$LCM_InstanceName`n"
-      "`t`t`t  OutputPath   = $([System.Char]34)`$MOFs\Epoch_`$(`$EpochIndex)__`$(`$EpochLabel)\Wave_`$WaveIndex$([System.Char]34)`n"
+      "`t`t`t  OutputPath   = $([System.Char]34)`$OutputFolder$([System.Char]34)`n"
       "`t`t`t  Verbose      = `$true`n"
       "`t`t`t}`n"
       "`t`t`tInvoke-Expression -Verbose:`$true -Command $([System.Char]34)`$LCM_InstanceName @lcmHT$([System.Char]34)`n"
@@ -5827,109 +5846,148 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)PSDesiredStateConfiguration$([System.Char]39)  -ModuleVersion 1.1`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)xPSDesiredStateConfiguration$([System.Char]39) -ModuleVersion 9.2.2`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)AdHocInstantAdcsDsc$([System.Char]39)          -ModuleVersion 0.4.0`n"
-      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocCertsDsc$([System.Char]39)                -ModuleVersion`n"
-      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocNetsDsc$([System.Char]39)                 -ModuleVersion`n"
-      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocPkiDsc$([System.Char]39)                  -ModuleVersion`n"
-      "`t`t`t  #  Import-DscResource -ModuleName $([System.Char]39)AdHocUtilsDsc$([System.Char]39)                -ModuleVersion`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)ComputerManagementDsc$([System.Char]39)        -ModuleVersion 10.0.1`n"
       "`t`t`t  Import-DscResource -ModuleName $([System.Char]39)CertificateDsc$([System.Char]39)               -ModuleVersion 6.1.0`n"
       "`t`t`t  #endregion`n"
       "`t`t`t`n"
       "`t`t`t  Node $([System.Char]39)localhost$([System.Char]39) {`n"
-      "`t`t`t    #region | Strictest Level of Windows PowerShell ScriptBlock and Module Logging |`n"
-      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 ScriptBlock Logging$([System.Char]39) {`n"
-      "`t`t`t      ValueName = $([System.Char]39)EnableScriptBlockLogging$([System.Char]39)`n"
-      "`t`t`t      Key       = $([System.Char]39)HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging$([System.Char]39)`n"
-      "`t`t`t      ValueData = $([System.Char]39)1$([System.Char]39)`n"
-      "`t`t`t      ValueType = $([System.Char]39)String$([System.Char]39)`n"
-      "`t`t`t      Force     = `$true`n"
-      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t`n"
-      "`t`t`t    }`n"
-      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Module Logging$([System.Char]39) {`n"
+      "`t`t`t    #region | Strictest Level of Windows PowerShell Transcription and ScriptBlock/Module Logging |`n"
+      "`t`t`t    `$ParentPath = $([System.Char]34)HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell$([System.Char]34)`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Module Logging$([System.Char]39) { # PowerShell 5.1 Module Logging |`n"
       "`t`t`t      ValueName = $([System.Char]39)EnableModuleLogging$([System.Char]39)`n"
-      "`t`t`t      Key       = $([System.Char]39)HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\ModuleLogging$([System.Char]34)`n"
       "`t`t`t      ValueData = $([System.Char]39)1$([System.Char]39)`n"
-      "`t`t`t      ValueType = $([System.Char]39)String$([System.Char]39)`n"
+      "`t`t`t      ValueType = $([System.Char]39)Dword$([System.Char]39)`n"
       "`t`t`t      Force     = `$true`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 ScriptBlock Logging$([System.Char]34)`n"
-      "`t`t`t      )`n"
       "`t`t`t    }`n"
-      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Transcription 1$([System.Char]39) {`n"
-      "`t`t`t      ValueName = $([System.Char]39)EnableTranscribing$([System.Char]39)`n"
-      "`t`t`t      Key       = $([System.Char]39)HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription$([System.Char]39)`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 ScriptBlock Logging$([System.Char]39) { # PowerShell 5.1 ScriptBlock Logging |`n"
+      "`t`t`t      ValueName = $([System.Char]39)EnableScriptBlockLogging$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\ScriptBlockLogging$([System.Char]34)`n"
       "`t`t`t      ValueData = $([System.Char]39)1$([System.Char]39)`n"
-      "`t`t`t      ValueType = $([System.Char]39)String$([System.Char]39)`n"
+      "`t`t`t      ValueType = $([System.Char]39)DWord$([System.Char]39)`n"
       "`t`t`t      Force     = `$true`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn = [System.String[]]@(`n"
       "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Module Logging$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
-      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Transcription 2$([System.Char]39) {`n"
-      "`t`t`t      ValueName = $([System.Char]39)EnableInvocationHeader$([System.Char]39)`n"
-      "`t`t`t      Key       = $([System.Char]39)HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription$([System.Char]39)`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 ScriptBlock Invocation Logging$([System.Char]39) { # PowerShell 5.1 ScriptBlock Invocation Logging |`n"
+      "`t`t`t      ValueName = $([System.Char]39)EnableScriptBlockInvocationLogging$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\ScriptBlockLogging$([System.Char]34)`n"
       "`t`t`t      ValueData = $([System.Char]39)1$([System.Char]39)`n"
+      "`t`t`t      ValueType = $([System.Char]39)Dword$([System.Char]39)`n"
+      "`t`t`t      Force     = `$true`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 ScriptBlock Logging$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Transcription-Enable Invocation Header$([System.Char]39) { # PowerShell 5.1 Transcription-Enable Invocation Header |`n"
+      "`t`t`t      ValueName = $([System.Char]39)EnableInvocationHeader$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\Transcription$([System.Char]34)`n"
+      "`t`t`t      ValueData = $([System.Char]39)1$([System.Char]39)`n"
+      "`t`t`t      ValueType = $([System.Char]39)Dword$([System.Char]39)`n"
+      "`t`t`t      Force     = `$true`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 ScriptBlock Invocation Logging$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Transcription-Enable Transcribing$([System.Char]39) { # PowerShell 5.1 Transcription-Enable Transcribing |`n"
+      "`t`t`t      ValueName = $([System.Char]39)EnableTranscribing$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\Transcription$([System.Char]34)`n"
+      "`t`t`t      ValueData = $([System.Char]34)1$([System.Char]34)`n"
       "`t`t`t      ValueType = $([System.Char]39)String$([System.Char]39)`n"
       "`t`t`t      Force     = `$true`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 1$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription-Enable Invocation Header$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Transcription-Enable Transcripting$([System.Char]39) { # PowerShell 5.1 Transcription-Enable Transcripting |`n"
+      "`t`t`t      ValueName = $([System.Char]39)EnableTranscripting$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\Transcription$([System.Char]34)`n"
+      "`t`t`t      ValueData = $([System.Char]34)1$([System.Char]34)`n"
+      "`t`t`t      ValueType = $([System.Char]39)Dword$([System.Char]39)`n"
+      "`t`t`t      Force     = `$true`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription-Enable Transcribing$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    xRegistry $([System.Char]39)PowerShell 5.1 Transcription-Output Directory$([System.Char]39) { # PowerShell 5.1 Transcription-Output Directory |`n"
+      "`t`t`t      ValueName = $([System.Char]39)OutputDirectory$([System.Char]39)`n"
+      "`t`t`t      Key       = $([System.Char]34)`$ParentPath\Transcription$([System.Char]34)`n"
+      "`t`t`t      ValueData = $([System.Char]34)`$env:ProgramData\Transcript-PowerShell 5.1$([System.Char]34)`n"
+      "`t`t`t      ValueType = $([System.Char]39)String$([System.Char]39)`n"
+      "`t`t`t      Force     = `$true`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn = [System.String[]]@(`n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription-Enable Transcripting$([System.Char]34)`n"
+      "`t`t`t      )`n"
+      "`t`t`t    }`n"
+      "`t`t`t    #endregion`n"
+      "`t`t`t`n"
+      "`t`t`t    #region | System-scope Environment Variables |`n"
+      "`t`t`t    xEnvironment $([System.Char]39)regex literal DNS CNAME \Anchorless\$([System.Char]39) {`n"
+      "`t`t`t      Name      = $([System.Char]34)regex literal DNS CNAME (Anchorless)$([System.Char]34)`n"
+      "`t`t`t      Value     = `${regex literal DNS CNAME (Anchorless)}`n"
+      "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      Path      = `$false`n"
+      "`t`t`t      DependsOn = [System.String[]]@( `n"
+      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription-Output Directory$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
       "`t`t`t    #region | Diagnostics-Enable channels in the Microsoft-Windows-Dsc Event Log Provider |`n"
-      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Operational channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]39) {`n"
       "`t`t`t      Channel   = $([System.Char]39)Operational$([System.Char]39)`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[xEnvironment]regex literal DNS CNAME \Anchorless\$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
-      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Analytic channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]39) {`n"
       "`t`t`t      Channel   = $([System.Char]39)Analytic$([System.Char]39)`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Operational channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Operational channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
-      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]39) {`n"
+      "`t`t`t    WindowsEventLogChannelThatIsENABLEDforDscTracking $([System.Char]39)Debug channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]39) {`n"
       "`t`t`t      Channel   = $([System.Char]39)Debug$([System.Char]39)`n"
       "`t`t`t      Ensure    = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Analytic channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
       "`t`t`t    #region | One-time Generation of New Random %ComputerNames% |`n"
-      "`t`t`t    `${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
+      "`t`t`t    `${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\CNs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
       "`t`t`t    if (-not `${Is file with new random %ComputerNames% present at time of MOF compilation}) {`n"
       "`t`t`t      File $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
-      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\CNs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
       "`t`t`t        Attributes      = @($([System.Char]39)ReadOnly$([System.Char]39))`n"
       "`t`t`t        Contents        = `$(($([System.Char]39)WIN-$([System.Char]39) + ([System.IO.Path]::GetRandomFileName()) -replace $([System.Char]39)\.$([System.Char]39),$([System.Char]39)$([System.Char]39) -join $([System.Char]39)$([System.Char]39)).ToUpper())`n"
       "`t`t`t        Force           = `$true`n"
       "`t`t`t        Type            = $([System.Char]39)File$([System.Char]39)`n"
       "`t`t`t        Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t        DependsOn       = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t          #$([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Debug channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #region | Rename Computer and Reboot |`n"
       "`t`t`t    if (`${Is file with new random %ComputerNames% present at time of MOF compilation}) {`n"
       "`t`t`t      Computer $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
-      "`t`t`t        Name                  = `$(Get-Content -Path $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34))`n"
+      "`t`t`t        Name                  = `$(Get-Content -Path $([System.Char]34)`$Statics\CNs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34))`n"
       "`t`t`t        Description           = $([System.Char]39)Description TBD$([System.Char]39)`n"
       "`t`t`t        WorkGroupName         = $([System.Char]39)NoNetwork$([System.Char]39)`n"
       "`t`t`t        DependsOn             = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
-      "`t`t`t          #$([System.Char]34)[xRegistry]PowerShell 5.1 Transcription 2$([System.Char]34)`n"
+      "`t`t`t          $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Debug channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]34)`n"
       "`t`t`t        )`n"
       "`t`t`t      }`n"
       "`t`t`t      PendingReboot $([System.Char]34)New Random ComputerName for primordial Unclustered Hyper-V Host$([System.Char]34) {`n"
@@ -5945,31 +6003,20 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
-      "`t`t`t    #endregion                            `n"
+      "`t`t`t    #endregion`n"
       "`t`t`t`n"
       "`t`t`t    #region | Essential Directory Structure |`n"
-      "`t`t`t    File $([System.Char]39)Epoch_A__PreDocument_Encryption\Wave_00$([System.Char]39) {`n"
-      "`t`t`t      DestinationPath = $([System.Char]34)`$MOFs\Epoch_A__PreDocument_Encryption\Wave_00$([System.Char]34)`n"
+      "`t`t`t    File `$InstanceFolderName {`n"
+      "`t`t`t      DestinationPath = $([System.Char]34)`$MOFs\`$InstanceFolderName$([System.Char]34)`n"
       "`t`t`t      Force           = `$true`n"
       "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
       "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t      DependsOn       = [System.String[]]@(`n"
-      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider$([System.Char]34)`n"
+      "`t`t`t        $([System.Char]34)[WindowsEventLogChannelThatIsENABLEDforDscTracking]Debug channel for the Microsoft-Windows-Dsc event log provider on localhost$([System.Char]34)`n"
       "`t`t`t      )`n"
       "`t`t`t    }`n"
-      "`t`t`t    `${Dependency Epoch_A__PreDocument_Encryption Wave_00} = [System.String[]]@(`n"
-      "`t`t`t      $([System.Char]34)[File]Epoch_A__PreDocument_Encryption\Wave_00$([System.Char]34)`n"
-      "`t`t`t    )`n"
-      "`t`t`t`n"
-      "`t`t`t    File $([System.Char]39)Epoch_B__HvH_with_VMs\Wave_00$([System.Char]39) {`n"
-      "`t`t`t      DestinationPath = $([System.Char]34)`$MOFs\Epoch_B__HvH_with_VMs\Wave_00$([System.Char]34)`n"
-      "`t`t`t      Force           = `$true`n"
-      "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
-      "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn       = `${Dependency Epoch_A__PreDocument_Encryption Wave_00}`n"
-      "`t`t`t    }`n"
-      "`t`t`t    `${Dependency Epoch_B__HvH_with_VMs Wave_00} = [System.String[]]@(`n"
-      "`t`t`t      $([System.Char]34)[File]Epoch_B__HvH_with_VMs\Wave_00$([System.Char]34)`n"
+      "`t`t`t    `${Dependency x_00_Hadean__PreDocEcyn} = [System.String[]]@(`n"
+      "`t`t`t      $([System.Char]34)[File]`$InstanceFolderName$([System.Char]34)`n"
       "`t`t`t    )`n"
       "`t`t`t`n"
       "`t`t`t    File $([System.Char]39)Self-Signed Certs Directory$([System.Char]39) {`n"
@@ -5977,7 +6024,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      Force           = `$true`n"
       "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
       "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t      DependsOn       = `${Dependency Epoch_B__HvH_with_VMs Wave_00}`n"
+      "`t`t`t      DependsOn       = `${Dependency x_00_Hadean__PreDocEcyn}`n"
       "`t`t`t    }`n"
       "`t`t`t    `${Dependency Self-Signed Certs Directory} = [System.String[]]@(`n"
       "`t`t`t      $([System.Char]34)[File]Self-Signed Certs Directory$([System.Char]34)`n"
@@ -6019,51 +6066,61 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
-      "`t`t`t    #region | Global Certificate Signer |`n"
+      "`t`t`t    #region | Pre-PKI Global Certificate Signer |`n"
       "`t`t`t    `${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path `${env:Pre-PKI CertFSOs}`n"
       "`t`t`t    if (`${Is CertFSOs Directory present at time of MOF compilation}) {`n"
-      "`t`t`t      `${New Random ComputerName} = Get-Content -Path $([System.Char]34)`$Statics\PMs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
-      "`t`t`t      `${Current ComputerName confirmed to match New Random ComputerName} = `${New Random ComputerName} -eq `$env:ComputerName`n"
-      "`t`t`t      if (`${Current ComputerName confirmed to match New Random ComputerName}) {`n"
-      "`t`t`t        GlobalCertificateSignerSequence0 $([System.Char]39)Global Certificate Signer$([System.Char]39) {`n"
-      "`t`t`t          IsSingleInstance            = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
-      "`t`t`t          FriendlyName                = [System.String]$([System.Char]39)Global Certificate Signer$([System.Char]39)`n"
-      "`t`t`t          Ensure                      = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t        }`n"
-      "`t`t`t        `${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(`n"
-      "`t`t`t          $([System.Char]34)[GlobalCertificateSignerSequence0]`$($([System.Char]39)Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
-      "`t`t`t        )`n"
-      "`t`t`t        #region | Document Encryption Certificate for primordial unclustered Hyper-V host |`n"
-      "`t`t`t        `${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path $([System.Char]39)Cert:\LocalMachine\My$([System.Char]39) -Recurse`n"
-      "`t`t`t        `${Global Certificate Signing Certificate} = `${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {`n"
-      "`t`t`t          `$_.FriendlyName -eq $([System.Char]39)Global Certificate Signer$([System.Char]39)`n"
-      "`t`t`t        }`n"
-      "`t`t`t        if (`$null -ne `${Global Certificate Signing Certificate}) {`n"
-      "`t`t`t          GlobalCodeSignerSequence0 $([System.Char]39)Global Code Signer$([System.Char]39) {`n"
-      "`t`t`t            IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
-      "`t`t`t            FriendlyName     = [System.String]$([System.Char]39)Global Code Signer$([System.Char]39)`n"
-      "`t`t`t            Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t            DependsOn        = `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t      if (`${Is file with new random %ComputerNames% present at time of MOF compilation}) {`n"
+      "`t`t`t        `${New Random ComputerName} = Get-Content -Path $([System.Char]34)`$Statics\CNs\`${DSC Authoring Station Mgmt Cname} ComputerName.txt$([System.Char]34)`n"
+      "`t`t`t        `${Current ComputerName confirmed to match New Random ComputerName} = `${New Random ComputerName} -eq `$env:ComputerName`n"
+      "`t`t`t        if (`${Current ComputerName confirmed to match New Random ComputerName}) {`n"
+      "`t`t`t          PrePKIGlobalCertificateSignerSequence0 $([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39) {`n"
+      "`t`t`t            IsSingleInstance            = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t            FriendlyName                = [System.String]$([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39)`n"
+      "`t`t`t            Ensure                      = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t          }`n"
-      "`t`t`t          `${Dependency GlobalCodeSignerSequence0} = [System.String[]]@(`n"
-      "`t`t`t            $([System.Char]34)[GlobalCodeSignerSequence0]`$($([System.Char]39)Global Code Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t          `${Dependency PrePKIGlobalCertificateSignerSequence0} = [System.String[]]@(`n"
+      "`t`t`t            $([System.Char]34)[PrePKIGlobalCertificateSignerSequence0]`$($([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
       "`t`t`t          )`n"
-      "`t`t`t          GlobalCertificateSignerSequence1 $([System.Char]39)Global Certificate Signer$([System.Char]39) {`n"
-      "`t`t`t            IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
-      "`t`t`t            FriendlyName     = [System.String]$([System.Char]39)Global Certificate Signer$([System.Char]39)`n"
-      "`t`t`t            Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t            DependsOn        = `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          #region | Document Encryption Certificate for primordial unclustered Hyper-V host |`n"
+      "`t`t`t          `${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path $([System.Char]39)Cert:\LocalMachine\My$([System.Char]39) -Recurse`n"
+      "`t`t`t          `${Pre-PKI Global Certificate Signing Certificate} = `${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {`n"
+      "`t`t`t            `$_.FriendlyName -eq $([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39)`n"
       "`t`t`t          }`n"
-      "`t`t`t          `${Dependency GlobalCertificateSignerSequence1} = [System.String[]]@(`n"
-      "`t`t`t            $([System.Char]34)[GlobalCertificateSignerSequence1]`$($([System.Char]39)Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
-      "`t`t`t          )`n"
-      "`t`t`t          MofPasswordProtectionSequence0 $([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34) {`n"
-      "`t`t`t            FriendlyName = [System.String]$([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
-      "`t`t`t            Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
-      "`t`t`t            DependsOn    = `${Dependency GlobalCertificateSignerSequence0}`n"
+      "`t`t`t          if (`$null -ne `${Pre-PKI Global Certificate Signing Certificate}) {`n"
+      "`t`t`t            PrePKIGlobalCodeSignerSequence0 $([System.Char]39)Pre-PKI Global Code Signer$([System.Char]39) {`n"
+      "`t`t`t              IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t              FriendlyName     = [System.String]$([System.Char]39)Pre-PKI Global Code Signer$([System.Char]39)`n"
+      "`t`t`t              Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t              DependsOn        = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
+      "`t`t`t            }`n"
+      "`t`t`t            `${Dependency PrePKIGlobalCodeSignerSequence0} = [System.String[]]@(`n"
+      "`t`t`t              $([System.Char]34)[PrePKIGlobalCodeSignerSequence0]`$($([System.Char]39)Pre-PKI Global Code Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t            )`n"
+      "`t`t`t            PrePKIGlobalCertificateSignerSequence1 $([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39) {`n"
+      "`t`t`t              IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t              FriendlyName     = [System.String]$([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39)`n"
+      "`t`t`t              Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t              DependsOn        = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
+      "`t`t`t            }`n"
+      "`t`t`t            `${Dependency PrePKIGlobalCertificateSignerSequence1} = [System.String[]]@(`n"
+      "`t`t`t              $([System.Char]34)[PrePKIGlobalCertificateSignerSequence1]`$($([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t            )`n"
+      "`t`t`t`n"
+      "`t`t`t            # Encrypting the sensitive strings (e.g., passwords) inside of .MOF files:`n"
+      "`t`t`t            ## start msedge.exe $([System.Char]39)https://learn.microsoft.com/en-us/powershell/dsc/pull-server/securemof?view=dsc-1.1$([System.Char]39)`n"
+      "`t`t`t            PrePKIMofPasswordProtectionSequence0 $([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34) {`n"
+      "`t`t`t              FriendlyName = [System.String]$([System.Char]34)Encrypt Passwords in MOF for LCM on `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
+      "`t`t`t              Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t              DependsOn    = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
+      "`t`t`t            }`n"
+      "`t`t`t            PrePKIEventLogRecordProtectorSequence0 $([System.Char]34)Encrypt Event Log Records Originating from `${DSC Authoring Station Mgmt Cname}$([System.Char]34) {`n"
+      "`t`t`t              FriendlyName = [System.String]$([System.Char]34)Encrypt Event Log Records Originating from `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
+      "`t`t`t              Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t              DependsOn    = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
+      "`t`t`t            }`n"
       "`t`t`t          }`n"
+      "`t`t`t          #endregion`n"
       "`t`t`t        }`n"
-      "`t`t`t        #endregion`n"
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
@@ -6080,12 +6137,49 @@ $XmlWriter.WriteStartDocument()
       "`t`t`tStart-DscConfiguration -UseExisting -Force -Wait:`$true -Verbose:`$true`n"
       "`t`t"
       #endregion
-      {
-        $WaveIndex = '00'
-        $EpochIndex = 'A'
-        $EpochLabel = "PreDocument_Encryption"
-        $InstanceName = "Epoch_$($EpochIndex)__$($EpochLabel)__Wave_$($WaveIndex)"
-        $LCM_InstanceName = "LCM_" + $InstanceName
+      { # ConvertTo-HereStringCompatible |
+        #region | Classes/Functions/Variables defined before launching a chronological unit |
+        $ProjectName = "$FolderFQN"
+        # ".s" stands for "dot-sourced"
+        ${.s} = "$env:DSC_CFG_ROOT\$ProjectName\Dot-Sourced Structural Data"
+
+        . "$PSHOME\Lightweight Functions.ps1"
+        . "$PSHOME\Important Variables.ps1"
+        . "$PSHOME\Node Mgmt NetIPInterface CNAMEs.ps1"
+        . "$PSHOME\Type Accelerator Instance.ps1"
+        . "$PSHOME\Class Definitions\Windows Server Image Index.ps1"
+        . "$PSHOME\Class Definitions\Quick Management Cname Conversions.ps1"
+        . "$PSHOME\Regular Expression Patterns.ps1"
+
+        #region | Quick Management Cname Conversions |
+        class CluelessConversions {
+          static [System.String] CN ([System.String] $cname) {
+            ${%ComputerName%-to-DNS Canonical Name Conversion} = [System.Collections.Specialized.OrderedDictionary]@{}
+            $CanonicalName = ${script:DSC Authoring Station Mgmt Cname}
+            ${Variable Representation String} = '${' + "$env:Statics\CNs\$CanonicalName ComputerName.txt" + '}'
+            $ComputerName = Invoke-Expression -Command ${Variable Representation String}
+            ${%ComputerName%-to-DNS Canonical Name Conversion} += @{$CanonicalName = $ComputerName}
+            if ($null -ne $ComputerName) {${%ComputerName%-to-DNS Canonical Name Conversion} += @{$ComputerName = $CanonicalName}}
+            return ${%ComputerName%-to-DNS Canonical Name Conversion}.$cname
+          }
+        }
+        #endregion
+
+        $Host.PrivateData.DebugForegroundColor = $(rFc)
+        $Host.PrivateData.DebugBackgroundColor = $(rBc)
+
+        $Host.PrivateData.VerboseForegroundColor = $(rFc)
+        $Host.PrivateData.VerboseBackgroundColor = $(rBc)
+        $error.Clear()
+        #endregion
+
+        $InstanceIndex = '00'; $InstanceChrono = 'Hadean'; $InstanceDesc = "Pre-Document Encryption"
+        $InstanceName = 'x_' + $InstanceIndex + '_' + $InstanceChrono + '__' + $($InstanceDesc -replace '[^\w\.-]','_')
+        $InstanceFolderName = $InstanceIndex + ' ' + $InstanceChrono + ' ' + $InstanceDesc
+        $LCM_InstanceName = 'LCM_' + $InstanceIndex + '_' + $InstanceChrono + '__' + $($InstanceDesc -replace '[^\w\.-]','_')
+
+        $path = "$MOFs\$InstanceFolderName"; 
+        $OutputFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
         [System.Management.Automation.DscLocalConfigurationManagerAttribute()]
         Configuration $LCM_InstanceName {
@@ -6104,7 +6198,7 @@ $XmlWriter.WriteStartDocument()
         }
         $lcmHT = @{
           InstanceName = $LCM_InstanceName
-          OutputPath   = "$MOFs\Epoch_$($EpochIndex)__$($EpochLabel)\Wave_$WaveIndex"
+          OutputPath   = "$OutputFolder"
           Verbose      = $true
         }
         Invoke-Expression -Verbose:$true -Command "$LCM_InstanceName @lcmHT"
@@ -6115,109 +6209,148 @@ $XmlWriter.WriteStartDocument()
           Imp0rt-DscResource -ModuleName 'PSDesiredStateConfiguration'  -ModuleVersion 1.1
           Imp0rt-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion 9.2.2
           Imp0rt-DscResource -ModuleName 'AdHocInstantAdcsDsc'          -ModuleVersion 0.4.0
-          #  Imp0rt-DscResource -ModuleName 'AdHocCertsDsc'                -ModuleVersion
-          #  Imp0rt-DscResource -ModuleName 'AdHocNetsDsc'                 -ModuleVersion
-          #  Imp0rt-DscResource -ModuleName 'AdHocPkiDsc'                  -ModuleVersion
-          #  Imp0rt-DscResource -ModuleName 'AdHocUtilsDsc'                -ModuleVersion
           Imp0rt-DscResource -ModuleName 'ComputerManagementDsc'        -ModuleVersion 10.0.1
           Imp0rt-DscResource -ModuleName 'CertificateDsc'               -ModuleVersion 6.1.0
           #endregion
 
           Node 'localhost' {
-            #region | Strictest Level of Windows PowerShell ScriptBlock and Module Logging |
-            xRegistry 'PowerShell 5.1 ScriptBlock Logging' {
-              ValueName = 'EnableScriptBlockLogging'
-              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging'
-              ValueData = '1'
-              ValueType = 'String'
-              Force     = $true
-              Ensure    = 'Present'
-
-            }
-            xRegistry 'PowerShell 5.1 Module Logging' {
+            #region | Strictest Level of Windows PowerShell Transcription and ScriptBlock/Module Logging |
+            $ParentPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell"
+            xRegistry 'PowerShell 5.1 Module Logging' { # PowerShell 5.1 Module Logging |
               ValueName = 'EnableModuleLogging'
-              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging'
+              Key       = "$ParentPath\ModuleLogging"
               ValueData = '1'
-              ValueType = 'String'
+              ValueType = 'Dword'
               Force     = $true
               Ensure    = 'Present'
-              DependsOn = [System.String[]]@(
-                "[xRegistry]PowerShell 5.1 ScriptBlock Logging"
-              )
             }
-            xRegistry 'PowerShell 5.1 Transcription 1' {
-              ValueName = 'EnableTranscribing'
-              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'
+            xRegistry 'PowerShell 5.1 ScriptBlock Logging' { # PowerShell 5.1 ScriptBlock Logging |
+              ValueName = 'EnableScriptBlockLogging'
+              Key       = "$ParentPath\ScriptBlockLogging"
               ValueData = '1'
-              ValueType = 'String'
+              ValueType = 'DWord'
               Force     = $true
               Ensure    = 'Present'
               DependsOn = [System.String[]]@(
                 "[xRegistry]PowerShell 5.1 Module Logging"
               )
             }
-            xRegistry 'PowerShell 5.1 Transcription 2' {
-              ValueName = 'EnableInvocationHeader'
-              Key       = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'
+            xRegistry 'PowerShell 5.1 ScriptBlock Invocation Logging' { # PowerShell 5.1 ScriptBlock Invocation Logging |
+              ValueName = 'EnableScriptBlockInvocationLogging'
+              Key       = "$ParentPath\ScriptBlockLogging"
               ValueData = '1'
+              ValueType = 'Dword'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 ScriptBlock Logging"
+              )
+            }
+            xRegistry 'PowerShell 5.1 Transcription-Enable Invocation Header' { # PowerShell 5.1 Transcription-Enable Invocation Header |
+              ValueName = 'EnableInvocationHeader'
+              Key       = "$ParentPath\Transcription"
+              ValueData = '1'
+              ValueType = 'Dword'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 ScriptBlock Invocation Logging"
+              )
+            }
+            xRegistry 'PowerShell 5.1 Transcription-Enable Transcribing' { # PowerShell 5.1 Transcription-Enable Transcribing |
+              ValueName = 'EnableTranscribing'
+              Key       = "$ParentPath\Transcription"
+              ValueData = "1"
               ValueType = 'String'
               Force     = $true
               Ensure    = 'Present'
               DependsOn = [System.String[]]@(
-                "[xRegistry]PowerShell 5.1 Transcription 1"
+                "[xRegistry]PowerShell 5.1 Transcription-Enable Invocation Header"
+              )
+            }
+            xRegistry 'PowerShell 5.1 Transcription-Enable Transcripting' { # PowerShell 5.1 Transcription-Enable Transcripting |
+              ValueName = 'EnableTranscripting'
+              Key       = "$ParentPath\Transcription"
+              ValueData = "1"
+              ValueType = 'Dword'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 Transcription-Enable Transcribing"
+              )
+            }
+            xRegistry 'PowerShell 5.1 Transcription-Output Directory' { # PowerShell 5.1 Transcription-Output Directory |
+              ValueName = 'OutputDirectory'
+              Key       = "$ParentPath\Transcription"
+              ValueData = "$env:ProgramData\Transcript-PowerShell 5.1"
+              ValueType = 'String'
+              Force     = $true
+              Ensure    = 'Present'
+              DependsOn = [System.String[]]@(
+                "[xRegistry]PowerShell 5.1 Transcription-Enable Transcripting"
+              )
+            }
+            #endregion
+
+            #region | System-scope Environment Variables |
+            xEnvironment 'regex literal DNS CNAME \Anchorless\' {
+              Name      = "regex literal DNS CNAME (Anchorless)"
+              Value     = ${regex literal DNS CNAME (Anchorless)}
+              Ensure    = 'Present'
+              Path      = $false
+              DependsOn = [System.String[]]@( 
+                "[xRegistry]PowerShell 5.1 Transcription-Output Directory"
               )
             }
             #endregion
 
             #region | Diagnostics-Enable channels in the Microsoft-Windows-Dsc Event Log Provider |
-            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Status of Operational channel for the Microsoft-Windows-Dsc event log provider' {
+            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Operational channel for the Microsoft-Windows-Dsc event log provider on localhost' {
               Channel   = 'Operational'
               Ensure    = 'Present'
               DependsOn = [System.String[]]@(
-                "[xRegistry]PowerShell 5.1 Transcription 2"
+                "[xEnvironment]regex literal DNS CNAME \Anchorless\"
               )
             }
-            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Status of Analytic channel for the Microsoft-Windows-Dsc event log provider' {
+            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Analytic channel for the Microsoft-Windows-Dsc event log provider on localhost' {
               Channel   = 'Analytic'
               Ensure    = 'Present'
               DependsOn = [System.String[]]@(
-                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Operational channel for the Microsoft-Windows-Dsc event log provider"
+                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Operational channel for the Microsoft-Windows-Dsc event log provider on localhost"
               )
             }
-            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Status of Debug channel for the Microsoft-Windows-Dsc event log provider' {
+            WindowsEventLogChannelThatIsENABLEDforDscTracking 'Debug channel for the Microsoft-Windows-Dsc event log provider on localhost' {
               Channel   = 'Debug'
               Ensure    = 'Present'
               DependsOn = [System.String[]]@(
-                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Analytic channel for the Microsoft-Windows-Dsc event log provider"
+                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Analytic channel for the Microsoft-Windows-Dsc event log provider on localhost"
               )
             }
             #endregion
 
             #region | One-time Generation of New Random %ComputerNames% |
-            ${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+            ${Is file with new random %ComputerNames% present at time of MOF compilation} = Test-Path -Path "$Statics\CNs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
             if (-not ${Is file with new random %ComputerNames% present at time of MOF compilation}) {
               File "New Random ComputerName for primordial Unclustered Hyper-V Host" {
-                DestinationPath = "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+                DestinationPath = "$Statics\CNs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
                 Attributes      = @('ReadOnly')
                 Contents        = $(('WIN-' + ([System.IO.Path]::GetRandomFileName()) -replace '\.','' -join '').ToUpper())
                 Force           = $true
                 Type            = 'File'
                 Ensure          = 'Present'
                 DependsOn       = [System.String[]]@(
-                  "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
-                  #"[xRegistry]PowerShell 5.1 Transcription 2"
+                  "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Debug channel for the Microsoft-Windows-Dsc event log provider on localhost"
                 )
               }
             }
             #region | Rename Computer and Reboot |
             if (${Is file with new random %ComputerNames% present at time of MOF compilation}) {
               Computer "New Random ComputerName for primordial Unclustered Hyper-V Host" {
-                Name                  = $(Get-Content -Path "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt")
+                Name                  = $(Get-Content -Path "$Statics\CNs\${DSC Authoring Station Mgmt Cname} ComputerName.txt")
                 Description           = 'Description TBD'
                 WorkGroupName         = 'NoNetwork'
                 DependsOn             = [System.String[]]@(
-                  "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
-                  #"[xRegistry]PowerShell 5.1 Transcription 2"
+                  "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Debug channel for the Microsoft-Windows-Dsc event log provider on localhost"
                 )
               }
               PendingReboot "New Random ComputerName for primordial Unclustered Hyper-V Host" {
@@ -6233,31 +6366,20 @@ $XmlWriter.WriteStartDocument()
               }
             }
             #endregion
-            #endregion                            
+            #endregion
 
             #region | Essential Directory Structure |
-            File 'Epoch_A__PreDocument_Encryption\Wave_00' {
-              DestinationPath = "$MOFs\Epoch_A__PreDocument_Encryption\Wave_00"
+            File $InstanceFolderName {
+              DestinationPath = "$MOFs\$InstanceFolderName"
               Force           = $true
               Type            = 'Directory'
               Ensure          = 'Present'
               DependsOn       = [System.String[]]@(
-                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Status of Debug channel for the Microsoft-Windows-Dsc event log provider"
+                "[WindowsEventLogChannelThatIsENABLEDforDscTracking]Debug channel for the Microsoft-Windows-Dsc event log provider on localhost"
               )
             }
-            ${Dependency Epoch_A__PreDocument_Encryption Wave_00} = [System.String[]]@(
-              "[File]Epoch_A__PreDocument_Encryption\Wave_00"
-            )
-
-            File 'Epoch_B__HvH_with_VMs\Wave_00' {
-              DestinationPath = "$MOFs\Epoch_B__HvH_with_VMs\Wave_00"
-              Force           = $true
-              Type            = 'Directory'
-              Ensure          = 'Present'
-              DependsOn       = ${Dependency Epoch_A__PreDocument_Encryption Wave_00}
-            }
-            ${Dependency Epoch_B__HvH_with_VMs Wave_00} = [System.String[]]@(
-              "[File]Epoch_B__HvH_with_VMs\Wave_00"
+            ${Dependency x_00_Hadean__PreDocEcyn} = [System.String[]]@(
+              "[File]$InstanceFolderName"
             )
 
             File 'Self-Signed Certs Directory' {
@@ -6265,7 +6387,7 @@ $XmlWriter.WriteStartDocument()
               Force           = $true
               Type            = 'Directory'
               Ensure          = 'Present'
-              DependsOn       = ${Dependency Epoch_B__HvH_with_VMs Wave_00}
+              DependsOn       = ${Dependency x_00_Hadean__PreDocEcyn}
             }
             ${Dependency Self-Signed Certs Directory} = [System.String[]]@(
               "[File]Self-Signed Certs Directory"
@@ -6307,51 +6429,61 @@ $XmlWriter.WriteStartDocument()
             }
             #endregion
 
-            #region | Global Certificate Signer |
+            #region | Pre-PKI Global Certificate Signer |
             ${Is CertFSOs Directory present at time of MOF compilation} = Test-Path -Path ${env:Pre-PKI CertFSOs}
             if (${Is CertFSOs Directory present at time of MOF compilation}) {
-              ${New Random ComputerName} = Get-Content -Path "$Statics\PMs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
-              ${Current ComputerName confirmed to match New Random ComputerName} = ${New Random ComputerName} -eq $env:ComputerName
-              if (${Current ComputerName confirmed to match New Random ComputerName}) {
-                GlobalCertificateSignerSequence0 'Global Certificate Signer' {
-                  IsSingleInstance            = [System.String]'Yes'
-                  FriendlyName                = [System.String]'Global Certificate Signer'
-                  Ensure                      = [System.String]'Present'
-                }
-                ${Dependency GlobalCertificateSignerSequence0} = [System.String[]]@(
-                  "[GlobalCertificateSignerSequence0]$('Global Certificate Signer')"
-                )
-                #region | Document Encryption Certificate for primordial unclustered Hyper-V host |
-                ${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse
-                ${Global Certificate Signing Certificate} = ${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {
-                  $_.FriendlyName -eq 'Global Certificate Signer'
-                }
-                if ($null -ne ${Global Certificate Signing Certificate}) {
-                  GlobalCodeSignerSequence0 'Global Code Signer' {
-                    IsSingleInstance = [System.String]'Yes'
-                    FriendlyName     = [System.String]'Global Code Signer'
-                    Ensure           = [System.String]'Present'
-                    DependsOn        = ${Dependency GlobalCertificateSignerSequence0}
+              if (${Is file with new random %ComputerNames% present at time of MOF compilation}) {
+                ${New Random ComputerName} = Get-Content -Path "$Statics\CNs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+                ${Current ComputerName confirmed to match New Random ComputerName} = ${New Random ComputerName} -eq $env:ComputerName
+                if (${Current ComputerName confirmed to match New Random ComputerName}) {
+                  PrePKIGlobalCertificateSignerSequence0 'Pre-PKI Global Certificate Signer' {
+                    IsSingleInstance            = [System.String]'Yes'
+                    FriendlyName                = [System.String]'Pre-PKI Global Certificate Signer'
+                    Ensure                      = [System.String]'Present'
                   }
-                  ${Dependency GlobalCodeSignerSequence0} = [System.String[]]@(
-                    "[GlobalCodeSignerSequence0]$('Global Code Signer')"
+                  ${Dependency PrePKIGlobalCertificateSignerSequence0} = [System.String[]]@(
+                    "[PrePKIGlobalCertificateSignerSequence0]$('Pre-PKI Global Certificate Signer')"
                   )
-                  GlobalCertificateSignerSequence1 'Global Certificate Signer' {
-                    IsSingleInstance = [System.String]'Yes'
-                    FriendlyName     = [System.String]'Global Certificate Signer'
-                    Ensure           = [System.String]'Present'
-                    DependsOn        = ${Dependency GlobalCertificateSignerSequence0}
+                  #region | Document Encryption Certificate for primordial unclustered Hyper-V host |
+                  ${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse
+                  ${Pre-PKI Global Certificate Signing Certificate} = ${All Certs in Personal LocalMachine Store} | Where-Object -FilterScript {
+                    $_.FriendlyName -eq 'Pre-PKI Global Certificate Signer'
                   }
-                  ${Dependency GlobalCertificateSignerSequence1} = [System.String[]]@(
-                    "[GlobalCertificateSignerSequence1]$('Global Certificate Signer')"
-                  )
-                  MofPasswordProtectionSequence0 "Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}" {
-                    FriendlyName = [System.String]"Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}"
-                    Ensure       = [System.String]'Present'
-                    DependsOn    = ${Dependency GlobalCertificateSignerSequence0}
+                  if ($null -ne ${Pre-PKI Global Certificate Signing Certificate}) {
+                    PrePKIGlobalCodeSignerSequence0 'Pre-PKI Global Code Signer' {
+                      IsSingleInstance = [System.String]'Yes'
+                      FriendlyName     = [System.String]'Pre-PKI Global Code Signer'
+                      Ensure           = [System.String]'Present'
+                      DependsOn        = ${Dependency PrePKIGlobalCertificateSignerSequence0}
+                    }
+                    ${Dependency PrePKIGlobalCodeSignerSequence0} = [System.String[]]@(
+                      "[PrePKIGlobalCodeSignerSequence0]$('Pre-PKI Global Code Signer')"
+                    )
+                    PrePKIGlobalCertificateSignerSequence1 'Pre-PKI Global Certificate Signer' {
+                      IsSingleInstance = [System.String]'Yes'
+                      FriendlyName     = [System.String]'Pre-PKI Global Certificate Signer'
+                      Ensure           = [System.String]'Present'
+                      DependsOn        = ${Dependency PrePKIGlobalCertificateSignerSequence0}
+                    }
+                    ${Dependency PrePKIGlobalCertificateSignerSequence1} = [System.String[]]@(
+                      "[PrePKIGlobalCertificateSignerSequence1]$('Pre-PKI Global Certificate Signer')"
+                    )
+
+                    # Encrypting the sensitive strings (e.g., passwords) inside of .MOF files:
+                    ## start msedge.exe 'https://learn.microsoft.com/en-us/powershell/dsc/pull-server/securemof?view=dsc-1.1'
+                    PrePKIMofPasswordProtectionSequence0 "Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}" {
+                      FriendlyName = [System.String]"Encrypt Passwords in MOF for LCM on ${DSC Authoring Station Mgmt Cname}"
+                      Ensure       = [System.String]'Present'
+                      DependsOn    = ${Dependency PrePKIGlobalCertificateSignerSequence0}
+                    }
+                    PrePKIEventLogRecordProtectorSequence0 "Encrypt Event Log Records Originating from ${DSC Authoring Station Mgmt Cname}" {
+                      FriendlyName = [System.String]"Encrypt Event Log Records Originating from ${DSC Authoring Station Mgmt Cname}"
+                      Ensure       = [System.String]'Present'
+                      DependsOn    = ${Dependency PrePKIGlobalCertificateSignerSequence0}
+                    }
                   }
+                  #endregion
                 }
-                #endregion
               }
             }
             #endregion
@@ -6369,8 +6501,8 @@ $XmlWriter.WriteStartDocument()
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\HadeanDscConfigurationDocument.ps1')
-        $XmlWriter.WriteString(${File HadeanDscConfigurationDocument.ps1 Here-String})
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1')
+        $XmlWriter.WriteString(${File 00 Hadean Pre-Document Encryption.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
 
@@ -6492,6 +6624,8 @@ ${LocalAccount Node}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
 #region | Save to removable external storage media |
 $XmlDocument.ChildNodes[0].Encoding = $null
 
+<#
+#>
 # autounattend.xml belongs on $OSDeploy but will put in 'output\$FolderFQN\usb1' for the moment
 # Rename current autounattend.xml, if present |
 if (Test-Path -Path "$usb1\autounattend.xml") {
@@ -6503,12 +6637,10 @@ if ($null -ne $usb1) {
   $XmlDocument.Save("$usb1\autounattend.xml")
   $XmlDocument.Save("$PSScriptRoot\..\..\output\$FolderFQN\usb1\autounattend.xml")
 }
-
 if ($null -ne $usb0) {
   if (Test-Path -Path "$usb0\autounattend.xml") {Rename-Item -Path "$usb0\autounattend.xml" -NewName "autounattend-$(Call-DateVar).xml"}
   $XmlDocument.Save("$usb0\autounattend.xml")
 }
-
 $IsPresent = Test-Path -Path "$PSScriptRoot\..\..\..\.CommonItems\usb0\autounattend.xml"
 if (-not $IsPresent) {
   $XmlDocument.Save("$PSScriptRoot\..\..\..\.CommonItems\usb0\autounattend.xml")
