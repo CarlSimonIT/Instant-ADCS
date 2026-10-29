@@ -49,13 +49,28 @@ ${Cname of AD Forest Originator} = ${CanonicalName Set Of Focus} | Where-Object 
   As such, only a single self-signed certificate is present in our environment: the Global Certificate Signer. 
   All other pre-PKI certificates are signed by the Global Certificate Signer. 
 #>
-$ObjectTitle = "Global Certificate Signer"
+
+<#
+  $ObjectTitle = "Global Certificate Signer"
+  New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true -PasswordLength 96 -CheckAuthenticationStatus
+
+  $ObjectTitle = "Global Code Signer"
+  New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+  $ObjectTitle = "${DSC WebServer Mgmt Cname} DSC WebServer"
+  New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+#>
+
+$ObjectTitle = "pre-PKI Global Certificate Signer"
 New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true -PasswordLength 96 -CheckAuthenticationStatus
 
-$ObjectTitle = "Global Code Signer"
+$ObjectTitle = "pre-PKI Global Code Signer"
 New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
 
-$ObjectTitle = "${DSC WebServer Mgmt Cname} DSC WebServer"
+$ObjectTitle = "pre-PKI ${DSC WebServer Mgmt Cname} DSC WebServer"
+New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+$ObjectTitle = "pre-PKI Event Log Protector"
 New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
 #endregion
 #region | Passwords to protect .pfx files associated with certificates where EKU = 'Document Encryption' |
@@ -64,13 +79,22 @@ foreach ($cname in ${CanonicalName Set Of Focus}) {
     Passwords for the protection of certificates that are specifically for the purpose of encrypting the .MOF file. 
     For reference, see 'https://learn.microsoft.com/en-us/powershell/dsc/pull-server/securemof?view=dsc-1.1#creating-the-certificate-on-the-authoring-node'
   #>
-  $ObjectTitle = "PFX Protection;EKU=Document Encryption;LCM Host=$([System.Char]39)$cname$([System.Char]39)"
+  # $ObjectTitle = "PFX Protection;EKU=Document Encryption;LCM Host=$([System.Char]39)$cname$([System.Char]39)"
+  # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+  $ObjectTitle = "pre-PKI PFX Protection;EKU=Document Encryption;LCM Host=$([System.Char]39)$cname$([System.Char]39)"
+  New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+  $ObjectTitle = "pre-PKI PFX Protection;EKU=Document Encryption;Event Log Record Origin Point=$([System.Char]39)$cname$([System.Char]39)"
   New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
 }
 #endregion
 #region | Passwords to protect .pfx files associated with certificates where EKU = 'Server Authentication' |
 foreach ($cname in ${CanonicalName Set Of Focus}) {
-  $ObjectTitle = "PFX Protection;EKU=Server Authentication;Target Machine=$([System.Char]39)$cname$([System.Char]39)"
+  # $ObjectTitle = "PFX Protection;EKU=Server Authentication;Target Machine=$([System.Char]39)$cname$([System.Char]39)"
+  # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+  $ObjectTitle = "pre-PKI PFX Protection;EKU=Server Authentication;Target Machine=$([System.Char]39)$cname$([System.Char]39)"
   New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
 }
 #endregion
@@ -84,13 +108,19 @@ foreach ($cname in ${Non-AD Forest creator Cnames}) {
     because '544' in hexadecimal is 0x220. 
   #>
   foreach ($PrimaryGroupID in (${Primary Group ID Set Selection} + '220')) {
-    $ObjectTitle = "PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)$cname $PrimaryGroupID$([System.Char]39)"
+    # $ObjectTitle = "PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)$cname $PrimaryGroupID$([System.Char]39)"
+    # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+    $ObjectTitle = "pre-PKI PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)$cname $PrimaryGroupID$([System.Char]39)"
     New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
   }
 }
 foreach ($cname in ${Cname of AD Forest Originator}) {
   foreach ($PrimaryGroupID in (${Primary Group ID Set Selection} + '220')) {
-    $ObjectTitle = "PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID$([System.Char]39)"
+    # $ObjectTitle = "PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID$([System.Char]39)"
+    # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
+
+    $ObjectTitle = "pre-PKI PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID$([System.Char]39)"
     New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
   }
 }
