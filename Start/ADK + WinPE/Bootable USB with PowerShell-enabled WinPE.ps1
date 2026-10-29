@@ -620,6 +620,7 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
 
 
 
+
   #region |  |
   "`n"
   "& {`n"
@@ -693,7 +694,7 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  `$FolderFQN = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\FolderFQN.clixml$([System.Char]34)`n"
   "  #endregion`n"
   "  #region | Copy Operations |`n"
-  "  #region | Copy the All Users All Hosts profile.ps1 file from external storage to local drive. |`n"
+  "  #region | Copy the All Users All Hosts profile.ps1 file (and all components) from external storage to local drive. |`n"
   "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\Base\5.1$([System.Char]34) -File | ForEach-Object -Process {`n"
   "    `$HT = @{`n"
   "      Path        = `$_.FullName`n"
@@ -714,6 +715,35 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "    }`n"
   "    Copy-Item @HT`n"
   "  }`n"
+  "  # But dont load profile.ps1. Eventually the profile script becomes quite burdensome.`n"
+  "  # This is why profile.ps1 is built from other .ps1 files. `n"
+  "  Get-Item -Path $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile.ps1$([System.Char]34) | Rename-Item -NewName $([System.Char]39)profile-DO NOT LOAD.ps1$([System.Char]39)`n"
+  "`n"
+  "  #region | $([System.Char]39).\ProfileAlt.ps1$([System.Char]39) experiment |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\ProfileAlt$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\Base\5.1$([System.Char]34) -File | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\Base\5.1$([System.Char]34) -Directory | ForEach-Object -Process {`n"
+  "    `$HT = @{`n"
+  "      Path        = `$_.FullName`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Force       = `$false`n"
+  "      Verbose     = `$true`n"
+  "      Recurse     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "`n"
   "  #endregion`n"
   "  #region | Copy autounattend.xml into root of local drive | Copy autounattend.xml into Panther directory and rename to unattend.xml |`n"
   "  `$HT = @{`n"
@@ -826,6 +856,16 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "`n"
   "  #endregion`n"
   "`n"
+  "  #region | On 2nd thought, just launch powershell.exe with the -NoProfile switch |`n"
+  "  Get-Item -Path $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile-DO NOT LOAD.ps1$([System.Char]34) | Rename-Item -NewName $([System.Char]39)profile.ps1$([System.Char]39)`n"
+  "  #endregion`n"
+  "  `n"
+  "  #region | Copy .clixml Files |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\CliXmls$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\clixmls$([System.Char]34) -Filter $([System.Char]34)*.clixml$([System.Char]34) -File | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
+  "  #endregion`n"
+  "  `n"
   "  #region | Credential Manager backup file |`n"
   "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN\sec$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -846,6 +886,7 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "}`n"
   "`t`t"
   #endregion
+
 
 
 
@@ -923,7 +964,7 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       $FolderFQN = Import-CliXml -Path "X:\Scriptoids\FolderFQN.clixml"
       #endregion
       #region | Copy Operations |
-      #region | Copy the All Users All Hosts profile.ps1 file from external storage to local drive. |
+      #region | Copy the All Users All Hosts profile.ps1 file (and all components) from external storage to local drive. |
       Get-ChildItem -Path "$usb1\$FolderFQN\Base\5.1" -File | ForEach-Object -Process {
         $HT = @{
           Path        = $_.FullName
@@ -944,6 +985,35 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
         }
         Copy-Item @HT
       }
+      # But dont load profile.ps1. Eventually the profile script becomes quite burdensome.
+      # This is why profile.ps1 is built from other .ps1 files. 
+      Get-Item -Path "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile.ps1" | Rename-Item -NewName 'profile-DO NOT LOAD.ps1'
+
+      #region | '.\ProfileAlt.ps1' experiment |
+      $path = "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\ProfileAlt"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb1\$FolderFQN\Base\5.1" -File | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force       = $false
+          Verbose     = $true
+        }
+        Copy-Item @HT
+      }
+
+      Get-ChildItem -Path "$usb1\$FolderFQN\Base\5.1" -Directory | ForEach-Object -Process {
+        $HT = @{
+          Path        = $_.FullName
+          Destination = "$folder"
+          Force       = $false
+          Verbose     = $true
+          Recurse     = $true
+        }
+        Copy-Item @HT
+      }
+      #endregion
+
       #endregion
       #region | Copy autounattend.xml into root of local drive | Copy autounattend.xml into Panther directory and rename to unattend.xml |
       $HT = @{
@@ -1056,6 +1126,16 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
 
       #endregion
 
+      #region | On 2nd thought, just launch powershell.exe with the -NoProfile switch |
+      Get-Item -Path "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile-DO NOT LOAD.ps1" | Rename-Item -NewName 'profile.ps1'
+      #endregion
+      
+      #region | Copy .clixml Files |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\CliXmls"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Get-ChildItem -Path "$usb1\$FolderFQN\clixmls" -Filter "*.clixml" -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+      #endregion
+      
       #region | Credential Manager backup file |
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN\sec"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -1098,7 +1178,6 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`n"
   #endregion
   #region | New Precursor Volume for eventual WinPE | Custom WinPE image written to USB Flash Drive |
-
 
 
   #region |  |
@@ -1382,10 +1461,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "  #endregion`n"
   "}`n"
   "`t`t"
-
   #endregion
-
-
 
   #endregion
   #########################################-BOUNDARY-#########################################
@@ -1691,4 +1767,11 @@ return @{
   'WinPE Image Creation Parent Folder'                     = ${WinPE Image Creation Parent Folder}
 }
 #endregion
+
+
+
+
+
+
+
 
