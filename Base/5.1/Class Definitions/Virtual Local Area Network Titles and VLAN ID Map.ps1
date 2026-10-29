@@ -191,7 +191,7 @@ class VlanTitle {
   static [System.String] $UpdateValidation_Z      = 'Update Validation Z'
 }
 
-class VlanConversion {
+class VlanConversionTry01 {
   static [System.String] BinaryID ([System.String] $Title) {
     ${Interconversion between Vlan ID in Binary and VLAN Title} = [System.Collections.Specialized.OrderedDictionary]@{}
     $VlanStaticPropertyNames = Invoke-Expression -Command "[VlanTitle]::New() | Get-Member -Static -MemberType $([System.Char]39)Property$([System.Char]39) | Select-Object -ExpandProperty $([System.Char]39)Name$([System.Char]39)`n"
@@ -200,7 +200,7 @@ class VlanConversion {
     }
 
     foreach ($VlanTitle in $VlanTitles) {
-      ${Variable Representation String} = '${' + "$env:Statics\VLANs\$VlanTitle\$VlanTitle.txt" + '}'
+      ${Variable Representation String} = '${' + "$env:Statics\MaxIP\VLANs\$VlanTitle\$VlanTitle.txt" + '}'
       $VlanId_Binary = Invoke-Expression -Command ${Variable Representation String}
       ${Interconversion between Vlan ID in Binary and VLAN Title} += @{$VlanTitle = $VlanId_Binary}
       if ($null -ne $VlanId_Binary) {${Interconversion between Vlan ID in Binary and VLAN Title} += @{$VlanId_Binary = $VlanTitle}}
@@ -209,6 +209,8 @@ class VlanConversion {
     return ${Interconversion between Vlan ID in Binary and VLAN Title}.$Title
   }
 }
-$accelerators::Add('vc','VlanConversion')
+$accelerators::Add('vcTry01','VlanConversionTry01')
+
+#$accelerators::Add('vc','VlanConversion')
 #endregion
 
