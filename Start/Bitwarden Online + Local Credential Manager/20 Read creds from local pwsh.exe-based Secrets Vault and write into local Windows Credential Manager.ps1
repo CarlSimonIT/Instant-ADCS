@@ -2,9 +2,9 @@
 #Requires -PSEdition Core
 
 Unlock-BwCli -Verbose
-$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\FolderFQN.clixml"
+$FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 
-$QltFile = Get-ChildItem -Path "$PSScriptRoot\..\..\.CommonItems\Quick Lookup Table for $FolderFQN *.csv" `
+$QltFile = Get-ChildItem -Path "$PSScriptRoot\..\..\..\.CommonItems\Quick Lookup Table for $FolderFQN *.csv" `
 | Sort-Object `
 | Select-Object -Last 1
 ${Quick Lookup Table} = Import-Csv -Path $QltFile.FullName
