@@ -82,6 +82,7 @@ class PrePKIEventLogRecordProtectorSequence0 {
 
   #%_Set Explained Here-String_%
   [System.Void] Set () {
+    Write-Verbose -Message "Call to Set()"
     if ($this.Ensure -eq [Ensure]::Present) 
     {
       ${Extension to X.509v3 OID-Enhanced Key Usage} = ([System.Security.Cryptography.Oid]'Enhanced Key Usage').Value
@@ -94,7 +95,7 @@ class PrePKIEventLogRecordProtectorSequence0 {
       $Config_Target_Mgmt_Cname = $Matches['Config_Target_Mgmt_Cname']
       $ConfigTargetComputerNameFile = $Config_Target_Mgmt_Cname | ForEach-Object -Process {
         $HT = @{
-          Path    = $env:Statics
+          Path    = "$env:Statics\CNs"
           Filter  = "*$_ ComputerName.txt"
           Recurse = $true
         }
