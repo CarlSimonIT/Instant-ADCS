@@ -108,6 +108,20 @@ param (
   ${AD Site Name A},
   #endregion
 
+  #region | File-based DNS Naming |
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${Zone Title 00_Non-AD DNS},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [System.String]
+  ${Zone Title 01_Non-AD DNS},
+  #endregion
+
   #region | Labels for Active Directory Security Tiers |
   [Parameter(
     Mandatory = $false
@@ -407,7 +421,24 @@ param (
   )]
   [System.String]
   ${Web PKI NDES Server Mgmt Cname},
-  #[Parameter(Mandatory = $true)][ValidatePattern('^[a-z0-9_-]{1,40}$')][System.String]${},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [ValidatePattern(
+    '^[a-z0-9_-]{1,40}$'
+  )]
+  [System.String]
+  ${DNS Server 00 Mgmt Cname},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [ValidatePattern(
+    '^[a-z0-9_-]{1,40}$'
+  )]
+  [System.String]
+  ${DNS Server 01 Mgmt Cname},
   #endregion
 
   #region | Volume Letters on VM Instances |
@@ -536,6 +567,12 @@ param (
   )]
   [System.String]
   ${Root CA Validity Period Units},
+
+  [Parameter(
+    Mandatory = $false
+  )]
+  [System.String]
+  ${SubjectDN-Country-2 Char} = $((Get-Language).LanguageId.Substring(3,2)),
   #endregion
 
   #region | Location for output content inside '.\output' directory of project root |
@@ -581,6 +618,14 @@ ${AD Forest and Domain Naming} = ${AD Forest and Domain Naming Precursor} `
 Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\AD Forest and Domain Naming.ps1" -Value (${AD Forest and Domain Naming})
 #endregion
 
+#region | File-based DNS Naming |
+${File-based DNS Naming Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\File-based DNS Naming Precursor.ps1"
+${File-based DNS Naming} = ${File-based DNS Naming Precursor} `
+  -replace '%_Zone Title 00_Non-AD DNS_%',${Zone Title 00_Non-AD DNS} `
+  -replace '%_Zone Title 01_Non-AD DNS_%',${Zone Title 01_Non-AD DNS}
+Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\File-based DNS Naming.ps1" -Value (${File-based DNS Naming})
+#endregion
+
 #region | Labels for Active Directory Security Tiers |
 ${Labels for Active Directory Security Tiers Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\Labels for Active Directory Security Tiers Precursor.ps1"
 ${Labels for Active Directory Security Tiers} = ${Labels for Active Directory Security Tiers Precursor} `
@@ -607,6 +652,13 @@ Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PART
 #endregion
 
 #region | Node Mgmt NetIPInterface CNAMEs |
+# REMEMBER TO UPDATE 
+## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+# AND
+## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# AND
+## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+# WHEN ADDING A NEW DSC CONFIGURATION TARGET
 ${Node Mgmt NetIPInterface CNAMEs Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\Node Mgmt NetIPInterface CNAMEs Precursor.ps1"
 ${Node Mgmt NetIPInterface CNAMEs} = ${Node Mgmt NetIPInterface CNAMEs Precursor} `
   -replace '%_DSC Authoring Station Mgmt Cname_%',${DSC Authoring Station Mgmt Cname} `
@@ -630,8 +682,17 @@ ${Node Mgmt NetIPInterface CNAMEs} = ${Node Mgmt NetIPInterface CNAMEs Precursor
   -replace '%_Web PKI CRLDP Server Mgmt Cname_%',${Web PKI CRLDP Server Mgmt Cname} `
   -replace '%_Web PKI OSCP Server Mgmt Cname_%',${Web PKI OSCP Server Mgmt Cname} `
   -replace '%_Web PKI CAWE Server Mgmt Cname_%',${Web PKI CAWE Server Mgmt Cname} `
-  -replace '%_Web PKI NDES Server Mgmt Cname_%',${Web PKI NDES Server Mgmt Cname}
+  -replace '%_Web PKI NDES Server Mgmt Cname_%',${Web PKI NDES Server Mgmt Cname} `
+  -replace '%_DNS Server 00 Mgmt Cname_%',${DNS Server 00 Mgmt Cname} `
+  -replace '%_DNS Server 01 Mgmt Cname_%',${DNS Server 01 Mgmt Cname}
 Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Node Mgmt NetIPInterface CNAMEs.ps1" -Value (${Node Mgmt NetIPInterface CNAMEs})
+# REMEMBER TO UPDATE 
+## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+# AND
+## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# AND
+## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+# WHEN ADDING A NEW DSC CONFIGURATION TARGET
 #endregion
 
 #region | Volume Letters on VM Instances |
@@ -658,22 +719,27 @@ Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PART
 #region | Certification Authority CommonNames |
 ${Certification Authority CommonNames Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\Certification Authority CommonNames Precursor.ps1"
 ${Certification Authority CommonNames} = ${Certification Authority CommonNames Precursor} `
-  -replace '%_Root CA Name_%',${Root CA Name} `
-  -replace '%_Policy CA1 Name_%',${Policy CA1 Name} `
-  -replace '%_Leaf CA1 Name_%',${Leaf CA1 Name} `
-  -replace '%_Leaf CA2 Name_%',${Leaf CA2 Name} `
-  -replace '%_Leaf CA3 Name_%',${Leaf CA3 Name} `
-  -replace '%_Policy CA2 Name_%',${Policy CA2 Name} `
-  -replace '%_End-Entity CA1 Name_%',${End-Entity CA1 Name} `
-  -replace '%_End-Entity CA1 Name_%',${End-Entity CA1 Name}
+  -replace '%_Root CA Name_%',        ${Root CA Name}        `
+  -replace '%_Policy CA1 Name_%',     ${Policy CA1 Name}     `
+  -replace '%_Leaf CA1 Name_%',       ${Leaf CA1 Name}       `
+  -replace '%_Leaf CA2 Name_%',       ${Leaf CA2 Name}       `
+  -replace '%_Leaf CA3 Name_%',       ${Leaf CA3 Name}       `
+  -replace '%_Policy CA2 Name_%',     ${Policy CA2 Name}     `
+  -replace '%_End-Entity CA1 Name_%', ${End-Entity CA1 Name} `
+  -replace '%_End-Entity CA2 Name_%', ${End-Entity CA2 Name}
 Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Certification Authority CommonNames.ps1" -Value (${Certification Authority CommonNames})
 #endregion
 
 #region | PKI Misc |
+${Root CA Renewal Period} = [System.Int32](${Root CA Validity Period} / 8)
+${Root CA Renewal Period Units} = ${Root CA Validity Period Units}
 ${PKI Misc Precursor} = Get-Content -Path "$PSScriptRoot\Precursors\PKI Misc Precursor.ps1"
 ${PKI Misc} = ${PKI Misc Precursor} `
-  -replace '%_Root CA Validity Period_%',${Root CA Validity Period} `
-  -replace '%_Root CA Validity Period Units_%',${Root CA Validity Period Units}
+  -replace '%_Root CA Validity Period_%',       ${Root CA Validity Period}       `
+  -replace '%_Root CA Validity Period Units_%', ${Root CA Validity Period Units} `
+  -replace '%_Root CA Renewal Period_%',        ${Root CA Renewal Period}        `
+  -replace '%_Root CA Renewal Period Units_%',  ${Root CA Renewal Period Units}  `
+  -replace '%_SubjectDN-Country-2 Char_%',      ${SubjectDN-Country-2 Char}
 Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PKI Misc.ps1" -Value (${PKI Misc})
 #endregion
 
@@ -687,6 +753,7 @@ ${Constructed Profile} = -join $(
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PATH Environment Variable.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Other Env Vars not defined by DSC.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\AD Forest and Domain Naming.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\File-based DNS Naming.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Labels for Active Directory Security Tiers.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Constants for Organization Naming that are not directly related to IT operations.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Node Mgmt NetIPInterface CNAMEs.ps1"
@@ -707,9 +774,11 @@ ${Constructed Profile} = -join $(
   Get-Content -Raw -Path "$PSScriptRoot\Class Definitions\Windows Server Image Index.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Registry Provider Paths.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\Certification Authority CommonNames.ps1"
+  Get-Content -Raw -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\PKI Misc.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Location - Culture - Geography.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\RelativeID and CanonicalName Sets.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\Module Imports.ps1"
+
 
   Get-Content -Raw -Path "$PSScriptRoot\Static\Exercise Control Over Command Resolution.ps1"
   Get-Content -Raw -Path "$PSScriptRoot\Static\PowerShell Cookbook (4th Ed.) Selections.ps1"
@@ -736,6 +805,7 @@ ${ProfileAlt.ps1 Here-String} = $(
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\PATH Environment Variable.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Other Env Vars not defined by DSC.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\AD Forest and Domain Naming.ps1$([System.Char]34)`n"
+  ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\File-based DNS Naming.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Labels for Active Directory Security Tiers.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Constants for Organization Naming that are not directly related to IT operations.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Node Mgmt NetIPInterface CNAMEs.ps1$([System.Char]34)`n"
@@ -756,6 +826,7 @@ ${ProfileAlt.ps1 Here-String} = $(
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Class Definitions\Windows Server Image Index.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Registry Provider Paths.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Certification Authority CommonNames.ps1$([System.Char]34)`n"
+  ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\PKI Misc.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Location - Culture - Geography.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\RelativeID and CanonicalName Sets.ps1$([System.Char]34)`n"
   ". $([System.Char]34)`$PSScriptRoot\ProfileAlt\Module Imports.ps1$([System.Char]34)`n"
@@ -772,6 +843,7 @@ ${ProfileAlt.ps1 Here-String} = $(
   . "$PSScriptRoot\ProfileAlt\PATH Environment Variable.ps1"
   . "$PSScriptRoot\ProfileAlt\Other Env Vars not defined by DSC.ps1"
   . "$PSScriptRoot\ProfileAlt\AD Forest and Domain Naming.ps1"
+  . "$PSScriptRoot\ProfileAlt\File-based DNS Naming.ps1"
   . "$PSScriptRoot\ProfileAlt\Labels for Active Directory Security Tiers.ps1"
   . "$PSScriptRoot\ProfileAlt\Constants for Organization Naming that are not directly related to IT operations.ps1"
   . "$PSScriptRoot\ProfileAlt\Node Mgmt NetIPInterface CNAMEs.ps1"
@@ -792,6 +864,7 @@ ${ProfileAlt.ps1 Here-String} = $(
   . "$PSScriptRoot\ProfileAlt\Class Definitions\Windows Server Image Index.ps1"
   . "$PSScriptRoot\ProfileAlt\Registry Provider Paths.ps1"
   . "$PSScriptRoot\ProfileAlt\Certification Authority CommonNames.ps1"
+  . "$PSScriptRoot\ProfileAlt\PKI Misc.ps1"
   . "$PSScriptRoot\ProfileAlt\Location - Culture - Geography.ps1"
   . "$PSScriptRoot\ProfileAlt\RelativeID and CanonicalName Sets.ps1"
   . "$PSScriptRoot\ProfileAlt\Module Imports.ps1"
