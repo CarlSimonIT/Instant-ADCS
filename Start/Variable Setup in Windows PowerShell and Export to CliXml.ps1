@@ -13,6 +13,13 @@ $HT = [System.Collections.Hashtable]::New()
 $HT.Add('NetBIOS Name of Root Domain in AD Forest',${NetBIOS Name of Root Domain in AD Forest})
 $HT.Add('DNS Name of Root Domain in AD Forest',${DNS Name of Root Domain in AD Forest})
 
+# REMEMBER TO UPDATE 
+## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+# AND
+## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# AND
+## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+# WHEN ADDING A NEW DSC CONFIGURATION TARGET
 . "$PSScriptRoot\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Node Mgmt NetIPInterface CNAMEs.ps1"
 $HT.Add('DSC Authoring Station Mgmt Cname',${DSC Authoring Station Mgmt Cname})
 $HT.Add('DSC WebServer Mgmt Cname',${DSC WebServer Mgmt Cname})
@@ -36,6 +43,15 @@ $HT.Add('Web PKI CRLDP Server Mgmt Cname',${Web PKI CRLDP Server Mgmt Cname})
 $HT.Add('Web PKI OSCP Server Mgmt Cname',${Web PKI OSCP Server Mgmt Cname})
 $HT.Add('Web PKI CAWE Server Mgmt Cname',${Web PKI CAWE Server Mgmt Cname})
 $HT.Add('Web PKI NDES Server Mgmt Cname',${Web PKI NDES Server Mgmt Cname})
+$HT.Add('DNS Server 00 Mgmt Cname',${DNS Server 00 Mgmt Cname})
+$HT.Add('DNS Server 01 Mgmt Cname',${DNS Server 01 Mgmt Cname})
+# REMEMBER TO UPDATE 
+## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+# AND
+## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# AND
+## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+# WHEN ADDING A NEW DSC CONFIGURATION TARGET
 
 . "$PSScriptRoot\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Labels for Active Directory Security Tiers.ps1"
 $HT.Add('Upn Suffix Gamma',${Upn Suffix Gamma})
