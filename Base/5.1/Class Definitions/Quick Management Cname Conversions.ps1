@@ -253,6 +253,9 @@ class QuickMgmtCnameConversion {
     $UnencryptedMofLocalUserNameCnameConversion += @{${script:DNS Server 01 Mgmt Cname} = 'OneDNS OS Deploy'}
     $UnencryptedMofLocalUserNameCnameConversion += @{'OneDNS OS Deploy' = ${script:DNS Server 01 Mgmt Cname}}
 
+    $UnencryptedMofLocalUserNameCnameConversion += @{${script:DSC WebServer Mgmt Cname} = 'DSC WebSvr OS Deploy'}
+    $UnencryptedMofLocalUserNameCnameConversion += @{'DSC WebSvr OS Deploy' = ${script:DSC WebServer Mgmt Cname}}
+
 
     #endregion
     return $UnencryptedMofLocalUserNameCnameConversion.$cname
@@ -306,6 +309,9 @@ class QuickMgmtCnameConversion {
 
     ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = 'DnsSvrB Local Admin'}
     ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{'DnsSvrB Local Admin' = ${script:DNS Server 01 Mgmt Cname}}
+
+    ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = 'DscWeb Local Admin'}
+    ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{'DscWeb Local Admin' = ${script:DSC WebServer Mgmt Cname}}
 
     #endregion
     return ${Unencrypted Mof Local User DisplayName to Cname Conversion}.$cname
@@ -399,8 +405,8 @@ class QuickMgmtCnameConversion {
       ${Computer Description before Domain-Join to Cname Conversion} += @{'' = ${script:End-Entity CA2 Server Mgmt Cname}}
     #>
 
-    ${Computer Description before Domain-Join to Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = "Non-domain DSC WebServer and Authoring Station $(${script:DSC WebServer Mgmt Cname})"}
-    ${Computer Description before Domain-Join to Cname Conversion} += @{"Non-domain DSC WebServer and Authoring Station $(${script:DSC WebServer Mgmt Cname})" = ${script:DSC WebServer Mgmt Cname}}
+    ${Computer Description before Domain-Join to Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = "Non-domain DSC Web Server)"}
+    ${Computer Description before Domain-Join to Cname Conversion} += @{"Non-domain DSC Web Server)" = ${script:DSC WebServer Mgmt Cname}}
 
     ${Computer Description before Domain-Join to Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = "DNS Zone Hoster Zero"}
     ${Computer Description before Domain-Join to Cname Conversion} += @{"DNS Zone Hoster Zero" = ${script:DNS Server 00 Mgmt Cname}}
@@ -469,6 +475,9 @@ class QuickMgmtCnameConversion {
 
     ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = "DNS RRs should refer to Net IP Interfaces, and NOT an OS instance!"}
     ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{"DNS RRs should refer to Net IP Interfaces, and NOT an OS instance!" = ${script:DNS Server 01 Mgmt Cname}}
+
+    ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = ".mof file uploader (Critical)"}
+    ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{".mof file uploader (Critical)" = ${script:DSC WebServer Mgmt Cname}}
     #endregion
     return ${Notes Attribute of Hyper-V VM to Cname Conversion}.$cname
   }
