@@ -119,7 +119,6 @@ $CnamesOfVirtualMachines  = [System.String[]] @(
   ${End-Entity CA2 Server Mgmt Cname}
   #endregion
   #region | PKI Support |
-  #$PkiInfoDistServerCname
   'pki0-cdp'
   'pki0-aia'
   #${PKI Support Server Cname}
@@ -161,7 +160,6 @@ $CnamesOfVirtualMachines  = [System.String[]] @(
   'patchA0-0'
   #endregion
   #region | Privileged Access Workstations |
-  #$PrivAccWs00Cname
   #$PrivAccWs41Cname
   #$PrivAccWs88Cname
   #endregion
@@ -185,52 +183,41 @@ $CnamesOfClusterNameObjects = [System.String[]]@('fc0','fc1','fc2','fc3','fc4') 
 #>
 
 $CanonicalName_Set_00 = @(
+  ${DNS Server 00 Mgmt Cname}
   ${DSC Authoring Station Mgmt Cname}
   ${DSC WebServer Mgmt Cname}
   ${AD Forest Creator Mgmt Cname}
   ${DHCP Server 00 Mgmt Cname}
   ${Root CA Server Mgmt Cname}
-  #$EnterpriseLeafCAServerCname
-  #$PkiInfoDistServerCname
   'dscJava'
   'fsEggroll'
 )
 $CanonicalName_Set_01 = @(
+  ${DNS Server 00 Mgmt Cname}
   ${DSC Authoring Station Mgmt Cname}
   ${DSC WebServer Mgmt Cname}
   ${AD Forest Creator Mgmt Cname}
   ${DHCP Server 00 Mgmt Cname}
   ${Root CA Server Mgmt Cname}
-  #$EnterpriseLeafCAServerCname
-  #$PkiInfoDistServerCname
-  #'dscJava'
-  #'fsEggroll'
-  #$PrivAccWs00Cname
 )
 $CanonicalName_Set_02 = @(
+  ${DNS Server 00 Mgmt Cname}
   ${DSC Authoring Station Mgmt Cname}
   #${DSC WebServer Mgmt Cname}
   ${AD Forest Creator Mgmt Cname}
   ${DHCP Server 00 Mgmt Cname}
   ${Root CA Server Mgmt Cname}
-  #$EnterpriseLeafCAServerCname
-  #$PkiInfoDistServerCname
-  #'dscJava'
-  #'fsEggroll'
 )
 $CanonicalName_Set_03 = @(
+  ${DNS Server 00 Mgmt Cname}
   ${DSC Authoring Station Mgmt Cname}
   ${DSC WebServer Mgmt Cname}
   ${AD Forest Creator Mgmt Cname}
   ${DHCP Server 00 Mgmt Cname}
   ${Root CA Server Mgmt Cname}
-  #$EnterpriseLeafCAServerCname
-  #$PkiInfoDistServerCname
-  #'dscJava'
-  #'fsEggroll'
-  #$PrivAccWs00Cname
 )
 $CanonicalName_Set_04 = @(
+  ${DNS Server 00 Mgmt Cname}
   ${DSC Authoring Station Mgmt Cname}
   ${DSC WebServer Mgmt Cname}
   ${AD Forest Creator Mgmt Cname}
@@ -247,7 +234,7 @@ $CanonicalName_Set_For_ClientAuthSelfSignedCert_Operations = $CanonicalName_Set_
 #$CanonicalName_Set_Of_Focus    = $CanonicalName_Set_04
 #$CanonicalName_Set_Of_Interest = $CanonicalName_Set_04
 ${CanonicalName Set A}  = $CanonicalName_Set_04
-${CanonicalName Set B}  = $CanonicalName_Set_04
+# I this we can delete ${CanonicalName Set B}  = $CanonicalName_Set_04
 #endregion
 
 
