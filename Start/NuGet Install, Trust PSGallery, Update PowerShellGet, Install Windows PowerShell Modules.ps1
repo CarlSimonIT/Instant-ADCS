@@ -60,70 +60,109 @@ $PowerShellGetVersion = Get-Module -Name 'PowerShellGet' | Select-Object -Expand
 ${PowerShellGet Needs to be Updated} = "$PowerShellGetVersion" -eq '1.0.0.1'
 if (${PowerShellGet Needs to be Updated}) {
   ${Update PowerShellGet Command Here-String} = $(
+    #region | Hashtag Requires structures-Do not delete |
     "#Requires -Version 5.1`n"
     "#Requires -PSEdition Desktop`n"
     "#Requires -RunAsAdministrator`n"
     "`n"
+    "`n"
+    #endregion
+    #region |  |
     "& {`n"
     "  Install-Module -Name $([System.Char]39)PowerShellGet$([System.Char]39) -Scope $([System.Char]39)AllUsers$([System.Char]39) -Force -AllowClobber`n"
     "  Update-Module -Name $([System.Char]39)PowerShellGet$([System.Char]39) -Force`n"
     "}`n"
+    #endregion
+    { # Above lines generated with 'ConvertTo-HereStringPrecursor' function provided by importin 'HereStringConversionModule.psm1' module inside '.\A0\' folder |
+      & {
+        Install-Module -Name 'PowerShellGet' -Scope 'AllUsers' -Force -AllowClobber
+        Update-Module -Name 'PowerShellGet' -Force
+      }
+    } | Out-Null
   ) -join ''
   ${Update PowerShellGet ScriptBlock} = [ScriptBlock]::Create(${Update PowerShellGet Command Here-String})
   Start-Process -FilePath powershell.exe -ArgumentList ${Update PowerShellGet ScriptBlock} -Wait -Verb 'RunAs' -WindowStyle 'Hidden'
 }
 #endregion
 
-#region | Install 'TUN.CredentialManager' and 'MSCatalog' modules for Windows PowerShell in 'AllUsers' scope |
-${Name Of Windows PowerShell Module from PSGallery} = 'TUN.CredentialManager'
-${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Command Here-String} = $(
-  #region | Hashtag Requires structures-Do not delete |
-  "#Requires -Version 5.1`n"
-  "#Requires -PSEdition Desktop`n"
-  "#Requires -RunAsAdministrator`n"
-  "`n"
-  "`n"
-  #endregion
-  #region |  |
-  "`n"
-  "& {`n"
-  "  Set-ExecutionPolicy -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -Scope $([System.Char]39)Process$([System.Char]39) -Force`n"
-  "  Import-Module $([System.Char]39)PowerShellGet$([System.Char]39) -MinimumVersion $([System.Char]39)2.2.5$([System.Char]39)`n"
-  "  `$InstallModuleHT = @{`n"
-  "    Name       = $([System.Char]34)${Name Of Windows PowerShell Module from PSGallery}$([System.Char]34)`n"
-  "    Scope      = $([System.Char]39)AllUsers$([System.Char]39)`n"
-  "    Repository = $([System.Char]39)PSGallery$([System.Char]39)`n"
-  "    Verbose    = `$true`n"
-  "    Force      = `$true`n"
-  "  }`n"
-  "  Install-Module @InstallModuleHT`n"
-  "}`n"
-  "`t`t"
-  #endregion
-  { # Above lines generated with 'ConvertTo-HereStringPrecursor' function provided by importing 'HereStringConversionModule.psm1' module inside '.\A0\' folder |
-    & {
-      Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
-      Import-Module 'PowerShellGet' -MinimumVersion '2.2.5'
-      $InstallModuleHT = @{
-        Name       = "${Name Of Windows PowerShell Module from PSGallery}"
-        Scope      = 'AllUsers'
-        Repository = 'PSGallery'
-        Verbose    = $true
-        Force      = $true
+#region | Un-comment this region if a Windows PowerShell module ever needs to be installed on the technician PC in 'AllUsers' scope |
+<#
+  ${Name Of Windows PowerShell Module from PSGallery} = ''
+  ${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Command Here-String} = $(
+    #region | Hashtag Requires structures-Do not delete |
+    "#Requires -Version 5.1`n"
+    "#Requires -PSEdition Desktop`n"
+    "#Requires -RunAsAdministrator`n"
+    "`n"
+    "`n"
+    #endregion
+    #region |  |
+    "`n"
+    "& {`n"
+    "  Set-ExecutionPolicy -ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) -Scope $([System.Char]39)Process$([System.Char]39) -Force`n"
+    "  Import-Module $([System.Char]39)PowerShellGet$([System.Char]39) -MinimumVersion $([System.Char]39)2.2.5$([System.Char]39)`n"
+    "  `$InstallModuleHT = @{`n"
+    "    Name       = $([System.Char]34)${Name Of Windows PowerShell Module from PSGallery}$([System.Char]34)`n"
+    "    Scope      = $([System.Char]39)AllUsers$([System.Char]39)`n"
+    "    Repository = $([System.Char]39)PSGallery$([System.Char]39)`n"
+    "    Verbose    = `$true`n"
+    "    Force      = `$true`n"
+    "  }`n"
+    "  Install-Module @InstallModuleHT`n"
+    "}`n"
+    "`t`t"
+    #endregion
+    { # Above lines generated with 'ConvertTo-HereStringPrecursor' function provided by importing 'HereStringConversionModule.psm1' module inside '.\A0\' folder |
+      & {
+        Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
+        Import-Module 'PowerShellGet' -MinimumVersion '2.2.5'
+        $InstallModuleHT = @{
+          Name       = "${Name Of Windows PowerShell Module from PSGallery}"
+          Scope      = 'AllUsers'
+          Repository = 'PSGallery'
+          Verbose    = $true
+          Force      = $true
+        }
+        Install-Module @InstallModuleHT
       }
-      Install-Module @InstallModuleHT
-    }
-  } | Out-Null
-) -join ''
+    } | Out-Null
+  ) -join ''
 
-${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script Path} = "$env:Temp\Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script.ps1"
-Set-Content -Path ${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script Path} -Value ${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Command Here-String}
-${PSCustomObject InstalledModule} = Get-InstalledModule -Name ${Name Of Windows PowerShell Module from PSGallery} -ErrorAction 'SilentlyContinue' -Verbose:$false
+  ${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script Path} = "$env:Temp\Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script.ps1"
+  Set-Content -Path ${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script Path} -Value ${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Command Here-String}
+  ${PSCustomObject InstalledModule} = Get-InstalledModule -Name ${Name Of Windows PowerShell Module from PSGallery} -ErrorAction 'SilentlyContinue' -Verbose:$false
 
-if (${PSCustomObject InstalledModule} -eq $null) {
-  Start-Process -ArgumentList @(
-    "Get-Item -Path '${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script Path}' | Get-Content -Raw | Invoke-Expression"
-  ) -FilePath powershell.exe -Verb 'RunAs' -Wait
-}
+  if (${PSCustomObject InstalledModule} -eq $null) {
+    Start-Process -ArgumentList @(
+      "Get-Item -Path '${Install PowerShell 5.1 Modules from PSGallery in AllUsers Scope Script Path}' | Get-Content -Raw | Invoke-Expression"
+    ) -FilePath powershell.exe -Verb 'RunAs' -Wait
+  }
+#>
+
+<# Compound Mistake |
+  I was installing 'TUN.CredentialManager' module for Windows PowerShell when I should've installed 
+  'TUN.CredentialManager' for PowerShell 7, and 'CredentialManager' for Windows PowerShell! 
+  Worse yet, I wasted time figuring out how to install 'TUN.CredentialManager' module for Windows 
+  PowerShell in 'AllUsers' scope. So not only was my base assumption incorrect, I was persuing a red
+  herring. 
+#>
 #endregion
 
+#region | Ensure that 'CredentialManager' Windows PowerShell module is installed in 'CurrentUser' scope |
+$InstallModuleHT = @{
+  Scope      = 'CurrentUser'
+  Repository = 'PSGallery'
+  Verbose    = $true
+}
+$ModuleNames = @(
+  'CredentialManager'
+)
+foreach ($ModuleName in $ModuleNames) {
+  try {
+    ${PSCustomObject InstalledModule} = Get-InstalledModule -Name $ModuleName -ErrorAction 'Stop' -Verbose:$false
+  } catch {
+    Write-Host -Object "  Ensuring that the '$ModuleName' module`n  for Windows PowerShell is installed in 'CurrentUser' scope:"
+    Install-Module -Name $ModuleName @InstallModuleHT
+  }
+}
+#endregion
