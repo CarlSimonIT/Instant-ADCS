@@ -121,6 +121,11 @@ $InputHT = @{
   'AD Site Name A'                           = 'us-il-chicago-devlab-03'
   #endregion
 
+  #region | File-based DNS Naming |
+  'Zone Title 00_Non-AD DNS' = 'red.thunder'
+  'Zone Title 01_Non-AD DNS' = 'lasko.fan'
+  #endregion
+
   #region | Labels for Active Directory Security Tiers |
   'Upn Suffix Gamma' = 'architect-core.INTERNAL'
   LabelGamma         = 'Tier 0'
@@ -140,13 +145,21 @@ $InputHT = @{
   #endregion
 
   #region | Node Mgmt NetIPInterface CNAMEs |
+  # REMEMBER TO UPDATE 
+  ## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+  # AND
+  ## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+  # AND
+  ## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+  # WHEN ADDING A NEW DSC CONFIGURATION TARGET
+
   <# IMPORTANT |
     The Key for each Key-Value pair in this 'Node Mgmt NetIPInterface CNAMEs' 
     section MUST end in ' Mgmt Cname'. Other areas in Instant-ADCS rely on that pattern. 
   #>
 
   #region | DSC WebServer (aka the pull server) + DSC Authoring Station (aka the push server) |
-  'DSC Authoring Station Mgmt Cname' = 'unclu-Hyper-V-Host-mgmt-apple'
+  'DSC Authoring Station Mgmt Cname' = 'original-unclu-HvH'
   'DSC WebServer Mgmt Cname'         = 'configs-mgmt-bagel'
   #endregion
 
@@ -184,6 +197,19 @@ $InputHT = @{
   'Web PKI NDES Server Mgmt Cname'  = 'pki-support-NDES-mgmt'
   #endregion
   #endregion
+  
+  #region | File-based DNS Servers |
+  'DNS Server 00 Mgmt Cname' = 'dns-machine-entry'
+  'DNS Server 01 Mgmt Cname' = 'zone-hosting-mgmt-ingress'
+  #endregion
+
+  # REMEMBER TO UPDATE 
+  ## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+  # AND
+  ## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+  # AND
+  ## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+  # WHEN ADDING A NEW DSC CONFIGURATION TARGET
   #endregion
 
   #region | Volume Letters on VM Instances |
@@ -231,3 +257,4 @@ Push-Location -Path "$PSScriptRoot\..\Base\5.1"
 Pop-Location
 #endregion
 #endregion
+
