@@ -215,11 +215,13 @@ ${Display History Index Here-String} = @'
   "`b "
 '@
 #endregion
+
 #region | What evidence signals that the console is actually PowerShell Remoting session? |
 $_Var_Name = 'PSSenderInfo'; try {Get-Variable -Name $_Var_Name -ErrorAction 'Stop' | Out-Null} catch {New-Variable -Name $_Var_Name -Value $null}
 # Is this another Option?    Test-Path -Path Variable:\PSSenderInfo
 # Is the concept of a 'runspace' related? 
 #endregion
+
 switch ($true) {
   ('a' -eq 'b') {
     ${Prompt Here-String Set} = @(
