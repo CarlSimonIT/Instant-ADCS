@@ -375,7 +375,8 @@ $XmlWriter.WriteStartDocument()
                 "-Scope $([System.Char]39)LocalMachine$([System.Char]39) "
                 "-ExecutionPolicy $([System.Char]39)RemoteSigned$([System.Char]39) "
                 "-Verbose "
-                "-Force; pause"
+                #"-Force; pause"
+                "-Force"
                 $([System.Char]34)
               )
             ))
@@ -394,7 +395,8 @@ $XmlWriter.WriteStartDocument()
                 "`$xml = [xml]::new(); "
                 "`$xml.Load('C:\Windows\Panther\unattend.xml'); "
                 "`$sb = [ScriptBlock]::Create(`$xml.unattend.Extensions.ExtractScript); "
-                "icm -ArgumentList `$xml -ScriptBlock `$sb; pause"
+                #"icm -ArgumentList `$xml -ScriptBlock `$sb; pause"
+                "icm -ArgumentList `$xml -ScriptBlock `$sb"
                 $([System.Char]34)
               )
             ))
@@ -416,7 +418,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\SpEcialiZe.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -451,7 +454,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\DefaultUser.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -604,7 +608,8 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-NoProfile "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -613,7 +618,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\FirstLogon.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose"
                 $([System.Char]34)
               )
             ))
@@ -647,7 +653,7 @@ $XmlWriter.WriteStartDocument()
               -join @(
                 "powershell.exe "
                 "-NoProfile "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -656,7 +662,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose; sleep 5"
                 $([System.Char]34)
               )
             ))
@@ -672,7 +679,7 @@ $XmlWriter.WriteStartDocument()
               -join @(
                 "powershell.exe "
                 "-NoProfile "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -681,7 +688,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose; sleep 5"
                 $([System.Char]34)
               )
             ))
@@ -696,7 +704,7 @@ $XmlWriter.WriteStartDocument()
               -join @(
                 "powershell.exe "
                 "-NoProfile "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -705,7 +713,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose; sleep 5"
                 $([System.Char]34)
               )
             ))
@@ -720,7 +729,7 @@ $XmlWriter.WriteStartDocument()
               -join @(
                 "powershell.exe "
                 "-NoProfile "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -729,7 +738,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose; sleep 5"
                 $([System.Char]34)
               )
             ))
@@ -744,7 +754,7 @@ $XmlWriter.WriteStartDocument()
               -join @(
                 "powershell.exe "
                 "-NoProfile "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -753,7 +763,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose; sleep 5"
                 $([System.Char]34)
               )
             ))
@@ -768,7 +779,7 @@ $XmlWriter.WriteStartDocument()
               -join @(
                 "powershell.exe "
                 "-NoProfile "
-                "-WindowStyle $([System.Char]34)Normal$([System.Char]34) "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
                 "Get-Content "
@@ -777,7 +788,8 @@ $XmlWriter.WriteStartDocument()
                 "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
                 "| "
                 "iex "
-                "-Verbose; pause"
+                #"-Verbose; pause"
+                "-Verbose; sleep 5"
                 $([System.Char]34)
               )
             ))
@@ -5645,20 +5657,22 @@ $XmlWriter.WriteStartDocument()
       $XmlWriter.WriteEndElement()
     #endregion
 
-    #region | "Credential Manager-RESTOREps1" Here-String and XML Element |
+    #region | "Credential Manager-RESTORE.ps1" Here-String and XML Element |
     ${File Credential Manager-RESTORE.ps1 Here-String} = $(
       #region |  |
       "`n"
       "`t`t`t# Restore Credential Manager data |`n"
-      "`t`t`t$([System.Char]34)`$usb0\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
+      "`t`t`t#$([System.Char]34)`$usb0\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
+      "`t`t`t$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
       "`t`t`tcontrol.exe /Name Microsoft.CredentialManager`n"
       "`t`t`tpause`n"
       "`t`t`tStart-Sleep 20`n"
       "`t`t"
       #endregion
-      {
+      { # ConvertTo-HereStringCompatible |
         # Restore Credential Manager data |
-        "$usb0\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
+        #"$usb0\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
+        "$env:DSC_CFG_ROOT\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
         control.exe /Name Microsoft.CredentialManager
         pause
         Start-Sleep 20
@@ -5716,7 +5730,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\SetWallpaper-FirstLogon.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\HideTaskBar-FirstLogon.ps1$([System.Char]39)}`n"
       "`t`t`t  # Mess with this some other time `n"
-      "`t`t`t  #{& $([System.Char]39)C:\Windows\Setup\Scripts\Credential Manager-RESTORE.ps1$([System.Char]39)}`n"
+      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Credential Manager-RESTORE.ps1$([System.Char]39)}`n"
       "`t`t`t)`n"
       "`t`t`t& {`n"
       "`t`t`t  [System.Single] `$Complete = 0`n"
@@ -5747,7 +5761,7 @@ $XmlWriter.WriteStartDocument()
           {& 'C:\Windows\Setup\Scripts\SetWallpaper-FirstLogon.ps1'}
           {& 'C:\Windows\Setup\Scripts\HideTaskBar-FirstLogon.ps1'}
           # Mess with this some other time 
-          #{& 'C:\Windows\Setup\Scripts\Credential Manager-RESTORE.ps1'}
+          {& 'C:\Windows\Setup\Scripts\Credential Manager-RESTORE.ps1'}
         )
         & {
           [System.Single] $Complete = 0
@@ -5773,6 +5787,9 @@ $XmlWriter.WriteStartDocument()
 
     #region | 00 Hadean Pre-Document Encryption.ps1 Here-String |
     ${File 00 Hadean Pre-Document Encryption.ps1 Here-String} = $(
+
+
+
       #region |  |
       "`n"
       "`t`t`t#region | Classes/Functions/Variables defined before launching a chronological unit |`n"
@@ -6031,9 +6048,9 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    )`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
-      "`t`t`t    #region | Write MACs of detected non-USB NICs to .txt file |`n"
+      "`t`t`t    #region | Establish MaxIPs Directory | Write MACs of detected non-USB NICs to .txt file |`n"
       "`t`t`t    File $([System.Char]34)Physical Non-Removable PCIe Adapter MACs Directory$([System.Char]34) {`n"
-      "`t`t`t      DestinationPath = $([System.Char]34)`$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs$([System.Char]34)`n"
+      "`t`t`t      DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs$([System.Char]34)`n"
       "`t`t`t      #Attributes      = @($([System.Char]39)Hidden$([System.Char]39))`n"
       "`t`t`t      Force           = `$true`n"
       "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
@@ -6043,8 +6060,19 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    `${Dependency Physical Non-Removable PCIe Adapter MACs Directory} = [System.String[]]@(`n"
       "`t`t`t      $([System.Char]34)[File]Physical Non-Removable PCIe Adapter MACs Directory$([System.Char]34)`n"
       "`t`t`t    )`n"
-      "`t`t`t    `${Is MaxIP child Directory present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs$([System.Char]34)`n"
-      "`t`t`t    if (-not `${Is MaxIP child Directory present at time of MOF compilation}) {`n"
+      "`t`t`t    File $([System.Char]34)MaxIP Directory$([System.Char]34) {`n"
+      "`t`t`t      DestinationPath = $([System.Char]34)`$Statics\MaxIP\VLANs$([System.Char]34)`n"
+      "`t`t`t      #Attributes      = @($([System.Char]39)Hidden$([System.Char]39))`n"
+      "`t`t`t      Force           = `$true`n"
+      "`t`t`t      Type            = $([System.Char]39)Directory$([System.Char]39)`n"
+      "`t`t`t      Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t      DependsOn       = `${Dependency Self-Signed Certs Directory}`n"
+      "`t`t`t    }`n"
+      "`t`t`t    `${Dependency MaxIP Directory} = [System.String[]]@(`n"
+      "`t`t`t      $([System.Char]34)[File]MaxIP Directory$([System.Char]34)`n"
+      "`t`t`t    )`n"
+      "`t`t`t    `${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs$([System.Char]34)`n"
+      "`t`t`t    if (-not `${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {`n"
       "`t`t`t      Get-CimInstance -ClassName $([System.Char]39)Win32_NetworkAdapter$([System.Char]39) $([System.Char]96)`n"
       "`t`t`t      | Where-Object -FilterScript {`$_.PNPDeviceID -cmatch $([System.Char]39)^PCI\\$([System.Char]39)} $([System.Char]96)`n"
       "`t`t`t      | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription `$_.Name} $([System.Char]96)`n"
@@ -6053,7 +6081,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t        `$MacAddrNoHyperLowerCase = (`$MacAddress -replace $([System.Char]39)-$([System.Char]39),$([System.Char]39)$([System.Char]39)).ToLower()`n"
       "`t`t`t        `${Guid Value} = [System.Guid]::NewGuid().Guid`n"
       "`t`t`t        File $([System.Char]34)Write MAC Address to `${Guid Value}.txt File$([System.Char]34) {`n"
-      "`t`t`t          DestinationPath = $([System.Char]34)`$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs\`${Guid Value}.txt$([System.Char]34)`n"
+      "`t`t`t          DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs\`${Guid Value}.txt$([System.Char]34)`n"
       "`t`t`t          #Attributes      = @($([System.Char]39)Hidden$([System.Char]39),$([System.Char]39)ReadOnly$([System.Char]39))`n"
       "`t`t`t          Attributes      = @($([System.Char]39)ReadOnly$([System.Char]39))`n"
       "`t`t`t          Contents        = `$MacAddrNoHyperLowerCase`n"
@@ -6063,6 +6091,22 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t          DependsOn       = `${Dependency Physical Non-Removable PCIe Adapter MACs Directory}`n"
       "`t`t`t        }`n"
       "`t`t`t      }`n"
+      "`t`t`t    }`n"
+      "`t`t`t    if (`${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {`n"
+      "`t`t`t      `$files = Get-ChildItem -Path $([System.Char]34)`$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs$([System.Char]34) -Filter $([System.Char]34)*.txt$([System.Char]34) -File | Sort-Object -Property $([System.Char]39)BaseName$([System.Char]39)`n"
+      "`t`t`t      File $([System.Char]34)`$(`$files[0].BaseName)$([System.Char]34) {`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} Administrative Control 0.txt$([System.Char]34)`n"
+      "`t`t`t        SourcePath = `$files[0].FullName`n"
+      "`t`t`t      }`n"
+      "`t`t`t      File $([System.Char]34)`$(`$files[1].BaseName)$([System.Char]34) {`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} Virtualized Workloads 0.txt$([System.Char]34)`n"
+      "`t`t`t        SourcePath = `$files[1].FullName`n"
+      "`t`t`t      }`n"
+      "`t`t`t      File $([System.Char]34)`$(`$files[2].BaseName)$([System.Char]34) {`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} iSCSI Storage 0.txt$([System.Char]34)`n"
+      "`t`t`t        SourcePath = `$files[2].FullName`n"
+      "`t`t`t      }`n"
+      "`t`t`t`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
@@ -6137,6 +6181,9 @@ $XmlWriter.WriteStartDocument()
       "`t`t`tStart-DscConfiguration -UseExisting -Force -Wait:`$true -Verbose:`$true`n"
       "`t`t"
       #endregion
+
+
+
       { # ConvertTo-HereStringCompatible |
         #region | Classes/Functions/Variables defined before launching a chronological unit |
         $ProjectName = "$FolderFQN"
@@ -6394,9 +6441,9 @@ $XmlWriter.WriteStartDocument()
             )
             #endregion
 
-            #region | Write MACs of detected non-USB NICs to .txt file |
+            #region | Establish MaxIPs Directory | Write MACs of detected non-USB NICs to .txt file |
             File "Physical Non-Removable PCIe Adapter MACs Directory" {
-              DestinationPath = "$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs"
+              DestinationPath = "$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs"
               #Attributes      = @('Hidden')
               Force           = $true
               Type            = 'Directory'
@@ -6406,8 +6453,19 @@ $XmlWriter.WriteStartDocument()
             ${Dependency Physical Non-Removable PCIe Adapter MACs Directory} = [System.String[]]@(
               "[File]Physical Non-Removable PCIe Adapter MACs Directory"
             )
-            ${Is MaxIP child Directory present at time of MOF compilation} = Test-Path -Path "$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs"
-            if (-not ${Is MaxIP child Directory present at time of MOF compilation}) {
+            File "MaxIP Directory" {
+              DestinationPath = "$Statics\MaxIP\VLANs"
+              #Attributes      = @('Hidden')
+              Force           = $true
+              Type            = 'Directory'
+              Ensure          = 'Present'
+              DependsOn       = ${Dependency Self-Signed Certs Directory}
+            }
+            ${Dependency MaxIP Directory} = [System.String[]]@(
+              "[File]MaxIP Directory"
+            )
+            ${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation} = Test-Path -Path "$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs"
+            if (-not ${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {
               Get-CimInstance -ClassName 'Win32_NetworkAdapter' `
               | Where-Object -FilterScript {$_.PNPDeviceID -cmatch '^PCI\\'} `
               | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription $_.Name} `
@@ -6416,7 +6474,7 @@ $XmlWriter.WriteStartDocument()
                 $MacAddrNoHyperLowerCase = ($MacAddress -replace '-','').ToLower()
                 ${Guid Value} = [System.Guid]::NewGuid().Guid
                 File "Write MAC Address to ${Guid Value}.txt File" {
-                  DestinationPath = "$Statics\MaxIP\Physical Non-Removable PCIe Adapter MACs\${Guid Value}.txt"
+                  DestinationPath = "$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs\${Guid Value}.txt"
                   #Attributes      = @('Hidden','ReadOnly')
                   Attributes      = @('ReadOnly')
                   Contents        = $MacAddrNoHyperLowerCase
@@ -6426,6 +6484,22 @@ $XmlWriter.WriteStartDocument()
                   DependsOn       = ${Dependency Physical Non-Removable PCIe Adapter MACs Directory}
                 }
               }
+            }
+            if (${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {
+              $files = Get-ChildItem -Path "$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs" -Filter "*.txt" -File | Sort-Object -Property 'BaseName'
+              File "$($files[0].BaseName)" {
+                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} Administrative Control 0.txt"
+                SourcePath = $files[0].FullName
+              }
+              File "$($files[1].BaseName)" {
+                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} Virtualized Workloads 0.txt"
+                SourcePath = $files[1].FullName
+              }
+              File "$($files[2].BaseName)" {
+                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} iSCSI Storage 0.txt"
+                SourcePath = $files[2].FullName
+              }
+
             }
             #endregion
 
