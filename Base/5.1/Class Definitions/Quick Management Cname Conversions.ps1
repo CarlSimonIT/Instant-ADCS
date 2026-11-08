@@ -144,6 +144,19 @@ class QuickMgmtCnameConversion {
     if ($null -ne $ComputerName) {${%ComputerName%-to-DNS Canonical Name Conversion} += @{$ComputerName = $CanonicalName}}
     #endregion
     #endregion
+    #region | File-based DNS Servers |
+    $CanonicalName = ${script:DNS Server 00 Mgmt Cname}
+    ${Variable Representation String} = '${' + "$env:Statics\CNs\$CanonicalName ComputerName.txt" + '}'
+    $ComputerName = Invoke-Expression -Command ${Variable Representation String}
+    ${%ComputerName%-to-DNS Canonical Name Conversion} += @{$CanonicalName = $ComputerName}
+    if ($null -ne $ComputerName) {${%ComputerName%-to-DNS Canonical Name Conversion} += @{$ComputerName = $CanonicalName}}
+
+    $CanonicalName = ${script:DNS Server 01 Mgmt Cname}
+    ${Variable Representation String} = '${' + "$env:Statics\CNs\$CanonicalName ComputerName.txt" + '}'
+    $ComputerName = Invoke-Expression -Command ${Variable Representation String}
+    ${%ComputerName%-to-DNS Canonical Name Conversion} += @{$CanonicalName = $ComputerName}
+    if ($null -ne $ComputerName) {${%ComputerName%-to-DNS Canonical Name Conversion} += @{$ComputerName = $CanonicalName}}
+    #endregion
     #endregion
     return ${%ComputerName%-to-DNS Canonical Name Conversion}.$cname
   }
@@ -188,6 +201,13 @@ class QuickMgmtCnameConversion {
     ${Hyper-V VM Name-to-Cname Conversion} += @{'02.28 Glowstone Leaf CA' = ${script:End-Entity CA2 Server Mgmt Cname}}
     #endregion
     #endregion
+    #region | File-based DNS Servers |
+    ${Hyper-V VM Name-to-Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = '12.00 DNS without HA'}
+    ${Hyper-V VM Name-to-Cname Conversion} += @{'12.00 DNS without HA' = ${script:DNS Server 00 Mgmt Cname}}
+
+    ${Hyper-V VM Name-to-Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = '12.10 Backup DNS'}
+    ${Hyper-V VM Name-to-Cname Conversion} += @{'12.10 Backup DNS' = ${script:DNS Server 01 Mgmt Cname}}
+    #endregion
     #endregion
     return ${Hyper-V VM Name-to-Cname Conversion}.$cname
   }
@@ -227,8 +247,13 @@ class QuickMgmtCnameConversion {
     $UnencryptedMofLocalUserNameCnameConversion += @{${script:End-Entity CA2 Server Mgmt Cname} = 'E-Ety CA2 OS Deploy'}
     $UnencryptedMofLocalUserNameCnameConversion += @{'E-Ety CA2 OS Deploy' = ${script:End-Entity CA2 Server Mgmt Cname}}
 
-    $UnencryptedMofLocalUserNameCnameConversion += @{${script:DSC WebServer Mgmt Cname} = 'DSC Pull OS Deploy'}
-    $UnencryptedMofLocalUserNameCnameConversion += @{'DSC Pull OS Deploy' = ${script:DSC WebServer Mgmt Cname}}
+    $UnencryptedMofLocalUserNameCnameConversion += @{${script:DNS Server 00 Mgmt Cname} = 'dns0 OS Deploy'}
+    $UnencryptedMofLocalUserNameCnameConversion += @{'dns0 OS Deploy' = ${script:DNS Server 00 Mgmt Cname}}
+
+    $UnencryptedMofLocalUserNameCnameConversion += @{${script:DNS Server 01 Mgmt Cname} = 'OneDNS OS Deploy'}
+    $UnencryptedMofLocalUserNameCnameConversion += @{'OneDNS OS Deploy' = ${script:DNS Server 01 Mgmt Cname}}
+
+
     #endregion
     return $UnencryptedMofLocalUserNameCnameConversion.$cname
   }
@@ -276,6 +301,12 @@ class QuickMgmtCnameConversion {
     ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{${script:End-Entity CA2 Server Mgmt Cname} = 'End-Entity CA2 Local Admin'}
     ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{'End-Entity CA2 Local Admin' = ${script:End-Entity CA2 Server Mgmt Cname}}
 
+    ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = 'DnsSvrA Local Admin'}
+    ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{'DnsSvrA Local Admin' = ${script:DNS Server 00 Mgmt Cname}}
+
+    ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = 'DnsSvrB Local Admin'}
+    ${Unencrypted Mof Local User DisplayName to Cname Conversion} += @{'DnsSvrB Local Admin' = ${script:DNS Server 01 Mgmt Cname}}
+
     #endregion
     return ${Unencrypted Mof Local User DisplayName to Cname Conversion}.$cname
   }
@@ -317,6 +348,14 @@ class QuickMgmtCnameConversion {
 
     ${Unencrypted Mof Local User Description to Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = 'Temporary local admin on DSC Pull Web Server'}
     ${Unencrypted Mof Local User Description to Cname Conversion} += @{'Temporary local admin on DSC Pull Web Server' = ${script:DSC WebServer Mgmt Cname}}
+
+    ${Unencrypted Mof Local User Description to Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = 'Temp admin on DNS Zone Responder'}
+    ${Unencrypted Mof Local User Description to Cname Conversion} += @{'Temp admin on DNS Zone Responder' = ${script:DNS Server 00 Mgmt Cname}}
+
+    ${Unencrypted Mof Local User Description to Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = 'Temp admin on non-AD DNS host'}
+    ${Unencrypted Mof Local User Description to Cname Conversion} += @{'Temp admin on non-AD DNS host' = ${script:DNS Server 01 Mgmt Cname}}
+
+
     #endregion
     return ${Unencrypted Mof Local User Description to Cname Conversion}.$cname
   }
@@ -360,9 +399,16 @@ class QuickMgmtCnameConversion {
       ${Computer Description before Domain-Join to Cname Conversion} += @{'' = ${script:End-Entity CA2 Server Mgmt Cname}}
     #>
 
-
     ${Computer Description before Domain-Join to Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = "Non-domain DSC WebServer and Authoring Station $(${script:DSC WebServer Mgmt Cname})"}
     ${Computer Description before Domain-Join to Cname Conversion} += @{"Non-domain DSC WebServer and Authoring Station $(${script:DSC WebServer Mgmt Cname})" = ${script:DSC WebServer Mgmt Cname}}
+
+    ${Computer Description before Domain-Join to Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = "DNS Zone Hoster Zero"}
+    ${Computer Description before Domain-Join to Cname Conversion} += @{"DNS Zone Hoster Zero" = ${script:DNS Server 00 Mgmt Cname}}
+
+    ${Computer Description before Domain-Join to Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = "Backup system for hosting Zones"}
+    ${Computer Description before Domain-Join to Cname Conversion} += @{"Backup system for hosting Zones" = ${script:DNS Server 01 Mgmt Cname}}
+
+
     #endregion
     return ${Computer Description before Domain-Join to Cname Conversion}.$cname
   }
@@ -385,6 +431,12 @@ class QuickMgmtCnameConversion {
 
     ${Computer Description upon Domain-Join Cname Conversion} += @{${script:Web PKI Support Mgmt Cname} = 'Web Server for PKI Support Services'}
     ${Computer Description upon Domain-Join Cname Conversion} += @{'Web Server for PKI Support Services' = ${script:Web PKI Support Mgmt Cname}}
+    
+    ${Computer Description upon Domain-Join Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = 'Domain-joined machine with file-based zones'}
+    ${Computer Description upon Domain-Join Cname Conversion} += @{'Domain-joined machine with file-based zones' = ${script:DNS Server 00 Mgmt Cname}}
+
+    ${Computer Description upon Domain-Join Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = 'Domain-joined machine with file-based zones'}
+    ${Computer Description upon Domain-Join Cname Conversion} += @{'Domain-joined machine with file-based zones' = ${script:DNS Server 01 Mgmt Cname}}
     #endregion
     return ${Computer Description upon Domain-Join Cname Conversion}.$cname
   }
@@ -412,10 +464,16 @@ class QuickMgmtCnameConversion {
     ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{${script:Web PKI Support Mgmt Cname} = "Provides AIA, CRLDP, OSCP, and other PKI-centric services supporting the Enterprise CA"}
     ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{"Provides AIA, CRLDP, OSCP, and other PKI-centric services supporting the Enterprise CA" = ${script:Web PKI Support Mgmt Cname}}
 
+    ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{${script:DNS Server 00 Mgmt Cname} = "Proof of concept for decoupling DNS RRs from OS instances."}
+    ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{"Proof of concept for decoupling DNS RRs from OS instances." = ${script:DNS Server 00 Mgmt Cname}}
+
+    ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{${script:DNS Server 01 Mgmt Cname} = "DNS RRs should refer to Net IP Interfaces, and NOT an OS instance!"}
+    ${Notes Attribute of Hyper-V VM to Cname Conversion} += @{"DNS RRs should refer to Net IP Interfaces, and NOT an OS instance!" = ${script:DNS Server 01 Mgmt Cname}}
     #endregion
     return ${Notes Attribute of Hyper-V VM to Cname Conversion}.$cname
   }
 }
 $accelerators::Add('qmcc','QuickMgmtCnameConversion')
+$accelerators::Add('QuickMgmtCnameConversions','QuickMgmtCnameConversion')
 #endregion
 
