@@ -85,12 +85,14 @@ class PrePKIGlobalCertificateSignerSequence1 {
 
   #%_Set Explained Here-String_%
   [System.Void] Set () {
+    Write-Verbose -Message "Call to Set()"
     if ($this.Ensure -eq [Ensure]::Present) 
     {
       ${Cert-Pre-PKI Global Certificate Signer} = Get-ChildItem -Path 'Cert:\LocalMachine\CA' -Recurse | Where-Object -FilterScript {
         $_.FriendlyName -eq $this.FriendlyName
       }
 
+      Write-Verbose -Message "Save copy of cert to Root store"
       ${Machine Store Root Container} = Get-Item -Path 'Cert:\LocalMachine\Root'
       ${Machine Store Root Container}.Open("ReadWrite")
       ${Machine Store Root Container}.Add(${Cert-Pre-PKI Global Certificate Signer})
