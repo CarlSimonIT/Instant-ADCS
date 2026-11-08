@@ -6,5 +6,6 @@ ${Leaf CA2 Name}       = '%_Leaf CA2 Name_%'
 ${Leaf CA3 Name}       = '%_Leaf CA3 Name_%'
 ${Policy CA2 Name}     = '%_Policy CA2 Name_%'
 ${End-Entity CA1 Name} = '%_End-Entity CA1 Name_%'
-${End-Entity CA1 Name} = '%_End-Entity CA1 Name_%'
+${End-Entity CA2 Name} = '%_End-Entity CA2 Name_%'
 #endregion
+
