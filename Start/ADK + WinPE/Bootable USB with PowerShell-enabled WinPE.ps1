@@ -34,6 +34,7 @@ $__DirectoryForDscConfigs = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonI
 #region | Write "${env:.CommonItems}\WinPE\startnet.cmd" to the file system of the technician PC |
 ${startnet.cmd File Contents} = $(
 
+
   #region |  |
   "`n"
   "wpeinit.exe`n"
@@ -44,10 +45,10 @@ ${startnet.cmd File Contents} = $(
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\03-OsDiskPart2.ps1$([System.Char]39)$([System.Char]34)`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\05-DismLoad-ApplyImage.ps1$([System.Char]39)$([System.Char]34)`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\07-x2cCopyOps.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\09-MachineRecon.ps1$([System.Char]39)$([System.Char]34)`n"
   "REM wpeutil.exe reboot`n"
   "powershell.exe`n"
   "`t`t"
-
   #endregion
 
 
@@ -61,6 +62,7 @@ ${startnet.cmd File Contents} = $(
     powershell.exe -command "iex '& X:\Scriptoids\03-OsDiskPart2.ps1'"
     powershell.exe -command "iex '& X:\Scriptoids\05-DismLoad-ApplyImage.ps1'"
     powershell.exe -command "iex '& X:\Scriptoids\07-x2cCopyOps.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\09-MachineRecon.ps1'"
     REM wpeutil.exe reboot
     powershell.exe
   } | Out-Null
@@ -423,8 +425,10 @@ Set-Content -Path ${03-OsDiskPart2 Script Path} -Value (${03-OsDiskPart2 Command
 ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
 
-  #region |  |
 
+
+
+  #region |  |
   "`n"
   "& {`n"
   "  `$PSModuleInfo = Import-Module $([System.Char]39)Storage$([System.Char]39) -PassThru -Force`n"
@@ -501,9 +505,9 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "  #region | Activate New Version of DISM |`n"
   "  . $([System.Char]39)X:\DISM\WimMountAdkSetupAmd64.exe$([System.Char]39) /Install /q`n"
   "  #endregion`n"
-  "  #region | Apply ImageIndex 2 |`n"
+  "  #region | Apply ImageIndex 4 |`n"
   "  #. $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /CheckIntegrity /Verify`n"
-  "  . $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:2 /ApplyDir:`${LocalOS Volume Letter} /Compact`n"
+  "  . $([System.Char]39)X:\DISM\dism.exe$([System.Char]39) /Apply-Image /ImageFile:$([System.Char]34)`$OSDeploy\sources\install.wim$([System.Char]34) /Index:4 /ApplyDir:`${LocalOS Volume Letter} /Compact`n"
   "  #endregion`n"
   "  #region | Make the EFI System Partition (the EFS) bootable |`n"
   "  . $([System.Char]39)X:\Windows\System32\bcdboot.exe$([System.Char]39) $([System.Char]34)`${LocalOS Volume Letter}\Windows$([System.Char]34) /l $([System.Char]34)en-us$([System.Char]34) /s $([System.Char]34)`${EFI System Partition Volume Letter}$([System.Char]34) /f $([System.Char]34)UEFI$([System.Char]34)`n"
@@ -511,9 +515,8 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "  #endregion`n"
   "}`n"
   "`t`t"
-
-
   #endregion
+
 
 
 
@@ -595,9 +598,9 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
       #region | Activate New Version of DISM |
       . 'X:\DISM\WimMountAdkSetupAmd64.exe' /Install /q
       #endregion
-      #region | Apply ImageIndex 2 |
+      #region | Apply ImageIndex 4 |
       #. 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:2 /ApplyDir:${LocalOS Volume Letter} /CheckIntegrity /Verify
-      . 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:2 /ApplyDir:${LocalOS Volume Letter} /Compact
+      . 'X:\DISM\dism.exe' /Apply-Image /ImageFile:"$OSDeploy\sources\install.wim" /Index:4 /ApplyDir:${LocalOS Volume Letter} /Compact
       #endregion
       #region | Make the EFI System Partition (the EFS) bootable |
       . 'X:\Windows\System32\bcdboot.exe' "${LocalOS Volume Letter}\Windows" /l "en-us" /s "${EFI System Partition Volume Letter}" /f "UEFI"
@@ -617,8 +620,6 @@ Set-Content -Path ${05-DismLoad-ApplyImage Script Path} -Value (${05-DismLoad-Ap
 #region | Write "${env:.CommonItems}\WinPE\07-x2cCopyOps.ps1" to the file system of the technician PC |
 ${07-x2cCopyOps Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
-
-
 
 
   #region |  |
@@ -853,19 +854,85 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "    Copy-Item @HT`n"
   "  }`n"
   "  #endregion`n"
-  "`n"
+  "  #region | SysinternalsSuite | SysinternalsSuite-Nano |`n"
+  "  #region | EXTRACT SysinternalsSuite into root of OS volume |`n"
+  "  `$ZipFileBaseName = $([System.Char]39)SysinternalsSuite$([System.Char]39)`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$ZipFileBaseName$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  `$HT = @{`n"
+  "    Path            = $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\`$ZipFileBaseName\`$ZipFileBaseName.zip$([System.Char]34)`n"
+  "    DestinationPath = $([System.Char]34)`${LocalOS Volume Letter}\`$ZipFileBaseName$([System.Char]34)`n"
+  "  }`n"
+  "  Expand-Archive @HT`n"
   "  #endregion`n"
+  "  #region | Copy .zip files into installs |`n"
+  "  `$ZipFileBaseNames = @($([System.Char]39)SysinternalsSuite$([System.Char]39),$([System.Char]39)SysinternalsSuite-Nano$([System.Char]39))`n"
+  "  foreach (`$ZipFileBaseName in `$ZipFileBaseNames) {`n"
+  "    `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\`$ZipFileBaseName$([System.Char]34); `n"
+  "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    `$HT = @{`n"
+  "      Path        = $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\`$ZipFileBaseName\`$ZipFileBaseName.zip$([System.Char]34)`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "  #endregion`n"
+  "  #region | Windows ADK + WinPE |`n"
+  "  `$ZipFileBaseNames = @($([System.Char]39)Windows ADK 2026-09$([System.Char]39),$([System.Char]39)WinPE 2026-09$([System.Char]39))`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs$([System.Char]34)`n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  foreach (`$ZipFileBaseName in `$ZipFileBaseNames) {`n"
+  "    `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Installs\`$ZipFileBaseName$([System.Char]34)`n"
+  "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    `$HT = @{`n"
+  "      Path            = $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\`$ZipFileBaseName\`$ZipFileBaseName.zip$([System.Char]34)`n"
+  "      DestinationPath = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    }`n"
+  "    Expand-Archive @HT`n"
+  "    `n"
+  "    `$HT = @{`n"
+  "      Path        = $([System.Char]34)`$usb0\`$FolderFQN\cfg\installs\`$ZipFileBaseName\`$ZipFileBaseName.zip$([System.Char]34)`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "  #endregion`n"
+  "`n"
+  "  #region | Copy OS .iso files |`n"
+  "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Hyper-V Prep\Images$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "`n"
+  "  `$ParentDirectoryNames = @($([System.Char]39)Original$([System.Char]39),$([System.Char]39)Patched$([System.Char]39))`n"
+  "  foreach (`$ParentDirectoryName in `$ParentDirectoryNames) {`n"
+  "    `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\Hyper-V Prep\Images$([System.Char]34); `n"
+  "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "    `$HT = @{`n"
+  "      Path        = $([System.Char]34)`$usb0\`$FolderFQN\Microsoft\OS\Server 25\`$ParentDirectoryName$([System.Char]34)`n"
+  "      Destination = $([System.Char]34)`$folder$([System.Char]34)`n"
+  "      Recurse     = `$true`n"
+  "    }`n"
+  "    Copy-Item @HT`n"
+  "  }`n"
+  "  #endregion`n"
+  "`n"
+  "`n"
+  "`n"
+  "`n"
+  "`n"
+  "`n"
+  "`n"
+  "`n"
   "`n"
   "  #region | On 2nd thought, just launch powershell.exe with the -NoProfile switch |`n"
   "  Get-Item -Path $([System.Char]34)`${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile-DO NOT LOAD.ps1$([System.Char]34) | Rename-Item -NewName $([System.Char]39)profile.ps1$([System.Char]39)`n"
   "  #endregion`n"
-  "  `n"
   "  #region | Copy .clixml Files |`n"
   "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\CliXmls$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\clixmls$([System.Char]34) -Filter $([System.Char]34)*.clixml$([System.Char]34) -File | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
   "  #endregion`n"
-  "  `n"
   "  #region | Credential Manager backup file |`n"
   "  `$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN\sec$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -886,8 +953,6 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "}`n"
   "`t`t"
   #endregion
-
-
 
 
   #endregion
@@ -1035,12 +1100,6 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       Copy-Item @HT
       #endregion
       #region | Copy modules to local fixed disk |
-      # Let DSC create this directory #  $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Managed Object Format Files"; 
-      # Let DSC create this directory #  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-      # Let DSC create this directory #  $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Statics"; 
-      # Let DSC create this directory #  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
       Get-ChildItem -Path "$usb0\$FolderFQN\cfg\DSC Resources" -Filter '*.zip' -Recurse `
@@ -1048,14 +1107,11 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
         $HT = @{
           Path        = $_.FullName
           Destination = "$folder"
-          Force         = $false
-          Verbose       = $true
+          Force       = $false
+          Verbose     = $true
         }
         Copy-Item @HT
       }
-
-      # Let DSC create this directory #  $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"; 
-      # Let DSC create this directory #  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\Modules\5.1"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -1064,8 +1120,8 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
         $HT = @{
           Path        = $_.FullName
           Destination = "$folder"
-          Force         = $false
-          Verbose       = $true
+          Force       = $false
+          Verbose     = $true
         }
         Copy-Item @HT
       }
@@ -1074,8 +1130,8 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       $HT = @{
         Path        = "$usb0\lockscreen.png"
         Destination = "${LocalOS Volume Letter}\"
-        Force       = $false
-        Verbose     = $true
+        Force   = $false
+        Verbose = $true
       }
       Copy-Item @HT
       #endregion
@@ -1123,19 +1179,85 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
         Copy-Item @HT
       }
       #endregion
-
+      #region | SysinternalsSuite | SysinternalsSuite-Nano |
+      #region | EXTRACT SysinternalsSuite into root of OS volume |
+      $ZipFileBaseName = 'SysinternalsSuite'
+      $path = "${LocalOS Volume Letter}\$ZipFileBaseName"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      $HT = @{
+        Path            = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName\$ZipFileBaseName.zip"
+        DestinationPath = "${LocalOS Volume Letter}\$ZipFileBaseName"
+      }
+      Expand-Archive @HT
       #endregion
+      #region | Copy .zip files into installs |
+      $ZipFileBaseNames = @('SysinternalsSuite','SysinternalsSuite-Nano')
+      foreach ($ZipFileBaseName in $ZipFileBaseNames) {
+        $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\$ZipFileBaseName"; 
+        $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+        $HT = @{
+          Path        = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName\$ZipFileBaseName.zip"
+          Destination = "$folder"
+        }
+        Copy-Item @HT
+      }
+      #endregion
+      #endregion
+      #region | Windows ADK + WinPE |
+      $ZipFileBaseNames = @('Windows ADK 2026-09','WinPE 2026-09')
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs"
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      foreach ($ZipFileBaseName in $ZipFileBaseNames) {
+        $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Installs\$ZipFileBaseName"
+        $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+        $HT = @{
+          Path            = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName\$ZipFileBaseName.zip"
+          DestinationPath = "$folder"
+        }
+        Expand-Archive @HT
+        
+        $HT = @{
+          Path        = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName\$ZipFileBaseName.zip"
+          Destination = "$folder"
+        }
+        Copy-Item @HT
+      }
+      #endregion
+      #endregion
+
+      #region | Copy OS .iso files |
+      $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Hyper-V Prep\Images"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+      $ParentDirectoryNames = @('Original','Patched')
+      foreach ($ParentDirectoryName in $ParentDirectoryNames) {
+        $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\Hyper-V Prep\Images"; 
+        $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+        $HT = @{
+          Path        = "$usb0\$FolderFQN\Microsoft\OS\Server 25\$ParentDirectoryName"
+          Destination = "$folder"
+          Recurse     = $true
+        }
+        Copy-Item @HT
+      }
+      #endregion
+
+
+
+
+
+
+
+
 
       #region | On 2nd thought, just launch powershell.exe with the -NoProfile switch |
       Get-Item -Path "${LocalOS Volume Letter}\Windows\System32\WindowsPowerShell\v1.0\profile-DO NOT LOAD.ps1" | Rename-Item -NewName 'profile.ps1'
       #endregion
-      
       #region | Copy .clixml Files |
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\CliXmls"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
       Get-ChildItem -Path "$usb1\$FolderFQN\clixmls" -Filter "*.clixml" -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
       #endregion
-      
       #region | Credential Manager backup file |
       $path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN\sec"; 
       $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -1164,7 +1286,43 @@ ${07-x2cCopyOps Script Path} = "${WinPE Image Creation Parent Folder}\07-x2cCopy
 Set-Content -Path ${07-x2cCopyOps Script Path} -Value (${07-x2cCopyOps Command Here-String})
 #endregion
 
+#region | Write "${env:.CommonItems}\WinPE\09-MachineRecon.ps1" to the file system of the technician PC |
+${09-MachineRecon Command Here-String Precursor} = $(
+  #region | OS Disk | Hyper-V Disk |
 
+  #region |  |
+  "`n"
+  "& {`n"
+  "  `${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml$([System.Char]34)`n"
+  "  `${LocalOS Volume Letter} = [System.String]`${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+  "  `$__DirectoryForDscConfigs = Import-CliXml -Path $([System.Char]34)X:\Scriptoids\__DirectoryForDscConfigs.clixml$([System.Char]34)`n"
+  "`n"
+  "  `$FixedDisks = Get-Disk | Where-Object -FilterScript {`$_.BusType -match $([System.Char]39)SATA|NVMe$([System.Char]39)}`n"
+  "  Export-CliXml -Path $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\CliXmls\FixedDisks.clixml$([System.Char]34) -InputObject (`$FixedDisks)`n"
+  "}`n"
+  "`t`t"
+  #endregion
+
+  #endregion
+  #########################################-BOUNDARY-#########################################
+  { # Create with ConvertTo-HereStringPrecursor |
+    & {
+      ${OS Volume OS Partition OS Disk CIM Instance} = Import-CliXml -Path "X:\Scriptoids\OS Volume OS Partition OS Disk CIM Instance.clixml"
+      ${LocalOS Volume Letter} = [System.String]${OS Volume OS Partition OS Disk CIM Instance}.DriveLetter + ':'
+      $__DirectoryForDscConfigs = Import-CliXml -Path "X:\Scriptoids\__DirectoryForDscConfigs.clixml"
+
+      $FixedDisks = Get-Disk | Where-Object -FilterScript {$_.BusType -match 'SATA|NVMe'}
+      Export-CliXml -Path "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\CliXmls\FixedDisks.clixml" -InputObject ($FixedDisks)
+    }
+  } | Out-Null
+  #########################################-BOUNDARY-#########################################
+) -join ''
+
+${09-MachineRecon Command Here-String} = ${09-MachineRecon Command Here-String Precursor}
+${09-MachineRecon Command} = [ScriptBlock]::Create(${09-MachineRecon Command Here-String})
+${09-MachineRecon Script Path} = "${WinPE Image Creation Parent Folder}\09-MachineRecon.ps1"
+Set-Content -Path ${09-MachineRecon Script Path} -Value (${09-MachineRecon Command Here-String})
+#endregion
 
 #region | Write "${env:.CommonItems}\WinPE\Bootable USB with PowerShell-enabled WinPE Script.ps1" to the file system of the technician PC |
 ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
@@ -1178,7 +1336,6 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "`n"
   #endregion
   #region | New Precursor Volume for eventual WinPE | Custom WinPE image written to USB Flash Drive |
-
 
   #region |  |
   "`n"
@@ -1386,6 +1543,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\09-MachineRecon.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "`n"
   "    `$path = $([System.Char]34)`${Mount Directory Path}\Scriptoids\5.1$([System.Char]34)`n"
   "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -1670,6 +1828,7 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         Move-Item -Path "${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1" -Destination "$folder"
         Move-Item -Path "${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1" -Destination "$folder"
         Move-Item -Path "${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\09-MachineRecon.ps1" -Destination "$folder"
 
         $path = "${Mount Directory Path}\Scriptoids\5.1"
         $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
@@ -1767,11 +1926,4 @@ return @{
   'WinPE Image Creation Parent Folder'                     = ${WinPE Image Creation Parent Folder}
 }
 #endregion
-
-
-
-
-
-
-
 
