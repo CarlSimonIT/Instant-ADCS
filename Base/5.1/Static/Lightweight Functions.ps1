@@ -2,12 +2,18 @@
 #region | Time & Date Functions |
 #function Call-DateVar {[System.String]::Format('{0:yyyy}.{0:MMdd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
 function Call-DateVar {[System.String]::Format('{0:yyyy}.{0:MM}{0:dd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
-Set-Alias -Name 'cdv' -Value 'Call-DateVar'
+$AliasName = 'cdv'
+$AliasValue = 'Call-DateVar'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 #function Call-DateVar {[System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now)}
 
 #function Call-VersVar {[System.Version][System.String]::Format('{0:yyyy}.{0:MMdd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
 function Call-VersVar {[System.Version][System.String]::Format('{0:yyyy}.{0:MM}{0:dd}.{0:HH}{0:mm}.{0:ss}',[System.DateTime]::Now)}
-Set-Alias -Name 'cvv' -Value 'Call-VersVar'
+$AliasName = 'cvv'
+$AliasValue = 'Call-VersVar'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 function Call-ISO8601TimeDate {
   [System.String](Get-Date -Date $(([System.DateTime]::Now)) -Format "yyyy-MM-ddTHH-mm-ssZ")
@@ -16,9 +22,16 @@ function Call-ISO8601TimeDate {
 
 # See Windows PowerShell in Action (3rd Ed.) Chapter 01 for explanation of these two functions. 
 function Quote-List {$args}
-Set-Alias -Name 'ql' -Value 'Quote-List'
+$AliasName = 'ql'
+$AliasValue = 'Quote-List'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
+
 function Quote-String {"$args"}
-Set-Alias -Name 'qs' -Value 'Quote-String'
+$AliasName = 'qs'
+$AliasValue = 'Quote-String'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 function View-Win32Products {
   $Products = Get-CimInstance -ClassName 'Win32_Product'
@@ -37,44 +50,63 @@ function Get-SortedAndFormattedPowerShellRemotingSessions {
   $FormattedObjects = $SelectedObjects | Format-Table -AutoSize
   $FormattedObjects
 }
-New-Alias -Name 'gpsn' -Value 'Get-SortedAndFormattedPowerShellRemotingSessions'
+$AliasName = 'gpsn'
+$AliasValue = 'Get-SortedAndFormattedPowerShellRemotingSessions'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 function Remove-BrokenPowerShellRemotingSessions {
   Get-PSSession | Where-Object -FilterScript {
     $_.State -eq 'Broken'
   } | Remove-PSSession -ErrorAction 'SilentlyContinue'
 }
-New-Alias -Name 'rbpsn' -Value 'Remove-BrokenPowerShellRemotingSessions'
+$AliasName = 'rbpsn'
+$AliasValue = 'Remove-BrokenPowerShellRemotingSessions'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 function Remove-DisconnectedPowerShellRemotingSessions {
   Get-PSSession | Where-Object -FilterScript {
     $_.State -eq 'Disconnected'
   } | Remove-PSSession -ErrorAction 'SilentlyContinue'
 }
-New-Alias -Name 'rdpsn' -Value 'Remove-DisconnectedPowerShellRemotingSessions'
+$AliasName = 'rdpsn'
+$AliasValue = 'Remove-DisconnectedPowerShellRemotingSessions'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 function Remove-ClosedPowerShellRemotingSessions {
   Get-PSSession | Where-Object -FilterScript {
     $_.State -eq 'Closed'
   } | Remove-PSSession -ErrorAction 'SilentlyContinue'
 }
-New-Alias -Name 'rcpsn' -Value 'Remove-ClosedPowerShellRemotingSessions'
+$AliasName = 'rcpsn'
+$AliasValue = 'Remove-ClosedPowerShellRemotingSessions'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 function Purge-DownedPowerShellRemotingSessions {
   (Get-PSSession).Where({
     $_.State -match 'Broken|Disconnected|Closed'
   }) | Remove-PSSession -ErrorAction 'SilentlyContinue' -Confirm:$false > $null
 }
-New-Alias -Name 'purge' -Value 'Purge-DownedPowerShellRemotingSessions'
+$AliasName = 'purge'
+$AliasValue = 'Purge-DownedPowerShellRemotingSessions'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 #endregion
 
 
 #region | Randomized Color Selection |
 $RandomObject = [System.Random]::New()
 
-${Console Output-Foreground Colors} = [System.ConsoleColor]::New() | Get-Member -Static -MemberType 'Property' | Select-Object -ExpandProperty 'Name'
+#${Console Output-Foreground Colors} = [System.ConsoleColor]::New() | Get-Member -Static -MemberType 'Property' | Select-Object -ExpandProperty 'Name' 
+${Console Output-Foreground Colors} = [System.ConsoleColor]::New() | Get-Member -Static -MemberType 'Property' | Select-Object -ExpandProperty 'Name' | Where-Object -FilterScript {$_ -notmatch 'Red'}
 function Pick-RandomForegroundColor {${Console Output-Foreground Colors}[$RandomObject.Next(0,${Console Output-Foreground Colors}.Length)]}
-New-Alias -Name 'rFc' -Value 'Pick-RandomForegroundColor'
+$AliasName = 'rFc'
+$AliasValue = 'Pick-RandomForegroundColor'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 
 ${Console Output-Background Colors} = @(
   [System.ConsoleColor]::Black
@@ -95,11 +127,16 @@ ${Console Output-Background Colors} = @(
   #[System.ConsoleColor]::White
 )
 function Pick-RandomBackgroundColor {${Console Output-Background Colors}[$RandomObject.Next(0,${Console Output-Background Colors}.Length)]}
-New-Alias -Name 'rBc' -Value 'Pick-RandomBackgroundColor'
+$AliasName = 'rBc'
+$AliasValue = 'Pick-RandomBackgroundColor'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 #endregion
 
 function Get-RandomFileName {[System.IO.Path]::GetRandomFileName()}
-Set-Alias -Name 'grfn' -Value 'Get-RandomFileName'
-
+$AliasName = 'grfn'
+$AliasValue = 'Get-RandomFileName'
+try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
+#try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
 #endregion
 
