@@ -8,9 +8,7 @@ ${\w} = -join ([System.Char[]](0x30..0x39) + [System.Char[]](0x41..0x5A) + [Syst
 ${\S} = -join [System.Char[]](0x21..0x7E)
 ${.*} = -join ([System.Char[]](0x9,0x20,0xd,0xa,0xc,0xb) + [System.Char[]](0x21..0x7E))
 
-
-
-
-
+${Windows ADK 2026-09 ProductId} = '4f4f4626-ccb4-41ba-9c62-7ec9b0e113f3'
+${WinPE 2026-09 ProductId}       = 'f567a246-97ac-4217-a1ba-020ced2a8187'
 #endregion
 
