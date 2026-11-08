@@ -82,6 +82,7 @@ class PrePKIMofPasswordProtectionSequence0 {
 
   #%_Set Explained Here-String_%
   [System.Void] Set () {
+    Write-Verbose -Message "Call to Set()"
     if ($this.Ensure -eq [Ensure]::Present) 
     {
       ${Extension to X.509v3 OID-Enhanced Key Usage} = ([System.Security.Cryptography.Oid]'Enhanced Key Usage').Value
@@ -94,7 +95,7 @@ class PrePKIMofPasswordProtectionSequence0 {
       $Config_Target_Mgmt_Cname = $Matches['Config_Target_Mgmt_Cname']
       $ConfigTargetComputerNameFile = $Config_Target_Mgmt_Cname | ForEach-Object -Process {
         $HT = @{
-          Path    = $env:Statics
+          Path    = "$env:Statics\CNs"
           Filter  = "*$_ ComputerName.txt"
           Recurse = $true
         }
@@ -171,12 +172,10 @@ class PrePKIMofPasswordProtectionSequence0 {
 
     if ($null -ne ${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance}) 
     {
-      $CurrentState.Add('IsSingleInstance',$this.IsSingleInstance)
       $CurrentState.Add('FriendlyName',${OBSERVED real-world state of the object which corresponds to this exact specific DSC Resource instance}.FriendlyName)
       $CurrentState.Add('Ensure',[Ensure]::Present)
     } 
     else {
-      $CurrentState.Add('IsSingleInstance',$this.IsSingleInstance)
       $CurrentState.Add('FriendlyName',$null)
       $CurrentState.Add('Ensure',[Ensure]::Absent)
     }
