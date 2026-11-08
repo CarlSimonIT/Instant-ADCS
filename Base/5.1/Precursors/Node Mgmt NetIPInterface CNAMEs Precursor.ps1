@@ -16,6 +16,13 @@
   for your organization, then an increase in complexity is unavoidable. 
 #>
 
+# REMEMBER TO UPDATE 
+## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+# AND
+## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# AND
+## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+# WHEN ADDING A NEW DSC CONFIGURATION TARGET
 ${DSC Authoring Station Mgmt Cname} = '%_DSC Authoring Station Mgmt Cname_%'
 ${DSC WebServer Mgmt Cname}         = '%_DSC WebServer Mgmt Cname_%'
 ${AD Forest Creator Mgmt Cname}     = '%_AD Forest Creator Mgmt Cname_%'
@@ -38,5 +45,14 @@ ${Web PKI CRLDP Server Mgmt Cname}  = '%_Web PKI CRLDP Server Mgmt Cname_%'
 ${Web PKI OSCP Server Mgmt Cname}   = '%_Web PKI OSCP Server Mgmt Cname_%'
 ${Web PKI CAWE Server Mgmt Cname}   = '%_Web PKI CAWE Server Mgmt Cname_%'
 ${Web PKI NDES Server Mgmt Cname}   = '%_Web PKI NDES Server Mgmt Cname_%'
+${DNS Server 00 Mgmt Cname}         = '%_DNS Server 00 Mgmt Cname_%'
+${DNS Server 01 Mgmt Cname}         = '%_DNS Server 01 Mgmt Cname_%'
+# REMEMBER TO UPDATE 
+## ---> ".\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
+# AND
+## ---> ".\Start\Variable Setup in Windows PowerShell and Export to CliXml.ps1"
+# AND
+## ---> the 'CanonicalName_Set_##' within ".\Start\5.1\Static\RelativeID and CanonicalName Sets.ps1"
+# WHEN ADDING A NEW DSC CONFIGURATION TARGET
 #endregion
 
