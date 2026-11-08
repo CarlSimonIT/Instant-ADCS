@@ -89,8 +89,7 @@ class PrePKIGlobalCodeSignerSequence0 {
 
   #%_Set Explained Here-String_%
   [System.Void] Set () {
-    #$PSModuleInfo = Import-Module 'PKI' -Force -Passthru
-
+    Write-Verbose -Message "Call to Set()"
     if ($this.Ensure -eq [Ensure]::Present) 
     {
       ${Extension to X.509v3 OID-Enhanced Key Usage} = ([System.Security.Cryptography.Oid]'Enhanced Key Usage').Value
