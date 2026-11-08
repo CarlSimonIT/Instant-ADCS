@@ -76,7 +76,7 @@ class WindowsEventLogChannelThatIsENABLEDforDscTracking {
 
   #%_Set Explained Here-String_%
   [System.Void] Set () {
-    Write-Verbose -Message "Set() method has been called"
+    Write-Verbose -Message "Call to Set()"
     Import-Module -Name 'xDscDiagnostics' -Function 'Update-xDscEventLogStatus' -RequiredVersion '2.8.0'
     switch ($true) {
       ($this.Ensure -eq [Ensure]::Present) {
