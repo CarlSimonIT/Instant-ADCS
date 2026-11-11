@@ -1,8 +1,8 @@
 # Instant-ADCS
-Quickly and securely build an Active Directory-integrated 3-tier PKI with Windows PowerShell, DSC version 1.1, and as little manual input as possible. 
+Quickly and securely build an Active Directory-integrated 3-tier PKI with Desired State Configuration v1.1.
 
 ### New Local Standard Account
-Exporting the contents of the Windows Credential Manager is a critical step in this workflow. Using a new non-administrative local account is advised to ensure that only secure strings directly relevant to Instant-ADCS are exported. 
+Exporting the contents of the Windows Credential Manager is the critical final step in this workflow. Using a new non-administrative local account is advised to ensure that only secure strings directly relevant to Instant-ADCS are exported. 
 
 Launch Windows PowerShell in a elevated security context and execute the lines below:  
 
@@ -48,8 +48,7 @@ Install Git with WinGet in the user scope:
   if (${Current powershell.exe process is running at Integrity Level-High}) {
     throw "Re-launch Windows PowerShell WITHOUT selecting Run As Administrator!"
     exit
-  } 
-  else {winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'}
+  } else {winget.exe install --id 'Git.Git' --scope 'user' --source 'winget'}
   ```
 </details>
 
@@ -59,8 +58,8 @@ Configure a new directory for cloning multiple GitHub repositories. <span style=
   <summary>Relocate to Empty Working Directory</summary>
 
   ```powershell
-  ${Intermediary Partial Path} = Read-Host -Prompt 'Optional: Partial path of Intermediary Partial Path'
-  $CloningRepoPath = "$env:UserProfile\GitHub\${Intermediary Partial Path}\CarlSimonIT"
+  ${Intermediary Partial Path} = 'write something\or nothing'
+  $CloningRepoPath = "$env:UserProfile\${Intermediary Partial Path}\CarlSimonIT"
   $CloningRepoFolder = try {
     Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'
   } catch {
@@ -77,9 +76,9 @@ Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</spa
 
   ```powershell
   $GitHubRepositoryName = 'Secure-Automations-Toolset'
-  git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+  . "$env:LocalAppData\Programs\Git\bin\git.exe" clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
   $GitHubRepositoryName = 'Instant-ADCS'
-  git.exe clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+  . "$env:LocalAppData\Programs\Git\bin\git.exe" clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
   ```
 </details>
 
@@ -100,34 +99,15 @@ Define new hidden directory for information exchange between PowerShell versions
 </details>
 
 
-Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>. 
-
-
+Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>. No need to update the user or machine-scope PowerShell Execution Policy: 
 
 <details>
-  <summary></summary>
+  <summary>Process-scope Execution Policy</summary>
 
   ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
   ```
 </details>
-
-
-
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
-```
-
-
-
-<details>
-  <summary></summary>
-
-  ```powershell
-  ```
-</details>
-
-
 
 Declare input variables, run <u>Start.ps1</u> and follow the subsequent on-screen instructions.  
 
@@ -147,8 +127,6 @@ $InputHT = @{
 
 #### Hardware-specific Drivers (Optional)
 Drivers specific to your hardware is not something this project can automate. You will have to undertake this manual work yourself, if you so desire. My example will feature a Dell Precision 3460 SFF. 
-
-
 
 <details>
   <summary>WinPE Drivers</summary>
