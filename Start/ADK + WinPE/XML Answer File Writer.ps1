@@ -19,16 +19,9 @@ $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Computer Info Lite.ps1"
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Location - Culture - Geography.ps1"
-#. "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Type Accelerator Instance.ps1"
-#. "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Quick Management Cname Conversions.ps1"
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Class Definitions\Windows Server Image Index.ps1"
 . "$PSScriptRoot\..\..\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Constants for Organization Naming that are not directly related to IT operations.ps1"
 $__DirectoryForDscConfigs = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\__DirectoryForDscConfigs.clixml"
-
-${AdHocCertsDsc Version} = '0.0.2'
-${AdHocNetsDsc Version}  = '0.0.2'
-${AdHocPkiDsc Version}   = '0.0.2'
-${AdHocUtilsDsc Version} = '0.0.2'
 #endregion
 
 #region | Node-Specific Variables | Temporary File | XML Writer Settings |
@@ -663,7 +656,7 @@ $XmlWriter.WriteStartDocument()
                 "| "
                 "iex "
                 #"-Verbose; pause"
-                "-Verbose; sleep 5"
+                "-Verbose; sleep 1"
                 $([System.Char]34)
               )
             ))
@@ -689,7 +682,7 @@ $XmlWriter.WriteStartDocument()
                 "| "
                 "iex "
                 #"-Verbose; pause"
-                "-Verbose; sleep 5"
+                "-Verbose; sleep 1"
                 $([System.Char]34)
               )
             ))
@@ -714,7 +707,7 @@ $XmlWriter.WriteStartDocument()
                 "| "
                 "iex "
                 #"-Verbose; pause"
-                "-Verbose; sleep 5"
+                "-Verbose; sleep 1"
                 $([System.Char]34)
               )
             ))
@@ -739,7 +732,7 @@ $XmlWriter.WriteStartDocument()
                 "| "
                 "iex "
                 #"-Verbose; pause"
-                "-Verbose; sleep 5"
+                "-Verbose; sleep 1"
                 $([System.Char]34)
               )
             ))
@@ -764,7 +757,7 @@ $XmlWriter.WriteStartDocument()
                 "| "
                 "iex "
                 #"-Verbose; pause"
-                "-Verbose; sleep 5"
+                "-Verbose; sleep 1"
                 $([System.Char]34)
               )
             ))
@@ -789,7 +782,32 @@ $XmlWriter.WriteStartDocument()
                 "| "
                 "iex "
                 #"-Verbose; pause"
-                "-Verbose; sleep 5"
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          # Pass 06 of ".\00 Hadean Pre-Document Encryption.ps1"
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Pass 06 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                #"-Verbose; pause"
+                "-Verbose; sleep 1"
                 $([System.Char]34)
               )
             ))
@@ -1662,23 +1680,33 @@ $XmlWriter.WriteStartDocument()
     ${File Environment Variables-System Scope.ps1 Here-String} = $(
       #region |  |
       "`n"
-      "`t`t`t`${04f1in3 path} = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS$([System.Char]34)`n"
+      "`t`t`t`${DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${DSC Volume Letter} = [System.String]`${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
+      "`t`t`t`${HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${HvH Volume Letter} = [System.String]`${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
+      "`t`t`t#`${04f1in3 path} = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS$([System.Char]34)`n"
       "`t`t`t`${HKLM Sess Mgr Env} = $([System.Char]39)HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment$([System.Char]39)`n"
       "`t`t`t`$HT = @{`n"
-      "`t`t`t  $([System.Char]39)DSC_CFG_ROOT$([System.Char]39)                         = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)04f1in3$([System.Char]39)                              = `${04f1in3 path}`n"
-      "`t`t`t  $([System.Char]39)SystemModules$([System.Char]39)                        = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)SysMods$([System.Char]39)                              = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)SMs$([System.Char]39)                                  = $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)ProgramModules$([System.Char]39)                       = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)ProgMods$([System.Char]39)                             = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)PMs$([System.Char]39)                                  = $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)MOFs$([System.Char]39)                                 = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Managed Object Format Files$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)Statics$([System.Char]39)                              = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Statics$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)ResMod$([System.Char]39)                               = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34)`n"
-      "`t`t`t  $([System.Char]39)Pre-PKI CertFSOs$([System.Char]39)                     = $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34)`n"
-      "`t`t`t  # $([System.Char]39)VHDs$([System.Char]39) = $([System.Char]34)`$env:ProgramData\Microsoft\Windows\Virtual Hard Disks$([System.Char]34) # Accomodate for multiple hard disks #`n"
-      "`t`t`t  # $([System.Char]39)VMs$([System.Char]39)  = $([System.Char]34)`$env:ProgramData\Microsoft\Windows\Hyper-V$([System.Char]34)            # Accomodate for multiple hard disks #`n"
+      "`t`t`t  $([System.Char]39)DSC_CFG_ROOT$([System.Char]39)        =    $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs$([System.Char]34)`n"
+      "`t`t`t  #$([System.Char]39)04f1in3$([System.Char]39)             =    `${04f1in3 path}`n"
+      "`t`t`t  $([System.Char]39)SystemModules$([System.Char]39)       =    $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)SysMods$([System.Char]39)             =    $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)SMs$([System.Char]39)                 =    $([System.Char]34)`$env:WinDir\System32\WindowsPowerShell\v1.0\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)ProgramModules$([System.Char]39)      =    $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)ProgMods$([System.Char]39)            =    $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)PMs$([System.Char]39)                 =    $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)MOFs$([System.Char]39)                =    $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\Managed Object Format Files$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)Statics$([System.Char]39)             =    $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\Statics$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)ResMod$([System.Char]39)              =    $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)Pre-PKI CertFSOs$([System.Char]39)    =    $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)VHD Folder Path$([System.Char]39)     =    $([System.Char]34)`${HvH Volume Letter}\ProgramData\Microsoft\Windows\Virtual Hard Disks$([System.Char]34)`n"
+      "`t`t`t  $([System.Char]39)VM Folder Path$([System.Char]39)      =    $([System.Char]34)`${HvH Volume Letter}\ProgramData\Microsoft\Windows\Hyper-V$([System.Char]34)`n"
       "`t`t`t}`n"
       "`t`t`t`$DictionaryEntrySet = `$HT.GetEnumerator() | Write-Output`n"
       "`t`t`tforeach (`$DictionaryEntry in `$DictionaryEntrySet) {`n"
@@ -1691,23 +1719,33 @@ $XmlWriter.WriteStartDocument()
       "`t`t"
       #endregion
       {
-        ${04f1in3 path} = "$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS"
+        ${DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Disk CIM Instance.clixml"
+        ${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml"
+        ${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml")
+        ${DSC Volume Letter} = [System.String]${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + ':'
+
+        ${HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Disk CIM Instance.clixml"
+        ${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml"
+        ${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml")
+        ${HvH Volume Letter} = [System.String]${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + ':'
+
+        #${04f1in3 path} = "$env:SystemDrive\$__DirectoryForDscConfigs\Instant-ADCS"
         ${HKLM Sess Mgr Env} = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
         $HT = @{
-          'DSC_CFG_ROOT'                         = "$env:SystemDrive\$__DirectoryForDscConfigs"
-          '04f1in3'                              = ${04f1in3 path}
-          'SystemModules'                        = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
-          'SysMods'                              = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
-          'SMs'                                  = "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
-          'ProgramModules'                       = "$env:ProgramFiles\WindowsPowerShell\Modules"
-          'ProgMods'                             = "$env:ProgramFiles\WindowsPowerShell\Modules"
-          'PMs'                                  = "$env:ProgramFiles\WindowsPowerShell\Modules"
-          'MOFs'                                 = "$env:SystemDrive\$__DirectoryForDscConfigs\Managed Object Format Files"
-          'Statics'                              = "$env:SystemDrive\$__DirectoryForDscConfigs\Statics"
-          'ResMod'                               = "$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules"
-          'Pre-PKI CertFSOs'                     = "$env:SystemDrive\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"
-          # 'VHDs' = "$env:ProgramData\Microsoft\Windows\Virtual Hard Disks" # Accomodate for multiple hard disks #
-          # 'VMs'  = "$env:ProgramData\Microsoft\Windows\Hyper-V"            # Accomodate for multiple hard disks #
+          'DSC_CFG_ROOT'        =    "${DSC Volume Letter}\$__DirectoryForDscConfigs"
+          #'04f1in3'             =    ${04f1in3 path}
+          'SystemModules'       =    "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
+          'SysMods'             =    "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
+          'SMs'                 =    "$env:WinDir\System32\WindowsPowerShell\v1.0\Modules"
+          'ProgramModules'      =    "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'ProgMods'            =    "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'PMs'                 =    "$env:ProgramFiles\WindowsPowerShell\Modules"
+          'MOFs'                =    "${DSC Volume Letter}\$__DirectoryForDscConfigs\Managed Object Format Files"
+          'Statics'             =    "${DSC Volume Letter}\$__DirectoryForDscConfigs\Statics"
+          'ResMod'              =    "${DSC Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules"
+          'Pre-PKI CertFSOs'    =    "${DSC Volume Letter}\$__DirectoryForDscConfigs\Pre-PKI Certificate File-System Objects"
+          'VHD Folder Path'     =    "${HvH Volume Letter}\ProgramData\Microsoft\Windows\Virtual Hard Disks"
+          'VM Folder Path'      =    "${HvH Volume Letter}\ProgramData\Microsoft\Windows\Hyper-V"
         }
         $DictionaryEntrySet = $HT.GetEnumerator() | Write-Output
         foreach ($DictionaryEntry in $DictionaryEntrySet) {
@@ -1752,17 +1790,39 @@ $XmlWriter.WriteStartDocument()
     #endregion
     #region | "Module Extraction-Installation.ps1" Here-String and XML Element |
     ${File Module Extraction-Installation.ps1 Here-String} = $(
+      #region |  |
       "`n"
+      "`t`t`t`${DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${DSC Volume Letter} = [System.String]`${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
+      "`t`t`t`${HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${HvH Volume Letter} = [System.String]`${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
       "`t`t`t# Extract all Windows PowerShell non-DSC Resource modules`n"
-      "`t`t`tGet-ChildItem -Path $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Installs\Modules\5.1$([System.Char]34) -Filter $([System.Char]34)*.zip$([System.Char]34) -PipelineVariable $([System.Char]39)file$([System.Char]39) -Recurse | ForEach-Object -Process {Expand-Archive -Path `$file.FullName -DestinationPath $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34) -Verbose -Force}`n"
+      "`t`t`tGet-ChildItem -Path $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\Installs\Modules\5.1$([System.Char]34) -Filter $([System.Char]34)*.zip$([System.Char]34) -PipelineVariable $([System.Char]39)file$([System.Char]39) -Recurse | ForEach-Object -Process {Expand-Archive -Path `$file.FullName -DestinationPath $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34) -Verbose -Force}`n"
       "`t`t`t# Extract all DSC Resource modules`n"
-      "`t`t`tGet-ChildItem -Path $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34) -Filter $([System.Char]34)*.zip$([System.Char]34) -PipelineVariable $([System.Char]39)file$([System.Char]39) -Recurse | ForEach-Object -Process {Expand-Archive -Path `$file.FullName -DestinationPath $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34) -Verbose -Force}`n"
+      "`t`t`tGet-ChildItem -Path $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules$([System.Char]34) -Filter $([System.Char]34)*.zip$([System.Char]34) -PipelineVariable $([System.Char]39)file$([System.Char]39) -Recurse | ForEach-Object -Process {Expand-Archive -Path `$file.FullName -DestinationPath $([System.Char]34)`$env:ProgramFiles\WindowsPowerShell\Modules$([System.Char]34) -Verbose -Force}`n"
       "`t`t"
+      #endregion
       {
+        ${DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Disk CIM Instance.clixml"
+        ${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml"
+        ${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml")
+        ${DSC Volume Letter} = [System.String]${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + ':'
+
+        ${HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Disk CIM Instance.clixml"
+        ${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml"
+        ${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml")
+        ${HvH Volume Letter} = [System.String]${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + ':'
+
         # Extract all Windows PowerShell non-DSC Resource modules
-        Get-ChildItem -Path "$env:SystemDrive\$__DirectoryForDscConfigs\Installs\Modules\5.1" -Filter "*.zip" -PipelineVariable 'file' -Recurse | ForEach-Object -Process {Expand-Archive -Path $file.FullName -DestinationPath "$env:ProgramFiles\WindowsPowerShell\Modules" -Verbose -Force}
+        Get-ChildItem -Path "${DSC Volume Letter}\$__DirectoryForDscConfigs\Installs\Modules\5.1" -Filter "*.zip" -PipelineVariable 'file' -Recurse | ForEach-Object -Process {Expand-Archive -Path $file.FullName -DestinationPath "$env:ProgramFiles\WindowsPowerShell\Modules" -Verbose -Force}
         # Extract all DSC Resource modules
-        Get-ChildItem -Path "$env:SystemDrive\$__DirectoryForDscConfigs\DSC Resource Modules" -Filter "*.zip" -PipelineVariable 'file' -Recurse | ForEach-Object -Process {Expand-Archive -Path $file.FullName -DestinationPath "$env:ProgramFiles\WindowsPowerShell\Modules" -Verbose -Force}
+        Get-ChildItem -Path "${DSC Volume Letter}\$__DirectoryForDscConfigs\DSC Resource Modules" -Filter "*.zip" -PipelineVariable 'file' -Recurse | ForEach-Object -Process {Expand-Archive -Path $file.FullName -DestinationPath "$env:ProgramFiles\WindowsPowerShell\Modules" -Verbose -Force}
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
@@ -4374,18 +4434,25 @@ $XmlWriter.WriteStartDocument()
           c = 'ms-settings:easeofaccess-mousepointer'
           d = '%PMs%'
           e = 'ms-settings:personalization-colors'
-          f = 'cmd.exe /c powershell.exe; Start pwsh -Verb RunAs'
-          #g = 'cmd.exe /c "powershell.exe -NoProfile -Command ^"Start-Process powershell.exe -Verb Runas -ArgumentList @(^'-NoProfile^')^""'
+          f = 'cmd.exe /c powershell.exe; Start-Process pwsh -Verb RunAs'
+
+          # Launches an elevated instance of powershell.exe without also loading profile.ps1 
           g = "cmd.exe /c $([System.Char]34)powershell.exe -NoProfile -Command ^$([System.Char]34)Start-Process powershell.exe -Verb Runas -ArgumentList @(^'-NoProfile^')^$([System.Char]34)$([System.Char]34)"
+          #h = 
+          #i = 
+          #j = 
           k = 'ms-settings:taskbar'
           l = 'shutdown -p'
           m = 'control.exe /Name Microsoft.CredentialManager'
           n = 'ms-settings:about'
           o = 'appwiz.cpl'
+          #p = 
           q = 'windowsdefender://coreisolation/'
           r = 'windowsdefender://securityprocessor/'
           s = 'ms-settings:accounts'
           t = 'ms-settings:defaultapps'
+          #u = 
+          #v = 
           w = 'taskschd.msc'
           x = 'eventvwr.msc'
           y = 'chrome /incognito https://mysignins.microsoft.com/security-info'
@@ -5304,21 +5371,40 @@ $XmlWriter.WriteStartDocument()
     ${File Visual Studio Code Install.ps1 Here-String} = $(
       #region |  |
       "`n"
+      "`t`t`t`${DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${DSC Volume Letter} = [System.String]`${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
+      "`t`t`t`${HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${HvH Volume Letter} = [System.String]`${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
       "`t`t`t# Install Visual Studio Code`n"
       "`t`t`tWrite-Host -Object $([System.Char]34)Script to run when the first user logs on after Windows has been installed.$([System.Char]34)`n"
       "`t`t`tWrite-Host -Object $([System.Char]34)First user to log on is typically an administrator. Script would run with elevated privileges.$([System.Char]34)`n"
-      "`t`t`t`$VSCodeExe = Get-ChildItem -Path $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Installs\Visual Studio Code\##$([System.Char]34) -Filter $([System.Char]34)VSCodeSetup-x64-*.exe$([System.Char]34) -Recurse $([System.Char]96)`n"
+      "`t`t`t`$VSCodeExe = Get-ChildItem -Path $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\Installs\Visual Studio Code\##$([System.Char]34) -Filter $([System.Char]34)VSCodeSetup-x64-*.exe$([System.Char]34) -Recurse $([System.Char]96)`n"
       "`t`t`t| Sort-Object -Property $([System.Char]39)LastWriteTime$([System.Char]39) $([System.Char]96)`n"
       "`t`t`t| Select-Object -Last 1`n"
       "`t`t`tStart-Process -FilePath `$VSCodeExe.FullName -ArgumentList @($([System.Char]34)/VERYSILENT$([System.Char]34),$([System.Char]34)/MERGETASKS=!runcode$([System.Char]34))`n"
       "`t`t"
       #endregion
-
       {
+        ${DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Disk CIM Instance.clixml"
+        ${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml"
+        ${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml")
+        ${DSC Volume Letter} = [System.String]${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + ':'
+
+        ${HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Disk CIM Instance.clixml"
+        ${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml"
+        ${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml")
+        ${HvH Volume Letter} = [System.String]${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + ':'
+
         # Install Visual Studio Code
         Write-Host -Object "Script to run when the first user logs on after Windows has been installed."
         Write-Host -Object "First user to log on is typically an administrator. Script would run with elevated privileges."
-        $VSCodeExe = Get-ChildItem -Path "$env:SystemDrive\$__DirectoryForDscConfigs\Installs\Visual Studio Code\##" -Filter "VSCodeSetup-x64-*.exe" -Recurse `
+        $VSCodeExe = Get-ChildItem -Path "${DSC Volume Letter}\$__DirectoryForDscConfigs\Installs\Visual Studio Code\##" -Filter "VSCodeSetup-x64-*.exe" -Recurse `
         | Sort-Object -Property 'LastWriteTime' `
         | Select-Object -Last 1
         Start-Process -FilePath $VSCodeExe.FullName -ArgumentList @("/VERYSILENT","/MERGETASKS=!runcode")
@@ -5418,18 +5504,37 @@ $XmlWriter.WriteStartDocument()
     ${File OneDrive Install.ps1 Here-String} = $(
       #region |  |
       "`n"
+      "`t`t`t`${DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${DSC Volume Letter} = [System.String]`${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
+      "`t`t`t`${HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34)`n"
+      "`t`t`t`${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path $([System.Char]34)`$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34))`n"
+      "`t`t`t`${HvH Volume Letter} = [System.String]`${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + $([System.Char]39):$([System.Char]39)`n"
+      "`t`t`t`n"
       "`t`t`t# Install OneDrive`n"
       "`t`t`tWrite-Host -Object $([System.Char]34)Script to run when the first user logs on after Windows has been installed.$([System.Char]34)`n"
       "`t`t`tWrite-Host -Object $([System.Char]34)First user to log on is typically an administrator. Script would run with elevated privileges.$([System.Char]34)`n"
-      "`t`t`tStart-Process -FilePath $([System.Char]34)`$env:SystemDrive\$__DirectoryForDscConfigs\Installs\OneDrive\##\OneDriveSetup.exe$([System.Char]34) -ArgumentList @($([System.Char]34)/silent$([System.Char]34),$([System.Char]34)/allusers$([System.Char]34))`n"
+      "`t`t`tStart-Process -FilePath $([System.Char]34)`${DSC Volume Letter}\$__DirectoryForDscConfigs\Installs\OneDrive\##\OneDriveSetup.exe$([System.Char]34) -ArgumentList @($([System.Char]34)/silent$([System.Char]34),$([System.Char]34)/allusers$([System.Char]34))`n"
       "`t`t"
       #endregion
-
       {
+        ${DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Disk CIM Instance.clixml"
+        ${DSC Partition DSC Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml"
+        ${DSC Volume DSC Partition DSC Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\DSC Partition DSC Disk CIM Instance.clixml")
+        ${DSC Volume Letter} = [System.String]${DSC Volume DSC Partition DSC Disk CIM Instance}.DriveLetter + ':'
+
+        ${HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Disk CIM Instance.clixml"
+        ${HvH Partition HvH Disk CIM Instance} = Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml"
+        ${HvH Volume HvH Partition HvH Disk CIM Instance} = Get-Volume -Partition (Import-CliXml -Path "$env:SystemDrive\HvH Partition HvH Disk CIM Instance.clixml")
+        ${HvH Volume Letter} = [System.String]${HvH Volume HvH Partition HvH Disk CIM Instance}.DriveLetter + ':'
+
         # Install OneDrive
         Write-Host -Object "Script to run when the first user logs on after Windows has been installed."
         Write-Host -Object "First user to log on is typically an administrator. Script would run with elevated privileges."
-        Start-Process -FilePath "$env:SystemDrive\$__DirectoryForDscConfigs\Installs\OneDrive\##\OneDriveSetup.exe" -ArgumentList @("/silent","/allusers")
+        Start-Process -FilePath "${DSC Volume Letter}\$__DirectoryForDscConfigs\Installs\OneDrive\##\OneDriveSetup.exe" -ArgumentList @("/silent","/allusers")
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
@@ -5663,7 +5768,8 @@ $XmlWriter.WriteStartDocument()
       "`n"
       "`t`t`t# Restore Credential Manager data |`n"
       "`t`t`t#$([System.Char]34)`$usb0\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
-      "`t`t`t$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
+      "`t`t`t#$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
+      "`t`t`t$([System.Char]34)`$env:DSC_CFG_ROOT\sec\$FolderFQN.crd$([System.Char]34) | Set-Clipboard`n"
       "`t`t`tcontrol.exe /Name Microsoft.CredentialManager`n"
       "`t`t`tpause`n"
       "`t`t`tStart-Sleep 20`n"
@@ -5672,7 +5778,8 @@ $XmlWriter.WriteStartDocument()
       { # ConvertTo-HereStringCompatible |
         # Restore Credential Manager data |
         #"$usb0\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
-        "$env:DSC_CFG_ROOT\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
+        #"$env:DSC_CFG_ROOT\$FolderFQN\sec\$FolderFQN.crd" | Set-Clipboard
+        "$env:DSC_CFG_ROOT\sec\$FolderFQN.crd" | Set-Clipboard
         control.exe /Name Microsoft.CredentialManager
         pause
         Start-Sleep 20
@@ -5787,7 +5894,6 @@ $XmlWriter.WriteStartDocument()
 
     #region | 00 Hadean Pre-Document Encryption.ps1 Here-String |
     ${File 00 Hadean Pre-Document Encryption.ps1 Here-String} = $(
-
 
 
       #region |  |
@@ -6020,7 +6126,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
-      "`t`t`t    #endregion`n"
+      "`t`t`t    #endregion                            `n"
       "`t`t`t`n"
       "`t`t`t    #region | Essential Directory Structure |`n"
       "`t`t`t    File `$InstanceFolderName {`n"
@@ -6074,7 +6180,9 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    `${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation} = Test-Path -Path $([System.Char]34)`$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs$([System.Char]34)`n"
       "`t`t`t    if (-not `${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {`n"
       "`t`t`t      Get-CimInstance -ClassName $([System.Char]39)Win32_NetworkAdapter$([System.Char]39) $([System.Char]96)`n"
-      "`t`t`t      | Where-Object -FilterScript {`$_.PNPDeviceID -cmatch $([System.Char]39)^PCI\\$([System.Char]39)} $([System.Char]96)`n"
+      "`t`t`t      | Where-Object -FilterScript {`n"
+      "`t`t`t        (`$_.PNPDeviceID -cmatch $([System.Char]39)^PCI\\$([System.Char]39)) -and (`$_.Name -cmatch $([System.Char]39)^Realtek PCIe GbE Family Controller$([System.Char]39))`n"
+      "`t`t`t      } $([System.Char]96)`n"
       "`t`t`t      | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription `$_.Name} $([System.Char]96)`n"
       "`t`t`t      | Select-Object -ExpandProperty $([System.Char]39)MacAddress$([System.Char]39) -PipelineVariable $([System.Char]39)MacAddress$([System.Char]39) $([System.Char]96)`n"
       "`t`t`t      | ForEach-Object -Process {`n"
@@ -6095,18 +6203,32 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    if (`${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {`n"
       "`t`t`t      `$files = Get-ChildItem -Path $([System.Char]34)`$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs$([System.Char]34) -Filter $([System.Char]34)*.txt$([System.Char]34) -File | Sort-Object -Property $([System.Char]39)BaseName$([System.Char]39)`n"
       "`t`t`t      File $([System.Char]34)`$(`$files[0].BaseName)$([System.Char]34) {`n"
-      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} Administrative Control 0.txt$([System.Char]34)`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} Virtualized Workloads 0.txt$([System.Char]34)`n"
       "`t`t`t        SourcePath = `$files[0].FullName`n"
       "`t`t`t      }`n"
       "`t`t`t      File $([System.Char]34)`$(`$files[1].BaseName)$([System.Char]34) {`n"
-      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} Virtualized Workloads 0.txt$([System.Char]34)`n"
+      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} iSCSI Storage 0.txt$([System.Char]34)`n"
       "`t`t`t        SourcePath = `$files[1].FullName`n"
       "`t`t`t      }`n"
-      "`t`t`t      File $([System.Char]34)`$(`$files[2].BaseName)$([System.Char]34) {`n"
-      "`t`t`t        DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} iSCSI Storage 0.txt$([System.Char]34)`n"
-      "`t`t`t        SourcePath = `$files[2].FullName`n"
-      "`t`t`t      }`n"
       "`t`t`t`n"
+      "`t`t`t      Get-CimInstance -ClassName $([System.Char]39)Win32_NetworkAdapter$([System.Char]39) $([System.Char]96)`n"
+      "`t`t`t      | Where-Object -FilterScript {`n"
+      "`t`t`t        (`$_.PNPDeviceID -cmatch $([System.Char]39)^PCI\\$([System.Char]39)) -and (`$_.Name -notmatch $([System.Char]39)^Realtek PCIe GbE Family Controller$([System.Char]39))`n"
+      "`t`t`t      } $([System.Char]96)`n"
+      "`t`t`t      | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription `$_.Name} $([System.Char]96)`n"
+      "`t`t`t      | Select-Object -ExpandProperty $([System.Char]39)MacAddress$([System.Char]39) -PipelineVariable $([System.Char]39)MacAddress$([System.Char]39) $([System.Char]96)`n"
+      "`t`t`t      | ForEach-Object -Process {`n"
+      "`t`t`t        `$MacAddrNoHyperLowerCase = (`$MacAddress -replace $([System.Char]39)-$([System.Char]39),$([System.Char]39)$([System.Char]39)).ToLower()`n"
+      "`t`t`t`n"
+      "`t`t`t        File $([System.Char]34)Write MAC Address to txt File$([System.Char]34) {`n"
+      "`t`t`t          DestinationPath = $([System.Char]34)`$Statics\MAC Address Space\`${DSC Authoring Station Mgmt Cname} Administrative Control 0.txt$([System.Char]34)`n"
+      "`t`t`t          Attributes      = @($([System.Char]39)ReadOnly$([System.Char]39))`n"
+      "`t`t`t          Contents        = `$MacAddrNoHyperLowerCase`n"
+      "`t`t`t          Force           = `$false`n"
+      "`t`t`t          Type            = $([System.Char]39)File$([System.Char]39)`n"
+      "`t`t`t          Ensure          = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t        }`n"
+      "`t`t`t      }`n"
       "`t`t`t    }`n"
       "`t`t`t    #endregion`n"
       "`t`t`t`n"
@@ -6123,7 +6245,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t            Ensure                      = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t          }`n"
       "`t`t`t          `${Dependency PrePKIGlobalCertificateSignerSequence0} = [System.String[]]@(`n"
-      "`t`t`t            $([System.Char]34)[PrePKIGlobalCertificateSignerSequence0]`$($([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t            $([System.Char]34)[PrePKIGlobalCertificateSignerSequence0]Pre-PKI Global Certificate Signer$([System.Char]34)`n"
       "`t`t`t          )`n"
       "`t`t`t          #region | Document Encryption Certificate for primordial unclustered Hyper-V host |`n"
       "`t`t`t          `${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path $([System.Char]39)Cert:\LocalMachine\My$([System.Char]39) -Recurse`n"
@@ -6138,7 +6260,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t              DependsOn        = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
       "`t`t`t            }`n"
       "`t`t`t            `${Dependency PrePKIGlobalCodeSignerSequence0} = [System.String[]]@(`n"
-      "`t`t`t              $([System.Char]34)[PrePKIGlobalCodeSignerSequence0]`$($([System.Char]39)Pre-PKI Global Code Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t              $([System.Char]34)[PrePKIGlobalCodeSignerSequence0]Pre-PKI Global Code Signer$([System.Char]34)`n"
       "`t`t`t            )`n"
       "`t`t`t            PrePKIGlobalCertificateSignerSequence1 $([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39) {`n"
       "`t`t`t              IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
@@ -6147,7 +6269,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t              DependsOn        = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
       "`t`t`t            }`n"
       "`t`t`t            `${Dependency PrePKIGlobalCertificateSignerSequence1} = [System.String[]]@(`n"
-      "`t`t`t              $([System.Char]34)[PrePKIGlobalCertificateSignerSequence1]`$($([System.Char]39)Pre-PKI Global Certificate Signer$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t              $([System.Char]34)[PrePKIGlobalCertificateSignerSequence1]Pre-PKI Global Certificate Signer$([System.Char]34)`n"
       "`t`t`t            )`n"
       "`t`t`t`n"
       "`t`t`t            # Encrypting the sensitive strings (e.g., passwords) inside of .MOF files:`n"
@@ -6161,6 +6283,34 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t              FriendlyName = [System.String]$([System.Char]34)Encrypt Event Log Records Originating from `${DSC Authoring Station Mgmt Cname}$([System.Char]34)`n"
       "`t`t`t              Ensure       = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
       "`t`t`t              DependsOn    = `${Dependency PrePKIGlobalCertificateSignerSequence0}`n"
+      "`t`t`t            }`n"
+      "`t`t`t            `${Is Global Code Signer Thumbprint Present} = Test-Path -Path $([System.Char]34)`${env:Pre-PKI CertFSOs}\Pre-PKI Global Code Signer.txt$([System.Char]34)`n"
+      "`t`t`t            if (`${Is Global Code Signer Thumbprint Present}) {`n"
+      "`t`t`t              PrePKIGlobalCodeSignerSequence1 $([System.Char]39)Pre-PKI Global Code Signer$([System.Char]39) {`n"
+      "`t`t`t                IsSingleInstance = [System.String]$([System.Char]39)Yes$([System.Char]39)`n"
+      "`t`t`t                FriendlyName     = [System.String]$([System.Char]39)Pre-PKI Global Code Signer$([System.Char]39)`n"
+      "`t`t`t                Ensure           = [System.String]$([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t                DependsOn        = `${Dependency PrePKIGlobalCodeSignerSequence0}`n"
+      "`t`t`t              }`n"
+      "`t`t`t              `${Dependency PrePKIGlobalCodeSignerSequence1} = [System.String[]]@(`n"
+      "`t`t`t                $([System.Char]34)[PrePKIGlobalCodeSignerSequence1]Pre-PKI Global Code Signer$([System.Char]34)`n"
+      "`t`t`t              )`n"
+      "`t`t`t              `n"
+      "`t`t`t              #region | Install Hyper-V if the Global Code Signer has been exported to .cer |`n"
+      "`t`t`t              `${Is Global Code Signer cert exported to file system} = Test-Path -Path $([System.Char]34)`${env:Pre-PKI CertFSOs}\Pre-PKI Global Code Signer.cer$([System.Char]34)`n"
+      "`t`t`t              if (`${Is Global Code Signer cert exported to file system}) {`n"
+      "`t`t`t                xWindowsFeature $([System.Char]34)Install Hyper-V and only Hyper-V. IncludeAllSubfeature is FALSE$([System.Char]34) {`n"
+      "`t`t`t                  Name                 = $([System.Char]39)Hyper-V$([System.Char]39)`n"
+      "`t`t`t                  IncludeAllSubfeature = `$false`n"
+      "`t`t`t                  LogPath              = $([System.Char]34)`$env:ProgramData\`$Name.log$([System.Char]34)`n"
+      "`t`t`t                  Ensure               = $([System.Char]39)Present$([System.Char]39)`n"
+      "`t`t`t                  DependsOn            = `${Dependency PrePKIGlobalCodeSignerSequence1}`n"
+      "`t`t`t                }`n"
+      "`t`t`t                `${Dependency Installation-HyperV} = [System.String[]]@(`n"
+      "`t`t`t                  $([System.Char]34)[xWindowsFeature]`$($([System.Char]39)Install Hyper-V and only Hyper-V. IncludeAllSubfeature is FALSE$([System.Char]39))$([System.Char]34)`n"
+      "`t`t`t                )`n"
+      "`t`t`t              }`n"
+      "`t`t`t              #endregion`n"
       "`t`t`t            }`n"
       "`t`t`t          }`n"
       "`t`t`t          #endregion`n"
@@ -6179,9 +6329,9 @@ $XmlWriter.WriteStartDocument()
       "`t`t`tInvoke-Expression -Verbose:`$true -Command $([System.Char]34)`$InstanceName @HT$([System.Char]34)`n"
       "`t`t`tPublish-DscConfiguration -ComputerName $([System.Char]39)localhost$([System.Char]39) -Path `$lcmHT[$([System.Char]39)OutputPath$([System.Char]39)] -Force -Verbose:`$true`n"
       "`t`t`tStart-DscConfiguration -UseExisting -Force -Wait:`$true -Verbose:`$true`n"
+      "`t`t`tStart-Sleep 15`n"
       "`t`t"
       #endregion
-
 
 
       { # ConvertTo-HereStringCompatible |
@@ -6413,7 +6563,7 @@ $XmlWriter.WriteStartDocument()
               }
             }
             #endregion
-            #endregion
+            #endregion                            
 
             #region | Essential Directory Structure |
             File $InstanceFolderName {
@@ -6467,7 +6617,9 @@ $XmlWriter.WriteStartDocument()
             ${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation} = Test-Path -Path "$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs"
             if (-not ${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {
               Get-CimInstance -ClassName 'Win32_NetworkAdapter' `
-              | Where-Object -FilterScript {$_.PNPDeviceID -cmatch '^PCI\\'} `
+              | Where-Object -FilterScript {
+                ($_.PNPDeviceID -cmatch '^PCI\\') -and ($_.Name -cmatch '^Realtek PCIe GbE Family Controller')
+              } `
               | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription $_.Name} `
               | Select-Object -ExpandProperty 'MacAddress' -PipelineVariable 'MacAddress' `
               | ForEach-Object -Process {
@@ -6488,18 +6640,32 @@ $XmlWriter.WriteStartDocument()
             if (${Is Physical Non-Removable PCIe Adapter MACs child Directory present at time of MOF compilation}) {
               $files = Get-ChildItem -Path "$Statics\MAC Address Space\Physical Non-Removable PCIe Adapter MACs" -Filter "*.txt" -File | Sort-Object -Property 'BaseName'
               File "$($files[0].BaseName)" {
-                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} Administrative Control 0.txt"
+                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} Virtualized Workloads 0.txt"
                 SourcePath = $files[0].FullName
               }
               File "$($files[1].BaseName)" {
-                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} Virtualized Workloads 0.txt"
+                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} iSCSI Storage 0.txt"
                 SourcePath = $files[1].FullName
               }
-              File "$($files[2].BaseName)" {
-                DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} iSCSI Storage 0.txt"
-                SourcePath = $files[2].FullName
-              }
 
+              Get-CimInstance -ClassName 'Win32_NetworkAdapter' `
+              | Where-Object -FilterScript {
+                ($_.PNPDeviceID -cmatch '^PCI\\') -and ($_.Name -notmatch '^Realtek PCIe GbE Family Controller')
+              } `
+              | ForEach-Object -Process {Get-NetAdapter -InterfaceDescription $_.Name} `
+              | Select-Object -ExpandProperty 'MacAddress' -PipelineVariable 'MacAddress' `
+              | ForEach-Object -Process {
+                $MacAddrNoHyperLowerCase = ($MacAddress -replace '-','').ToLower()
+
+                File "Write MAC Address to txt File" {
+                  DestinationPath = "$Statics\MAC Address Space\${DSC Authoring Station Mgmt Cname} Administrative Control 0.txt"
+                  Attributes      = @('ReadOnly')
+                  Contents        = $MacAddrNoHyperLowerCase
+                  Force           = $false
+                  Type            = 'File'
+                  Ensure          = 'Present'
+                }
+              }
             }
             #endregion
 
@@ -6516,7 +6682,7 @@ $XmlWriter.WriteStartDocument()
                     Ensure                      = [System.String]'Present'
                   }
                   ${Dependency PrePKIGlobalCertificateSignerSequence0} = [System.String[]]@(
-                    "[PrePKIGlobalCertificateSignerSequence0]$('Pre-PKI Global Certificate Signer')"
+                    "[PrePKIGlobalCertificateSignerSequence0]Pre-PKI Global Certificate Signer"
                   )
                   #region | Document Encryption Certificate for primordial unclustered Hyper-V host |
                   ${All Certs in Personal LocalMachine Store} = Get-ChildItem -Path 'Cert:\LocalMachine\My' -Recurse
@@ -6531,7 +6697,7 @@ $XmlWriter.WriteStartDocument()
                       DependsOn        = ${Dependency PrePKIGlobalCertificateSignerSequence0}
                     }
                     ${Dependency PrePKIGlobalCodeSignerSequence0} = [System.String[]]@(
-                      "[PrePKIGlobalCodeSignerSequence0]$('Pre-PKI Global Code Signer')"
+                      "[PrePKIGlobalCodeSignerSequence0]Pre-PKI Global Code Signer"
                     )
                     PrePKIGlobalCertificateSignerSequence1 'Pre-PKI Global Certificate Signer' {
                       IsSingleInstance = [System.String]'Yes'
@@ -6540,7 +6706,7 @@ $XmlWriter.WriteStartDocument()
                       DependsOn        = ${Dependency PrePKIGlobalCertificateSignerSequence0}
                     }
                     ${Dependency PrePKIGlobalCertificateSignerSequence1} = [System.String[]]@(
-                      "[PrePKIGlobalCertificateSignerSequence1]$('Pre-PKI Global Certificate Signer')"
+                      "[PrePKIGlobalCertificateSignerSequence1]Pre-PKI Global Certificate Signer"
                     )
 
                     # Encrypting the sensitive strings (e.g., passwords) inside of .MOF files:
@@ -6554,6 +6720,34 @@ $XmlWriter.WriteStartDocument()
                       FriendlyName = [System.String]"Encrypt Event Log Records Originating from ${DSC Authoring Station Mgmt Cname}"
                       Ensure       = [System.String]'Present'
                       DependsOn    = ${Dependency PrePKIGlobalCertificateSignerSequence0}
+                    }
+                    ${Is Global Code Signer Thumbprint Present} = Test-Path -Path "${env:Pre-PKI CertFSOs}\Pre-PKI Global Code Signer.txt"
+                    if (${Is Global Code Signer Thumbprint Present}) {
+                      PrePKIGlobalCodeSignerSequence1 'Pre-PKI Global Code Signer' {
+                        IsSingleInstance = [System.String]'Yes'
+                        FriendlyName     = [System.String]'Pre-PKI Global Code Signer'
+                        Ensure           = [System.String]'Present'
+                        DependsOn        = ${Dependency PrePKIGlobalCodeSignerSequence0}
+                      }
+                      ${Dependency PrePKIGlobalCodeSignerSequence1} = [System.String[]]@(
+                        "[PrePKIGlobalCodeSignerSequence1]Pre-PKI Global Code Signer"
+                      )
+                      
+                      #region | Install Hyper-V if the Global Code Signer has been exported to .cer |
+                      ${Is Global Code Signer cert exported to file system} = Test-Path -Path "${env:Pre-PKI CertFSOs}\Pre-PKI Global Code Signer.cer"
+                      if (${Is Global Code Signer cert exported to file system}) {
+                        xWindowsFeature "Install Hyper-V and only Hyper-V. IncludeAllSubfeature is FALSE" {
+                          Name                 = 'Hyper-V'
+                          IncludeAllSubfeature = $false
+                          LogPath              = "$env:ProgramData\$Name.log"
+                          Ensure               = 'Present'
+                          DependsOn            = ${Dependency PrePKIGlobalCodeSignerSequence1}
+                        }
+                        ${Dependency Installation-HyperV} = [System.String[]]@(
+                          "[xWindowsFeature]$('Install Hyper-V and only Hyper-V. IncludeAllSubfeature is FALSE')"
+                        )
+                      }
+                      #endregion
                     }
                   }
                   #endregion
@@ -6572,6 +6766,7 @@ $XmlWriter.WriteStartDocument()
         Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
         Publish-DscConfiguration -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force -Verbose:$true
         Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$true
+        Start-Sleep 15
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
