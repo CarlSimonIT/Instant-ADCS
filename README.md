@@ -35,10 +35,10 @@ Launch Windows PowerShell in a non-elevated security context.
 > [!NOTE]
 > Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. 
 
-Install Git with WinGet in the user scope:  
-
 <details>
-  <summary>Install Git</summary>
+  <summary>
+  <u>Install User-Scope Git with WinGet</u>. 
+  </summary>
 
   ```powershell
   ${powershell.exe owner Identity} = [Security.Principal.WindowsIdentity]::GetCurrent()
