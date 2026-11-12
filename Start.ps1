@@ -2094,21 +2094,24 @@ if ($null -ne $usb0) {
   }
   #endregion
   #region | Patched ISO File |
-  ${Is Patched ISO File Present on External Media} = Test-Path -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
-  $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched";
-  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+  ${Is Patched ISO File Present in usb0 Folder} = Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
+  if (${Is Patched ISO File Present in usb0 Folder}) {
+    ${Is Patched ISO File Present on External Media} = Test-Path -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
+    $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched";
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
-  if (${Is Patched ISO File Present on External Media}) {
-    ${Size of Patched ISO File in usb0 Folder} = Get-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-    ${Size of Patched ISO File on External Media} = Get-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-    if (
-      ${Size of Patched ISO File on External Media} -ne ${Size of Patched ISO File in usb0 Folder}
-    ) {
-      Remove-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
+    if (${Is Patched ISO File Present on External Media}) {
+      ${Size of Patched ISO File in usb0 Folder} = Get-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
+      ${Size of Patched ISO File on External Media} = Get-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
+      if (
+        ${Size of Patched ISO File on External Media} -ne ${Size of Patched ISO File in usb0 Folder}
+      ) {
+        Remove-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
+        Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" -Destination "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
+      }
+    } else {
       Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" -Destination "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
     }
-  } else {
-    Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" -Destination "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
   }
   #endregion
 }
