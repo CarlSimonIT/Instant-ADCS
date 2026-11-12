@@ -30,7 +30,7 @@ param (
     Mandatory = $true
   )]
   [System.String]
-  $EmailAddressOfBitwardenAccount,
+  ${Bitwarden Account Email Address},
 
   [Parameter(
     Mandatory = $true
@@ -55,7 +55,7 @@ Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of Windows Server 2
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of WinPE 2026-09 EXE File.clixml" -InputObject (${SHA256 of WinPE 2026-09 EXE File})
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of Dell WinPE Driver Pack A11.clixml" -InputObject (${SHA256 of Dell WinPE Driver Pack A11})
 Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\SHA256 of Windows ADK 2026-09 EXE File.clixml" -InputObject (${SHA256 of Windows ADK 2026-09 EXE File})
-Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\EmailAddressOfBitwardenAccount.clixml" -InputObject ($EmailAddressOfBitwardenAccount)
+Export-CliXml -Path "$PSScriptRoot\..\..\.CommonItems\EmailAddressOfBitwardenAccount.clixml" -InputObject (${Bitwarden Account Email Address})
 <# Note |
   Fully Qualified Name (FQN) of the Folder object in the Bitwarden 
   Vault that contains the secure strings for this project follows 
