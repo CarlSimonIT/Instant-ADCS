@@ -76,15 +76,18 @@ Launch Windows PowerShell in a non-elevated security context.
   Clone Instant-ADCS and Secure-Automations-Toolset.
   </summary>
 
-  Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories:  
+  Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure-Automations-Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories:  
 
 
 
   ```powershell
   $GitHubRepositoryName = 'Secure-Automations-Toolset'
-  . "$env:LocalAppData\Programs\Git\bin\git.exe" clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+  $GitHubRepositoryURL = "https://github.com/CarlSimonIT/$GitHubRepositoryName.git"
+  . "$env:LocalAppData\Programs\Git\bin\git.exe" clone $GitHubRepositoryURL $GitHubRepositoryName
+
   $GitHubRepositoryName = 'Instant-ADCS'
-  . "$env:LocalAppData\Programs\Git\bin\git.exe" clone "https://github.com/CarlSimonIT/$GitHubRepositoryName.git" $GitHubRepositoryName
+  $GitHubRepositoryURL = "https://github.com/CarlSimonIT/$GitHubRepositoryName.git"
+  . "$env:LocalAppData\Programs\Git\bin\git.exe" clone $GitHubRepositoryURL $GitHubRepositoryName
   ```
 </details>
 
