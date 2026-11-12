@@ -98,28 +98,79 @@ Define new hidden directory for information exchange between PowerShell versions
   ```
 </details>
 
-
-Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>. No need to update the user or machine-scope PowerShell Execution Policy: 
-
 <details>
-  <summary>Process-scope Execution Policy</summary>
+  <summary>
+  Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>.
+  </summary>
+
+  Update process-scope Execution Policy: 
 
   ```powershell
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
   ```
+
+  No need to update the user or machine-scope PowerShell Execution Policy
+
 </details>
+
+<details>
+  <summary>
+  Establish the three mandatory variable values.
+  </summary>
+
+
+  Most variable values are pre-selected but all variables are still user-configurable. The three variables requiring specification are:  
+
+  > 1. Email address of the online Bitwarden Account.  
+  > 
+  > 2. Pre-Windows 2000 NetBIOS name of your Active Directory domain. See [naming constraints](https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/naming-conventions-for-computer-domain-site-ou#netbios-domain-names) for allowed values.   
+  > 
+  > 3. Character sequence representing DNS namespace.  DNS domain name of root domain in AD forest.  Constraints     Open 
+
+
+
+
+  Update process-scope Execution Policy: 
+
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process'
+  ```
+
+  No need to update the user or machine-scope PowerShell Execution Policy
+
+</details>
+
+
+Most variable values are pre-selected but all variables are still user-configurable. The three variables requiring specification are:  
+
+> 1. Email address of the online Bitwarden Account.  
+> 
+> 2. Pre-Windows 2000 NetBIOS name of your Active Directory domain. See [naming constraints](https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/naming-conventions-for-computer-domain-site-ou#netbios-domain-names) for allowed values.   
+> 
+> 3. Character sequence representing DNS namespace.  DNS domain name of root domain in AD forest.  Constraints     Open 
 
 Declare input variables, run <u>Start.ps1</u> and follow the subsequent on-screen instructions.  
 
-```powershell
-$EmailAddressOfBitwardenAccount = Read-Host -Prompt 'Email Address of Bitwarden Account'
-${NetBIOS Name of Root Domain in AD Forest} = Read-Host -Prompt 'NetBIOS Name of Root Domain in AD Forest'
-${DNS Name of Root Domain in AD Forest} = Read-Host -Prompt 'DNS Name of Root Domain in AD Forest'
+<details>
+  <summary>Declare Input Variables</summary>
 
+  ```powershell
+  ${Bitwarden Account Email Address} = Read-Host -Prompt 'Email Address of Bitwarden Account'
+  ${NetBIOS Name of Root Domain in AD Forest} = Read-Host -Prompt 'NetBIOS Name of Root Domain in AD Forest'
+  ${Substring from DNS Namespace of Root Domain in AD Forest} = Read-Host -Prompt 'Substring from DNS Namespace of Root Domain in AD Forest'
+  ```
+</details>
+
+
+```powershell
+```
+
+
+```powershell
 $InputHT = @{
-  EmailAddressOfBitwardenAccount             = $EmailAddressOfBitwardenAccount
-  'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
-  'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
+  'Bitwarden Account Email Address'                          = ${Bitwarden Account Email Address}
+  'NetBIOS Name of Root Domain in AD Forest'                 = ${NetBIOS Name of Root Domain in AD Forest}
+  'Substring from DNS Namespace of Root Domain in AD Forest' = ${Substring from DNS Namespace of Root Domain in AD Forest}
 }
 & '.\Instant-ADCS\Start.ps1' @InputHT
 ```
