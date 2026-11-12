@@ -75,7 +75,7 @@ Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</spa
 
 <details>
   <summary>
-  Clone from GitHub to Local Host
+  Clone from GitHub to Local Host <span style="font-family:Consolas;font-size:1.85em;">Instant-ADCS</span>
   </summary>
 
   ```powershell
