@@ -135,11 +135,12 @@ Launch Windows PowerShell in a non-elevated security context.
   > 
   > 3. Character sequence representing a DNS namespace. This project wraps the user-supplied DNS namespace between `ad.` and `.INTERNAL` to produce the DNS domain name of the root domain in the AD forest.
 
-
+  To demonstrate: 
+  
   ```powershell
-  ${Bitwarden Account Email Address} = Read-Host -Prompt 'Email Address of Bitwarden Account'
-  ${NetBIOS Name of Root Domain in AD Forest} = Read-Host -Prompt 'NetBIOS Name of Root Domain in AD Forest'
-  ${Substring from DNS Namespace of Root Domain in AD Forest} = Read-Host -Prompt 'Substring from DNS Namespace of Root Domain in AD Forest'
+  ${Bitwarden Account Email Address} = 'example@example.com'
+  ${NetBIOS Name of Root Domain in AD Forest} = ']>+Val?d<['
+  ${Substring from DNS Namespace of Root Domain in AD Forest} = '-.-.-.-.-.-.-.-.-.-.-.-.-.-.-'
   ```
 
 </details>
