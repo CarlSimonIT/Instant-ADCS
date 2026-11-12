@@ -156,6 +156,12 @@ Launch Windows PowerShell in a non-elevated security context.
   }
   & '.\Instant-ADCS\Start.ps1' @InputHT
   ```
+
+  View the PowerShell Jobs currently running:  
+  ```powershell
+  (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job
+  Get-Job | Format-Table -AutoSize  
+  ```
 </details>
 
 
