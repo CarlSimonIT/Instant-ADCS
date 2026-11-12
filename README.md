@@ -142,10 +142,8 @@ Launch Windows PowerShell in a non-elevated security context.
   ${Substring from DNS Namespace of Root Domain in AD Forest} = Read-Host -Prompt 'Substring from DNS Namespace of Root Domain in AD Forest'
   ```
 
-  > [!TIP]
-  > hello *hello*. 
-
-
+> [!TIP]
+> hello *hello*. 
 
 </details>
 
