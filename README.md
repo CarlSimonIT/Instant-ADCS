@@ -123,7 +123,7 @@ Launch Windows PowerShell in a non-elevated security context.
 
 <details>
   <summary>
-  Establish the Three Mandatory Variable Values.
+  Establish the Three Mandatory Variables.
   </summary>
 
   Most variable values are pre-selected but all variables are still user-configurable. The three variables requiring specification are:  
