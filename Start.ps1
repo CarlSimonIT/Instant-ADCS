@@ -3,6 +3,38 @@
 
 param (
   [Parameter(
+    Mandatory = $true,
+    HelpMessage = "Regular expression sourced from 'https://www.regular-expressions.info/email.html'"
+  )]
+  [ValidatePattern(
+    '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'
+  )]
+  [System.String]
+  [Alias(
+    'email'
+  )]
+  ${Bitwarden Account Email Address},
+
+  [Parameter(
+    Mandatory = $true, 
+    HelpMessage = "Naming constraints: 'https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/naming-conventions-for-computer-domain-site-ou#netbios-domain-names'"
+  )]
+  [ValidateScript(
+    {$_ -match "^(?!(anonymous|batch|builtin|dialup|domain|enterprise|interactive|internet|local|network|null|proxy|restricted|self|server|service|system|users|world|\d{1,15})$)[^,~:!@#$([System.Char]36)%^$([System.Char]39)\.\(\{\)\}_\s\\/]{1,15}$([System.Char]36)"}
+  )]
+  [System.String]
+  ${NetBIOS Name of Root Domain in AD Forest},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [ValidatePattern(
+    '(^[-a-z0-9]$)|(^[-a-z0-9](a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|(\.(?=[-a-z0-9]))|0|1|2|3|4|5|6|7|8|9|-){0,50}[-a-z0-9]$)'
+  )]
+  [System.String]
+  ${Substring from DNS Namespace of Root Domain in AD Forest},
+
+  [Parameter(
     Mandatory = $false,
     HelpMessage = "The SHA256 hash you download might not match the default value in the Start.ps1 script. `r`nSome websites for reference on hash verification of an iso:`r`n  'https://woshub.com/check-file-hash-windows/'`r`n  'https://files.rg-adguard.net/?dark=1'`r`n  'https://my.visualstudio.com/Downloads' "
   )]
@@ -49,17 +81,10 @@ param (
   $CloningRepoPath = $(Get-Location | Select-Object -ExpandProperty 'Path'),
 
   [Parameter(
-    Mandatory = $true,
-    HelpMessage = "Regular expression sourced from 'https://www.regular-expressions.info/email.html'"
-  )]
-  [ValidatePattern(
-    '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'
+    Mandatory = $false
   )]
   [System.String]
-  [Alias(
-    'email'
-  )]
-  $EmailAddressOfBitwardenAccount,
+  $__DirectoryForDscConfigs = '_Zeta',
 
   [Parameter(
     Mandatory = $false
@@ -72,40 +97,16 @@ param (
   )]
   [Alias('Folder Fully Qualified Name')]
   [System.String]
-  $FolderFQN = 'Instant-ADCS',
-
-  [Parameter(
-    Mandatory = $false
-  )]
-  [System.String]
-  $__DirectoryForDscConfigs = '_Zeta',
-
-  [Parameter(
-    Mandatory = $true
-  )]
-  [ValidatePattern(
-    '^(?!(\d{1,15}|ANONYMOUS|BATCH|BUILTIN|DIALUP|DOMAIN|ENTERPRISE|INTERACTIVE|INTERNET|LOCAL|NETWORK|NULL|PROXY|RESTRICTED|SELF|SERVER|SERVICE|SYSTEM|USERS|WORLD)$)[a-z0-9][a-z0-9-]{1,13}[a-z0-9]$'
-  )]
-  [System.String]
-  ${NetBIOS Name of Root Domain in AD Forest},
-
-  [Parameter(
-    Mandatory = $true
-  )]
-  [ValidatePattern(
-    '^ad\.[0-9a-z-]{1,256}\.INTERNAL$'
-  )]
-  [System.String]
-  ${DNS Name of Root Domain in AD Forest}
+  $FolderFQN = 'Instant-ADCS'
 )
 
 <#
-  $CloningRepoPath = "$env:UserProfile\GitHub\e4\m5\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
+  $CloningRepoPath = "$env:UserProfile\write something\or nothing\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  ipmo "$env:UserProfile\GitHub\e4\m5\CarlSimonIT\Instant-ADCS\A0\HereStringConversionModule.psm1"
-  $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurrito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
+  ipmo "$env:UserProfile\write something\or nothing\CarlSimonIT\Instant-ADCS\A0\HereStringConversionModule.psm1"
+  $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurrito'; 'Substring from DNS Namespace of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\e4\m5\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurrito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\write something\or nothing\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurrito'; 'Substring from DNS Namespace of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
   Clear-Host; 
   # see 'https://www.hurryupandwait.io/blog/certificate-password-less-based-authentication-in-winrm'
 #>
@@ -130,7 +131,7 @@ $InputHT = @{
   'SHA256 of WinPE 2026-09 EXE File'                   = ${SHA256 of WinPE 2026-09 EXE File}
   'SHA256 of Dell WinPE Driver Pack A11'               = ${SHA256 of Dell WinPE Driver Pack A11}
   'SHA256 of Windows ADK 2026-09 EXE File'             = ${SHA256 of Windows ADK 2026-09 EXE File}
-  EmailAddressOfBitwardenAccount                       = $EmailAddressOfBitwardenAccount
+  'Bitwarden Account Email Address'                    = ${Bitwarden Account Email Address}
   BadPassword                                          = $BadPassword
   FolderFQN                                            = $FolderFQN
   __DirectoryForDscConfigs                             = $__DirectoryForDscConfigs
@@ -238,7 +239,7 @@ if (
 #region | Generate Windows PowerShell-compatible profile.ps1 file for Instant-ADCS |
 $HT = @{
   'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
-  'DNS Name of Root Domain in AD Forest'     = ${DNS Name of Root Domain in AD Forest}
+  'Substring from DNS Namespace of Root Domain in AD Forest'     = ${Substring from DNS Namespace of Root Domain in AD Forest}
 }
 & "$PSScriptRoot\Start\Construct profile.ps1 for Windows PowerShell.ps1" @HT
 
@@ -1078,7 +1079,7 @@ $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $
 Write-Host -Object "`n  Prepare your Drivers folder. Press Enter when ready to proceed.`n" -ForegroundColor $(rFc)
 <#
   $drivers128 = 'F:'
-  $destination = "C:\Users\lowpr\GitHub\e4\m5\CarlSimonIT\.CommonItems\Offline WU\Drivers"
+  $destination = "C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Drivers"
 
   $HT = @{
     Path        = "$drivers128\drivers\realtek\RTL8168E\Install_PCIE_WinServer2025"
@@ -1315,7 +1316,7 @@ if (
     Start-Sleep 3
 
     <#
-      Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\e4\m5\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{EmailAddressOfBitwardenAccount = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurrito'; 'DNS Name of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+      Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\write something\or nothing\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'BeefBurrito'; 'Substring from DNS Namespace of Root Domain in AD Forest' = 'ad.Chicken-Salad.INTERNAL'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
     #>
 
     # Import custom class to enumerate the Windows Server Image Index collection
@@ -1331,18 +1332,18 @@ if (
     )
     <# After Patching |
       Set-Location -Path "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM"
-      PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> ${Mount Dir Path} = "C:\Users\lowpr\GitHub\e4\m5\CarlSimonIT\.CommonItems\Offline WU\Server 25\m0unted_wiim"
+      PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> ${Mount Dir Path} = "C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Server 25\m0unted_wiim"
       PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> New-Item -Path ${Mount Dir Path} -ItemType 'Directory'
 
 
-      PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> $WimFilePath = "C:\Users\lowpr\GitHub\e4\m5\CarlSimonIT\.CommonItems\Offline WU\Server 25\Extracted ISO\sources\install.wim"
+      PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> $WimFilePath = "C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Server 25\Extracted ISO\sources\install.wim"
       PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> #.\dism.exe /Mount-Wim:$WimFilePath /Index:1 /MountDir:${Mount Dir Path}
       PS C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\DISM> .\dism.exe /Get-ImageInfo /ImageFile:$WimFilePath
 
       Deployment Image Servicing and Management tool
       Version: 10.0.26100.9457
 
-      Details for image : C:\Users\lowpr\GitHub\e4\m5\CarlSimonIT\.CommonItems\Offline WU\Server 25\Extracted ISO\sources\install.wim
+      Details for image : C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Server 25\Extracted ISO\sources\install.wim
 
       Index : 1
       Name : Windows Server 2025 Standard Evaluation
@@ -1473,7 +1474,7 @@ if ($IsPresent) { # If the .swm is present, then format the other 80% of the $OS
 #endregion
 #region | Download, but do not install, DSC Resource modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
-#            $path = 'C:\Users\lowpr\GitHub\e4\m5\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
+#            $path = 'C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 ${DSC Resource module Save Path} = "$folder"
 Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource module Save Path.clixml" -InputObject (${DSC Resource module Save Path})
