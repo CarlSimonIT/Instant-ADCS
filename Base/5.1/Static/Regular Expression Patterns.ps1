@@ -1,4 +1,27 @@
 #region | Regular Expression Patterns |
+<# Character to Integer Mapping |
+  [System.Uint32][System.Char]'/' # [System.Char]47
+  [System.Uint32][System.Char]'\' # [System.Char]92
+  [System.Uint32][System.Char]'[' # [System.Char]91
+  [System.Uint32][System.Char]']' # [System.Char]93
+  [System.Uint32][System.Char]':' # [System.Char]58
+  [System.Uint32][System.Char]';' # [System.Char]59
+  [System.Uint32][System.Char]'|' # [System.Char]124
+  [System.Uint32][System.Char]'=' # [System.Char]61
+  [System.Uint32][System.Char]',' # [System.Char]44
+  [System.Uint32][System.Char]'+' # [System.Char]43
+  [System.Uint32][System.Char]'*' # [System.Char]42
+  [System.Uint32][System.Char]'?' # [System.Char]63
+  [System.Uint32][System.Char]'<' # [System.Char]60
+  [System.Uint32][System.Char]'>' # [System.Char]62
+  [System.Uint32][System.Char]'@' # [System.Char]64
+  [System.Uint32][System.Char]'"' # [System.Char]34
+#>
+
+# Domain NetBIOS Names | start msedge.exe 'https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/naming-conventions-for-computer-domain-site-ou#netbios-domain-names' 
+[System.String]${regex literal AD Domain NetBIOS Name} = "^(?!(anonymous|batch|builtin|dialup|domain|enterprise|interactive|internet|local|network|null|proxy|restricted|self|server|service|system|users|world|\d{1,15})$)[^,~:!@#$([System.Char]36)%^$([System.Char]39)\.\(\{\)\}_\s\\/]{1,15}$([System.Char]36)"
+
+
 [System.String]${String of Regex Octet Base10}                          = '(?:0?0?[0-9]|0?[1-9][0-9]|1[0-9]{2}|2[0-5][0-5]|2[0-4][0-9])'
 [System.Text.RegularExpressions.Regex]${regex IPv4}                     = "^(?:${String of Regex Octet Base10}\.){3}(?:${String of Regex Octet Base10})$"
 [System.String]${String of Regex IPv4 CIDR}                             = '/(?:\d|[12]\d|3[012])'
@@ -28,10 +51,6 @@
 
 [System.String]${regex literal non-Domain Windows UserName}              = ${regex literal SamAccountName of User Account in Active Directory}
 [System.String]${regex literal non-Domain Windows UserName (Anchorless)} = ${regex literal SamAccountName of User Account in Active Directory (Anchorless)}
-
-# start msedge.exe 'https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/naming-conventions-for-computer-domain-site-ou#netbios-domain-names'
-[System.String]${regex literal AD Domain NetBIOS Name}              = ${regex literal Windows NetBIOS ComputerName}
-[System.String]${regex literal AD Domain NetBIOS Name (Anchorless)} = ${regex literal Windows NetBIOS ComputerName (Anchorless)}
 
 # start msedge.exe 'https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/naming-conventions-for-computer-domain-site-ou#dns-domain-names'
 
@@ -67,23 +86,6 @@
   start msedge.exe 'https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/office-suite-issues/username-contains-special-character#cause'
   start msedge.exe 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)?redirectedfrom=MSDN'
 
-  [System.Uint32][System.Char]'/' # [System.Char]47
-  [System.Uint32][System.Char]'\' # [System.Char]92
-  [System.Uint32][System.Char]'[' # [System.Char]91
-  [System.Uint32][System.Char]']' # [System.Char]93
-  [System.Uint32][System.Char]':' # [System.Char]58
-  [System.Uint32][System.Char]';' # [System.Char]59
-  [System.Uint32][System.Char]'|' # [System.Char]124
-  [System.Uint32][System.Char]'=' # [System.Char]61
-  [System.Uint32][System.Char]',' # [System.Char]44
-  [System.Uint32][System.Char]'+' # [System.Char]43
-  [System.Uint32][System.Char]'*' # [System.Char]42
-  [System.Uint32][System.Char]'?' # [System.Char]63
-  [System.Uint32][System.Char]'<' # [System.Char]60
-  [System.Uint32][System.Char]'>' # [System.Char]62
-  [System.Uint32][System.Char]'@' # [System.Char]64
-  [System.Uint32][System.Char]'"' # [System.Char]34
-
   [^/\\\[\]\:;\|=,\+\*\?\<\>@"]
 
   "\$([System.Char]47)\$([System.Char]92)\$([System.Char]91)\$([System.Char]93)\$([System.Char]58)\$([System.Char]59)\$([System.Char]124)\$([System.Char]61)\$([System.Char]44)\$([System.Char]43)\$([System.Char]42)\$([System.Char]63)\$([System.Char]60)\$([System.Char]62)\$([System.Char]64)\$([System.Char]34)"
@@ -94,5 +96,7 @@
 
 [System.String]${regex literal Windows DirectoryName}              = '^[^\\/:*?"<>|\r\n]+$'
 [System.String]${regex literal Windows DirectoryName (Anchorless)} = '[^\\/:*?"<>|\r\n]+'
+
+
 #endregion
 
