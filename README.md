@@ -119,7 +119,6 @@ Launch Windows PowerShell in a non-elevated security context.
   ```
 
   No need to update the user or machine-scope PowerShell Execution Policy. 
-
 </details>
 
 <details>
@@ -138,41 +137,27 @@ Launch Windows PowerShell in a non-elevated security context.
   To demonstrate: 
   
   ```powershell
-  ${Bitwarden Account Email Address} = 'example@example.com'
-  ${NetBIOS Name of Root Domain in AD Forest} = ']>+Val?d<['
-  ${Substring from DNS Namespace of Root Domain in AD Forest} = '-.-.-.-.-.-.-.-.-.-.-.-.-.-.-'
+  ${Bitwarden Account Email Address} = 'pwdsec3@gmail.com'
+  ${NetBIOS Name of Root Domain in AD Forest} = ']>+Va|i?<['
+  ${Substring from DNS Namespace of Root Domain in AD Forest} = '-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-'
   ```
-
 </details>
-
-
-> [!TIP]
-> hello *hello*. 
-
 
 <details>
-  <summary>Declare Input Variables</summary>
+  <summary>
+  Launch the Start.ps1 Script and Follow the Instructions Presented.
+  </summary>
 
   ```powershell
+  $InputHT = @{
+    'Bitwarden Account Email Address'                          = ${Bitwarden Account Email Address}
+    'NetBIOS Name of Root Domain in AD Forest'                 = ${NetBIOS Name of Root Domain in AD Forest}
+    'Substring from DNS Namespace of Root Domain in AD Forest' = ${Substring from DNS Namespace of Root Domain in AD Forest}
+  }
+  & '.\Instant-ADCS\Start.ps1' @InputHT
   ```
 </details>
 
-
-Declare input variables, run <u>Start.ps1</u> and follow the subsequent on-screen instructions.  
-
-
-```powershell
-```
-
-
-```powershell
-$InputHT = @{
-  'Bitwarden Account Email Address'                          = ${Bitwarden Account Email Address}
-  'NetBIOS Name of Root Domain in AD Forest'                 = ${NetBIOS Name of Root Domain in AD Forest}
-  'Substring from DNS Namespace of Root Domain in AD Forest' = ${Substring from DNS Namespace of Root Domain in AD Forest}
-}
-& '.\Instant-ADCS\Start.ps1' @InputHT
-```
 
 
 #### Hardware-specific Drivers (Optional)
