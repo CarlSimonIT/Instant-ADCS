@@ -109,7 +109,7 @@ Launch Windows PowerShell in a non-elevated security context.
 
 <details>
   <summary>
-  Set the Execution Policy for the Windows PowerShell process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>.
+  Set Execution Policy for this PowerShell 5.1 Process to <span style="font-family:Consolas;font-size:1.05em;">RemoteSigned</span>.
   </summary>
 
   Update process-scope Execution Policy: 
