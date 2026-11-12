@@ -33,12 +33,12 @@ Log off this current session, authenticate back into Windows with the newly crea
 Launch Windows PowerShell in a non-elevated security context. 
 
 > [!NOTE]
-> Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. 
-
-<details>
   <summary>
   Install User-Scope Git with WinGet. 
   </summary>
+> Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. 
+
+<details>
 
   ```powershell
   ${powershell.exe owner Identity} = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -142,11 +142,11 @@ Launch Windows PowerShell in a non-elevated security context.
   ${Substring from DNS Namespace of Root Domain in AD Forest} = Read-Host -Prompt 'Substring from DNS Namespace of Root Domain in AD Forest'
   ```
 
-> [!TIP]
-> hello *hello*. 
-
 </details>
 
+
+> [!TIP]
+> hello *hello*. 
 
 
 <details>
