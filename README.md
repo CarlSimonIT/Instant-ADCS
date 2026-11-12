@@ -89,10 +89,12 @@ Launch Windows PowerShell in a non-elevated security context.
   ```
 </details>
 
-Define new hidden directory for information exchange between PowerShell versions and PowerShell process instances: 
-
 <details>
-  <summary>Temporary Folder</summary>
+  <summary>
+  Define New Hidden Directory for Temporary Objects.
+  </summary>
+
+  Deploy a new hidden folder for downloads, information exchange between PowerShell process instances/versions, image creation, etc.: 
 
   ```powershell
   $path = ".\.CommonItems"
