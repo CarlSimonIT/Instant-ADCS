@@ -33,12 +33,12 @@ Log off this current session, authenticate back into Windows with the newly crea
 Launch Windows PowerShell in a non-elevated security context. 
 
 > [!NOTE]
-  <summary>
-  Install User-Scope Git with WinGet. 
-  </summary>
 > Stated differently, do *NOT* right-click the Windows PowerShell icon and select Run As Administrator. 
 
 <details>
+  <summary>
+  Install User-Scope Git with WinGet. 
+  </summary>
 
   ```powershell
   ${powershell.exe owner Identity} = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -157,7 +157,6 @@ Launch Windows PowerShell in a non-elevated security context.
   & '.\Instant-ADCS\Start.ps1' @InputHT
   ```
 </details>
-
 
 
 #### Hardware-specific Drivers (Optional)
