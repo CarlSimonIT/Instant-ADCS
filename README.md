@@ -37,7 +37,7 @@ Launch Windows PowerShell in a non-elevated security context.
 
 <details>
   <summary>
-  <u>Install User-Scope Git with WinGet</u>. 
+  Install User-Scope Git with WinGet. 
   </summary>
 
   ```powershell
@@ -54,9 +54,7 @@ Launch Windows PowerShell in a non-elevated security context.
 
 <details>
   <summary>
-
-  <u>Create and Relocate to New Directory for Cloning Multiple GitHub Repositories</u>. 
-
+  Create and Relocate to New Directory for Cloning Multiple GitHub Repositories. 
   </summary>
 
   Configure a new directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory: 
@@ -73,14 +71,14 @@ Launch Windows PowerShell in a non-elevated security context.
   ```
 </details>
 
-Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories:  
-
 <details>
   <summary>
-
-  Clone from GitHub to Local Host <span style="font-family:Consolas;font-size:1.85em;">Instant-ADCS</span>
-
+  Clone Instant-ADCS and Secure-Automations-Toolset.
   </summary>
+
+  Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories:  
+
+
 
   ```powershell
   $GitHubRepositoryName = 'Secure-Automations-Toolset'
