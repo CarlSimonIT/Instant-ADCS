@@ -54,7 +54,9 @@ Launch Windows PowerShell in a non-elevated security context.
 
 <details>
   <summary>
+
   <u>Create and Relocate to New Directory for Cloning Multiple GitHub Repositories</u>. 
+
   </summary>
 
   Configure a new directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory: 
@@ -75,7 +77,9 @@ Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</spa
 
 <details>
   <summary>
+
   Clone from GitHub to Local Host <span style="font-family:Consolas;font-size:1.85em;">Instant-ADCS</span>
+
   </summary>
 
   ```powershell
