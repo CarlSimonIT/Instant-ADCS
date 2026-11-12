@@ -55,7 +55,9 @@ Launch Windows PowerShell in a non-elevated security context.
 Configure a new directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory:   
 
 <details>
-  <summary>Relocate to Empty Working Directory</summary>
+  <summary>
+  <u>Create and Relocate to New Directory for Cloning Multiple GitHub Repositories</u>. 
+  </summary>
 
   ```powershell
   ${Intermediary Partial Path} = 'write something\or nothing'
@@ -72,7 +74,9 @@ Configure a new directory for cloning multiple GitHub repositories. <span style=
 Clone the <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> and [Secure Automations Toolset](https://github.com/CarlSimonIT/Secure-Automations-Toolset) repositories into their own dedicated directories:  
 
 <details>
-  <summary>Clone from GitHub to Local Host</summary>
+  <summary>
+  Clone from GitHub to Local Host
+  </summary>
 
   ```powershell
   $GitHubRepositoryName = 'Secure-Automations-Toolset'
