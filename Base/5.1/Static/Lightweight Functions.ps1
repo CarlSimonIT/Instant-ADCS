@@ -101,7 +101,25 @@ try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias
 $RandomObject = [System.Random]::New()
 
 #${Console Output-Foreground Colors} = [System.ConsoleColor]::New() | Get-Member -Static -MemberType 'Property' | Select-Object -ExpandProperty 'Name' 
-${Console Output-Foreground Colors} = [System.ConsoleColor]::New() | Get-Member -Static -MemberType 'Property' | Select-Object -ExpandProperty 'Name' | Where-Object -FilterScript {$_ -notmatch 'Red'}
+#${Console Output-Foreground Colors} = [System.ConsoleColor]::New() | Get-Member -Static -MemberType 'Property' | Select-Object -ExpandProperty 'Name' | Where-Object -FilterScript {$_ -notmatch 'Red'}
+${Console Output-Foreground Colors} = @(
+  #[System.ConsoleColor]::Black
+  #[System.ConsoleColor]::DarkBlue
+  [System.ConsoleColor]::DarkGreen
+  [System.ConsoleColor]::DarkCyan
+  #[System.ConsoleColor]::DarkRed
+  [System.ConsoleColor]::DarkMagenta
+  [System.ConsoleColor]::DarkYellow
+  [System.ConsoleColor]::Gray
+  [System.ConsoleColor]::DarkGray
+  #[System.ConsoleColor]::Blue
+  [System.ConsoleColor]::Green
+  [System.ConsoleColor]::Cyan
+  #[System.ConsoleColor]::Red
+  [System.ConsoleColor]::Magenta
+  [System.ConsoleColor]::Yellow
+  [System.ConsoleColor]::White
+)
 function Pick-RandomForegroundColor {${Console Output-Foreground Colors}[$RandomObject.Next(0,${Console Output-Foreground Colors}.Length)]}
 $AliasName = 'rFc'
 $AliasValue = 'Pick-RandomForegroundColor'
