@@ -6,7 +6,10 @@ param (
     Mandatory = $true
   )]
   [ValidateScript(
-    {$_ -match "^(?!(anonymous|batch|builtin|dialup|domain|enterprise|interactive|internet|local|network|null|proxy|restricted|self|server|service|system|users|world|\d{1,15})$)[^,~:!@#$([System.Char]36)%^$([System.Char]39)\.\(\{\)\}_\s\\/]{1,15}$([System.Char]36)"}
+    {
+      #$_ -match "^(?!(anonymous|batch|builtin|dialup|domain|enterprise|interactive|internet|local|network|null|proxy|restricted|self|server|service|system|users|world|\d{1,15})$)[^,~:!@#$([System.Char]36)%^$([System.Char]39)\.\(\{\)\}_\s\\/]{1,15}$([System.Char]36)"
+      $_ -match "^(?!(\d{1,15})$)[^,~:!@#$([System.Char]36)%^$([System.Char]39)\.\(\{\)\}_\s\\/]{1,15}$([System.Char]36)"
+    }
   )]
   [System.String]
   ${NetBIOS Name of Root Domain in AD Forest},
@@ -15,7 +18,9 @@ param (
     Mandatory = $true
   )]
   [ValidatePattern(
-    '(^[-a-z0-9]$)|(^[-a-z0-9](a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|(\.(?=[-a-z0-9]))|0|1|2|3|4|5|6|7|8|9|-){0,50}[-a-z0-9]$)'
+    #'(^[-a-z0-9]$)|(^[-a-z0-9](a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|(\.(?=[-a-z0-9]))|0|1|2|3|4|5|6|7|8|9|-){0,50}[-a-z0-9]$)'
+    #'(^[-a-z0-9]$)|(^[-a-z0-9]([a-z]|(\.(?=[-a-z0-9]))|[0-9-]){0,50}[-a-z0-9]$)'
+    '(^[-a-z0-9]$)|(^[-a-z0-9]([a-z0-9-]|(\.(?=[-a-z0-9]))){0,50}[-a-z0-9]$)'
   )]
   [System.String]
   ${Substring from DNS Namespace of Root Domain in AD Forest}
