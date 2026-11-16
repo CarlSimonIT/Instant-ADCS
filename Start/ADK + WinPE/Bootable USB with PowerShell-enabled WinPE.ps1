@@ -1339,6 +1339,18 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  `$path = $([System.Char]34)`${DSC Volume Letter}\`$__DirectoryForDscConfigs\CliXmls$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
   "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN\clixmls$([System.Char]34) -Filter $([System.Char]34)*.clixml$([System.Char]34) -File | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true}`n"
+  "`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
+  "  #endregion`n"
+  "  #region | Copy Instant-ADSC environmental data & structural data |`n"
+  "  `$path = $([System.Char]34)`${DSC Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "`n"
+  "  Get-ChildItem -Path $([System.Char]34)`$usb1\`$FolderFQN$([System.Char]34) -Filter $([System.Char]34)*.ps1$([System.Char]34) -File | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true}`n"
+  "  Copy-Item -Path $([System.Char]34)`$usb1\`$FolderFQN\Dot-Sourced Structural Data$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true -Recurse`n"
   "  #endregion`n"
   "  #region | Credential Manager backup file |`n"
   "  #`$path = $([System.Char]34)`${LocalOS Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN\sec$([System.Char]34); `n"
@@ -1358,13 +1370,13 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "  }`n"
   "  #endregion`n"
   "  #endregion`n"
-  "  #region | Copy into root local OS volume the .clixml files that help resolve `$env:DSC_CFG_ROOT and `${env:VM Folder Path} & `${env:VHD Folder Path} |`n"
-  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
-  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
+  "  #region | Copy into root of local OS volume the .clixml files that help resolve `$env:DSC_CFG_ROOT and `${env:VM Folder Path} & `${env:VHD Folder Path} |`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34) -Verbose:`$true`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34) -Verbose:`$true`n"
   "  #Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Volume DSC Partition DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
   "`n"
-  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
-  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34) -Verbose:`$true`n"
+  "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34) -Verbose:`$true`n"
   "  #Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Volume HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
   "  #endregion`n"
   "}`n"
@@ -1686,6 +1698,13 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       Copy-Item -Path "X:\Scriptoids\HvH Disk CIM Instance.clixml" -Destination "$folder" -Verbose:$true
       Copy-Item -Path "X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml" -Destination "$folder" -Verbose:$true
       #endregion
+      #region | Copy Instant-ADSC environmental data & structural data |
+      $path = "${DSC Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+      Get-ChildItem -Path "$usb1\$FolderFQN" -Filter "*.ps1" -File | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder" -Verbose:$true}
+      Copy-Item -Path "$usb1\$FolderFQN\Dot-Sourced Structural Data" -Destination "$folder" -Verbose:$true -Recurse
+      #endregion
       #region | Credential Manager backup file |
       #$path = "${LocalOS Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN\sec"; 
       $path = "${DSC Volume Letter}\$__DirectoryForDscConfigs\sec"; 
@@ -1705,12 +1724,12 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
       #endregion
       #endregion
       #region | Copy into root of local OS volume the .clixml files that help resolve $env:DSC_CFG_ROOT and ${env:VM Folder Path} & ${env:VHD Folder Path} |
-      Copy-Item -Path "X:\Scriptoids\DSC Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\"
-      Copy-Item -Path "X:\Scriptoids\DSC Partition DSC Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\"
+      Copy-Item -Path "X:\Scriptoids\DSC Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\" -Verbose:$true
+      Copy-Item -Path "X:\Scriptoids\DSC Partition DSC Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\" -Verbose:$true
       #Copy-Item -Path "X:\Scriptoids\DSC Volume DSC Partition DSC Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\"
 
-      Copy-Item -Path "X:\Scriptoids\HvH Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\"
-      Copy-Item -Path "X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\"
+      Copy-Item -Path "X:\Scriptoids\HvH Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\" -Verbose:$true
+      Copy-Item -Path "X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\" -Verbose:$true
       #Copy-Item -Path "X:\Scriptoids\HvH Volume HvH Partition HvH Disk CIM Instance.clixml" -Destination "${LocalOS Volume Letter}\"
       #endregion
     }
