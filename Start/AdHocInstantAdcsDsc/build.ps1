@@ -867,10 +867,52 @@ $(${Authored DSC Resource Name} = 'DhcpExclusionRangesDDN'; $IndividualDscResour
   $NestedModules += @("DSCClassResources\${Authored DSC Resource Name}\${Authored DSC Resource Name}.psd1")
   $DscResourcesToExport += @(${Authored DSC Resource Name})
 )
-
-# DhcpExclusionSpace Here-String Unrefined Precursor
-# DhcpExclusionRangesDDN Here-String Unrefined Precursor.ps1
+# VhdxFileFromIsoImage Here-String Unrefined Precursor.ps1
 #              [System.String]::Format('{0:yyyy}.{0:MM}.{0:dd}.{0:HH}{0:mm}',[System.DateTime]::Now) | Set-Clipboard
+$(${Authored DSC Resource Name} = 'VhdxFileFromIsoImage'; $IndividualDscResourceVersion = '2026.11.15.1826';
+  $Path = "$PSScriptRoot\${Authored DSC Resource Name} Here-String Unrefined Precursor.ps1"
+  ${Authored Here-String Unrefined Precursor} = Get-Content -Path $Path -Raw
+  #region | Adjusted Get/Test/Set explanation here-strings applied to Unrefined Precursor result in Precursor |
+  ${Get Explained Here-String}  = ${Get Explained Here-String Precursor}  -replace '%_Authored DSC Resource Name_%',  ${Authored DSC Resource Name}
+  ${Test Explained Here-String} = ${Test Explained Here-String Precursor} -replace '%_Authored DSC Resource Name_%',  ${Authored DSC Resource Name}
+  ${Set Explained Here-String}  = ${Set Explained Here-String Precursor}  -replace '%_Authored DSC Resource Name_%',  ${Authored DSC Resource Name}
+
+  ${Authored Here-String Precursor} = ${Authored Here-String Unrefined Precursor} `
+    -replace '#%_Get Explained Here-String_%',${Get Explained Here-String} `
+    -replace '#%_Test Explained Here-String_%',${Test Explained Here-String} `
+    -replace '#%_Set Explained Here-String_%',${Set Explained Here-String}
+  #endregion
+
+  ${Authored Here-String} = $(
+    ${enum Ensure Here-String}
+    ${Authored Here-String Precursor}
+  ) -join "`n"
+
+  # Define the path of the parent directory for this class-based DSC Resource's module file.
+  $path = "$PSScriptRoot\..\..\..\.CommonItems\Authored\${DSC Resource Module Name}\${DSC Resource Module Vers}\DSCClassResources\${Authored DSC Resource Name}"
+  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+
+  # Define the module file of this class-based DSC Resource.
+  Set-Content -Path "$folder\${Authored DSC Resource Name}.psm1" -Value (${Authored Here-String})
+
+  # Define the module manifest file of this class-based DSC Resource
+  $HT = @{
+    Path                 = "$folder\${Authored DSC Resource Name}.psd1"
+    RootModule           = "${Authored DSC Resource Name}.psm1"
+    Guid                 = (New-Guid).Guid
+    Author               = 'CarlSimonIT'
+    Company              = 'CarlSimonIT'
+    PowerShellVersion    = '5.1'
+    ModuleVersion        = $IndividualDscResourceVersion
+    DscResourcesToExport = ${Authored DSC Resource Name}
+    Verbose              = $true
+  }
+  New-ModuleManifest @HT
+
+  $NestedModules += @("DSCClassResources\${Authored DSC Resource Name}\${Authored DSC Resource Name}.psd1")
+  $DscResourcesToExport += @(${Authored DSC Resource Name})
+)
+
 
 $InputHT = @{
   Path                 = "$PSScriptRoot\..\..\..\.CommonItems\Authored\${DSC Resource Module Name}\${DSC Resource Module Vers}\${DSC Resource Module Name}.psd1"
