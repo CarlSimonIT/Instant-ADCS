@@ -42,8 +42,10 @@ ${Cname of AD Forest Originator} = ${CanonicalName Set Of Focus} | Where-Object 
 }
 #endregion
 
+#region | Replace characters incompatible across different types of objects |
+${NetBIOS Name of Root Domain in AD Forest > upn-compatible} = ${NetBIOS Name of Root Domain in AD Forest} -replace '[\/\\\[\]\:\;\|\=\,\+\*\?\<\>\@\"]','-'
 
-
+#endregion
 
 #region | Passwords that protect certs not signed by a Certification Authority |
 #region | Passwords to protect .pfx files of the cert signing cert, the code signing cert, and the DSC Pull Server cert |
@@ -82,9 +84,6 @@ foreach ($cname in ${CanonicalName Set Of Focus}) {
     Passwords for the protection of certificates that are specifically for the purpose of encrypting the .MOF file. 
     For reference, see 'https://learn.microsoft.com/en-us/powershell/dsc/pull-server/securemof?view=dsc-1.1#creating-the-certificate-on-the-authoring-node'
   #>
-  # $ObjectTitle = "PFX Protection;EKU=Document Encryption;LCM Host=$([System.Char]39)$cname$([System.Char]39)"
-  # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
-
   $ObjectTitle = "pre-PKI PFX Protection;EKU=Document Encryption;LCM Host=$([System.Char]39)$cname$([System.Char]39)"
   New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
 
@@ -94,9 +93,6 @@ foreach ($cname in ${CanonicalName Set Of Focus}) {
 #endregion
 #region | Passwords to protect .pfx files associated with certificates where EKU = 'Server Authentication' |
 foreach ($cname in ${CanonicalName Set Of Focus}) {
-  # $ObjectTitle = "PFX Protection;EKU=Server Authentication;Target Machine=$([System.Char]39)$cname$([System.Char]39)"
-  # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
-
   $ObjectTitle = "pre-PKI PFX Protection;EKU=Server Authentication;Target Machine=$([System.Char]39)$cname$([System.Char]39)"
   New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
 }
@@ -111,19 +107,14 @@ foreach ($cname in ${Non-AD Forest creator Cnames}) {
     because '544' in hexadecimal is 0x220. 
   #>
   foreach ($PrimaryGroupID in (${Primary Group ID Set Selection} + '220')) {
-    # $ObjectTitle = "PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)$cname $PrimaryGroupID$([System.Char]39)"
-    # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
-
     $ObjectTitle = "pre-PKI PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)$cname $PrimaryGroupID$([System.Char]39)"
     New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
   }
 }
 foreach ($cname in ${Cname of AD Forest Originator}) {
   foreach ($PrimaryGroupID in (${Primary Group ID Set Selection} + '220')) {
-    # $ObjectTitle = "PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID$([System.Char]39)"
-    # New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
-
-    $ObjectTitle = "pre-PKI PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID$([System.Char]39)"
+    #$ObjectTitle = "pre-PKI PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID$([System.Char]39)"
+    $ObjectTitle = "pre-PKI PFX Protection;EKU=Client Authentication;Local Account=$([System.Char]39)${NetBIOS Name of Root Domain in AD Forest > upn-compatible} $PrimaryGroupID$([System.Char]39)"
     New-PasswordForNonAccounts -ObjectTitle $ObjectTitle -FolderId $FolderId -Verbose:$true -vv $true
   }
 }
@@ -199,8 +190,10 @@ foreach ($cname in ${Non-AD Forest creator Cnames}) {
   against Active Directory with this username/password pair, 
   take it. 
 #>
+
 $HT = @{
-  UserPrincipalName = "${NetBIOS Name of Root Domain in AD Forest} 500@${DNS Name of Root Domain in AD Forest}"
+  #UserPrincipalName = "${NetBIOS Name of Root Domain in AD Forest} 500@${DNS Name of Root Domain in AD Forest}"
+  UserPrincipalName = "${NetBIOS Name of Root Domain in AD Forest > upn-compatible} 500@${DNS Name of Root Domain in AD Forest}"
   FolderId          = $FolderId
   PasswordLength    = 126
   Check             = $true
@@ -210,7 +203,8 @@ New-ADUserAccountPassword @HT
 #endregion
 #region | Password for accounts holding membership in '.\Administrators' on an instance of Windows Server that eventually creates the AD Forest |
 foreach ($PrimaryGroupID in (${Primary Group ID Set Selection} + '220')) {
-  $BitwardenUsername = "${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID"
+  #$BitwardenUsername = "${NetBIOS Name of Root Domain in AD Forest} $PrimaryGroupID"
+  $BitwardenUsername = "${NetBIOS Name of Root Domain in AD Forest > upn-compatible} $PrimaryGroupID"
   New-LocalUserAccountPassword -BitwardenUsername $BitwardenUsername -FolderId $FolderId -PasswordLength 80 -Verbose:$true
 }
 #region | Password for an additional member of 'BUILTIN\Administrators' once the AD Forest has been created |
