@@ -138,7 +138,7 @@ Launch Windows PowerShell in a non-elevated security context.
   
   ```powershell
   ${Bitwarden Account Email Address} = 'pwdsec3@gmail.com'
-  ${NetBIOS Name of Root Domain in AD Forest} = ']>+Va|i?<['
+  ${NetBIOS Name of Root Domain in AD Forest} = 'NET-W0RK'
   ${Substring from DNS Namespace of Root Domain in AD Forest} = -join ((0..24) | %{ '-.'}) + '-'
   ```
 </details>
@@ -237,7 +237,7 @@ Get these devices. Sign up for these accounts.
 <details>
 <summary>External Computer Peripherals</summary>
 
-1. 3 NTFS-formatted USB flash drives: Two for data storage and 1 for bootable media. Source USB flash drives from different manufacturers to distinguish in UEFI/BIOS boot menu. 
+1. Three (3) NTFS-formatted USB flash drives: Two for data storage and 1 for bootable media. Source USB flash drives from different manufacturers to distinguish in UEFI/BIOS boot menu. 
     * **usb0** will contain multiple .iso image files, VHDX files, and application installation files. 
     * **usb1** delivers 2-3 MB of scripts in as part of bare-metal OS deployment.
     * Bootable media USB will deploy an instance of Windows Server 2025 to bare-metal of desktop computer.
