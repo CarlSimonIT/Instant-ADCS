@@ -32,7 +32,7 @@ function ConvertTo-HereStringPrecursor {
   ## Un-escape these specific text-sequences which represent variables
   ## that must be resolved prior to compiling the here-string.
   ${Escaped text sequences} = @(
-    '`${Name Of Windows PowerShell Module from PSGallery}' # <---- Used by 'NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1'
+    '`${Name Of Windows PowerShell Module from PSGallery}' # <---- Used by './Start/NuGet Install, Trust PSGallery, Update PowerShellGet, Install Windows PowerShell Modules.ps1'
     # '`$__DirectoryForDscConfigs'
     '`$([System.Char]96)'
     '`${usb0 FriendlyName}'
@@ -44,6 +44,11 @@ function ConvertTo-HereStringPrecursor {
     '`${OSDeploy FriendlyName}'
     '`${OSDeploy UniqueId Raw}'
     '`${OSDeploy SerialNumber}'
+    '`${Windows ADK 2026-09 Installer Folder Name}' # <---- Used by 'Download-Install-Compress ADK + WinPE' section within './Start.ps1'
+    '`${Windows ADK 2026-09 Installer Folder Path}' # <---- Used by 'Download-Install-Compress ADK + WinPE' section within './Start.ps1'
+    '`${WinPE 2026-09 Installer Folder Name}'       # <---- Used by 'Download-Install-Compress ADK + WinPE' section within './Start.ps1'
+    '`${WinPE 2026-09 Installer Folder Path}'       # <---- Used by 'Download-Install-Compress ADK + WinPE' section within './Start.ps1'
+    '`${Apps for OS Image Prep Folder}'             # <---- Used by 'Download-Install-Compress ADK + WinPE' section within './Start.ps1'
   )
 
   # Process each line 
