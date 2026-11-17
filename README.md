@@ -4,7 +4,7 @@ Quickly and securely build an Active Directory-integrated 3-tier PKI with Desire
 ### New Local Standard Account
 Exporting the contents of the Windows Credential Manager is the critical final step in this workflow. Using a new non-administrative local account is advised to ensure that only secure strings directly relevant to Instant-ADCS are exported. 
 
-Launch Windows PowerShell in a elevated security context and execute the lines below:  
+Launch Windows PowerShell in an elevated security context and execute the lines below:  
 
 <details>
   <summary>New Temporary Non-Privileged Local Account</summary>
