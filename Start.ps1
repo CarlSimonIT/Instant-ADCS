@@ -313,7 +313,18 @@ if ($RunningJob -eq $null) {
   )
   Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
     $BitwardenFolder = $args[0]
-    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\08 Call pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
+    #. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\08 Call pwsh.exe to Generate and Save Credentials into Bitwarden Vault.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\08 New Passwords that Protect the Private Key Associated with Certs not CA-Signed.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\09 Passwords that Protect .PFX Files of Certification Authority certs.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\10 UNSECURE Passwords for Local Accounts not intended for use outside of initial early build phase.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\11 Passwords for Local Accounts (Windows).ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\12 Passwords for Accounts that begin life as non-domain local acct on soon-to-be Promoted instance of Server 25.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\13 Passwords for Domain Accounts assigned to Security Tier Gamma.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\14 Passwords for Domain Accounts assigned to Security Tier Theta.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\15 Passwords for Domain Accounts assigned to Security Tier Kappa.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\16 Passwords for Domain Accounts assigned to Security Tier Omega.ps1"
+    #. "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\17 DSC Registration Keys.ps1"
+    . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\18 Non-Windows Passwords.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\20 Compile the Quick Lookup Table.csv File with PowerShell 7.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\24 Update Logon Password for bare-metal unclustered Hyper-V Host.ps1"
     . "$env:ProgramFiles\PowerShell\7\pwsh.exe" -NoProfile -File "$BitwardenFolder\28 Read creds from local pwsh.exe-based Secrets Vault and write into local Windows Credential Manager.ps1"
@@ -1128,7 +1139,7 @@ $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Drivers"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 Write-Host -Object "`n  Prepare your Drivers folder. Press Enter when ready to proceed.`n" -ForegroundColor $(rFc)
 <#
-  $drivers128 = 'I:'
+  $drivers128 = 'E:'
   $destination = "C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Drivers"
 
   $HT = @{
@@ -1313,9 +1324,9 @@ if ($null -ne "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso
     # Bare-metal deployments implement Windows Server Datacenter with Desktop Experience
     # I usually don't use Server Core version of Windows Server Datacenter edition. 
     ${Windows Server Image Index Set} = [System.UInt32[]]@(
-      #[System.UInt32][WindowsServerImageIndex]::StandardServerCore
-      #[System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
-      #[System.UInt32][WindowsServerImageIndex]::DatacenterServerCore
+      [System.UInt32][WindowsServerImageIndex]::StandardServerCore
+      [System.UInt32][WindowsServerImageIndex]::StandardDesktopExperience
+      [System.UInt32][WindowsServerImageIndex]::DatacenterServerCore
       [System.UInt32][WindowsServerImageIndex]::DatacenterDesktopExperience
     )
     #endregion
@@ -1696,7 +1707,7 @@ if ($FilesInFolder -eq $null) {
   pause
   Write-Host -Object "`n  Press Enter to proceed with the download of Visual Studio Code`n  " -ForegroundColor $(rFc)
   pause
-  Start-Process -FilePath 'msedge.exe' -ArgumentList @('https://code.visualstudio.com/sha/download?build=stable&os=win32-x64') -Wait
+  Start-Process -FilePath 'msedge.exe' -ArgumentList @('https://code.visualstudio.com/sha/download?build=stable&os=win32-x64')
   Start-Sleep 10
   
   Get-ChildItem -Path "$env:SystemDrive\Users\${explorer.exe Owner}\Downloads" -Filter "VSCodeSetup-x64-*.exe" -Recurse `
@@ -1721,7 +1732,7 @@ if ($FilesInFolder -eq $null) {
   pause
   Write-Host -Object "`n  Press Enter to proceed with the download of OneDrive`n  " -ForegroundColor $(rFc)
   pause
-  Start-Process -FilePath 'msedge.exe' -ArgumentList @('https://go.microsoft.com/fwlink/p/?LinkID=2182910&clcid=0x409&culture=en-us&country=us') -Wait
+  Start-Process -FilePath 'msedge.exe' -ArgumentList @('https://go.microsoft.com/fwlink/p/?LinkID=2182910&clcid=0x409&culture=en-us&country=us')
   Start-Sleep 10
   
   Get-ChildItem -Path "$env:SystemDrive\Users\${explorer.exe Owner}\Downloads" -Filter "OneDriveSetup*.exe" -Recurse `
