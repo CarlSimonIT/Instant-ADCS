@@ -1217,12 +1217,22 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "    Copy-Item @HT`n"
   "  }`n"
   "  #endregion`n"
-  "  #region | Copy lockscreen.png into root of local OS volume |`n"
+  "  #region | Copy lockscreen.png into root of local OS volume + into $([System.Char]39)DSC_CFG_ROOT\Preboots$([System.Char]39) directory of local DSC volume |`n"
   "  `$HT = @{`n"
   "    Path        = $([System.Char]34)`$usb0\lockscreen.png$([System.Char]34)`n"
   "    Destination = $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34)`n"
-  "    Force   = `$false`n"
-  "    Verbose = `$true`n"
+  "    Force       = `$false`n"
+  "    Verbose     = `$true`n"
+  "  }`n"
+  "  Copy-Item @HT`n"
+  "`n"
+  "  `$path = $([System.Char]34)`${DSC Volume Letter}\`$__DirectoryForDscConfigs\Preboots$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  `$HT = @{`n"
+  "    Path        = $([System.Char]34)`$usb0\lockscreen.png$([System.Char]34)`n"
+  "    Destination = $([System.Char]34)`$folder\$([System.Char]34)`n"
+  "    Force       = `$false`n"
+  "    Verbose     = `$true`n"
   "  }`n"
   "  Copy-Item @HT`n"
   "  #endregion`n"
@@ -1369,6 +1379,12 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "    }`n"
   "  }`n"
   "  #endregion`n"
+  "`n"
+  "  #region | Copy the All Users All Hosts profile.ps1 file (and all components) from external storage to local DSC volume. |`n"
+  "  `$path = $([System.Char]34)`${DSC Volume Letter}\`$__DirectoryForDscConfigs$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Copy-Item -Path $([System.Char]34)`$usb1\`$FolderFQN\Base$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Recurse -Verbose`n"
+  "  #endregion`n"
   "  #endregion`n"
   "  #region | Copy into root of local OS volume the .clixml files that help resolve `$env:DSC_CFG_ROOT and `${env:VM Folder Path} & `${env:VHD Folder Path} |`n"
   "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\DSC Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`${LocalOS Volume Letter}\$([System.Char]34) -Verbose:`$true`n"
@@ -1382,7 +1398,6 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   "}`n"
   "`t`t"
   #endregion
-
 
 
   #########################################-BOUNDARY-#########################################
@@ -1570,12 +1585,22 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
         Copy-Item @HT
       }
       #endregion
-      #region | Copy lockscreen.png into root of local OS volume |
+      #region | Copy lockscreen.png into root of local OS volume + into 'DSC_CFG_ROOT\Preboots' directory of local DSC volume |
       $HT = @{
         Path        = "$usb0\lockscreen.png"
         Destination = "${LocalOS Volume Letter}\"
-        Force   = $false
-        Verbose = $true
+        Force       = $false
+        Verbose     = $true
+      }
+      Copy-Item @HT
+
+      $path = "${DSC Volume Letter}\$__DirectoryForDscConfigs\Preboots"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      $HT = @{
+        Path        = "$usb0\lockscreen.png"
+        Destination = "$folder\"
+        Force       = $false
+        Verbose     = $true
       }
       Copy-Item @HT
       #endregion
@@ -1721,6 +1746,12 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
           Copy-Item @HT
         }
       }
+      #endregion
+
+      #region | Copy the All Users All Hosts profile.ps1 file (and all components) from external storage to local DSC volume. |
+      $path = "${DSC Volume Letter}\$__DirectoryForDscConfigs"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Copy-Item -Path "$usb1\$FolderFQN\Base" -Destination "$folder" -Recurse -Verbose
       #endregion
       #endregion
       #region | Copy into root of local OS volume the .clixml files that help resolve $env:DSC_CFG_ROOT and ${env:VM Folder Path} & ${env:VHD Folder Path} |
