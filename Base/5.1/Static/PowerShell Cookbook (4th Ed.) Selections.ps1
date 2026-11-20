@@ -309,8 +309,8 @@ ${Reveal Parameter AliasesV2 Here-String} = @'
       # return all of the aliases that apply. We use "starts with" because the user might have typed a shortened form of the parameter name.
       ${Whole Parameter Name(s)} | ForEach-Object {
                           $_.Value.Aliases | ForEach-Object {
-                            ${Here you go, fuckface} = "${Token of type Command}" + "|$currentParameter `b: `b$_"
-                            write-host "${Here you go, fuckface}" -ForegroundColor DarkBlue
+                            ${Here you go!} = "${Token of type Command}" + "|$currentParameter `b: `b$_"
+                            write-host "${Here you go!}" -ForegroundColor DarkBlue
                           }
       }
     }
