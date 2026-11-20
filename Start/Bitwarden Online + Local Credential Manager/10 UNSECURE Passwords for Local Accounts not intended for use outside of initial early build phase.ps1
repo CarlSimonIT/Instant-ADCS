@@ -1,7 +1,7 @@
 #Requires -Version 7.4
 #Requires -PSEdition Core
 
-#region | Unlock Bitwarden CLI and confirm that FolderID is a GUI |
+#region | Unlock Bitwarden CLI and confirm that FolderID is a GUID |
 Unlock-BwCLI -Verbose
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 Write-Verbose -Message "Attempting to execute bw.exe sync"
@@ -52,15 +52,13 @@ ${NetBIOS Name of Root Domain in AD Forest > upn-compatible} = ${NetBIOS Name of
 # Inside that .ps1 file, the source of ${Early Local Admin UserNames for OS Deploy} is ${CanonicalName Set A}
 # And the origination of ${CanonicalName Set A} is through dot-sourcing  '.\Base\5.1\Static\RelativeID and CanonicalName Sets.ps1'
 foreach ($BitwardenUsername in ${Early Local Admin UserNames for OS Deploy}) {
-  if ($BitwardenUsername -ne 'HyperV OS Deploy') {
-    $HT = @{
-      BitwardenUsername   = $BitwardenUsername
-      FolderId            = $FolderId
-      Verbose             = $true
-      VerboseVerification = $true
-      PasswordLength      = 80
-    }
-    New-LocalUserAccountPassword @HT
+  $HT = @{
+    BitwardenUsername   = $BitwardenUsername
+    FolderId            = $FolderId
+    Verbose             = $true
+    VerboseVerification = $true
+    PasswordLength      = 80
   }
+  New-LocalUserAccountPassword @HT
 }
 #endregion
