@@ -105,7 +105,25 @@ param (
     '^[a-z0-9_-]{1,256}$'
   )]
   [System.String]
-  ${AD Site Name A},
+  ${AD Site A Name},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [ValidatePattern(
+    '^[a-z0-9_-]{1,256}$'
+  )]
+  [System.String]
+  ${AD Site B Name},
+
+  [Parameter(
+    Mandatory = $true
+  )]
+  [ValidatePattern(
+    '^[a-z0-9_-]{1,256}$'
+  )]
+  [System.String]
+  ${AD Site C Name},
   #endregion
 
   #region | File-based DNS Naming |
@@ -614,7 +632,9 @@ ${AD Forest and Domain Naming} = ${AD Forest and Domain Naming Precursor} `
   -replace '%_NetBIOS Name of Root Domain in AD Forest_%',${NetBIOS Name of Root Domain in AD Forest} `
   -replace '%_DNS Name of Root Domain in AD Forest_%',${DNS Name of Root Domain in AD Forest} `
   -replace '%_AD Site Name_%',${AD Site Name} `
-  -replace '%_AD Site Name A_%',${AD Site Name A}
+  -replace '%_AD Site A Name_%',${AD Site A Name} `
+  -replace '%_AD Site B Name_%',${AD Site B Name} `
+  -replace '%_AD Site C Name_%',${AD Site C Name}
 Set-Content -Path "$PSScriptRoot\..\..\${New Windows PowerShell Base Folder PARTIAL Path}\AD Forest and Domain Naming.ps1" -Value (${AD Forest and Domain Naming})
 #endregion
 
