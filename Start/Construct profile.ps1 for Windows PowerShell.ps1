@@ -123,7 +123,9 @@ $InputHT = @{
   'NetBIOS Name of Root Domain in AD Forest' = ${NetBIOS Name of Root Domain in AD Forest}
   'DNS Name of Root Domain in AD Forest'     = 'ad.' + ${Substring from DNS Namespace of Root Domain in AD Forest} + '.INTERNAL'
   'AD Site Name'                             = '-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-'
-  'AD Site Name A'                           = 'us-il-chicago-devlab-03'
+  'AD Site A Name'                           = 'usa-illinois-chicago-devlab-03'
+  'AD Site B Name'                           = 'gbr-en-wmid-birmingham-devlab-07'
+  'AD Site C Name'                           = 'can-bc-vancouver-devlab-18'
   #endregion
 
   #region | File-based DNS Naming |
