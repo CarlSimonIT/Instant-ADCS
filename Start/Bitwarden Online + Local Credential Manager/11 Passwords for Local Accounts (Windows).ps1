@@ -50,13 +50,13 @@ ${NetBIOS Name of Root Domain in AD Forest > upn-compatible} = ${NetBIOS Name of
 foreach ($cname in ${Non-AD Forest creator Cnames}) {
   foreach ($PrimaryGroupID in ${Primary Group ID Set Of Focus}) {
     $BitwardenUsername = "$cname $PrimaryGroupID"
-    New-LocalUserAccountPassword -BitwardenUsername $BitwardenUsername -FolderId $FolderId -PasswordLength 23 -Verbose:$true
+    New-LocalUserAccountPassword -BitwardenUsername $BitwardenUsername -FolderId $FolderId -PasswordLength 80 -Verbose:$true
   }
 }
 
 # An additional account that can update the password for "$NodeMgmtCname 544" and vice-versa: 
 foreach ($cname in ${Non-AD Forest creator Cnames}) {
   $BitwardenUsername = "$cname 220"
-  New-LocalUserAccountPassword -BitwardenUsername $BitwardenUsername -FolderId $FolderId -PasswordLength 23 -Verbose:$true
+  New-LocalUserAccountPassword -BitwardenUsername $BitwardenUsername -FolderId $FolderId -PasswordLength 80 -Verbose:$true
 }
 #endregion
