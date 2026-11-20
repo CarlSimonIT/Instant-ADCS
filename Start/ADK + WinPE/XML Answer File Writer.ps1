@@ -54,7 +54,7 @@ $XmlWriterSettings.Indent = $true
 $XmlWriter = [System.Xml.XmlWriter]::Create($XmlFile.FullName,$XmlWriterSettings)
 #endregion
 
-# 'https://en.wikipedia.org/wiki/Geologic_time_scale'
+# start msedge.exe 'https://en.wikipedia.org/wiki/Geologic_time_scale'
 
 #region | XML Writer |
 $XmlWriter.WriteStartDocument()
