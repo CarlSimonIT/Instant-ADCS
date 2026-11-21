@@ -341,28 +341,10 @@ $XmlWriter.WriteStartDocument()
           $XmlWriter.WriteEndElement()
           #endregion
 
-          $XmlWriter.WriteStartElement('SynchronousCommand') # Wait 3 seconds
-            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Just wait, okay?!")
-            $XmlWriter.WriteElementString('RequiresUserInput',"false")
-            $XmlWriter.WriteElementString('CommandLine',$(
-              -join @(
-                "powershell.exe "
-                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-NoProfile "
-                "-Command "
-                $([System.Char]34)
-                "Start-Sleep 3"
-                $([System.Char]34)
-              )
-            ))
-          $XmlWriter.WriteEndElement()
-
-          # Pass 00 of ".\00 Hadean Pre-Document Encryption.ps1"
-          # Ep0ch_A__PreDocument_Encryption
+          # Round #1 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 00 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"R of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -374,7 +356,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -385,10 +367,10 @@ $XmlWriter.WriteStartDocument()
           $XmlWriter.WriteEndElement()
 
           # the primordial Hyper-V host / DSC Push server | Burn through 5 passes of the pre-document encryption configuration |
-          # Pass 01 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Pass 01 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 01 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"Pass 01 of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -400,7 +382,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -410,10 +392,10 @@ $XmlWriter.WriteStartDocument()
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 02 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Pass 02 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 02 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"Pass 02 of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -425,7 +407,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -435,10 +417,10 @@ $XmlWriter.WriteStartDocument()
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 03 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Pass 03 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 03 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"Pass 03 of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -450,7 +432,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -460,10 +442,10 @@ $XmlWriter.WriteStartDocument()
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 04 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Pass 04 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 04 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"Pass 04 of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -475,7 +457,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -485,10 +467,10 @@ $XmlWriter.WriteStartDocument()
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 05 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Pass 05 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 05 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"Pass 05 of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -500,7 +482,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -510,10 +492,10 @@ $XmlWriter.WriteStartDocument()
             ))
           $XmlWriter.WriteEndElement()
 
-          # Pass 06 of ".\00 Hadean Pre-Document Encryption.ps1"
+          # Pass 06 of '.\00 Hadean.ps1'
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Pass 06 of '.\00 Hadean Pre-Document Encryption.ps1'")
+            $XmlWriter.WriteElementString('Description',"Pass 06 of '.\00 Hadean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
@@ -525,7 +507,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\00 Hadean.ps1$([System.Char]39) "
                 "| "
                 "iex "
                 #"-Verbose; pause"
@@ -746,6 +728,144 @@ $XmlWriter.WriteStartDocument()
             $XmlWriter.WriteEndElement()
           #>
           #endregion
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #1 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\01 Eoarchean.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #2 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\01 Eoarchean.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #3 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\01 Eoarchean.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #4 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\01 Eoarchean.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #5 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\01 Eoarchean.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #6 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                "Get-Content "
+                "-Raw "
+                "-Path "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\01 Eoarchean.ps1$([System.Char]39) "
+                "| "
+                "iex "
+                "-Verbose; sleep 1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
 
           #region | DSC Push Server Epoch |
           <#
@@ -5614,8 +5734,8 @@ $XmlWriter.WriteStartDocument()
       $XmlWriter.WriteEndElement()
     #endregion
 
-    #region | 00 Hadean Pre-Document Encryption.ps1 Here-String |
-    ${File 00 Hadean Pre-Document Encryption.ps1 Here-String} = $(
+    #region | 00 Hadean.ps1 Here-String |
+    ${File 00 Hadean.ps1 Here-String} = $(
 
 
       #region |  |
@@ -6492,8 +6612,8 @@ $XmlWriter.WriteStartDocument()
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\00 Hadean Pre-Document Encryption.ps1')
-        $XmlWriter.WriteString(${File 00 Hadean Pre-Document Encryption.ps1 Here-String})
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\00 Hadean.ps1')
+        $XmlWriter.WriteString(${File 00 Hadean.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
 
