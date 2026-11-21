@@ -742,7 +742,7 @@ ${Apps for OS Image Prep Folder} = $OutputHT['Apps for OS Image Prep Folder']
 #$path = "$InstallsPath\ADK + WinPE (2026-09)"
 #$AppFolder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
-. "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Unimportant Variables.ps1"
+. "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Variables of Importance.ps1"
 #endregion
 #region | Main logic for offline install of ADK + WinPE |
 $AppName = 'Windows ADK 2026-09'
@@ -1602,7 +1602,42 @@ if (-not $IsPresent) {
 #endregion
 #region | PowerShell 7.6 |
 $Minor = 6
-$Patch = 9
+$Patch = 10
+
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
+$WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$FilePath = "$folder\PowerShell-7.$Minor.$Patch-win-x64.msi"
+$IsPresent = Test-Path -Path $FilePath
+if (-not $IsPresent) {
+  $JobName = "Download PowerShell 7.$Minor.$Patch 64-bit .msi"
+  $RunningJob = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq $JobName  -and `
+    $_.State -eq 'Running'
+  }
+
+  if ($RunningJob -eq $null) {
+    $ArgumentList = @(
+      $WebPath
+      $FilePath
+      $ProgressPreference
+    )
+
+    Start-Job -Name $JobName -ArgumentList $ArgumentList -ScriptBlock {
+      $WebPath                    = $args[0]
+      $FilePath                   = $args[1]
+      $OriginalProgressPreference = $args[2]
+
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri $WebPath -OutFile $FilePath
+      $ProgressPreference = $OriginalProgressPreference
+    } | Out-Null
+  }
+}
+#endregion
+#region | PowerShell 7.7 |
+$Minor = 7
+$Patch = 0
 
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\PowerShell 7\7.$Minor"
 $WebPath = "https://github.com/PowerShell/PowerShell/releases/download/v7.$Minor.$Patch/PowerShell-7.$Minor.$Patch-win-x64.msi"
