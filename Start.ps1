@@ -920,7 +920,7 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
   # [ ] Implementation Complete
   # Notes on running Windows Setup in Windows PE: 
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro?view=windows-11#notes-on-running-windows-setup-in-windows-pe'
-  # Configuration Passes Explained
+  # Configuration Passes Explained:
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-configuration-passes?view=windows-11'
 
   Pure gold: 
@@ -980,12 +980,8 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
   Create bootable WinPE Media
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11'
 
-  start msedge.exe ''
-
-  Boot To WinPE
+  Boot To WinPE:
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/boot-to-winpe?view=windows-11'
-
-  
   
   # Add Windows PowerShell support to the WinPE OS
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11'
@@ -1010,8 +1006,6 @@ if (${Dell WinPE Driver Pack A11 File} -eq $null) {
 
   # Capture and apply a Windows image using a single .WIM file
   start msedge.exe 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-using-a-single-wim?view=windows-11'
-
-
 
   # [x] Implementation Complete
   # Use newer version of DISM in WinPE: 
