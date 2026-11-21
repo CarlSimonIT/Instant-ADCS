@@ -1939,7 +1939,32 @@ if ($null -ne $usb1) {
 #Write-Host -Object "Copy usb1 directory into `$usb1-FINISH" -ForegroundColor $(rFc)
 #endregion
 
-#region |  |
+#region | Ensure presence of installation files within $usb0 |
+
+#region | Original ISO File |
+$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+$IsPresent = Test-Path -Path "$path\Windows Server 2025.iso"
+if (-not $IsPresent) {
+  $IsReady = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+  if ($IsReady) {
+    Write-Host -Object "`nCopy Original ISO file into usb0 directory`n" -ForegroundColor $(rFc)
+    Copy-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
+  }
+}
+#endregion
+#region | Patched ISO File |
+#endregion
+#region | Windows Assessment and Deployment Kit offline installation components |
+#endregion
+#region | WinPE offline installation components |
+#endregion
+#region | Visual Studio Code |
+#endregion
+#region | OneDrive |
+#endregion
+#region | MikroTik WinBox |
+#endregion
 #endregion
 
 #region | Copy Original ISO file and Patched ISO file into usb0 directory |
