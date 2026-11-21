@@ -1909,7 +1909,6 @@ Get-ChildItem -Path "$PSScriptRoot\DSC" -Filter '*.ps1' | ForEach-Object -Proces
   Copy-Item -Path $_.FullName -Destination "$folder"
 }
 #endregion
-
 #region | Copy usb1 directory into $usb1 |
 #Write-Host -Object "Copy usb1 directory into `$usb1-START" -ForegroundColor $(rFc)
 . "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\External Storage Media Drive Letters.ps1"
@@ -1938,6 +1937,9 @@ if ($null -ne $usb1) {
   }
 }
 #Write-Host -Object "Copy usb1 directory into `$usb1-FINISH" -ForegroundColor $(rFc)
+#endregion
+
+#region |  |
 #endregion
 
 #region | Copy Original ISO file and Patched ISO file into usb0 directory |
@@ -1988,7 +1990,6 @@ if (-not $IsPresent) {
 }
 #endregion
 
-
 #region | Copy .zip files for offline installation of ADK + WinPE tools into '.CommonItems\usb0' |
 $ZipFileBaseName = 'Windows ADK 2026-09'
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
@@ -2019,6 +2020,8 @@ if (-not $IsPresent) {
     Remove-Item -Path "$path\$ZipFileBaseName.zip"
     Write-Host -Object "`nzip file into usb0 directory`n" -ForegroundColor $(rFc)
     Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+
+    Test-Path -Path ""
   }
 }
 
@@ -2051,55 +2054,6 @@ if (-not $IsPresent) {
   }
 }
 #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #region | Copy usb0 directory into $usb0 |
 #region | Copy Original ISO file and Patched ISO file from usb0 directory into $usb0 |
