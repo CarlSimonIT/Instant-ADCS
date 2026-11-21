@@ -1133,8 +1133,8 @@ $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Drivers"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 Write-Host -Object "`n  Prepare your Drivers folder. Press Enter when ready to proceed.`n" -ForegroundColor $(rFc)
 <#
-  $drivers128 = 'E:'
-  $destination = "C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Drivers"
+  $drivers128 = 'J:'
+  $destination = "$env:UserProfile\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Drivers"
 
   $HT = @{
     Path        = "$drivers128\drivers\realtek\RTL8168E\Install_PCIE_WinServer2025"
