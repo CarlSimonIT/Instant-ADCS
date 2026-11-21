@@ -112,7 +112,7 @@ param (
 #>
 
 #region | Set latest Strict Mode | Exit '.\Start.ps1' script if launched in a powershell.exe process instance running at Integrity Level-High |
-Set-StrictMode -Version 'Latest'
+Set-StrictMode -Version 'Latest'; 
 
 ${powershell.exe owner Identity} = [Security.Principal.WindowsIdentity]::GetCurrent()
 ${powershell.exe owner Access} = [Security.Principal.WindowsPrincipal]${powershell.exe owner Identity}
