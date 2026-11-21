@@ -6567,14 +6567,31 @@ $XmlDocument = [System.Xml.XmlDocument](Get-Content -Path $XmlFile.FullName -Raw
 $HT = @{
   Xml       = $XmlDocument
   Namespace = @{un = 'urn:schemas-microsoft-com:unattend'}
+  XPath     = "/un:unattend/un:settings[@pass='windowsPE']/un:component[@name='Microsoft-Windows-Setup']/un:RunSynchronous/un:RunSynchronousCommand"
+}
+${RunSynchronousCommand Set} = Select-Xml @HT # | Select-Object -ExpandProperty 'Node'
+if ($null -ne ${RunSynchronousCommand Set}) {
+  for ($i = 0; $i -lt ${RunSynchronousCommand Set}.Count; $i++) {
+    [System.String]$OrderIndex = $i + 1
+    ${RunSynchronousCommand} = ${RunSynchronousCommand Set}[$i] | Select-Object -ExpandProperty 'Node'
+    ${RunSynchronousCommand}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
+    ${RunSynchronousCommand}.Order = $OrderIndex
+  }
+}
+
+$HT = @{
+  Xml       = $XmlDocument
+  Namespace = @{un = 'urn:schemas-microsoft-com:unattend'}
   XPath     = "/un:unattend/un:settings[@pass='specialize']/un:component[@name='Microsoft-Windows-Deployment']/un:RunSynchronous/un:RunSynchronousCommand"
 }
 ${RunSynchronousCommand Set} = Select-Xml @HT # | Select-Object -ExpandProperty 'Node'
-for ($i = 0; $i -lt ${RunSynchronousCommand Set}.Count; $i++) {
-  [System.String]$OrderIndex = $i + 1
-  ${RunSynchronousCommand} = ${RunSynchronousCommand Set}[$i] | Select-Object -ExpandProperty 'Node'
-  ${RunSynchronousCommand}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
-  ${RunSynchronousCommand}.Order = $OrderIndex
+if ($null -ne ${RunSynchronousCommand Set}) {
+  for ($i = 0; $i -lt ${RunSynchronousCommand Set}.Count; $i++) {
+    [System.String]$OrderIndex = $i + 1
+    ${RunSynchronousCommand} = ${RunSynchronousCommand Set}[$i] | Select-Object -ExpandProperty 'Node'
+    ${RunSynchronousCommand}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
+    ${RunSynchronousCommand}.Order = $OrderIndex
+  }
 }
 
 $HT = @{
@@ -6583,11 +6600,13 @@ $HT = @{
   XPath     = "/un:unattend/un:settings[@pass='oobeSystem']/un:component[@name='Microsoft-Windows-Shell-Setup']/un:FirstLogonCommands/un:SynchronousCommand"
 }
 ${SynchronousCommand Set} = Select-Xml @HT # | Select-Object -ExpandProperty 'Node'
-for ($i = 0; $i -lt ${SynchronousCommand Set}.Count; $i++) {
-  [System.String]$OrderIndex = $i + 1
-  ${SynchronousCommand} = ${SynchronousCommand Set}[$i] | Select-Object -ExpandProperty 'Node'
-  ${SynchronousCommand}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
-  ${SynchronousCommand}.Order = $OrderIndex
+if ($null -ne ${SynchronousCommand Set}) {
+  for ($i = 0; $i -lt ${SynchronousCommand Set}.Count; $i++) {
+    [System.String]$OrderIndex = $i + 1
+    ${SynchronousCommand} = ${SynchronousCommand Set}[$i] | Select-Object -ExpandProperty 'Node'
+    ${SynchronousCommand}.SetAttribute('action', $wcmNamespaceUrl, 'add') | Out-Null
+    ${SynchronousCommand}.Order = $OrderIndex
+  }
 }
 
 $HT = @{
