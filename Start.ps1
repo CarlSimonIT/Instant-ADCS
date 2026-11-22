@@ -1974,57 +1974,116 @@ if ($null -ne $usb1) {
 #Write-Host -Object "Copy usb1 directory into `$usb1-FINISH" -ForegroundColor $(rFc)
 #endregion
 
-#region | Ensure presence of installation files within $usb0 |
-
-#region | Original ISO File |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$IsPresent = Test-Path -Path "$path\Windows Server 2025.iso"
-if (-not $IsPresent) {
-  $IsReady = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-  if ($IsReady) {
-    Write-Host -Object "`nCopy Original ISO file into usb0 directory`n" -ForegroundColor $(rFc)
-    Copy-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
+#region | Ensure presence of installation files within $usb0 | IDEA: Provide the option of comparing file size or calculated SHA-256 hash for verification. |
+if ($null -ne $usb0) {
+  #region | Original ISO File |
+  ${Is Original ISO File Present on Fixed Disk} = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
+  if (${Is Original ISO File Present on Fixed Disk}) {
+    $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original"; 
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ${Is Original ISO File Present on External Media} = Test-Path -Path "$folder\Windows Server 2025.iso"
+    if (-not ${Is Original ISO File Present on External Media}) {
+      Copy-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
+    } else {
+      ${Size of Original ISO File on Fixed Disk} = Get-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
+      ${Size of Original ISO File on External Media} = Get-Item -Path "$folder\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
+      Write-Host -Object "`nComparing sizes of Original 'Windows Server 2025.iso' in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size of Original ISO File on Fixed Disk}     = ${Size of Original ISO File on Fixed Disk}" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size of Original ISO File on External Media} = ${Size of Original ISO File on External Media}" -ForegroundColor $(rFc)
+      if (${Size of Original ISO File on Fixed Disk} -ne ${Size of Original ISO File on External Media}) {
+        Remove-Item -Path "$folder\Windows Server 2025.iso"
+        Write-Host -Object "`nCopying Original ISO file into `$usb0 external media...`n" -ForegroundColor $(rFc)
+        Copy-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
+      }
+    }
   }
+  #endregion
+  #region | Patched ISO File |
+  ${Is Patched ISO File Present on Fixed Disk} = Test-Path -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso"
+  if (${Is Patched ISO File Present on Fixed Disk}) {
+    $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"; 
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ${Is Patched ISO File Present on External Media} = Test-Path -Path "$folder\Windows Server 2025.iso"
+    if (-not ${Is Patched ISO File Present on External Media}) {
+      Copy-Item -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
+    } else {
+      ${Size of Patched ISO File on Fixed Disk} = Get-Item -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
+      ${Size of Patched ISO File on External Media} = Get-Item -Path "$folder\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
+      Write-Host -Object "`nComparing sizes of Patched 'Windows Server 2025.iso' in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size of Patched ISO File on Fixed Disk}     = ${Size of Patched ISO File on Fixed Disk}" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size of Patched ISO File on External Media} = ${Size of Patched ISO File on External Media}" -ForegroundColor $(rFc)
+      if (${Size of Patched ISO File on Fixed Disk} -ne ${Size of Patched ISO File on External Media}) {
+        Remove-Item -Path "$folder\Windows Server 2025.iso"
+        Write-Host -Object "`nCopying Patched ISO file into `$usb0 external media...`n" -ForegroundColor $(rFc)
+        Copy-Item -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
+      }
+    }
+  }
+  #endregion
+
+  #region | Windows ADK + WinPE offline installation components |
+  $ZipFileBaseName = 'Windows ADK 2026-09'
+  $path = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
+  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+  ${Windows ADK 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${Windows ADK 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
+
+  $IsPresent = Test-Path -Path "$folder\$ZipFileBaseName.zip"
+  if (-not $IsPresent) {
+    $IsReady = Test-Path -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
+    if ($IsReady) {
+      Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+    }
+  } else {
+    Write-Host -Object "`nComparing the two file sizes of '$ZipFileBaseName' in different locations:`n" -ForegroundColor $(rFc)
+    ${Size of ADK .zip on Fixed Disk} = (Get-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
+    ${Size in ADK .zip on External Media} = (Get-Item -Path "$folder\$ZipFileBaseName.zip").Length
+    Write-Host -Object "`nComparing sizes of ADK .zip file in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
+    Write-Host -Object "  `${Size of ADK .zip on Fixed Disk}     = ${Size of ADK .zip on Fixed Disk}" -ForegroundColor $(rFc)
+    Write-Host -Object "  `${Size in ADK .zip on External Media} = ${Size in ADK .zip on External Media}" -ForegroundColor $(rFc)
+
+    if (${Size of ADK .zip on Fixed Disk} -ne ${Size in ADK .zip on External Media}) {
+      Remove-Item -Path "$folder\$ZipFileBaseName.zip"
+      Write-Host -Object "`nCopying ADK .zip file into `$usb0 external media...`n" -ForegroundColor $(rFc)
+      Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+    }
+  }
+
+  $ZipFileBaseName = 'WinPE 2026-09'
+  $path = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
+  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+  ${WinPE 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${WinPE 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
+  $IsPresent = Test-Path -Path "$folder\$ZipFileBaseName.zip"
+  if (-not $IsPresent) {
+    $IsReady = Test-Path -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
+    if ($IsReady) {
+      Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+    }
+  } else {
+    Write-Host -Object "`nComparing the two file sizes of '$ZipFileBaseName' in different locations:`n" -ForegroundColor $(rFc)
+    ${Size of WinPE .zip on Fixed Disk} = (Get-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
+    ${Size in WinPE .zip on External Media} = (Get-Item -Path "$folder\$ZipFileBaseName.zip").Length
+    Write-Host -Object "`nComparing sizes of WinPE .zip file in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
+    Write-Host -Object "  `${Size of WinPE .zip on Fixed Disk}     = ${Size of WinPE .zip on Fixed Disk}" -ForegroundColor $(rFc)
+    Write-Host -Object "  `${Size in WinPE .zip on External Media} = ${Size in WinPE .zip on External Media}" -ForegroundColor $(rFc)
+
+    if (${Size of WinPE .zip on Fixed Disk} -ne ${Size in WinPE .zip on External Media}) {
+      Remove-Item -Path "$folder\$ZipFileBaseName.zip"
+      Write-Host -Object "`nCopying WinPE .zip file into `$usb0 external media...`n" -ForegroundColor $(rFc)
+      Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+    }
+  }
+  #endregion
+
+  #region | Visual Studio Code |
+  #endregion
+  #region | OneDrive |
+  #endregion
+  #region | MikroTik WinBox |
+  #endregion
 }
-#endregion
-#region | Patched ISO File |
-#endregion
-#region | Windows Assessment and Deployment Kit offline installation components |
-#endregion
-#region | WinPE offline installation components |
-#endregion
-#region | Visual Studio Code |
-#endregion
-#region | OneDrive |
-#endregion
-#region | MikroTik WinBox |
-#endregion
-#endregion
-
-#region | Copy Original ISO file and Patched ISO file into usb0 directory |
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$IsPresent = Test-Path -Path "$path\Windows Server 2025.iso"
-if (-not $IsPresent) {
-  $IsReady = Test-Path -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso"
-  if ($IsReady) {
-    Write-Host -Object "`nCopy Original ISO file into usb0 directory`n" -ForegroundColor $(rFc)
-    Copy-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
-  }
-}
-
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-$IsPresent = Test-Path -Path "$path\Windows Server 2025.iso"
-if (-not $IsPresent) {
-  $IsReady = Test-Path -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso"
-  if ($IsReady) {
-    Copy-Item -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
-  }
-} else {
-  #Write-Host -Object "`nComparing two SHA256 hashes:`n" -ForegroundColor $(rFc)
-  #${Hash in usb0 Directory} = (Get-FileHash -Path "$path\Windows Server 2025.iso" -Algorithm 'SHA256').Hash
+<#
+  Write-Host -Object "`nComparing two SHA256 hashes:`n" -ForegroundColor $(rFc)
+  ${Hash in usb0 Directory} = (Get-FileHash -Path "$path\Windows Server 2025.iso" -Algorithm 'SHA256').Hash
   Write-Host -Object "`nComparing sizes of 'Windows Server 2025.iso' in usb0 directory vs Offline WU folder:`n" -ForegroundColor $(rFc)
   ${Size in usb0 Directory} = (Get-Item -Path "$path\Windows Server 2025.iso").Length
 
@@ -2039,131 +2098,22 @@ if (-not $IsPresent) {
       Copy-Item -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" -Destination "$folder"
     }
 
-
-
-
-
     #${Hash in Offline WU} = (Get-FileHash -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" -Algorithm 'SHA256').Hash
     #Write-Host -Object "  `${Hash in usb0 Directory} = ${Hash in usb0 Directory}" -ForegroundColor $(rFc)
     #Write-Host -Object "  `${Hash in Offline WU}     = ${Hash in Offline WU}" -ForegroundColor $(rFc)
+
+    Write-Host -Object "`nComparing two SHA256 hashes:`n" -ForegroundColor $(rFc)
+    ${Hash in usb0 Directory} = (Get-FileHash -Path "$path\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
+    ${Hash in ADK + WinPE} = (Get-FileHash -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
+    Write-Host -Object "  `${Hash in usb0 Directory} = ${Hash in usb0 Directory}" -ForegroundColor $(rFc)
+    Write-Host -Object "  `${Hash in ADK + WinPE}    = ${Hash in ADK + WinPE}" -ForegroundColor $(rFc)
+
+    Write-Host -Object "`nComparing two SHA256 hashes:`n" -ForegroundColor $(rFc)
+    ${Hash in usb0 Directory} = (Get-FileHash -Path "$path\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
+    ${Hash in ADK + WinPE} = (Get-FileHash -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
+    Write-Host -Object "  `${Hash in usb0 Directory} = ${Hash in usb0 Directory}" -ForegroundColor $(rFc)
+    Write-Host -Object "  `${Hash in ADK + WinPE}    = ${Hash in ADK + WinPE}" -ForegroundColor $(rFc)
   }
-}
+#>
 #endregion
 
-#region | Copy .zip files for offline installation of ADK + WinPE tools into '.CommonItems\usb0' |
-$ZipFileBaseName = 'Windows ADK 2026-09'
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${Windows ADK 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${Windows ADK 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
-
-$IsPresent = Test-Path -Path "$path\$ZipFileBaseName.zip"
-if (-not $IsPresent) {
-  $IsReady = Test-Path -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
-  if ($IsReady) {
-    Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
-  }
-} else {
-  Write-Host -Object "`nComparing the two file sizes of '$ZipFileBaseName' in different locations:`n" -ForegroundColor $(rFc)
-  ${Size in usb0 Directory} = (Get-Item -Path "$path\$ZipFileBaseName.zip").Length
-  ${Size in ADK + WinPE} = (Get-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
-  Write-Host -Object "  `${Size in usb0 Directory} = ${Size in usb0 Directory}" -ForegroundColor $(rFc)
-  Write-Host -Object "  `${Size in ADK + WinPE}    = ${Size in ADK + WinPE}" -ForegroundColor $(rFc)
-
-
-  #Write-Host -Object "`nComparing two SHA256 hashes:`n" -ForegroundColor $(rFc)
-  #${Hash in usb0 Directory} = (Get-FileHash -Path "$path\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
-  #${Hash in ADK + WinPE} = (Get-FileHash -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
-  #Write-Host -Object "  `${Hash in usb0 Directory} = ${Hash in usb0 Directory}" -ForegroundColor $(rFc)
-  #Write-Host -Object "  `${Hash in ADK + WinPE}    = ${Hash in ADK + WinPE}" -ForegroundColor $(rFc)
-
-  if (${Size in usb0 Directory} -ne ${Size in ADK + WinPE}) {
-    Remove-Item -Path "$path\$ZipFileBaseName.zip"
-    Write-Host -Object "`nzip file into usb0 directory`n" -ForegroundColor $(rFc)
-    Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
-
-    Test-Path -Path ""
-  }
-}
-
-$ZipFileBaseName = 'WinPE 2026-09'
-$path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
-$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-${WinPE 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${WinPE 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
-$IsPresent = Test-Path -Path "$path\$ZipFileBaseName.zip"
-
-if (-not $IsPresent) {
-  $IsReady = Test-Path -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
-  if ($IsReady) {
-    Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
-  }
-} else {
-  #Write-Host -Object "`nComparing two SHA256 hashes:`n" -ForegroundColor $(rFc)
-  Write-Host -Object "`nComparing two file sizes:`n" -ForegroundColor $(rFc)
-  #${Hash in usb0 Directory} = (Get-FileHash -Path "$path\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
-  ${Size in usb0 Directory} = (Get-Item -Path "$path\$ZipFileBaseName.zip").Length
-  #${Hash in ADK + WinPE} = (Get-FileHash -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Algorithm 'SHA256').Hash
-  ${Size in ADK + WinPE} = (Get-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
-  #Write-Host -Object "  `${Hash in usb0 Directory} = ${Hash in usb0 Directory}" -ForegroundColor $(rFc)
-  Write-Host -Object "  `${Size in usb0 Directory} = ${Size in usb0 Directory}" -ForegroundColor $(rFc)
-  #Write-Host -Object "  `${Hash in ADK + WinPE}    = ${Hash in ADK + WinPE}" -ForegroundColor $(rFc)
-  Write-Host -Object "  `${Size in ADK + WinPE}    = ${Size in ADK + WinPE}" -ForegroundColor $(rFc)
-  if (${Size in usb0 Directory} -ne ${Size in ADK + WinPE}) {
-    Remove-Item -Path "$path\$ZipFileBaseName.zip"
-    Write-Host -Object "`nzip file into usb0 directory`n" -ForegroundColor $(rFc)
-    Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
-  }
-}
-#endregion
-
-#region | Copy usb0 directory into $usb0 |
-#region | Copy Original ISO file and Patched ISO file from usb0 directory into $usb0 |
-if ($null -ne $usb0) {
-  #region | Original ISO File |
-  ${Is Original ISO File Present on External Media} = Test-Path -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original\Windows Server 2025.iso"
-  $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original";
-  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-  if (${Is Original ISO File Present on External Media}) {
-    ${Size of Original ISO File in usb0 Folder} = Get-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-    ${Size of Original ISO File on External Media} = Get-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-    if (
-      ${Size of Original ISO File on External Media} -ne ${Size of Original ISO File in usb0 Folder}
-    ) {
-      Remove-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original\Windows Server 2025.iso"
-      Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original\Windows Server 2025.iso" -Destination "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original"
-    }
-  } else {
-    $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Original"; 
-    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-    Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Original\Windows Server 2025.iso" -Destination "$folder"
-  }
-  #endregion
-  #region | Patched ISO File |
-  ${Is Patched ISO File Present in usb0 Folder} = Test-Path -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
-  if (${Is Patched ISO File Present in usb0 Folder}) {
-    ${Is Patched ISO File Present on External Media} = Test-Path -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
-    $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched";
-    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-
-    if (${Is Patched ISO File Present on External Media}) {
-      ${Size of Patched ISO File in usb0 Folder} = Get-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-      ${Size of Patched ISO File on External Media} = Get-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-      if (
-        ${Size of Patched ISO File on External Media} -ne ${Size of Patched ISO File in usb0 Folder}
-      ) {
-        Remove-Item -Path "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso"
-        Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" -Destination "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"
-      }
-    } else {
-      $path = "$usb0\$FolderFQN\Microsoft\OS\Server 25\Patched"; 
-      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-      Copy-Item -Path "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\Microsoft\OS\Server 25\Patched\Windows Server 2025.iso" -Destination "$folder"
-    }
-  }
-  #endregion
-}
-#endregion
-
-
-
-#endregion
