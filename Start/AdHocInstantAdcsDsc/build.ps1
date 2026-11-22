@@ -26,7 +26,7 @@ ${Requires Module xDscDiagnostics 2.8.0 Here-String} = "$([System.Char]35)Requir
 
 $FolderFQN = Import-CliXml -Path "$PSScriptRoot\..\..\..\.CommonItems\FolderFQN.clixml"
 . "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\PKI Misc.ps1"
-. "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Important Variables.ps1"
+. "$PSScriptRoot\..\..\..\$FolderFQN\output\$FolderFQN\usb1\$FolderFQN\Base\5.1\Variables of Importance.ps1"
 
 
 #"C:\Users\lowpr\GitHub\InterM3d\mc3\CarlSimonIT\Instant-ADCS\Base\5.1\Static\Type Accelerator Instance.ps1"
