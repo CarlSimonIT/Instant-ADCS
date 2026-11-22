@@ -139,7 +139,7 @@ Launch Windows PowerShell in a non-elevated security context.
   ```powershell
   ${Bitwarden Account Email Address} = 'pwdsec3@gmail.com'
   ${NetBIOS Name of Root Domain in AD Forest} = 'NET-W0RK'
-  ${Substring from DNS Namespace of Root Domain in AD Forest} = -join((0..24)|%{ '-.'})+'-'
+  ${Substring from DNS Namespace of Root Domain in AD Forest} = -join((0..24)|%{'-.'})+'-'
   ```
 </details>
 
