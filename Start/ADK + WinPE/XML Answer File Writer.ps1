@@ -351,16 +351,9 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
                 $([System.Char]34)
               )
             ))
@@ -375,16 +368,9 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
                 $([System.Char]34)
               )
             ))
@@ -399,16 +385,9 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
                 $([System.Char]34)
               )
             ))
@@ -423,16 +402,9 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
                 $([System.Char]34)
               )
             ))
@@ -447,16 +419,9 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
                 $([System.Char]34)
               )
             ))
@@ -865,16 +830,9 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
                 $([System.Char]34)
               )
             ))
@@ -883,23 +841,50 @@ $XmlWriter.WriteStartDocument()
 
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Round 2 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('Description',"Round #2 of '.\01 Eoarchean.ps1'")
             $XmlWriter.WriteElementString('RequiresUserInput',"false")
             $XmlWriter.WriteElementString('CommandLine',$(
               -join @(
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-Command "
+                "-File "
                 $([System.Char]34)
-                "Get-Content "
-                "-Raw "
-                "-Path "
-                "$([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34) "
-                "| "
-                "iex "
-                #"-Verbose; pause"
-                "-Verbose; sleep 1"
+                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #3 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-File "
+                $([System.Char]34)
+                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #4 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-File "
+                $([System.Char]34)
+                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
                 $([System.Char]34)
               )
             ))
