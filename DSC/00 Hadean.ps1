@@ -1,9 +1,10 @@
 #region | Classes/Functions/Variables defined before launching a chronological unit |
-$ProjectName = "Instant-ADCS"
+#$ProjectName = "Instant-ADCS"
+$ProjectName = Import-Clixml -Path "$env:DSC_CFG_ROOT\CliXmls\FolderFQN.clixml";
 ${.s} = "$env:DSC_CFG_ROOT\$ProjectName\Dot-Sourced Structural Data"
 
 . "$PSHOME\Lightweight Functions.ps1"
-. "$PSHOME\Important Variables.ps1"
+. "$PSHOME\Variables of Importance.ps1"
 . "$PSHOME\Node Mgmt NetIPInterface CNAMEs.ps1"
 . "$PSHOME\Type Accelerator Instance.ps1"
 . "$PSHOME\Class Definitions\Windows Server Image Index.ps1"
