@@ -198,7 +198,7 @@ ${WU s25 Part 03-Dismount ISO, Apply Updates, Package into Patched ISO at IL-Hig
         if ((3,4) -contains ${Windows Server Image Index}) {
           # Will WinPE drivers prevent the BSOD? Probably not, but here goes nothing. 
           #dism.exe /Add-Driver /Image:"${mounted_wim Folder Path}" /Driver:"${Extracted WinPE Driver Pack Dell A11 Folder}" /Recurse
-          # Yes, the computer blue-screened
+          # Yes, a Windows Stop Error (the Blue Screen of Death) resulted
           .\dism.exe /Add-Driver /Image:"${mounted_wim Folder Path}" /Driver:"${Extracted Bare-Metal Windows Server 2025 Drivers Folder}" /Recurse
         }
 
