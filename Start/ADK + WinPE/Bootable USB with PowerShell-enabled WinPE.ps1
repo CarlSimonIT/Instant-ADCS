@@ -40,13 +40,13 @@ ${startnet.cmd File Contents} = $(
   "wpeinit.exe`n"
   "powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`n"
   "powershell.exe -command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-ExecPol-FwCheck-PreDiskOps.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\01-DiskPartClean.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\03-OsDiskPart1.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\03-OsDiskPart2.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\05-DismLoad-ApplyImage.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\06-MultiDrive-Prep.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\07-x2cCopyOps.ps1$([System.Char]39)$([System.Char]34)`n"
-  "REM powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\09-MachineRecon.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\04-DiskPartClean.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\08-OsDiskPart1.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\12-OsDiskPart2.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\16-DismLoad-ApplyImage.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\20-MultiDrive-Prep.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\24-x2cCopyOps.ps1$([System.Char]39)$([System.Char]34)`n"
+  "REM powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\99-MachineRecon.ps1$([System.Char]39)$([System.Char]34)`n"
   "REM wpeutil.exe reboot`n"
   "powershell.exe`n"
   "`t`t"
@@ -58,13 +58,13 @@ ${startnet.cmd File Contents} = $(
     wpeinit.exe
     powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
     powershell.exe -command "iex 'Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-ExecPol-FwCheck-PreDiskOps.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\01-DiskPartClean.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\03-OsDiskPart1.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\03-OsDiskPart2.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\05-DismLoad-ApplyImage.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\06-MultiDrive-Prep.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\07-x2cCopyOps.ps1'"
-    REM powershell.exe -command "iex '& X:\Scriptoids\09-MachineRecon.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\04-DiskPartClean.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\08-OsDiskPart1.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\12-OsDiskPart2.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\16-DismLoad-ApplyImage.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\20-MultiDrive-Prep.ps1'"
+    powershell.exe -command "iex '& X:\Scriptoids\24-x2cCopyOps.ps1'"
+    REM powershell.exe -command "iex '& X:\Scriptoids\99-MachineRecon.ps1'"
     REM wpeutil.exe reboot
     powershell.exe
   } | Out-Null
@@ -138,8 +138,8 @@ ${00-ExecPol-FwCheck-PreDiskOps Script Path} = "${WinPE Image Creation Parent Fo
 Set-Content -Path ${00-ExecPol-FwCheck-PreDiskOps Script Path} -Value (${00-ExecPol-FwCheck-PreDiskOps Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\01-DiskPartClean.ps1" to the file system of the technician PC |
-${01-DiskPartClean Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\04-DiskPartClean.ps1" to the file system of the technician PC |
+${04-DiskPartClean Command Here-String Precursor} = $(
 
 
 
@@ -197,15 +197,15 @@ ${01-DiskPartClean Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${01-DiskPartClean Command Here-String} = ${01-DiskPartClean Command Here-String Precursor}
-${01-DiskPartClean Command} = [ScriptBlock]::Create(${01-DiskPartClean Command Here-String})
+${04-DiskPartClean Command Here-String} = ${04-DiskPartClean Command Here-String Precursor}
+${04-DiskPartClean Command} = [ScriptBlock]::Create(${04-DiskPartClean Command Here-String})
 
-${01-DiskPartClean Script Path} = "${WinPE Image Creation Parent Folder}\01-DiskPartClean.ps1"
-Set-Content -Path ${01-DiskPartClean Script Path} -Value (${01-DiskPartClean Command Here-String})
+${04-DiskPartClean Script Path} = "${WinPE Image Creation Parent Folder}\04-DiskPartClean.ps1"
+Set-Content -Path ${04-DiskPartClean Script Path} -Value (${04-DiskPartClean Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\03-OsDiskPart1.ps1" to the file system of the technician PC |
-${03-OsDiskPart1 Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\08-OsDiskPart1.ps1" to the file system of the technician PC |
+${08-OsDiskPart1 Command Here-String Precursor} = $(
 
 
 
@@ -225,8 +225,44 @@ ${03-OsDiskPart1 Command Here-String Precursor} = $(
   "  }`n"
   "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\non-USB disks.clixml$([System.Char]34) -InputObject (`${non-USB disks})`n"
   "  #region | Initialize All SATA/NVMe Disks |`n"
+  "  `$error.Clear()`n"
+  "`n"
   "  `${Initialized non-USB Disk CIM Instances} = foreach (`${non-USB disk} in `${non-USB disks}) {`n"
-  "    Initialize-Disk -UniqueId `${non-USB disk}.UniqueId -PartitionStyle $([System.Char]39)GPT$([System.Char]39) -Confirm:`$false -Verbose:`$true -PassThru`n"
+  "    do {`n"
+  "      try {`n"
+  "        `$InputHT = @{`n"
+  "          #UniqueId      = `${non-USB disk}.UniqueId`n"
+  "          # Problems might arise when specifying disks by UniqueId. `n"
+  "          # Possibly because the disk$([System.Char]39)s UniqueId changes after a clean ---> initialization`n"
+  "          # Regardless of the underlying explanation, indicate a disk by disk Number attribute. `n"
+  "          Number         = `${non-USB disk}.Number`n"
+  "          PartitionStyle = $([System.Char]39)GPT$([System.Char]39)`n"
+  "          Confirm        = `$false`n"
+  "          Verbose        = `$true`n"
+  "          #PassThru       = `$true`n"
+  "          ErrorAction    = $([System.Char]39)Stop$([System.Char]39)`n"
+  "          ErrorVariable  = $([System.Char]39)RedirectedErr0rs$([System.Char]39)`n"
+  "        }`n"
+  "        Initialize-Disk @InputHT`n"
+  "      } `n"
+  "      catch {`n"
+  "        Write-Host -Object $([System.Char]34)Initialize-Disk for disk number `$(`${non-USB disk}.Number) failed. Reattempting DiskPart ---> clean$([System.Char]34)`n"
+  "        `${DiskPartClean Here-String Precursor} = $([System.Char]34)select disk %_DISK_NUMBER_%$([System.Char]34)`n"
+  "        `${DiskPartClean Here-String Precursor} += $([System.Char]34)`n$([System.Char]34)`n"
+  "        `${DiskPartClean Here-String Precursor} += $([System.Char]34)clean$([System.Char]34)`n"
+  "        `${DiskPartClean Here-String} = `${DiskPartClean Here-String Precursor} -replace $([System.Char]39)%_DISK_NUMBER_%$([System.Char]39),`${non-USB disk}.Number`n"
+  "        `$ContentPath = $([System.Char]34)X:\Scriptoids\DiskPartClean`$(`${non-USB disk}.Number).txt$([System.Char]34)`n"
+  "        Set-Content -Path `$ContentPath -Value (`${DiskPartClean Here-String})`n"
+  "        `$ArgumentList = @(`n"
+  "          $([System.Char]39)/s$([System.Char]39)`n"
+  "          `$ContentPath`n"
+  "        )`n"
+  "        Start-Process diskpart.exe -ArgumentList `$ArgumentList # -NoNewWindow`n"
+  "`n"
+  "        Write-Host -Object $([System.Char]39)Pausing for 10 seconds...$([System.Char]39)`n"
+  "        Start-Sleep 10`n"
+  "      }`n"
+  "    } while (`$RedirectedErr0rs.Count -ne 0)`n"
   "  }`n"
   "  #endregion`n"
   "  #region | OS Disk |`n"
@@ -279,6 +315,7 @@ ${03-OsDiskPart1 Command Here-String Precursor} = $(
 
 
 
+
   #########################################-BOUNDARY-#########################################
   { # Create with ConvertTo-HereStringPrecursor |
     & {
@@ -294,8 +331,44 @@ ${03-OsDiskPart1 Command Here-String Precursor} = $(
       }
       Export-CliXml -Path "X:\Scriptoids\non-USB disks.clixml" -InputObject (${non-USB disks})
       #region | Initialize All SATA/NVMe Disks |
+      $error.Clear()
+
       ${Initialized non-USB Disk CIM Instances} = foreach (${non-USB disk} in ${non-USB disks}) {
-        Initialize-Disk -UniqueId ${non-USB disk}.UniqueId -PartitionStyle 'GPT' -Confirm:$false -Verbose:$true -PassThru
+        do {
+          try {
+            $InputHT = @{
+              #UniqueId      = ${non-USB disk}.UniqueId
+              # Problems might arise when specifying disks by UniqueId. 
+              # Possibly because the disk's UniqueId changes after a clean ---> initialization
+              # Regardless of the underlying explanation, indicate a disk by disk Number attribute. 
+              Number         = ${non-USB disk}.Number
+              PartitionStyle = 'GPT'
+              Confirm        = $false
+              Verbose        = $true
+              #PassThru       = $true
+              ErrorAction    = 'Stop'
+              ErrorVariable  = 'RedirectedErr0rs'
+            }
+            Initialize-Disk @InputHT
+          } 
+          catch {
+            Write-Host -Object "Initialize-Disk for disk number $(${non-USB disk}.Number) failed. Reattempting DiskPart ---> clean"
+            ${DiskPartClean Here-String Precursor} = "select disk %_DISK_NUMBER_%"
+            ${DiskPartClean Here-String Precursor} += "`n"
+            ${DiskPartClean Here-String Precursor} += "clean"
+            ${DiskPartClean Here-String} = ${DiskPartClean Here-String Precursor} -replace '%_DISK_NUMBER_%',${non-USB disk}.Number
+            $ContentPath = "X:\Scriptoids\DiskPartClean$(${non-USB disk}.Number).txt"
+            Set-Content -Path $ContentPath -Value (${DiskPartClean Here-String})
+            $ArgumentList = @(
+              '/s'
+              $ContentPath
+            )
+            Start-Process diskpart.exe -ArgumentList $ArgumentList # -NoNewWindow
+
+            Write-Host -Object 'Pausing for 10 seconds...'
+            Start-Sleep 10
+          }
+        } while ($RedirectedErr0rs.Count -ne 0)
       }
       #endregion
       #region | OS Disk |
@@ -346,14 +419,14 @@ ${03-OsDiskPart1 Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${03-OsDiskPart1 Command Here-String} = ${03-OsDiskPart1 Command Here-String Precursor}
-${03-OsDiskPart1 Command} = [ScriptBlock]::Create(${03-OsDiskPart1 Command Here-String})
-${03-OsDiskPart1 Script Path} = "${WinPE Image Creation Parent Folder}\03-OsDiskPart1.ps1"
-Set-Content -Path ${03-OsDiskPart1 Script Path} -Value (${03-OsDiskPart1 Command Here-String})
+${08-OsDiskPart1 Command Here-String} = ${08-OsDiskPart1 Command Here-String Precursor}
+${08-OsDiskPart1 Command} = [ScriptBlock]::Create(${08-OsDiskPart1 Command Here-String})
+${08-OsDiskPart1 Script Path} = "${WinPE Image Creation Parent Folder}\08-OsDiskPart1.ps1"
+Set-Content -Path ${08-OsDiskPart1 Script Path} -Value (${08-OsDiskPart1 Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\03-OsDiskPart2.ps1" to the file system of the technician PC |
-${03-OsDiskPart2 Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\12-OsDiskPart2.ps1" to the file system of the technician PC |
+${12-OsDiskPart2 Command Here-String Precursor} = $(
 
 
 
@@ -474,14 +547,14 @@ ${03-OsDiskPart2 Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${03-OsDiskPart2 Command Here-String} = ${03-OsDiskPart2 Command Here-String Precursor}
-${03-OsDiskPart2 Command} = [ScriptBlock]::Create(${03-OsDiskPart2 Command Here-String})
-${03-OsDiskPart2 Script Path} = "${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1"
-Set-Content -Path ${03-OsDiskPart2 Script Path} -Value (${03-OsDiskPart2 Command Here-String})
+${12-OsDiskPart2 Command Here-String} = ${12-OsDiskPart2 Command Here-String Precursor}
+${12-OsDiskPart2 Command} = [ScriptBlock]::Create(${12-OsDiskPart2 Command Here-String})
+${12-OsDiskPart2 Script Path} = "${WinPE Image Creation Parent Folder}\12-OsDiskPart2.ps1"
+Set-Content -Path ${12-OsDiskPart2 Script Path} -Value (${12-OsDiskPart2 Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\05-DismLoad-ApplyImage.ps1" to the file system of the technician PC |
-${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\16-DismLoad-ApplyImage.ps1" to the file system of the technician PC |
+${16-DismLoad-ApplyImage Command Here-String Precursor} = $(
 
 
 
@@ -672,14 +745,14 @@ ${05-DismLoad-ApplyImage Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${05-DismLoad-ApplyImage Command Here-String} = ${05-DismLoad-ApplyImage Command Here-String Precursor}
-${05-DismLoad-ApplyImage Command} = [ScriptBlock]::Create(${05-DismLoad-ApplyImage Command Here-String})
-${05-DismLoad-ApplyImage Script Path} = "${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1"
-Set-Content -Path ${05-DismLoad-ApplyImage Script Path} -Value (${05-DismLoad-ApplyImage Command Here-String})
+${16-DismLoad-ApplyImage Command Here-String} = ${16-DismLoad-ApplyImage Command Here-String Precursor}
+${16-DismLoad-ApplyImage Command} = [ScriptBlock]::Create(${16-DismLoad-ApplyImage Command Here-String})
+${16-DismLoad-ApplyImage Script Path} = "${WinPE Image Creation Parent Folder}\16-DismLoad-ApplyImage.ps1"
+Set-Content -Path ${16-DismLoad-ApplyImage Script Path} -Value (${16-DismLoad-ApplyImage Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\06-MultiDrive-Prep.ps1" to the file system of the technician PC |
-${06-MultiDrive-Prep Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\20-MultiDrive-Prep.ps1" to the file system of the technician PC |
+${20-MultiDrive-Prep Command Here-String Precursor} = $(
 
 
 
@@ -1021,14 +1094,14 @@ ${06-MultiDrive-Prep Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${06-MultiDrive-Prep Command Here-String} = ${06-MultiDrive-Prep Command Here-String Precursor}
-${06-MultiDrive-Prep Command} = [ScriptBlock]::Create(${06-MultiDrive-Prep Command Here-String})
-${06-MultiDrive-Prep Script Path} = "${WinPE Image Creation Parent Folder}\06-MultiDrive-Prep.ps1"
-Set-Content -Path ${06-MultiDrive-Prep Script Path} -Value (${06-MultiDrive-Prep Command Here-String})
+${20-MultiDrive-Prep Command Here-String} = ${20-MultiDrive-Prep Command Here-String Precursor}
+${20-MultiDrive-Prep Command} = [ScriptBlock]::Create(${20-MultiDrive-Prep Command Here-String})
+${20-MultiDrive-Prep Script Path} = "${WinPE Image Creation Parent Folder}\20-MultiDrive-Prep.ps1"
+Set-Content -Path ${20-MultiDrive-Prep Script Path} -Value (${20-MultiDrive-Prep Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\07-x2cCopyOps.ps1" to the file system of the technician PC |
-${07-x2cCopyOps Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\24-x2cCopyOps.ps1" to the file system of the technician PC |
+${24-x2cCopyOps Command Here-String Precursor} = $(
 
 
 
@@ -1768,14 +1841,14 @@ ${07-x2cCopyOps Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${07-x2cCopyOps Command Here-String} = ${07-x2cCopyOps Command Here-String Precursor}
-${07-x2cCopyOps Command} = [ScriptBlock]::Create(${07-x2cCopyOps Command Here-String})
-${07-x2cCopyOps Script Path} = "${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1"
-Set-Content -Path ${07-x2cCopyOps Script Path} -Value (${07-x2cCopyOps Command Here-String})
+${24-x2cCopyOps Command Here-String} = ${24-x2cCopyOps Command Here-String Precursor}
+${24-x2cCopyOps Command} = [ScriptBlock]::Create(${24-x2cCopyOps Command Here-String})
+${24-x2cCopyOps Script Path} = "${WinPE Image Creation Parent Folder}\24-x2cCopyOps.ps1"
+Set-Content -Path ${24-x2cCopyOps Script Path} -Value (${24-x2cCopyOps Command Here-String})
 #endregion
 
-#region | Write "${env:.CommonItems}\WinPE\09-MachineRecon.ps1" to the file system of the technician PC |
-${09-MachineRecon Command Here-String Precursor} = $(
+#region | Write "${env:.CommonItems}\WinPE\99-MachineRecon.ps1" to the file system of the technician PC |
+${99-MachineRecon Command Here-String Precursor} = $(
   #region | OS Disk | Hyper-V Disk |
 
 
@@ -1810,10 +1883,10 @@ ${09-MachineRecon Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
 ) -join ''
 
-${09-MachineRecon Command Here-String} = ${09-MachineRecon Command Here-String Precursor}
-${09-MachineRecon Command} = [ScriptBlock]::Create(${09-MachineRecon Command Here-String})
-${09-MachineRecon Script Path} = "${WinPE Image Creation Parent Folder}\09-MachineRecon.ps1"
-Set-Content -Path ${09-MachineRecon Script Path} -Value (${09-MachineRecon Command Here-String})
+${99-MachineRecon Command Here-String} = ${99-MachineRecon Command Here-String Precursor}
+${99-MachineRecon Command} = [ScriptBlock]::Create(${99-MachineRecon Command Here-String})
+${99-MachineRecon Script Path} = "${WinPE Image Creation Parent Folder}\99-MachineRecon.ps1"
+Set-Content -Path ${99-MachineRecon Script Path} -Value (${99-MachineRecon Command Here-String})
 #endregion
 
 #region | Write "${env:.CommonItems}\WinPE\Bootable USB with PowerShell-enabled WinPE Script.ps1" to the file system of the technician PC |
@@ -2031,13 +2104,13 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    Get-ChildItem -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\..\*.clixml$([System.Char]34) | ForEach-Object -Process {Copy-Item -Path `$_.FullName -Destination $([System.Char]34)`$folder$([System.Char]34)}`n"
   "`n"
   "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\00-ExecPol-FwCheck-PreDiskOps.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\01-DiskPartClean.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\03-OsDiskPart1.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\06-MultiDrive-Prep.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
-  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\09-MachineRecon.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\04-DiskPartClean.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\08-OsDiskPart1.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\12-OsDiskPart2.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\16-DismLoad-ApplyImage.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\20-MultiDrive-Prep.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\24-x2cCopyOps.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
+  "    Move-Item -Path $([System.Char]34)`${WinPE Image Creation Parent Folder}\99-MachineRecon.ps1$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34)`n"
   "`n"
   "    `$path = $([System.Char]34)`${Mount Directory Path}\Scriptoids\5.1$([System.Char]34)`n"
   "    `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -2318,13 +2391,13 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         Get-ChildItem -Path "${WinPE Image Creation Parent Folder}\..\*.clixml" | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
 
         Move-Item -Path "${WinPE Image Creation Parent Folder}\00-ExecPol-FwCheck-PreDiskOps.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\01-DiskPartClean.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\03-OsDiskPart1.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\03-OsDiskPart2.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\05-DismLoad-ApplyImage.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\06-MultiDrive-Prep.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\07-x2cCopyOps.ps1" -Destination "$folder"
-        Move-Item -Path "${WinPE Image Creation Parent Folder}\09-MachineRecon.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\04-DiskPartClean.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\08-OsDiskPart1.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\12-OsDiskPart2.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\16-DismLoad-ApplyImage.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\20-MultiDrive-Prep.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\24-x2cCopyOps.ps1" -Destination "$folder"
+        Move-Item -Path "${WinPE Image Creation Parent Folder}\99-MachineRecon.ps1" -Destination "$folder"
 
         $path = "${Mount Directory Path}\Scriptoids\5.1"
         $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
