@@ -413,3 +413,4 @@ $HT = @{
 Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
 Publish-DscConfiguration -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force -Verbose:$true
 Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$true
+Start-Sleep 5 # Pausing for a few seconds is necessary for the file-system objects to come into existence and be detected. 
