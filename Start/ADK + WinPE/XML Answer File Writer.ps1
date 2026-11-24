@@ -352,8 +352,6 @@ $XmlWriter.WriteStartDocument()
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
                 "-Command "
                 $([System.Char]34)
-                #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
-                #"`${00 Hadean Here-String} = Get-Content -Raw -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
                 "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
               )
