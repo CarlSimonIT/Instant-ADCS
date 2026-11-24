@@ -171,6 +171,8 @@ class QuickMgmtCnameConversion {
     ${Hyper-V VM Name-to-Cname Conversion} += @{${script:AD Forest Creator Mgmt Cname} = '00.00 Domain Controller'}
     ${Hyper-V VM Name-to-Cname Conversion} += @{'00.00 Domain Controller' = ${script:AD Forest Creator Mgmt Cname}}
     #endregion
+    ${Hyper-V VM Name-to-Cname Conversion} += @{${script:DSC WebServer Mgmt Cname} = '01.00 .mof file distribution web server'}
+    ${Hyper-V VM Name-to-Cname Conversion} += @{'01.00 .mof file distribution web server' = ${script:DSC WebServer Mgmt Cname}}
     #region | PKI |
     ${Hyper-V VM Name-to-Cname Conversion} += @{${script:Root CA Server Mgmt Cname} = '02.00 Standalone Root CA Host'}
     ${Hyper-V VM Name-to-Cname Conversion} += @{'02.00 Standalone Root CA Host' = ${script:Root CA Server Mgmt Cname}}
