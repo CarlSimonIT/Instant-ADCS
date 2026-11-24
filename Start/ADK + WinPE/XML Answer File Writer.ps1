@@ -61,7 +61,7 @@ $XmlWriter.WriteStartDocument()
   $XmlWriter.WriteStartElement('unattend','urn:schemas-microsoft-com:unattend')
 
   #region | settings |
-    #region | settings | pass = specialize |
+    #region | settings | pass =    |
     $XmlWriter.WriteStartElement('settings')
       $XmlWriter.WriteAttributeString('pass','specialize')
 
@@ -119,7 +119,7 @@ $XmlWriter.WriteStartDocument()
 
           $XmlWriter.WriteStartElement('RunSynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
-            $XmlWriter.WriteElementString('Description',"Scriptblocks within SpEcialiZe.ps1 are executed in 'NT Authority\System' context.")
+            $XmlWriter.WriteElementString('Description',"Scriptblocks within Specialize.ps1 are executed in 'NT Authority\System' context.")
             $XmlWriter.WriteElementString('Path',$(
               -join @(
                 "powershell.exe "
@@ -130,7 +130,7 @@ $XmlWriter.WriteStartDocument()
                 "Get-Content "
                 "-Raw "
                 "-Path "
-                "$([System.Char]39)C:\Windows\Setup\Scripts\SpEcialiZe.ps1$([System.Char]39) "
+                "$([System.Char]39)C:\Windows\Setup\Scripts\Specialize.ps1$([System.Char]39) "
                 "| "
                 "Invoke-Expression "
                 #"-Verbose; pause"
@@ -341,7 +341,6 @@ $XmlWriter.WriteStartDocument()
           $XmlWriter.WriteEndElement()
           #endregion
 
-
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
             $XmlWriter.WriteElementString('Description',"Round #1 of '.\00 Hadean.ps1'")
@@ -351,10 +350,20 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
+                #"`${00 Hadean Here-String} = Get-Content -Raw -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -368,10 +377,20 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
+                #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -385,10 +404,20 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
+                #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -402,10 +431,20 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
+                #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -419,10 +458,19 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -821,6 +869,7 @@ $XmlWriter.WriteStartDocument()
           #>
           #endregion
 
+
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
             $XmlWriter.WriteElementString('Description',"Round #1 of '.\01 Eoarchean.ps1'")
@@ -830,14 +879,22 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-Command "
+                # $([System.Char]34)
+                # "`${00 Hadean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
-
 
           $XmlWriter.WriteStartElement('SynchronousCommand')
             $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
@@ -848,10 +905,19 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -865,10 +931,19 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -882,10 +957,45 @@ $XmlWriter.WriteStartDocument()
                 "powershell.exe "
                 "-NoProfile "
                 "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
-                "-File "
+                "-Command "
                 $([System.Char]34)
-                "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                # $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #5 of '.\01 Eoarchean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
+                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
+                $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1"
+                # $([System.Char]34)
               )
             ))
           $XmlWriter.WriteEndElement()
@@ -1491,7 +1601,7 @@ $XmlWriter.WriteStartDocument()
     $XmlWriter.WriteElementString('ExtractScript',${ExtractScript Here-String})
     #endregion
 
-    #region | SpEcialiZe.ps1 Here-String | A-Scripts | Executed by NT Authority\System, before user accounts are created |
+    #region | Specialize.ps1 Here-String | A-Scripts | Executed by NT Authority\System, before user accounts are created |
     #region | "Pause Windows Update-Command within Scheduled Task.ps1" Here-String | Pause Windows Update until AFTER WSUS construction |
     ${File Pause Windows Update-Command within Scheduled Task.ps1 Here-String} = $(
       #region |  |
@@ -2257,8 +2367,8 @@ $XmlWriter.WriteStartDocument()
         $XmlWriter.WriteString(${File UScheduler_Oobe OutlookUpdate-REMOVE.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
-    #region | "Sticky Keys-DISABLED SpEcialiZe version.ps1" Here-String and XML Element |
-    ${File Sticky Keys-DISABLED SpEcialiZe version.ps1 Here-String} = $(
+    #region | "Sticky Keys-DISABLED Specialize version.ps1" Here-String and XML Element |
+    ${File Sticky Keys-DISABLED Specialize version.ps1 Here-String} = $(
       "`n"
       "`t`t`treg.exe add $([System.Char]34)HKU\.DEFAULT\Control Panel\Accessibility\StickyKeys$([System.Char]34) /v $([System.Char]34)Flags$([System.Char]34) /t $([System.Char]34)REG_SZ$([System.Char]34) /d $([System.Char]34)10$([System.Char]34) /f`n"
       "`t`t"
@@ -2267,8 +2377,8 @@ $XmlWriter.WriteStartDocument()
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Sticky Keys-DISABLED SpEcialiZe version.ps1')
-        $XmlWriter.WriteString(${File Sticky Keys-DISABLED SpEcialiZe version.ps1 Here-String})
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Sticky Keys-DISABLED Specialize version.ps1')
+        $XmlWriter.WriteString(${File Sticky Keys-DISABLED Specialize version.ps1 Here-String})
       $XmlWriter.WriteEndElement()
     #endregion
     #region | "Chat AutoInstall-DISABLED.ps1" Here-String and XML Element |
@@ -2415,13 +2525,13 @@ $XmlWriter.WriteStartDocument()
 
 
 
-    ${File SpEcialiZe.ps1 Here-String} = $(
+    ${File Specialize.ps1 Here-String} = $(
 
 
 
       #region |  |
       "`n"
-      "`t`t`t`$SpEcialiZeScriptBlocks = `$(`n"
+      "`t`t`t`$SpecializeScriptBlocks = `$(`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Windows Update-PAUSE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\No non-GPO audit policy settings.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\WSMan Envelope Size.ps1$([System.Char]39)}`n"
@@ -2440,7 +2550,7 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Shortcuts-Microsoft Edge-DELETE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\UScheduler_Oobe DevHomeUpdate-REMOVE.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\UScheduler_Oobe OutlookUpdate-REMOVE.ps1$([System.Char]39)}`n"
-      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Sticky Keys-DISABLED SpEcialiZe version.ps1$([System.Char]39)}`n"
+      "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Sticky Keys-DISABLED Specialize version.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Chat AutoInstall-DISABLED.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\News And Interests-DISALLOW.ps1$([System.Char]39)}`n"
       "`t`t`t  {& $([System.Char]39)C:\Windows\Setup\Scripts\Windows Consumer Features-DISABLE.ps1$([System.Char]39)}`n"
@@ -2452,9 +2562,9 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t)`n"
       "`t`t`t& {`n"
       "`t`t`t  [System.Single] `$Complete = 0`n"
-      "`t`t`t  [System.Single] `$Increment = 100 / `$SpEcialiZeScriptBlocks.Count`n"
-      "`t`t`t  foreach (`$script in `$SpEcialiZeScriptBlocks) {`n"
-      "`t`t`t    Write-Progress -Activity $([System.Char]39)Running scriptblocks in SpEcialiZe.ps1. Do not close this window.$([System.Char]39) -PercentComplete `$Complete`n"
+      "`t`t`t  [System.Single] `$Increment = 100 / `$SpecializeScriptBlocks.Count`n"
+      "`t`t`t  foreach (`$script in `$SpecializeScriptBlocks) {`n"
+      "`t`t`t    Write-Progress -Activity $([System.Char]39)Running scriptblocks in Specialize.ps1. Do not close this window.$([System.Char]39) -PercentComplete `$Complete`n"
       "`t`t`t    $([System.Char]34)*** Will now execute command «{0}»$([System.Char]34) -f `$(`n"
       "`t`t`t      `$script.ToString().Trim() -replace $([System.Char]39)\s+$([System.Char]39), $([System.Char]39) $([System.Char]39) -replace $([System.Char]39)^(.{99})(.+)`$$([System.Char]39), $([System.Char]39)`$1……$([System.Char]39)`n"
       "`t`t`t    )`n"
@@ -2463,13 +2573,13 @@ $XmlWriter.WriteStartDocument()
       "`t`t`t    $([System.Char]39)*** Finished executing command after {0:0} ms.$([System.Char]39) -f [System.DateTime]::Now.Subtract(`$start).TotalMilliseconds`n"
       "`t`t`t    `$Complete += `$Increment`n"
       "`t`t`t  }`n"
-      "`t`t`t} *>&1 | Out-String -Width 1KB -Stream >> $([System.Char]34)C:\Windows\Setup\Scripts\SpEcialiZe.log$([System.Char]34)`n"
+      "`t`t`t} *>&1 | Out-String -Width 1KB -Stream >> $([System.Char]34)C:\Windows\Setup\Scripts\Specialize.log$([System.Char]34)`n"
       "`t`t"
       #endregion
 
 
       { # ConvertTo-HereStringCompatible |
-        $SpEcialiZeScriptBlocks = $(
+        $SpecializeScriptBlocks = $(
           {& 'C:\Windows\Setup\Scripts\Windows Update-PAUSE.ps1'}
           {& 'C:\Windows\Setup\Scripts\No non-GPO audit policy settings.ps1'}
           {& 'C:\Windows\Setup\Scripts\WSMan Envelope Size.ps1'}
@@ -2488,7 +2598,7 @@ $XmlWriter.WriteStartDocument()
           {& 'C:\Windows\Setup\Scripts\Shortcuts-Microsoft Edge-DELETE.ps1'}
           {& 'C:\Windows\Setup\Scripts\UScheduler_Oobe DevHomeUpdate-REMOVE.ps1'}
           {& 'C:\Windows\Setup\Scripts\UScheduler_Oobe OutlookUpdate-REMOVE.ps1'}
-          {& 'C:\Windows\Setup\Scripts\Sticky Keys-DISABLED SpEcialiZe version.ps1'}
+          {& 'C:\Windows\Setup\Scripts\Sticky Keys-DISABLED Specialize version.ps1'}
           {& 'C:\Windows\Setup\Scripts\Chat AutoInstall-DISABLED.ps1'}
           {& 'C:\Windows\Setup\Scripts\News And Interests-DISALLOW.ps1'}
           {& 'C:\Windows\Setup\Scripts\Windows Consumer Features-DISABLE.ps1'}
@@ -2500,9 +2610,9 @@ $XmlWriter.WriteStartDocument()
         )
         & {
           [System.Single] $Complete = 0
-          [System.Single] $Increment = 100 / $SpEcialiZeScriptBlocks.Count
-          foreach ($script in $SpEcialiZeScriptBlocks) {
-            Write-Progress -Activity 'Running scriptblocks in SpEcialiZe.ps1. Do not close this window.' -PercentComplete $Complete
+          [System.Single] $Increment = 100 / $SpecializeScriptBlocks.Count
+          foreach ($script in $SpecializeScriptBlocks) {
+            Write-Progress -Activity 'Running scriptblocks in Specialize.ps1. Do not close this window.' -PercentComplete $Complete
             "*** Will now execute command «{0}»" -f $(
               $script.ToString().Trim() -replace '\s+', ' ' -replace '^(.{99})(.+)$', '$1……'
             )
@@ -2511,17 +2621,17 @@ $XmlWriter.WriteStartDocument()
             '*** Finished executing command after {0:0} ms.' -f [System.DateTime]::Now.Subtract($start).TotalMilliseconds
             $Complete += $Increment
           }
-        } *>&1 | Out-String -Width 1KB -Stream >> "C:\Windows\Setup\Scripts\SpEcialiZe.log"
+        } *>&1 | Out-String -Width 1KB -Stream >> "C:\Windows\Setup\Scripts\Specialize.log"
       } | Out-Null
     ) -join ''
       $XmlWriter.WriteStartElement('File')
-        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\SpEcialiZe.ps1')
-        $XmlWriter.WriteString(${File SpEcialiZe.ps1 Here-String})
+        $XmlWriter.WriteAttributeString('path','C:\Windows\Setup\Scripts\Specialize.ps1')
+        $XmlWriter.WriteString(${File Specialize.ps1 Here-String})
       $XmlWriter.WriteEndElement()
 
     #endregion
 
-    #region | DefaultUser.ps1 Here-String | D-Scripts | D-Scripts run during the Specialize configuration pass, after the 'SpEcialiZe.ps1' script |
+    #region | DefaultUser.ps1 Here-String | D-Scripts | D-Scripts run during the Specialize configuration pass, after the 'Specialize.ps1' script |
     #region | "TaskbarLayoutModification.xml" XML Element |
     ${file TaskbarLayoutModification.xml} = New-TemporaryFile
     ${XmlFile TaskbarLayoutModification.xml} = Rename-Item -Path "${file TaskbarLayoutModification.xml}" -NewName $(${file TaskbarLayoutModification.xml}.BaseName + '.xml') -PassThru
