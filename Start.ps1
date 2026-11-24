@@ -101,11 +101,11 @@ param (
 )
 
 <#
-  $CloningRepoPath = "$env:UserProfile\write something\or nothing\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
+  $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"
   Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; 
-  ipmo "$env:UserProfile\write something\or nothing\CarlSimonIT\Instant-ADCS\A0\HereStringConversionModule.psm1"
-  $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'NET-W0RK'; 'Substring from DNS Namespace of Root Domain in AD Forest' = -join ((0..24) | %{ '-.'}) + '-'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize
-  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\write something\or nothing\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'NET-W0RK'; 'Substring from DNS Namespace of Root Domain in AD Forest' = -join ((0..24) | %{ '-.'}) + '-'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  ipmo "$env:UserProfile\GitHub\CarlSimonIT\Instant-ADCS\A0\HereStringConversionModule.psm1"
+  $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'NET-W0RK'; 'Substring from DNS Namespace of Root Domain in AD Forest' = -join ((0..24) | %{ '-.'}) + '-'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
+  Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force; $CloningRepoPath = "$env:UserProfile\GitHub\CarlSimonIT"; $CloningRepoFolder = try {Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'} catch {New-Item -Path $CloningRepoPath -ItemType 'Directory' -Force}; Set-Location -Path "$CloningRepoFolder"; $HT = @{'Bitwarden Account Email Address' = 'pwdsec3@gmail.com'; 'Folder Fully Qualified Name' = 'Instant-ADCS'; BadPassword = 'BadPassword!'; 'NetBIOS Name of Root Domain in AD Forest' = 'NET-W0RK'; 'Substring from DNS Namespace of Root Domain in AD Forest' = -join ((0..24) | %{ '-.'}) + '-'}; & '.\Instant-ADCS\Start.ps1' @HT; Set-Location -Path 'C:\'; (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
   (Get-Job).Where({$_.State -ne 'Running'}) | Remove-Job; Get-Job | Format-Table -AutoSize; 
   Clear-Host
   # see 'https://www.hurryupandwait.io/blog/certificate-password-less-based-authentication-in-winrm'
@@ -1134,7 +1134,7 @@ $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $
 Write-Host -Object "`n  Prepare your Drivers folder. Press Enter when ready to proceed.`n" -ForegroundColor $(rFc)
 <#
   $drivers128 = 'J:'
-  $destination = "$env:UserProfile\write something\or nothing\CarlSimonIT\.CommonItems\Offline WU\Drivers"
+  $destination = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\Offline WU\Drivers"
 
   $HT = @{
     Path        = "$drivers128\drivers\realtek\RTL8168E\Install_PCIE_WinServer2025"
@@ -1435,7 +1435,7 @@ if ($IsPresent) { # If the .swm is present, then format the other 80% of the $OS
 #region | Download tasks |
 #region | Download, but do not install, DSC Resource modules |
 $path = "$PSScriptRoot\..\.CommonItems\usb0\$FolderFQN\cfg\DSC Resources\PowerShell Gallery"
-#            $path = 'C:\Users\lowpr\write something\or nothing\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
+#            $path = 'C:\Users\lowpr\GitHub\CarlSimonIT\.CommonItems\usb0\Instant-ADCS\cfg\DSC Resources\PowerShell Gallery'
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 ${DSC Resource module Save Path} = "$folder"
 Export-CliXml -Path "$PSScriptRoot\..\.CommonItems\DSC Resource module Save Path.clixml" -InputObject (${DSC Resource module Save Path})
@@ -1933,11 +1933,14 @@ Get-ChildItem -Path "$PSScriptRoot\..\.CommonItems" -Filter '*.clixml' | ForEach
   Copy-Item -Path $_.FullName -Destination "$folder"
 }
 Write-Host -Object "Copy clixml files into usb1 directory-FINISH" -ForegroundColor $(rFc)
+pause
 #endregion
 #region | Copy DSC files into usb1 directory |
 $path = "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN"; 
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
+Get-ChildItem -Path "$PSScriptRoot\DSC\Dot-Sourced Structural Data" -recurse
+pause
 Copy-Item -Path "$PSScriptRoot\DSC\Dot-Sourced Structural Data" -Destination "$folder" -Recurse
 
 Get-ChildItem -Path "$PSScriptRoot\DSC" -Filter '*.ps1' | ForEach-Object -Process {
@@ -1987,7 +1990,7 @@ if ($null -ne $usb0) {
     } else {
       ${Size of Original ISO File on Fixed Disk} = Get-Item -Path "${Offline WU-Original Server 2025 Folder}\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
       ${Size of Original ISO File on External Media} = Get-Item -Path "$folder\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-      Write-Host -Object "`nComparing sizes of Original 'Windows Server 2025.iso' in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
+      Write-Host -Object "`nComparing sizes of Original 'Windows Server 2025.iso' in local fixed disk vs `$usb0 external media:" -ForegroundColor $(rFc)
       Write-Host -Object "  `${Size of Original ISO File on Fixed Disk}     = ${Size of Original ISO File on Fixed Disk}" -ForegroundColor $(rFc)
       Write-Host -Object "  `${Size of Original ISO File on External Media} = ${Size of Original ISO File on External Media}" -ForegroundColor $(rFc)
       if (${Size of Original ISO File on Fixed Disk} -ne ${Size of Original ISO File on External Media}) {
@@ -2009,7 +2012,7 @@ if ($null -ne $usb0) {
     } else {
       ${Size of Patched ISO File on Fixed Disk} = Get-Item -Path "${Offline WU-Patched Server 2025 Folder}\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
       ${Size of Patched ISO File on External Media} = Get-Item -Path "$folder\Windows Server 2025.iso" | Select-Object -ExpandProperty 'Length'
-      Write-Host -Object "`nComparing sizes of Patched 'Windows Server 2025.iso' in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
+      Write-Host -Object "`nComparing sizes of Patched 'Windows Server 2025.iso' in local fixed disk vs `$usb0 external media:" -ForegroundColor $(rFc)
       Write-Host -Object "  `${Size of Patched ISO File on Fixed Disk}     = ${Size of Patched ISO File on Fixed Disk}" -ForegroundColor $(rFc)
       Write-Host -Object "  `${Size of Patched ISO File on External Media} = ${Size of Patched ISO File on External Media}" -ForegroundColor $(rFc)
       if (${Size of Patched ISO File on Fixed Disk} -ne ${Size of Patched ISO File on External Media}) {
@@ -2023,53 +2026,105 @@ if ($null -ne $usb0) {
 
   #region | Windows ADK + WinPE offline installation components |
   $ZipFileBaseName = 'Windows ADK 2026-09'
-  $path = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
-  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-  ${Windows ADK 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${Windows ADK 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
+  ${Job-Name} = "Copy of '$ZipFileBaseName' .zip file from Local Fixed Disk to External Removable Media"
+  ${Running-Job} = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq ${Job-Name}  -and `
+    $_.State -eq 'Running'
+  }
+  if (${Running-Job} -eq $null) {
+    $path = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ${Windows ADK 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${Windows ADK 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
 
-  $IsPresent = Test-Path -Path "$folder\$ZipFileBaseName.zip"
-  if (-not $IsPresent) {
-    $IsReady = Test-Path -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
-    if ($IsReady) {
-      Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
-    }
-  } else {
-    Write-Host -Object "`nComparing the two file sizes of '$ZipFileBaseName' in different locations:`n" -ForegroundColor $(rFc)
-    ${Size of ADK .zip on Fixed Disk} = (Get-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
-    ${Size in ADK .zip on External Media} = (Get-Item -Path "$folder\$ZipFileBaseName.zip").Length
-    Write-Host -Object "`nComparing sizes of ADK .zip file in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
-    Write-Host -Object "  `${Size of ADK .zip on Fixed Disk}     = ${Size of ADK .zip on Fixed Disk}" -ForegroundColor $(rFc)
-    Write-Host -Object "  `${Size in ADK .zip on External Media} = ${Size in ADK .zip on External Media}" -ForegroundColor $(rFc)
+    $IsPresent = Test-Path -Path "$folder\$ZipFileBaseName.zip"
+    if (-not $IsPresent) {
+      $IsReady = Test-Path -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
+      if ($IsReady) {
+        $ArgumentList = @(
+          ${Windows ADK 2026-09 Extracted Folder Parent Path}
+          $ZipFileBaseName
+          "$folder"
+        )
+        Start-Job -Name ${Job-Name} -ArgumentList $ArgumentList -ScriptBlock {
+          ${Windows ADK 2026-09 Extracted Folder Parent Path} = $args[0]
+          $ZipFileBaseName = $args[1]
+          ${Folder Path} = $args[2]
+          Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination ${Folder Path}
+        } | Out-Null
+      }
+    } else {
+      ${Size of ADK .zip on Fixed Disk} = (Get-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
+      ${Size in ADK .zip on External Media} = (Get-Item -Path "$folder\$ZipFileBaseName.zip").Length
+      Write-Host -Object "`nComparing sizes of ADK .zip file in local fixed disk vs `$usb0 external media:" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size of ADK .zip on Fixed Disk}     = ${Size of ADK .zip on Fixed Disk}" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size in ADK .zip on External Media} = ${Size in ADK .zip on External Media}" -ForegroundColor $(rFc)
 
-    if (${Size of ADK .zip on Fixed Disk} -ne ${Size in ADK .zip on External Media}) {
-      Remove-Item -Path "$folder\$ZipFileBaseName.zip"
-      Write-Host -Object "`nCopying ADK .zip file into `$usb0 external media...`n" -ForegroundColor $(rFc)
-      Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+      if (${Size of ADK .zip on Fixed Disk} -ne ${Size in ADK .zip on External Media}) {
+        Remove-Item -Path "$folder\$ZipFileBaseName.zip"
+        Write-Host -Object "`nCopying ADK .zip file into `$usb0 external media...`n" -ForegroundColor $(rFc)
+        $ArgumentList = @(
+          ${Windows ADK 2026-09 Extracted Folder Parent Path}
+          $ZipFileBaseName
+          "$folder"
+        )
+        Start-Job -Name ${Job-Name} -ArgumentList $ArgumentList -ScriptBlock {
+          ${Windows ADK 2026-09 Extracted Folder Parent Path} = $args[0]
+          $ZipFileBaseName = $args[1]
+          ${Folder Path} = $args[2]
+          Copy-Item -Path "${Windows ADK 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination ${Folder Path}
+        } | Out-Null
+      }
     }
   }
 
   $ZipFileBaseName = 'WinPE 2026-09'
-  $path = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
-  $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
-  ${WinPE 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${WinPE 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
-  $IsPresent = Test-Path -Path "$folder\$ZipFileBaseName.zip"
-  if (-not $IsPresent) {
-    $IsReady = Test-Path -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
-    if ($IsReady) {
-      Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
-    }
-  } else {
-    Write-Host -Object "`nComparing the two file sizes of '$ZipFileBaseName' in different locations:`n" -ForegroundColor $(rFc)
-    ${Size of WinPE .zip on Fixed Disk} = (Get-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
-    ${Size in WinPE .zip on External Media} = (Get-Item -Path "$folder\$ZipFileBaseName.zip").Length
-    Write-Host -Object "`nComparing sizes of WinPE .zip file in local fixed disk vs `$usb0 external media:`n" -ForegroundColor $(rFc)
-    Write-Host -Object "  `${Size of WinPE .zip on Fixed Disk}     = ${Size of WinPE .zip on Fixed Disk}" -ForegroundColor $(rFc)
-    Write-Host -Object "  `${Size in WinPE .zip on External Media} = ${Size in WinPE .zip on External Media}" -ForegroundColor $(rFc)
+  ${Job\Name} = "Copy of '$ZipFileBaseName' .zip file from Local Fixed Disk to External Removable Media"
+  ${Running\Job} = Get-Job | Where-Object -FilterScript {
+    $_.Name  -eq ${Job\Name}  -and `
+    $_.State -eq 'Running'
+  }
+  if (${Job\Name} -eq $null) {
+    $path = "$usb0\$FolderFQN\cfg\installs\$ZipFileBaseName"
+    $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+    ${WinPE 2026-09 Extracted Folder Parent Path} = Resolve-Path -Path "${WinPE 2026-09 Extracted Folder Path}\.." | Select-Object -ExpandProperty 'Path'
+    $IsPresent = Test-Path -Path "$folder\$ZipFileBaseName.zip"
+    if (-not $IsPresent) {
+      $IsReady = Test-Path -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip"
+      if ($IsReady) {
+        $ArgumentList = @(
+          ${WinPE 2026-09 Extracted Folder Parent Path}
+          $ZipFileBaseName
+          "$folder"
+        )
+        Start-Job -Name ${Job-Name} -ArgumentList $ArgumentList -ScriptBlock {
+          ${WinPE 2026-09 Extracted Folder Parent Path} = $args[0]
+          $ZipFileBaseName = $args[1]
+          ${Folder Path} = $args[2]
+          Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination ${Folder Path}
+        } | Out-Null
+      }
+    } else {
+      ${Size of WinPE .zip on Fixed Disk} = (Get-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip").Length
+      ${Size in WinPE .zip on External Media} = (Get-Item -Path "$folder\$ZipFileBaseName.zip").Length
+      Write-Host -Object "`nComparing sizes of WinPE .zip file in local fixed disk vs `$usb0 external media:" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size of WinPE .zip on Fixed Disk}     = ${Size of WinPE .zip on Fixed Disk}" -ForegroundColor $(rFc)
+      Write-Host -Object "  `${Size in WinPE .zip on External Media} = ${Size in WinPE .zip on External Media}" -ForegroundColor $(rFc)
 
-    if (${Size of WinPE .zip on Fixed Disk} -ne ${Size in WinPE .zip on External Media}) {
-      Remove-Item -Path "$folder\$ZipFileBaseName.zip"
-      Write-Host -Object "`nCopying WinPE .zip file into `$usb0 external media...`n" -ForegroundColor $(rFc)
-      Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination "$folder"
+      if (${Size of WinPE .zip on Fixed Disk} -ne ${Size in WinPE .zip on External Media}) {
+        Remove-Item -Path "$folder\$ZipFileBaseName.zip"
+        Write-Host -Object "`nCopying WinPE .zip file into `$usb0 external media...`n" -ForegroundColor $(rFc)
+        $ArgumentList = @(
+          ${WinPE 2026-09 Extracted Folder Parent Path}
+          $ZipFileBaseName
+          "$folder"
+        )
+        Start-Job -Name ${Job-Name} -ArgumentList $ArgumentList -ScriptBlock {
+          ${WinPE 2026-09 Extracted Folder Parent Path} = $args[0]
+          $ZipFileBaseName = $args[1]
+          ${Folder Path} = $args[2]
+          Copy-Item -Path "${WinPE 2026-09 Extracted Folder Parent Path}\$ZipFileBaseName.zip" -Destination ${Folder Path}
+        } | Out-Null
+      }
     }
   }
   #endregion
