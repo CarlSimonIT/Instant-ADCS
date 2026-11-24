@@ -1,5 +1,8 @@
+#Requires -Version 5.1
+#Requires -PSEdition Desktop
+#Requires -RunAsAdministrator
+
 #region | Classes/Functions/Variables defined before launching a chronological unit |
-#$ProjectName = "Instant-ADCS"
 $ProjectName = Import-Clixml -Path "$env:DSC_CFG_ROOT\CliXmls\FolderFQN.clixml";
 ${.s} = "$env:DSC_CFG_ROOT\$ProjectName\Dot-Sourced Structural Data"
 
@@ -12,11 +15,7 @@ ${.s} = "$env:DSC_CFG_ROOT\$ProjectName\Dot-Sourced Structural Data"
 . "$PSHOME\Regular Expression Patterns.ps1"
 
 $Host.PrivateData.DebugForegroundColor = $(rFc)
-# $Host.PrivateData.DebugBackgroundColor = $(rBc)
-
 $Host.PrivateData.VerboseForegroundColor = $(rFc)
-# $Host.PrivateData.VerboseBackgroundColor = $(rBc)
-$error.Clear()
 #endregion
 
 $InstanceIndex = '00'; $InstanceChrono = 'Hadean'; $InstanceDesc = "Pre-Document Encryption"
@@ -414,4 +413,3 @@ $HT = @{
 Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
 Publish-DscConfiguration -ComputerName 'localhost' -Path $lcmHT['OutputPath'] -Force -Verbose:$true
 Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$true
-Start-Sleep 15
