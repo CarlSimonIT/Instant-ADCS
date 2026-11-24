@@ -156,5 +156,33 @@ $AliasName = 'grfn'
 $AliasValue = 'Get-RandomFileName'
 try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {Set-Alias -Name $AliasName -Value $AliasValue}
 #try {Get-Alias -Name $AliasName -ErrorAction 'Stop' | Out-Null} catch {New-Alias -Name $AliasName -Value $AliasValue | Out-Null}
+
+function Set-FileAsWriteReadAndDelete {
+  param (
+    [Parameter(
+      Mandatory = $true,
+      Position  = 0
+    )]
+    [ValidateScript(
+      {
+        Test-Path -Path $_
+      }
+    )]
+    [System.String]
+    $Path
+  )
+
+  begin {
+    Set-StrictMode -Version 'Latest' -Verbose
+    $VerbosePreference = 'Continue'
+  }
+
+  process {
+    Set-ItemProperty -Path $Path -Name 'IsReadOnly' -Value $false
+    Remove-Item -Path $Path
+  }
+
+  end {}
+}
 #endregion
 
