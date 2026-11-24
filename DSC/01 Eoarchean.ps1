@@ -23,8 +23,10 @@ ${.s} = "$env:DSC_CFG_ROOT\$ProjectName\Dot-Sourced Structural Data"
 . "$PSHOME\File-based DNS Naming.ps1"
 . "$PSHOME\RelativeID and CanonicalName Sets.ps1"
 . "$PSHOME\Class Definitions\Adapter Hardware Type.ps1"
-# $ConfigurationData frequently references the 'Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetIPInterface' namespace 
-# which is provided by the 'NetTCPIP' module. For this reason, the 'NetTCPIP' module is manually imported. 
+# $ConfigurationData frequently references the 
+# 'Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetIPInterface'
+# namespace, which is provided by the 'NetTCPIP' module. 
+# For this reason, the 'NetTCPIP' module is manually imported. 
 $PSModuleInfo = Import-Module 'NetTCPIP' -PassThru -Force
 . "$PSHOME\Class Definitions\Storage Spaces-Pooled Storage and Virtual Physical Disks.ps1"
 . "$PSHOME\Volume Letters on VM Instances.ps1"
@@ -90,7 +92,8 @@ $Paths = $(
 $Paths | ForEach-Object -Process {if (Test-Path -Path $_) {Set-FileAsWriteReadAndDelete -Path $_}}
 #endregion
 #region | Trackers |
-$InstanceIndex = '01'; $InstanceChrono = 'Eoarchean'; $InstanceDesc = 'One-time random variable selection without replacement and 2 of 3 phases for System VHDX gen.'
+$InstanceIndex = '01'; $InstanceChrono = 'Eoarchean'; $InstanceDesc = 'x'
+#$InstanceDesc = 'One-time random variable selection without replacement and 2 of 3 phases for System VHDX gen.'
 $InstanceName = 'x_' + $InstanceIndex + '_' + $InstanceChrono + '__' + $($InstanceDesc -replace '[^\w\.-]','_') # $($InstanceDesc -replace '\W','_') 
 $InstanceFolderName = $InstanceIndex + ' ' + $InstanceChrono # + ' ' + $InstanceDesc
 ${DSC ReRun ID} = [System.String]::Format('{0:yyyy}-{0:MMdd}-{0:HH}{0:mm}-{0:ss}',[System.DateTime]::Now)
@@ -573,6 +576,7 @@ Remove-Variable -Name 'Here-String Precursor','Here-String'
 #>
 #endregion
 #endregion
+
 #region | Configuration |
 Configuration $InstanceName {
   #region | Import DSC Resources into the Configuration Document |
@@ -682,7 +686,239 @@ Publish-DscConfiguration -CN $env:ComputerName -Path $lcmHT['OutputPath'] -Force
 #endregion
 #region | Enact the Configuration |
 ${time_begin Enact} = [System.DateTime]::Now
-Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$true
+Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$false
+${time_end Enact} = [System.DateTime]::Now
+$ts = ${time_end Enact} - ${time_begin Enact}; Write-Host -Object "  Enact $($InstanceName): $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
+${time_end Compile-Sign-Publish-Enact} = [System.DateTime]::Now
+$ts = ${time_end Compile-Sign-Publish-Enact} - ${time_begin Compile-Sign-Publish-Enact}; Write-Host -Object "`tCompile-Sign-Publish-Enact $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
+#endregion
+#endregion
+#region | Configuration |
+Configuration $InstanceName {
+  #region | Import DSC Resources into the Configuration Document |
+  Import-DscResource -ModuleName 'PSDesiredStateConfiguration'  -ModuleVersion 1.1
+  Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion 9.2.2
+  Import-DscResource -ModuleName 'AdHocInstantAdcsDsc'          -ModuleVersion 0.4.0
+  Import-DscResource -ModuleName 'ComputerManagementDsc'        -ModuleVersion 10.0.1
+  Import-DscResource -ModuleName 'CertificateDsc'               -ModuleVersion 6.1.0
+  Import-DscResource -ModuleName 'WSManDsc'                     -ModuleVersion 4.0.0
+  Import-DscResource -ModuleName 'NetworkingDsc'                -ModuleVersion 9.1.1
+  Import-DscResource -ModuleName 'xCIMSecurity'                 -ModuleVersion 1.0.0.1
+  Import-DscResource -ModuleName 'StorageDsc'                   -ModuleVersion 6.1.0
+  Import-DscResource -ModuleName 'xComputerManagement'          -ModuleVersion 4.1.0.0
+  Import-DscResource -ModuleName 'HyperVDsc'                    -ModuleVersion 4.0.0
+  Import-DscResource -ModuleName 'cHyper-V'                     -ModuleVersion 3.0.0.0
+  #endregion
+  Node $AllNodes.Where({
+    $_.Life          -eq $true                -and `
+    $_.SuperEmpire   -eq 'Microsoft'          -and `
+    $_.Empire        -eq 'PM'                 -and `
+    $_.SubEmpire     -eq 'Windows Server'     -and `
+    $_.SuperDominion -match '^Yes'            -and `
+    $_.Dominion      -eq 'Hyper-V'            -and `
+    $_.Kingdom       -eq 'Non-HA'             -and `
+    $_.Species       -eq 'Primordial Hyper-V Host'
+  }).NodeName {
+    . "${.s}\IL-System\Local Accounts and Group Membership with System account.ps1"
+    . "${.s}\Strict PowerShell 5.1 Tracking.ps1"
+    . "${.s}\Event Logs-Activate Channels of Microsoft-Windows-Dsc Provider.ps1"
+    . "${.s}\Enable BuiltIn Administrator on instances of Desktop Experience.ps1"
+    . "${.s}\Environment Variable Definitions.ps1"
+    . "${.s}\Directory Tree inside DSC_CFG_ROOT.ps1"
+    . "${.s}\Preboots Directory Set on DSC Authoring Station.ps1"
+    . "${.s}\One-time Write of VM Switch UUID.ps1"
+    . "${.s}\One-time Selection of Mac Address Space (8 bits) and New Random %ComputerNames%.ps1"
+    . "${.s}\File-based Predefined non-Random Variables.ps1"
+    . "${.s}\WinRM Part 1-WS-Man Client Config, WinRM Windows Service, WS-Man Service Settings.ps1"
+    . "${.s}\NVMe Native Support on Server 2025-Enable.ps1"
+    #. "${.s}\Windows ADK 2026-09-Archive Extraction.ps1"
+    #. "${.s}\Windows ADK 2026-09-Offline Installation.ps1"
+    #. "${.s}\WinPE 2026-09-Archive Extraction.ps1"
+    #. "${.s}\WinPE 2026-09-Offline Installation.ps1"
+    . "${.s}\UAC (User Account Control) on instances of Desktop Experience.ps1"
+    . "${.s}\Power Plan on instances of Desktop Experience.ps1"
+    . "${.s}\Time Zone via DSC + System Time via GPO.ps1"
+    . "${.s}\Execution Policy-Multiple Scopes.ps1"
+    . "${.s}\Ransomware Deployment Protocol (RDP).ps1"
+    . "${.s}\IE Enhanced Security Configuration on instances of Desktop Experience.ps1"
+    . "${.s}\Catalog of pre-PKI X.509v3 Certificates.ps1"
+    . "${.s}\One-time Write of VLAN Title and New Random VLAN ID.ps1"
+    . "${.s}\MAC Address Set v3 on Unclustered Hyper-V Host.ps1"
+    #. "${.s}\Immutable IPv4 Reservations.ps1"  ---> For the rare case when a predefined (non-random) IPv4 address is required, like a DNS Forwarder that's on a device not under DSC management.
+    . "${.s}\IPv4 Address Space Definitions.ps1"
+    . "${.s}\Sample Without Replacement Random IPv4 Addresses to Ensure Uniqueness.ps1"
+    . "${.s}\Firewall-Allow Inbound HTTPS-secured WinRM.ps1"
+    . "${.s}\Permissions Entries of WMI Namespaces on Remote Machines.ps1"
+    . "${.s}\Non-System .vhdx File-System Objects.ps1"
+    . "${.s}\Update %ComputerNam3% with the 'xComputer' DSC Resource (provided by xComputerManagement).ps1"
+    . "${.s}\Reboot after ComputerName Update.ps1"
+    . "${.s}\Windows Features, Roles, and Role Services-! Blank DependsOn.ps1"
+    . "${.s}\WinRM Part 2-HTTPS-Protected PowerShell Remoting.ps1"
+    . "${.s}\Network Refined v2-Motherboard-connected Network Adapters ONLY.ps1"
+    . "${.s}\Virtual Switch Clade 00.ps1"
+    . "${.s}\VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch.ps1"
+    . "${.s}\Network Refined v2-Abstraction-based Network Adapters ONLY.ps1"
+    . "${.s}\Hypervisor Config without Live Migration on UnClustered Hyper-V Host.ps1"
+    . "${.s}\Accumulated System VHDX Cascades-Block VHDX 2-Unique.ps1"
+    #. "${.s}\VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root.ps1" ---> Still need to implement. 
+  }
+}
+#endregion
+#region | Compile-Sign-Publish-Enact |
+#region | Compile |
+${time_begin Compile-Sign-Publish-Enact} = [System.DateTime]::Now
+$HT = @{
+  InstanceName      = $InstanceName
+  OutputPath        = $lcmHT['OutputPath']
+  ConfigurationData = $ConfigurationData
+  Verbose           = $true
+}
+${time_begin Compile} = [System.DateTime]::Now
+Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
+${time_end Compile} = [System.DateTime]::Now
+$ts = ${time_end Compile} - ${time_begin Compile}; Write-Host -Object "  Compile $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
+#endregion
+#region | Sign |
+$CodeSigningCert = Get-ChildItem -Path 'Cert:\LocalMachine\My\' -Recurse | Where-Object -FilterScript {
+  $_.FriendlyName -eq 'Pre-PKI Global Code Signer'
+}
+$HT = @{
+  Certificate     = $CodeSigningCert
+  FilePath        = $(
+    $ComputerName = Get-Content -Path "$Statics\CNs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+    $lcmHT['OutputPath'] + '\' + "$ComputerName.mof"
+  )
+  IncludeChain    = 'All'
+  Confirm         = $false
+  HashAlgorithm   = ${Global CNG CHA}
+  Verbose         = $false
+}
+# Digitally sign the .MOF with the code signing cert | performed on the DSC Authoring Station |
+$sig = Set-AuthenticodeSignature @HT
+#endregion
+#region | Publish (aka, "Stage") |
+# Stage the Configuration (i.e., convert the configuration into a Pending status): 
+Publish-DscConfiguration -CN $env:ComputerName -Path $lcmHT['OutputPath'] -Force -Verbose:$true
+#endregion
+#region | Enact the Configuration |
+${time_begin Enact} = [System.DateTime]::Now
+Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$false
+${time_end Enact} = [System.DateTime]::Now
+$ts = ${time_end Enact} - ${time_begin Enact}; Write-Host -Object "  Enact $($InstanceName): $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
+${time_end Compile-Sign-Publish-Enact} = [System.DateTime]::Now
+$ts = ${time_end Compile-Sign-Publish-Enact} - ${time_begin Compile-Sign-Publish-Enact}; Write-Host -Object "`tCompile-Sign-Publish-Enact $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
+#endregion
+#endregion
+#region | Configuration |
+Configuration $InstanceName {
+  #region | Import DSC Resources into the Configuration Document |
+  Import-DscResource -ModuleName 'PSDesiredStateConfiguration'  -ModuleVersion 1.1
+  Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion 9.2.2
+  Import-DscResource -ModuleName 'AdHocInstantAdcsDsc'          -ModuleVersion 0.4.0
+  Import-DscResource -ModuleName 'ComputerManagementDsc'        -ModuleVersion 10.0.1
+  Import-DscResource -ModuleName 'CertificateDsc'               -ModuleVersion 6.1.0
+  Import-DscResource -ModuleName 'WSManDsc'                     -ModuleVersion 4.0.0
+  Import-DscResource -ModuleName 'NetworkingDsc'                -ModuleVersion 9.1.1
+  Import-DscResource -ModuleName 'xCIMSecurity'                 -ModuleVersion 1.0.0.1
+  Import-DscResource -ModuleName 'StorageDsc'                   -ModuleVersion 6.1.0
+  Import-DscResource -ModuleName 'xComputerManagement'          -ModuleVersion 4.1.0.0
+  Import-DscResource -ModuleName 'HyperVDsc'                    -ModuleVersion 4.0.0
+  Import-DscResource -ModuleName 'cHyper-V'                     -ModuleVersion 3.0.0.0
+  #endregion
+  Node $AllNodes.Where({
+    $_.Life          -eq $true                -and `
+    $_.SuperEmpire   -eq 'Microsoft'          -and `
+    $_.Empire        -eq 'PM'                 -and `
+    $_.SubEmpire     -eq 'Windows Server'     -and `
+    $_.SuperDominion -match '^Yes'            -and `
+    $_.Dominion      -eq 'Hyper-V'            -and `
+    $_.Kingdom       -eq 'Non-HA'             -and `
+    $_.Species       -eq 'Primordial Hyper-V Host'
+  }).NodeName {
+    . "${.s}\IL-System\Local Accounts and Group Membership with System account.ps1"
+    . "${.s}\Strict PowerShell 5.1 Tracking.ps1"
+    . "${.s}\Event Logs-Activate Channels of Microsoft-Windows-Dsc Provider.ps1"
+    . "${.s}\Enable BuiltIn Administrator on instances of Desktop Experience.ps1"
+    . "${.s}\Environment Variable Definitions.ps1"
+    . "${.s}\Directory Tree inside DSC_CFG_ROOT.ps1"
+    . "${.s}\Preboots Directory Set on DSC Authoring Station.ps1"
+    . "${.s}\One-time Write of VM Switch UUID.ps1"
+    . "${.s}\One-time Selection of Mac Address Space (8 bits) and New Random %ComputerNames%.ps1"
+    . "${.s}\File-based Predefined non-Random Variables.ps1"
+    . "${.s}\WinRM Part 1-WS-Man Client Config, WinRM Windows Service, WS-Man Service Settings.ps1"
+    . "${.s}\NVMe Native Support on Server 2025-Enable.ps1"
+    #. "${.s}\Windows ADK 2026-09-Archive Extraction.ps1"
+    #. "${.s}\Windows ADK 2026-09-Offline Installation.ps1"
+    #. "${.s}\WinPE 2026-09-Archive Extraction.ps1"
+    #. "${.s}\WinPE 2026-09-Offline Installation.ps1"
+    . "${.s}\UAC (User Account Control) on instances of Desktop Experience.ps1"
+    . "${.s}\Power Plan on instances of Desktop Experience.ps1"
+    . "${.s}\Time Zone via DSC + System Time via GPO.ps1"
+    . "${.s}\Execution Policy-Multiple Scopes.ps1"
+    . "${.s}\Ransomware Deployment Protocol (RDP).ps1"
+    . "${.s}\IE Enhanced Security Configuration on instances of Desktop Experience.ps1"
+    . "${.s}\Catalog of pre-PKI X.509v3 Certificates.ps1"
+    . "${.s}\One-time Write of VLAN Title and New Random VLAN ID.ps1"
+    . "${.s}\MAC Address Set v3 on Unclustered Hyper-V Host.ps1"
+    #. "${.s}\Immutable IPv4 Reservations.ps1"  ---> For the rare case when a predefined (non-random) IPv4 address is required, like a DNS Forwarder that's on a device not under DSC management.
+    . "${.s}\IPv4 Address Space Definitions.ps1"
+    . "${.s}\Sample Without Replacement Random IPv4 Addresses to Ensure Uniqueness.ps1"
+    . "${.s}\Firewall-Allow Inbound HTTPS-secured WinRM.ps1"
+    . "${.s}\Permissions Entries of WMI Namespaces on Remote Machines.ps1"
+    . "${.s}\Non-System .vhdx File-System Objects.ps1"
+    . "${.s}\Update %ComputerNam3% with the 'xComputer' DSC Resource (provided by xComputerManagement).ps1"
+    . "${.s}\Reboot after ComputerName Update.ps1"
+    . "${.s}\Windows Features, Roles, and Role Services-! Blank DependsOn.ps1"
+    . "${.s}\WinRM Part 2-HTTPS-Protected PowerShell Remoting.ps1"
+    . "${.s}\Network Refined v2-Motherboard-connected Network Adapters ONLY.ps1"
+    . "${.s}\Virtual Switch Clade 00.ps1"
+    . "${.s}\VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch.ps1"
+    . "${.s}\Network Refined v2-Abstraction-based Network Adapters ONLY.ps1"
+    . "${.s}\Hypervisor Config without Live Migration on UnClustered Hyper-V Host.ps1"
+    . "${.s}\Accumulated System VHDX Cascades-Block VHDX 2-Unique.ps1"
+    #. "${.s}\VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root.ps1" ---> Still need to implement. 
+  }
+}
+#endregion
+#region | Compile-Sign-Publish-Enact |
+#region | Compile |
+${time_begin Compile-Sign-Publish-Enact} = [System.DateTime]::Now
+$HT = @{
+  InstanceName      = $InstanceName
+  OutputPath        = $lcmHT['OutputPath']
+  ConfigurationData = $ConfigurationData
+  Verbose           = $true
+}
+${time_begin Compile} = [System.DateTime]::Now
+Invoke-Expression -Verbose:$true -Command "$InstanceName @HT"
+${time_end Compile} = [System.DateTime]::Now
+$ts = ${time_end Compile} - ${time_begin Compile}; Write-Host -Object "  Compile $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
+#endregion
+#region | Sign |
+$CodeSigningCert = Get-ChildItem -Path 'Cert:\LocalMachine\My\' -Recurse | Where-Object -FilterScript {
+  $_.FriendlyName -eq 'Pre-PKI Global Code Signer'
+}
+$HT = @{
+  Certificate     = $CodeSigningCert
+  FilePath        = $(
+    $ComputerName = Get-Content -Path "$Statics\CNs\${DSC Authoring Station Mgmt Cname} ComputerName.txt"
+    $lcmHT['OutputPath'] + '\' + "$ComputerName.mof"
+  )
+  IncludeChain    = 'All'
+  Confirm         = $false
+  HashAlgorithm   = ${Global CNG CHA}
+  Verbose         = $false
+}
+# Digitally sign the .MOF with the code signing cert | performed on the DSC Authoring Station |
+$sig = Set-AuthenticodeSignature @HT
+#endregion
+#region | Publish (aka, "Stage") |
+# Stage the Configuration (i.e., convert the configuration into a Pending status): 
+Publish-DscConfiguration -CN $env:ComputerName -Path $lcmHT['OutputPath'] -Force -Verbose:$true
+#endregion
+#region | Enact the Configuration |
+${time_begin Enact} = [System.DateTime]::Now
+Start-DscConfiguration -UseExisting -Force -Wait:$true -Verbose:$false
 ${time_end Enact} = [System.DateTime]::Now
 $ts = ${time_end Enact} - ${time_begin Enact}; Write-Host -Object "  Enact $($InstanceName): $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
 ${time_end Compile-Sign-Publish-Enact} = [System.DateTime]::Now
@@ -690,9 +926,13 @@ $ts = ${time_end Compile-Sign-Publish-Enact} - ${time_begin Compile-Sign-Publish
 #endregion
 #endregion
 
+
+# start msedge.exe 'https://github.com/dsccommunity/SharePointDsc/wiki/Error-Exceeded-the-configured-MaxEnvelopeSize-quota'
+
 $ts = ${time_end Enact} - ${Begin ConfigurationData Confirmation}; Write-Host -Object "    $($InstanceName): $($ts.Minutes)m$($ts.Seconds)s" -ForegroundColor $(rFc) # -BackgroundColor $(rBc)
 
 Get-Variable -Name 'Define ConfigurationData Variable Here-String Precursor' | Remove-Variable
 Get-Variable -Name 'Define ConfigurationData Variable Here-String' | Remove-Variable
 Get-Variable -Name 'Define ConfigurationData Variable' | Remove-Variable
 Get-Variable -Name 'ConfigurationData' | Remove-Variable
+
