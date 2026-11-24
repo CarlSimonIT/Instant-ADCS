@@ -1133,7 +1133,7 @@ $path = "$PSScriptRoot\..\.CommonItems\Offline WU\Drivers"
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 Write-Host -Object "`n  Prepare your Drivers folder. Press Enter when ready to proceed.`n" -ForegroundColor $(rFc)
 <#
-  $drivers128 = 'J:'
+  $drivers128 = 'I:'
   $destination = "$env:UserProfile\GitHub\CarlSimonIT\.CommonItems\Offline WU\Drivers"
 
   $HT = @{
@@ -1933,19 +1933,23 @@ Get-ChildItem -Path "$PSScriptRoot\..\.CommonItems" -Filter '*.clixml' | ForEach
   Copy-Item -Path $_.FullName -Destination "$folder"
 }
 Write-Host -Object "Copy clixml files into usb1 directory-FINISH" -ForegroundColor $(rFc)
-pause
 #endregion
 #region | Copy DSC files into usb1 directory |
 $path = "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN"; 
 $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
 
 Get-ChildItem -Path "$PSScriptRoot\DSC\Dot-Sourced Structural Data" -recurse
-pause
 Copy-Item -Path "$PSScriptRoot\DSC\Dot-Sourced Structural Data" -Destination "$folder" -Recurse
 
 Get-ChildItem -Path "$PSScriptRoot\DSC" -Filter '*.ps1' | ForEach-Object -Process {
   Copy-Item -Path $_.FullName -Destination "$folder"
 }
+
+$path = "$PSScriptRoot\output\$FolderFQN\usb1\$FolderFQN\A0"; 
+$folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+Get-ChildItem -Path "$PSScriptRoot\A0" -Filter ('*.ps1') | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+Get-ChildItem -Path "$PSScriptRoot\A0" -Filter ('*.psm1') | ForEach-Object -Process {Copy-Item -Path $_.FullName -Destination "$folder"}
+
 #endregion
 #region | Copy usb1 directory into $usb1 |
 #Write-Host -Object "Copy usb1 directory into `$usb1-START" -ForegroundColor $(rFc)
