@@ -354,7 +354,7 @@ $XmlWriter.WriteStartDocument()
                 $([System.Char]34)
                 #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
                 #"`${00 Hadean Here-String} = Get-Content -Raw -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1$([System.Char]34); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -381,7 +381,7 @@ $XmlWriter.WriteStartDocument()
                 $([System.Char]34)
                 #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
                 #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -408,7 +408,7 @@ $XmlWriter.WriteStartDocument()
                 $([System.Char]34)
                 #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
                 #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -435,7 +435,7 @@ $XmlWriter.WriteStartDocument()
                 $([System.Char]34)
                 #"& $([System.Char]34)`$env:DSC_CFG_ROOT\$__DirectoryForDscConfigs\00 Hadean.ps1$([System.Char]34)"
                 #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -461,7 +461,7 @@ $XmlWriter.WriteStartDocument()
                 "-Command "
                 $([System.Char]34)
                 #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -474,6 +474,34 @@ $XmlWriter.WriteStartDocument()
               )
             ))
           $XmlWriter.WriteEndElement()
+
+          $XmlWriter.WriteStartElement('SynchronousCommand')
+            $XmlWriter.WriteElementString('Order',"%_Order_Index_%")
+            $XmlWriter.WriteElementString('Description',"Round #6 of '.\00 Hadean.ps1'")
+            $XmlWriter.WriteElementString('RequiresUserInput',"false")
+            $XmlWriter.WriteElementString('CommandLine',$(
+              -join @(
+                "powershell.exe "
+                "-NoProfile "
+                "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                "-Command "
+                $([System.Char]34)
+                #"`${00 Hadean Here-String} = Get-Content -Raw -Path `$([System.Char]39)`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1`$([System.Char]39); `${00 Hadean ScriptBlock} = Specialize[ScriptBlock]::Create(`${00 Hadean Here-String}); & `${00 Hadean ScriptBlock}"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\00 Hadean.ps1$([System.Char]39) | Invoke-Expression"
+                $([System.Char]34)
+
+                # "powershell.exe "
+                # "-NoProfile "
+                # "-WindowStyle $([System.Char]34)Maximized$([System.Char]34) "
+                # "-File "
+                # $([System.Char]34)
+                # "`$env:DSC_CFG_ROOT\$FolderFQN\00 Hadean.ps1"
+                # $([System.Char]34)
+              )
+            ))
+          $XmlWriter.WriteEndElement()
+
+
 
 
 
@@ -882,7 +910,7 @@ $XmlWriter.WriteStartDocument()
                 "-Command "
                 $([System.Char]34)
                 #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -908,7 +936,7 @@ $XmlWriter.WriteStartDocument()
                 "-Command "
                 $([System.Char]34)
                 #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -934,7 +962,7 @@ $XmlWriter.WriteStartDocument()
                 "-Command "
                 $([System.Char]34)
                 #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -960,7 +988,7 @@ $XmlWriter.WriteStartDocument()
                 "-Command "
                 $([System.Char]34)
                 #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
@@ -986,7 +1014,7 @@ $XmlWriter.WriteStartDocument()
                 "-Command "
                 $([System.Char]34)
                 #"`${01 Eoarchean Here-String} = Get-Content -Path $([System.Char]34)`$env:DSC_CFG_ROOT\$FolderFQN\01 Eoarchean.ps1$([System.Char]34); `${01 Eoarchean ScriptBlock} = Specialize[ScriptBlock]::Create(`${01 Eoarchean Here-String}); & `${01 Eoarchean ScriptBlock}"
-                "Set-Location -Path $env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
+                "Set-Location -Path `$env:DSC_CFG_ROOT\$FolderFQN; Get-Content -Raw -Path $([System.Char]39).\01 Eoarchean.ps1$([System.Char]39) | Invoke-Expression"
                 $([System.Char]34)
 
                 # "powershell.exe "
