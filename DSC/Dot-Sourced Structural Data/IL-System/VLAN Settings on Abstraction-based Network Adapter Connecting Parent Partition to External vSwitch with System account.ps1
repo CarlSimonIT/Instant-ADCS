@@ -41,7 +41,7 @@ if (
       #SecondaryVlanId            =      [System.UInt32]${VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch}.SecondaryVlanId
       #SecondaryVlanIdList        =      [System.String]${VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch}.SecondaryVlanIdList
       VlanId                      =      [System.UInt32]${VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch}.VlanId
-      PsDscRunAsCredential       =      [PSCredential]${VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch}.PsDscRunAsCredential
+      #PsDscRunAsCredential       =      [PSCredential]${VLAN Settings on Abstraction-based Network Adapter Connecting Parent Partition to External vSwitch}.PsDscRunAsCredential
       DependsOn                   =      ${Dependencys Virtual Switch Clade 00 Members}
     }
 
