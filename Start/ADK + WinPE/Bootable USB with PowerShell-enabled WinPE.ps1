@@ -39,14 +39,14 @@ ${startnet.cmd File Contents} = $(
   "`n"
   "wpeinit.exe`n"
   "powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-ExecPol-FwCheck-PreDiskOps.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\04-DiskPartClean.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\08-OsDiskPart1.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\12-OsDiskPart2.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\16-DismLoad-ApplyImage.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\20-MultiDrive-Prep.ps1$([System.Char]39)$([System.Char]34)`n"
-  "powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\24-x2cCopyOps.ps1$([System.Char]39)$([System.Char]34)`n"
-  "REM powershell.exe -command $([System.Char]34)iex $([System.Char]39)& X:\Scriptoids\99-MachineRecon.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\00-ExecPol-FwCheck-PreDiskOps.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\04-DiskPartClean.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\08-OsDiskPart1.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\12-OsDiskPart2.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\16-DismLoad-ApplyImage.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\20-MultiDrive-Prep.ps1$([System.Char]39)$([System.Char]34)`n"
+  "powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\24-x2cCopyOps.ps1$([System.Char]39)$([System.Char]34)`n"
+  "REM powershell.exe -WindowStyle $([System.Char]34)Maximized$([System.Char]34) -Command $([System.Char]34)iex $([System.Char]39)Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\99-MachineRecon.ps1$([System.Char]39)$([System.Char]34)`n"
   "REM wpeutil.exe reboot`n"
   "powershell.exe`n"
   "`t`t"
@@ -57,14 +57,14 @@ ${startnet.cmd File Contents} = $(
   { # Create with ConvertTo-HereStringPrecursor |
     wpeinit.exe
     powercfg.exe /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-    powershell.exe -command "iex 'Set-ExecutionPolicy RemoteSigned; & X:\Scriptoids\00-ExecPol-FwCheck-PreDiskOps.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\04-DiskPartClean.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\08-OsDiskPart1.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\12-OsDiskPart2.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\16-DismLoad-ApplyImage.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\20-MultiDrive-Prep.ps1'"
-    powershell.exe -command "iex '& X:\Scriptoids\24-x2cCopyOps.ps1'"
-    REM powershell.exe -command "iex '& X:\Scriptoids\99-MachineRecon.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\00-ExecPol-FwCheck-PreDiskOps.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\04-DiskPartClean.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\08-OsDiskPart1.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\12-OsDiskPart2.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\16-DismLoad-ApplyImage.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\20-MultiDrive-Prep.ps1'"
+    powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\24-x2cCopyOps.ps1'"
+    REM powershell.exe -WindowStyle "Maximized" -Command "iex 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; & X:\Scriptoids\99-MachineRecon.ps1'"
     REM wpeutil.exe reboot
     powershell.exe
   } | Out-Null
@@ -190,7 +190,6 @@ ${04-DiskPartClean Command Here-String Precursor} = $(
         Write-Host -Object 'Pausing for 5 seconds...'
         Start-Sleep 5
       }
-      Remove-Variable -Name 'non-USB disks'
       Remove-Item -Path "X:\Scriptoids\non-USB disks.clixml"
     }
   } | Out-Null
@@ -225,7 +224,6 @@ ${08-OsDiskPart1 Command Here-String Precursor} = $(
   "  }`n"
   "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\non-USB disks.clixml$([System.Char]34) -InputObject (`${non-USB disks})`n"
   "  #region | Initialize All SATA/NVMe Disks |`n"
-  "  `$error.Clear()`n"
   "`n"
   "  `${Initialized non-USB Disk CIM Instances} = foreach (`${non-USB disk} in `${non-USB disks}) {`n"
   "    do {`n"
@@ -267,7 +265,7 @@ ${08-OsDiskPart1 Command Here-String Precursor} = $(
   "  #endregion`n"
   "  #region | OS Disk |`n"
   "  `${OS Disk CIM Instance} = `${non-USB disks}[0]`n"
-  "  Set-Disk -UniqueId `${OS Disk CIM Instance}.UniqueId -PartitionStyle $([System.Char]39)GPT$([System.Char]39)`n"
+  "  Set-Disk -Number `${OS Disk CIM Instance}.Number -PartitionStyle $([System.Char]39)GPT$([System.Char]39)`n"
   "  #region | EFI System Partition |`n"
   "  `${EFI System Partition OS Disk CIM Instance} = `${OS Disk CIM Instance} | New-Partition -GptType $([System.Char]39){c12a7328-f81f-11d2-ba4b-00a0c93ec93b}$([System.Char]39) -Size 628MB -AssignDriveLetter`n"
   "  # The entirety of the EFI System Partition must contain a FAT32-formatted volume:`n"
@@ -296,18 +294,10 @@ ${08-OsDiskPart1 Command Here-String Precursor} = $(
   "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml$([System.Char]34) -InputObject (`${Recovery Volume OS Disk CIM Instance})`n"
   "  #endregion`n"
   "  #endregion`n"
-  "  Remove-Variable -Name $([System.Char]39)non-USB disks$([System.Char]39)`n"
+  "  # Values of Disk/Partition/Volume attributes seem to change whenever operations are performed on `n"
+  "  # storage-related objects (which makes sense), so do not rely on .clixml files of exported CIM instances`n"
+  "  # of Disk/Partition/Volume objects unless the .clixml was created within the script: `n"
   "  Remove-Item -Path $([System.Char]34)X:\Scriptoids\non-USB disks.clixml$([System.Char]34)`n"
-  "`n"
-  "  `${non-USB disks} = [System.Collections.ArrayList]::New()`n"
-  "  (Get-Disk).Where({`$_.BusType -match $([System.Char]39)NVMe|SATA$([System.Char]39)}) $([System.Char]96)`n"
-  "  | Sort-Object -Property $([System.Char]39)Size$([System.Char]39) $([System.Char]96)`n"
-  "  | ForEach-Object -Process {`n"
-  "    `${non-USB disks}.Add(`n"
-  "      `$_`n"
-  "    ) | Out-Null`n"
-  "  }`n"
-  "  Export-CliXml -Path $([System.Char]34)X:\Scriptoids\non-USB disks.clixml$([System.Char]34) -InputObject (`${non-USB disks})`n"
   "}`n"
   "`t`t"
   #endregion
@@ -331,7 +321,6 @@ ${08-OsDiskPart1 Command Here-String Precursor} = $(
       }
       Export-CliXml -Path "X:\Scriptoids\non-USB disks.clixml" -InputObject (${non-USB disks})
       #region | Initialize All SATA/NVMe Disks |
-      $error.Clear()
 
       ${Initialized non-USB Disk CIM Instances} = foreach (${non-USB disk} in ${non-USB disks}) {
         do {
@@ -373,7 +362,7 @@ ${08-OsDiskPart1 Command Here-String Precursor} = $(
       #endregion
       #region | OS Disk |
       ${OS Disk CIM Instance} = ${non-USB disks}[0]
-      Set-Disk -UniqueId ${OS Disk CIM Instance}.UniqueId -PartitionStyle 'GPT'
+      Set-Disk -Number ${OS Disk CIM Instance}.Number -PartitionStyle 'GPT'
       #region | EFI System Partition |
       ${EFI System Partition OS Disk CIM Instance} = ${OS Disk CIM Instance} | New-Partition -GptType '{c12a7328-f81f-11d2-ba4b-00a0c93ec93b}' -Size 628MB -AssignDriveLetter
       # The entirety of the EFI System Partition must contain a FAT32-formatted volume:
@@ -402,18 +391,10 @@ ${08-OsDiskPart1 Command Here-String Precursor} = $(
       Export-CliXml -Path "X:\Scriptoids\Recovery Volume OS Disk CIM Instance.clixml" -InputObject (${Recovery Volume OS Disk CIM Instance})
       #endregion
       #endregion
-      Remove-Variable -Name 'non-USB disks'
+      # Values of Disk/Partition/Volume attributes seem to change whenever operations are performed on 
+      # storage-related objects (which makes sense), so do not rely on .clixml files of exported CIM instances
+      # of Disk/Partition/Volume objects unless the .clixml was created within the script: 
       Remove-Item -Path "X:\Scriptoids\non-USB disks.clixml"
-
-      ${non-USB disks} = [System.Collections.ArrayList]::New()
-      (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) `
-      | Sort-Object -Property 'Size' `
-      | ForEach-Object -Process {
-        ${non-USB disks}.Add(
-          $_
-        ) | Out-Null
-      }
-      Export-CliXml -Path "X:\Scriptoids\non-USB disks.clixml" -InputObject (${non-USB disks})
     }
   } | Out-Null
   #########################################-BOUNDARY-#########################################
@@ -493,7 +474,6 @@ ${12-OsDiskPart2 Command Here-String Precursor} = $(
   #########################################-BOUNDARY-#########################################
   { # Create with ConvertTo-HereStringPrecursor |
     & {
-      #${non-USB disks} = Import-CliXml -Path "X:\Scriptoids\non-USB disks.clixml"
       ${non-USB disks} = [System.Collections.ArrayList]::New()
       (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) `
       | Sort-Object -Property 'Size' `
@@ -529,18 +509,7 @@ ${12-OsDiskPart2 Command Here-String Precursor} = $(
       #     "&echo FORMAT QUICK FS=NTFS LABEL=$([System.Char]34)Recovery$([System.Char]34)"
       #     "&echo SET ID=$([System.Char]34)DE94BBA4-06D1-4D40-A16A-BFD50179D6AC$([System.Char]34)"
       #     "&echo GPT ATTRIBUTES=0x8000000000000001"
-      Remove-Variable -Name 'non-USB disks'
       Remove-Item -Path "X:\Scriptoids\non-USB disks.clixml"
-
-      ${non-USB disks} = [System.Collections.ArrayList]::New()
-      (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) `
-      | Sort-Object -Property 'Size' `
-      | ForEach-Object -Process {
-        ${non-USB disks}.Add(
-          $_
-        ) | Out-Null
-      }
-      Export-CliXml -Path "X:\Scriptoids\non-USB disks.clixml" -InputObject (${non-USB disks})
       #endregion
     }
   } | Out-Null
@@ -555,9 +524,6 @@ Set-Content -Path ${12-OsDiskPart2 Script Path} -Value (${12-OsDiskPart2 Command
 
 #region | Write "${env:.CommonItems}\WinPE\16-DismLoad-ApplyImage.ps1" to the file system of the technician PC |
 ${16-DismLoad-ApplyImage Command Here-String Precursor} = $(
-
-
-
 
   #region |  |
   "`n"
@@ -650,12 +616,18 @@ ${16-DismLoad-ApplyImage Command Here-String Precursor} = $(
   "`t`t"
   #endregion
 
-
-
-
   #########################################-BOUNDARY-#########################################
   { # Create with ConvertTo-HereStringPrecursor |
     & {
+      ${non-USB disks} = [System.Collections.ArrayList]::New()
+      (Get-Disk).Where({$_.BusType -match 'NVMe|SATA'}) `
+      | Sort-Object -Property 'Size' `
+      | ForEach-Object -Process {
+        ${non-USB disks}.Add(
+          $_
+        ) | Out-Null
+      }
+      Export-CliXml -Path "X:\Scriptoids\non-USB disks.clixml" -InputObject (${non-USB disks})
       $PSModuleInfo = Import-Module 'Storage' -PassThru -Force
       #region | Precursor Variable Series I |
       ${Pattern UniqueId Raw} = '^(?<Unique_ID>[^:]+)(?<Discarded>\:.*)?$'
@@ -738,7 +710,6 @@ ${16-DismLoad-ApplyImage Command Here-String Precursor} = $(
       . 'X:\Windows\System32\bcdboot.exe' "${LocalOS Volume Letter}\Windows" /l "en-us" /s "${EFI System Partition Volume Letter}" /f "UEFI"
       #   . 'X:\Windows\System32\bcdedit.exe' /set {fwbootmgr} bootsequence {bootmgr}
       #endregion
-      Remove-Variable -Name 'non-USB disks'
       Remove-Item -Path "X:\Scriptoids\non-USB disks.clixml"
     }
   } | Out-Null
@@ -1903,6 +1874,8 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   #region | New Precursor Volume for eventual WinPE | Custom WinPE image written to USB Flash Drive |
 
 
+
+
   #region |  |
   "`n"
   "#region | Script-wide Variables |`n"
@@ -1927,9 +1900,36 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "    `$_.UniqueId     -eq $([System.Char]34)${OSDeploy UniqueId Raw}$([System.Char]34)`n"
   "  }`n"
   "`n"
-  "  `${OSDeploy Disk CIM Instance} = `${Uncleared OSDeploy Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$true -PassThru`n"
+  "  #`${OSDeploy Disk CIM Instance} = `${Uncleared OSDeploy Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:`$false -Verbose:`$true -PassThru`n"
+  "  `${Uncleared OSDeploy Disk CIM Instance} | ForEach-Object -Process {`n"
+  "    `$DiskNumber = `$_.Number`n"
+  "    try {`n"
+  "      `$InputHT = @{`n"
+  "        Number      = `$DiskNumber`n"
+  "        RemoveData  = `$true`n"
+  "        RemoveOEM   = `$true`n"
+  "        Confirm     = `$false`n"
+  "        Verbose     = `$true`n"
+  "        PassThru    = `$true`n"
+  "        ErrorAction = $([System.Char]39)Stop$([System.Char]39)`n"
+  "      }`n"
+  "      `${Cleared OSDeploy Disk CIM Instance} = Clear-Disk @InputHT`n"
+  "      Set-Disk -Number `${Cleared OSDeploy Disk CIM Instance}.Number -PartitionStyle $([System.Char]39)MBR$([System.Char]39) -Verbose:`$true -ErrorAction $([System.Char]39)Stop$([System.Char]39)`n"
+  "    } catch {`n"
+  "      `$InputHT = @{`n"
+  "        Number         = `$DiskNumber`n"
+  "        PartitionStyle = $([System.Char]39)MBR$([System.Char]39)`n"
+  "        Confirm        = `$false`n"
+  "        Verbose        = `$true`n"
+  "        PassThru       = `$true`n"
+  "        ErrorAction    = $([System.Char]39)Stop$([System.Char]39)`n"
+  "      }`n"
+  "      `${Cleared OSDeploy Disk CIM Instance} = Initialize-Disk @InputHT`n"
+  "    }`n"
+  "  }`n"
+  "  `${OSDeploy Disk CIM Instance} = Get-Disk -Number `${Cleared OSDeploy Disk CIM Instance}.Number`n"
   "`n"
-  "  `${OSDeploy Disk CIM Instance} | Set-Disk -PartitionStyle $([System.Char]39)MBR$([System.Char]39) -Verbose:`$true`n"
+  "  #`${OSDeploy Disk CIM Instance} | Set-Disk -PartitionStyle $([System.Char]39)MBR$([System.Char]39) -Verbose:`$true`n"
   "  `${WinPE Partition Size} = 1GB`n"
   "  `${MBR Partition 1 on OSDeploy Disk CIM Instance} = `${OSDeploy Disk CIM Instance} | New-Partition -Size (`${WinPE Partition Size}) -AssignDriveLetter -MbrType $([System.Char]39)FAT32$([System.Char]39) -Verbose:`$true`n"
   "`n"
@@ -2187,7 +2187,9 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
   "}`n"
   "`t`t"
   #endregion
-  
+
+
+
 
   #endregion
   #########################################-BOUNDARY-#########################################
@@ -2214,9 +2216,36 @@ ${Bootable USB with PowerShell-enabled WinPE Command Here-String Precursor} = $(
         $_.UniqueId     -eq "${OSDeploy UniqueId Raw}"
       }
 
-      ${OSDeploy Disk CIM Instance} = ${Uncleared OSDeploy Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$true -PassThru
+      #${OSDeploy Disk CIM Instance} = ${Uncleared OSDeploy Disk CIM Instance} | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false -Verbose:$true -PassThru
+      ${Uncleared OSDeploy Disk CIM Instance} | ForEach-Object -Process {
+        $DiskNumber = $_.Number
+        try {
+          $InputHT = @{
+            Number      = $DiskNumber
+            RemoveData  = $true
+            RemoveOEM   = $true
+            Confirm     = $false
+            Verbose     = $true
+            PassThru    = $true
+            ErrorAction = 'Stop'
+          }
+          ${Cleared OSDeploy Disk CIM Instance} = Clear-Disk @InputHT
+          Set-Disk -Number ${Cleared OSDeploy Disk CIM Instance}.Number -PartitionStyle 'MBR' -Verbose:$true -ErrorAction 'Stop'
+        } catch {
+          $InputHT = @{
+            Number         = $DiskNumber
+            PartitionStyle = 'MBR'
+            Confirm        = $false
+            Verbose        = $true
+            PassThru       = $true
+            ErrorAction    = 'Stop'
+          }
+          ${Cleared OSDeploy Disk CIM Instance} = Initialize-Disk @InputHT
+        }
+      }
+      ${OSDeploy Disk CIM Instance} = Get-Disk -Number ${Cleared OSDeploy Disk CIM Instance}.Number
 
-      ${OSDeploy Disk CIM Instance} | Set-Disk -PartitionStyle 'MBR' -Verbose:$true
+      #${OSDeploy Disk CIM Instance} | Set-Disk -PartitionStyle 'MBR' -Verbose:$true
       ${WinPE Partition Size} = 1GB
       ${MBR Partition 1 on OSDeploy Disk CIM Instance} = ${OSDeploy Disk CIM Instance} | New-Partition -Size (${WinPE Partition Size}) -AssignDriveLetter -MbrType 'FAT32' -Verbose:$true
 
@@ -2495,4 +2524,3 @@ return @{
   'WinPE Image Creation Parent Folder'                     = ${WinPE Image Creation Parent Folder}
 }
 #endregion
-
