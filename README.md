@@ -60,7 +60,7 @@ Launch Windows PowerShell in a non-elevated security context.
   Configure a new directory for cloning multiple GitHub repositories. <span style="font-family:Consolas;font-size:1.05em;">Instant-ADCS</span> requires `CarlSimonIT` as the BaseName of this directory. Ensure the folder exists and then set as current working directory: 
 
   ```powershell
-  ${Intermediary Partial Path} = 'write something\or nothing'
+  ${Intermediary Partial Path} = 'GitHub'
   $CloningRepoPath = "$env:UserProfile\${Intermediary Partial Path}\CarlSimonIT"
   $CloningRepoFolder = try {
     Get-Item -Path $CloningRepoPath -ErrorAction 'Stop'
