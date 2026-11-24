@@ -4,7 +4,6 @@
 
 #region | Classes/Functions/Variables defined before launching a chronological unit |
 $ProjectName = Import-Clixml -Path "$env:DSC_CFG_ROOT\CliXmls\FolderFQN.clixml";
-. "$env:DSC_CFG_ROOT\$ProjectName\A0\Set-FileAsWriteReadAndDelete.ps1"
 ${.s} = "$env:DSC_CFG_ROOT\$ProjectName\Dot-Sourced Structural Data"
 
 . "$PSHOME\Lightweight Functions.ps1"
@@ -33,8 +32,6 @@ $PSModuleInfo = Import-Module 'NetTCPIP' -PassThru -Force
 
 $Host.PrivateData.DebugForegroundColor = $(rFc)
 $Host.PrivateData.VerboseForegroundColor = $(rFc)
-
-$error.Clear()
 #endregion
 #region | Set Dot-Sourced DSC Resource Instance File as Read/Write and Delete |
 $Paths = $(
@@ -67,7 +64,7 @@ $Paths = $(
 
   "${.s}\MAC Address Set v3 on Unclustered Hyper-V Host.ps1"
   "${.s}\One-time Write of VLAN Title and New Random VLAN ID.ps1"
-  "${.s}\Immutable IPv4 Reservations.ps1"
+  #"${.s}\Immutable IPv4 Reservations.ps1"
   "${.s}\IPv4 Address Space Definitions.ps1"
   "${.s}\Sample Without Replacement Random IPv4 Addresses to Ensure Uniqueness.ps1"
   "${.s}\Formulate Default Gateway Components.ps1"
@@ -264,8 +261,6 @@ $path = "${.s}\WinRM Part 1-WS-Man Client Config, WinRM Windows Service, WS-Man 
 Set-Content -Path $path -ErrorAction 'SilentlyContinue' -Value ${Here-String}
 Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
 Remove-Variable -Name 'Here-String Precursor','Here-String'
-
-
 #endregion
 #region | "NVMe Native Support on Server 2025-Enable.ps1" |
 ${Here-String Precursor} = Get-Content -Path "${.s}\IL-System\NVMe Native Support on Server 2025-Enable with System account.ps1"
@@ -403,14 +398,16 @@ Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
 Remove-Variable -Name 'Here-String Precursor','Here-String'
 #endregion
 #region | "Immutable IPv4 Reservations.ps1" |
-${Here-String Precursor} = Get-Content -Path "${.s}\IL-System\Immutable IPv4 Reservations with System account.ps1"
-${Here-String} = ${Here-String Precursor} `
-  -replace '\s#PsDscRunAsCredential',' PsDscRunAsCredential' `
-  -replace '\s#Credential',' Credential'
-$path = "${.s}\Immutable IPv4 Reservations.ps1"
-Set-Content -Path $path -ErrorAction 'SilentlyContinue' -Value ${Here-String}
-Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
-Remove-Variable -Name 'Here-String Precursor','Here-String'
+<#
+  ${Here-String Precursor} = Get-Content -Path "${.s}\IL-System\Immutable IPv4 Reservations with System account.ps1"
+  ${Here-String} = ${Here-String Precursor} `
+    -replace '\s#PsDscRunAsCredential',' PsDscRunAsCredential' `
+    -replace '\s#Credential',' Credential'
+  $path = "${.s}\Immutable IPv4 Reservations.ps1"
+  Set-Content -Path $path -ErrorAction 'SilentlyContinue' -Value ${Here-String}
+  Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
+  Remove-Variable -Name 'Here-String Precursor','Here-String'
+#>
 #endregion
 #region | "IPv4 Address Space Definitions.ps1" |
 ${Here-String Precursor} = Get-Content -Path "${.s}\IL-System\IPv4 Address Space Definitions with System account.ps1"
@@ -564,14 +561,16 @@ Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
 Remove-Variable -Name 'Here-String Precursor','Here-String'
 #endregion
 #region | "VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root.ps1" |
-${Here-String Precursor} = Get-Content -Path "${.s}\IL-System\VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root with System account.ps1"
-${Here-String} = ${Here-String Precursor} `
-  -replace '\s#PsDscRunAsCredential',' PsDscRunAsCredential' `
-  -replace '\s#Credential',' Credential'
-$path = "${.s}\VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root.ps1"
-Set-Content -Path $path -ErrorAction 'SilentlyContinue' -Value ${Here-String}
-Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
-Remove-Variable -Name 'Here-String Precursor','Here-String'
+<#
+  ${Here-String Precursor} = Get-Content -Path "${.s}\IL-System\VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root with System account.ps1"
+  ${Here-String} = ${Here-String Precursor} `
+    -replace '\s#PsDscRunAsCredential',' PsDscRunAsCredential' `
+    -replace '\s#Credential',' Credential'
+  $path = "${.s}\VHDX Excluded from Storage Spaces Virtual Disk participation-DSC Configuration Root.ps1"
+  Set-Content -Path $path -ErrorAction 'SilentlyContinue' -Value ${Here-String}
+  Set-ItemProperty -Path $path -Name 'IsReadOnly' -Value $true
+  Remove-Variable -Name 'Here-String Precursor','Here-String'
+#>
 #endregion
 #endregion
 #region | Configuration |
@@ -590,7 +589,6 @@ Configuration $InstanceName {
   Import-DscResource -ModuleName 'HyperVDsc'                    -ModuleVersion 4.0.0
   Import-DscResource -ModuleName 'cHyper-V'                     -ModuleVersion 3.0.0.0
   #endregion
-
   Node $AllNodes.Where({
     $_.Life          -eq $true                -and `
     $_.SuperEmpire   -eq 'Microsoft'          -and `
@@ -613,6 +611,10 @@ Configuration $InstanceName {
     . "${.s}\File-based Predefined non-Random Variables.ps1"
     . "${.s}\WinRM Part 1-WS-Man Client Config, WinRM Windows Service, WS-Man Service Settings.ps1"
     . "${.s}\NVMe Native Support on Server 2025-Enable.ps1"
+    #. "${.s}\Windows ADK 2026-09-Archive Extraction.ps1"
+    #. "${.s}\Windows ADK 2026-09-Offline Installation.ps1"
+    #. "${.s}\WinPE 2026-09-Archive Extraction.ps1"
+    #. "${.s}\WinPE 2026-09-Offline Installation.ps1"
     . "${.s}\UAC (User Account Control) on instances of Desktop Experience.ps1"
     . "${.s}\Power Plan on instances of Desktop Experience.ps1"
     . "${.s}\Time Zone via DSC + System Time via GPO.ps1"
