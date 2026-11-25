@@ -5,7 +5,7 @@ $ResMod             = "$env:DSC_CFG_ROOT\DSC Resource Modules"
 ${Pre-PKI CertFSOs} = "$env:DSC_CFG_ROOT\Pre-PKI Certificate File-System Objects"
 
 # Maximum envelope size (?) for WS-Management traffic. 
-${WSMan MaxEnvelopeSizeKb} = (8192 * 4)
+${WSMan MaxEnvelopeSizeKb} = (8192 * 40)
 
 # for querying a WMI namespace for DSC |
 $nsDsc = @{Namespace = 'root/Microsoft/Windows/DesiredStateConfiguration'}
