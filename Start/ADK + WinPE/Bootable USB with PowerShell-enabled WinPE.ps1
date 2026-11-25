@@ -1399,6 +1399,11 @@ ${24-x2cCopyOps Command Here-String Precursor} = $(
   "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
   "  Copy-Item -Path $([System.Char]34)X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
   "  #endregion`n"
+  "  #region | Copy the A0 tools into local DSC volume |`n"
+  "  `$path = $([System.Char]34)`${DSC Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN$([System.Char]34); `n"
+  "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
+  "  Copy-Item -Path $([System.Char]34)`$usb1\`$FolderFQN\A0$([System.Char]34) -Destination $([System.Char]34)`$folder$([System.Char]34) -Verbose:`$true`n"
+  "  #endregion`n"
   "  #region | Copy Instant-ADSC environmental data & structural data |`n"
   "  `$path = $([System.Char]34)`${DSC Volume Letter}\`$__DirectoryForDscConfigs\`$FolderFQN$([System.Char]34); `n"
   "  `$folder = try {Get-Item -Path `$path -ErrorAction $([System.Char]39)Stop$([System.Char]39)} catch {New-Item -Path `$path -ItemType $([System.Char]39)Directory$([System.Char]39) -Force}`n"
@@ -1442,6 +1447,7 @@ ${24-x2cCopyOps Command Here-String Precursor} = $(
   "}`n"
   "`t`t"
   #endregion
+
 
 
   #########################################-BOUNDARY-#########################################
@@ -1766,6 +1772,11 @@ ${24-x2cCopyOps Command Here-String Precursor} = $(
       Copy-Item -Path "X:\Scriptoids\DSC Partition DSC Disk CIM Instance.clixml" -Destination "$folder" -Verbose:$true
       Copy-Item -Path "X:\Scriptoids\HvH Disk CIM Instance.clixml" -Destination "$folder" -Verbose:$true
       Copy-Item -Path "X:\Scriptoids\HvH Partition HvH Disk CIM Instance.clixml" -Destination "$folder" -Verbose:$true
+      #endregion
+      #region | Copy the A0 tools into local DSC volume |
+      $path = "${DSC Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN"; 
+      $folder = try {Get-Item -Path $path -ErrorAction 'Stop'} catch {New-Item -Path $path -ItemType 'Directory' -Force}
+      Copy-Item -Path "$usb1\$FolderFQN\A0" -Destination "$folder" -Verbose:$true
       #endregion
       #region | Copy Instant-ADSC environmental data & structural data |
       $path = "${DSC Volume Letter}\$__DirectoryForDscConfigs\$FolderFQN"; 
